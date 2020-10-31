@@ -7,14 +7,15 @@
 
 #include <Arduino.h>
 #include "./persistent-link.cpp"
+#include "./udp-messaging.cpp"
 
 PersistentLink persistentWifi({
   WIFI_PHY_MODE_11N, // phyMode
   6, // outputPower (dBm)
   #ifndef IOT_NODE_DHCP
     {
-      IPAddress(10, 97, 0, 254),
-      IPAddress(10, 97, 0, 1),
+      IPAddress(10, 97, 4, 254),
+      IPAddress(10, 97, 4, 1),
       IPAddress(255, 255, 255, 0),
     },
   #endif
@@ -40,6 +41,10 @@ PersistentLink persistentWifi({
     2000, // tryWifiReconnectAfter
     10000 // restartAfter
   }
+});
+
+UDPMessaging udp({
+  8266
 });
 
 #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
@@ -90,6 +95,7 @@ void setupInfoLog() {
   debug("info.system.mac-address", WiFi.macAddress());
 
   persistentWifi.setDebug(debug);
+  udp.setDebug(debug);
 
   #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
     persistentWifi.wifiDebug(true);
@@ -103,22 +109,54 @@ void setup() {
     setupInfoLog();
   #endif
 
-  #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
-    persistentWifi.onGotIP([](WiFiEventStationModeGotIP event) {
+  persistentWifi.onGotIP([](WiFiEventStationModeGotIP event) {
+    #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
       if (infoLog != 0) return;
       infoLog = 1;
-    });
-  #endif
+    #endif
+
+    udp.begin();
+  });
 
   persistentWifi.connect();
+
+  udp.addService({
+    1,
+    [](
+      UDPIncomingMessage request,
+      UDPOutgoingMessage response
+    ) {
+      debug("udp-service.got", String(request.payload.message[0]));
+
+      response.payloadLength = 1;
+      response.payload.message[0] = 44;
+
+      udp.write(response);
+
+      // yield();
+
+      // UDPEventMessage event;
+
+      // event.remoteAddress = udp.lastPeerAddress();
+      // event.remotePort = udp.lastPeerPort();
+      // event.payload.eventId = 90;
+      // event.payload.message[0] = 5;
+      // event.payloadLength = 1;
+
+      // udp.event(event);
+    }
+  });
 }
 
 void loop() {
   persistentWifi.update();
+  yield();
+
+  udp.update();
+  yield();
 
   #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
     setupInfoLog();
+    yield();
   #endif
-
-  yield();
 }

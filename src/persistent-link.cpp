@@ -75,7 +75,7 @@ struct PersistentLinkConfig {
   Timings timings;
 };
 
-struct State {
+struct PersistentLinkState {
   bool firstConnectionAttempted = false;
   bool firstConnectionSucceeded = false;
   bool wifiIsConnected = false;
@@ -98,7 +98,7 @@ struct State {
 
 class PersistentLink {
   private:
-    State state;
+    PersistentLinkState state;
 
     void configDebug() {
       state.callbacks.debug("config.wifi.phy-mode", String(state.phyMode));
