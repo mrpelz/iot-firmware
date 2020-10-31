@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 
-#ifndef USE_DHCP
+#ifndef IOT_NODE_DHCP
   struct InterfaceConfig {
     IPAddress ip;
     IPAddress gateway;
@@ -13,7 +13,7 @@ struct WiFiCredentials {
   String ssid;
   String password;
 
-  #ifdef USE_ADVANCED_WIFI_CONFIG
+  #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
     uint8_t bssid[6];
     uint8_t channel;
   #endif
@@ -28,42 +28,46 @@ struct Timings {
 struct EventListeners {
   WiFiEventHandler onStationModeAuthModeChanged;
   WiFiEventHandler onStationModeConnected;
-
-  #ifdef USE_DHCP
-    WiFiEventHandler onStationModeDHCPTimeout;
-  #endif
-
   WiFiEventHandler onStationModeDisconnected;
   WiFiEventHandler onStationModeGotIP;
   WiFiEventHandler onWiFiModeChange;
+
+  #ifdef IOT_NODE_DHCP
+    WiFiEventHandler onStationModeDHCPTimeout;
+  #endif
 };
 
 struct Callbacks {
   std::function<void (const String &, const String &)> debug =
     [](String key, String value) {};
+
+  std::function<void ()> beforeRestart =
+    []() {};
+  std::function<void ()> reconnect =
+    []() {};
+
   std::function<void (const WiFiEventStationModeAuthModeChanged &)> authModeChanged =
     [](WiFiEventStationModeAuthModeChanged event) {};
   std::function<void (const WiFiEventStationModeConnected &)> connected =
     [](WiFiEventStationModeConnected event) {};
-  
-  #ifdef USE_DHCP
-    std::function<void ()> dhcpTimeout =
-      []() {};
-  #endif
-
   std::function<void (const WiFiEventStationModeDisconnected &)> disconnected =
     [](WiFiEventStationModeDisconnected event) {};
   std::function<void (const WiFiEventStationModeGotIP &)> gotIP =
     [](WiFiEventStationModeGotIP event) {};
   std::function<void (const WiFiEventModeChange &)> modeChange =
     [](WiFiEventModeChange event) {};
+
+  #ifdef IOT_NODE_DHCP
+    std::function<void ()> dhcpTimeout =
+      []() {};
+  #endif
 };
 
-struct PersistentWifiConfig {
+struct PersistentLinkConfig {
   WiFiPhyMode_t phyMode;
   float outputPower;
 
-  #ifndef USE_DHCP
+  #ifndef IOT_NODE_DHCP
     InterfaceConfig interfaceConfig;
   #endif
 
@@ -82,7 +86,7 @@ struct State {
   WiFiPhyMode_t phyMode;
   float outputPower;
 
-  #ifndef USE_DHCP
+  #ifndef IOT_NODE_DHCP
     InterfaceConfig interfaceConfig;
   #endif
 
@@ -92,7 +96,7 @@ struct State {
   Callbacks callbacks;
 };
 
-class PersistentWiFi {
+class PersistentLink {
   private:
     State state;
 
@@ -101,12 +105,12 @@ class PersistentWiFi {
       state.callbacks.debug("config.wifi.output-power", String(state.outputPower));
       state.callbacks.debug("config.wifi.ssid", state.credentials.ssid);
 
-      #ifdef USE_ADVANCED_WIFI_CONFIG
+      #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
         state.callbacks.debug("config.wifi.bssid", printMacAddress(state.credentials.bssid));
         state.callbacks.debug("config.wifi.channel", String(state.credentials.channel));
       #endif
 
-      #ifdef USE_DHCP
+      #ifdef IOT_NODE_DHCP
         state.callbacks.debug("config.wifi.network-config.dhcp", "1");
       #else
         state.callbacks.debug("config.wifi.network-config.dhcp", "0");
@@ -140,7 +144,7 @@ class PersistentWiFi {
     void wifiConnect() {
       WiFi.disconnect();
 
-      #ifdef USE_ADVANCED_WIFI_CONFIG
+      #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
         WiFi.begin(
           state.credentials.ssid,
           state.credentials.password,
@@ -153,11 +157,11 @@ class PersistentWiFi {
     }
 
   public:
-    PersistentWiFi(PersistentWifiConfig config) {
+    PersistentLink(PersistentLinkConfig config) {
       state.phyMode = config.phyMode;
       state.outputPower = config.outputPower;
 
-      #ifndef USE_DHCP
+      #ifndef IOT_NODE_DHCP
         state.interfaceConfig = config.interfaceConfig;
       #endif
 
@@ -188,7 +192,7 @@ class PersistentWiFi {
         }
       );
 
-      #ifdef USE_DHCP
+      #ifdef IOT_NODE_DHCP
         state.eventListeners.onStationModeDHCPTimeout = WiFi.onStationModeDHCPTimeout(
           [&]() {
             state.callbacks.debug("event", "wifi.network-config.dhcp-timeout");
@@ -243,7 +247,7 @@ class PersistentWiFi {
         WiFi.setOutputPower(state.outputPower);
       }
 
-      #ifndef USE_DHCP
+      #ifndef IOT_NODE_DHCP
         WiFi.config(
           state.interfaceConfig.ip,
           state.interfaceConfig.gateway,
@@ -271,11 +275,15 @@ class PersistentWiFi {
       state.callbacks.authModeChanged = callback;
     }
 
+    void onBeforeRestart(std::function<void ()> callback) {
+      state.callbacks.beforeRestart = callback;
+    }
+
     void onConnected(std::function<void (const WiFiEventStationModeConnected &)> callback) {
       state.callbacks.connected = callback;
     }
 
-    #ifdef USE_DHCP
+    #ifdef IOT_NODE_DHCP
       void onDhcpTimeout(std::function<void ()> callback) {
         state.callbacks.dhcpTimeout = callback;
       }
@@ -291,6 +299,10 @@ class PersistentWiFi {
 
     void onModeChange(std::function<void (const WiFiEventModeChange &)> callback) {
       state.callbacks.modeChange = callback;
+    }
+
+    void onReconnect(std::function<void ()> callback) {
+      state.callbacks.reconnect = callback;
     }
 
     void setDebug(std::function<void (const String &, const String &)> callback) {
@@ -373,10 +385,14 @@ class PersistentWiFi {
         state.callbacks.debug("info.wifi.attempt-reconnect", String(timeSinceWifiDisconnect));
 
         wifiConnect();
+
+        state.callbacks.reconnect();
       }
 
       if (timeSinceWifiDisconnect > state.timings.restartAfter) {
         state.callbacks.debug("info.wifi.attempt-restart", String(timeSinceWifiDisconnect));
+
+        state.callbacks.beforeRestart();
 
         ESP.restart();
 
@@ -391,20 +407,20 @@ class PersistentWiFi {
         state.callbacks.debug("info.wifi.phy-mode", String(WiFi.getPhyMode()));
         state.callbacks.debug("info.wifi.ssid", WiFi.SSID());
 
-        #ifdef USE_ADVANCED_WIFI_CONFIG
+        #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
           state.callbacks.debug("info.wifi.bssid", printMacAddress(WiFi.BSSID()));
           state.callbacks.debug("info.wifi.channel", String(WiFi.channel()));
         #endif
       }
 
-      #ifndef USE_ADVANCED_WIFI_CONFIG
+      #ifndef IOT_NODE_ADVANCED_WIFI_CONFIG
         state.callbacks.debug("info.wifi.bssid", printMacAddress(WiFi.BSSID()));
         state.callbacks.debug("info.wifi.channel", String(WiFi.channel()));
       #endif
 
       state.callbacks.debug("info.wifi.rssi", String(WiFi.RSSI()));
 
-      #ifdef USE_DHCP
+      #ifdef IOT_NODE_DHCP
         state.callbacks.debug("info.wifi.network-config.ip", WiFi.localIP().toString());
         state.callbacks.debug("info.wifi.network-config.gateway", WiFi.gatewayIP().toString());
         state.callbacks.debug("info.wifi.network-config.netmask", WiFi.subnetMask().toString());

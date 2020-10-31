@@ -1,23 +1,17 @@
-// #define USE_AP_ALGORE
-// #define USE_AP_ELZAR
-#define USE_AP_RICHARDNIXON
-// #define USE_AP_SPIROAGNEW
-
-// #define USE_DHCP
-
-#define DEFER_INITIAL_LOGGING
-
-#if defined(USE_AP_ALGORE) || defined(USE_AP_ELZAR) || defined(USE_AP_RICHARDNIXON) || defined(USE_AP_SPIROAGNEW)
-  #define USE_ADVANCED_WIFI_CONFIG
+#if defined(IOT_NODE_AP_ALGORE) || defined(IOT_NODE_AP_ELZAR) || defined(IOT_NODE_AP_RICHARDNIXON) || defined(IOT_NODE_AP_SPIROAGNEW)
+  #define IOT_NODE_ADVANCED_WIFI_CONFIG
 #endif
 
-#include <Arduino.h>
-#include "./persistent-wifi.cpp"
+ #define TOSTRING(x) #x
+ #define STR(x) TOSTRING(x)
 
-PersistentWiFi persistentWifi({
+#include <Arduino.h>
+#include "./persistent-link.cpp"
+
+PersistentLink persistentWifi({
   WIFI_PHY_MODE_11N, // phyMode
   6, // outputPower (dBm)
-  #ifndef USE_DHCP
+  #ifndef IOT_NODE_DHCP
     {
       IPAddress(10, 97, 0, 254),
       IPAddress(10, 97, 0, 1),
@@ -27,16 +21,16 @@ PersistentWiFi persistentWifi({
   {
     "iot.wurstsalat.cloud", // ssid iot
     "xyz", // password iot
-    #if defined(USE_AP_ALGORE)
+    #if defined(IOT_NODE_AP_ALGORE)
       { 0x78, 0x8a, 0x20, 0x83, 0x69, 0x8c }, // bssid algore
       11, // channel algore
-    #elif defined(USE_AP_ELZAR)
+    #elif defined(IOT_NODE_AP_ELZAR)
       { 0x78, 0x8a, 0x20, 0x2c, 0x4b, 0x91 }, // bssid elzar
       1, // channel elzar
-    #elif defined(USE_AP_RICHARDNIXON)
+    #elif defined(IOT_NODE_AP_RICHARDNIXON)
       { 0x78, 0x8a, 0x20, 0x81, 0xd3, 0x2b }, // bssid richardnixon
       6, // channel richardnixon
-    #elif defined(USE_AP_SPIROAGNEW)
+    #elif defined(IOT_NODE_AP_SPIROAGNEW)
       { 0xf0, 0x9f, 0xc2, 0xc8, 0xb6, 0x18 }, // bssid spiroagnew
       6, // channel spiroagnew
     #endif
@@ -48,7 +42,7 @@ PersistentWiFi persistentWifi({
   }
 });
 
-#ifdef DEFER_INITIAL_LOGGING
+#ifdef IOT_NODE_DEFER_INITIAL_LOGGING
   // 0: wifi not started yet, defer infoLog
   // 1: wifi started, run infoLog
   // 2: infoLog has already been executed, do nothing
@@ -68,7 +62,7 @@ void debug(String key, String value) {
 }
 
 void setupInfoLog() {
-  #ifdef DEFER_INITIAL_LOGGING
+  #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
     if (infoLog != 1) return;
     infoLog = 2;
   #endif
@@ -77,19 +71,27 @@ void setupInfoLog() {
 
   Serial.println();
 
-  #ifdef DEFER_INITIAL_LOGGING
+  #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
     debug("info.ititial-loging", "deferred");
   #else
     debug("info.ititial-loging", "real-time");
   #endif
 
+  #ifdef IOT_NODE_BUILD_TIME
+    debug("info.build.time", STR(IOT_NODE_BUILD_TIME));
+  #endif
+
+  debug("info.build.git-rev", STR(IOT_NODE_BUILD_GIT_REV));
+  debug("info.build.pio.env", STR(IOT_NODE_PIO_ENV));
+  debug("info.build.pio.platform", STR(IOT_NODE_PIO_PLATFORM));
+  debug("info.build.pio.framework", STR(IOT_NODE_PIO_FRAMEWORK));
   debug("info.system.chip-id", String(ESP.getChipId(), HEX));
   debug("info.system.flash-id", String(ESP.getFlashChipId(), HEX));
   debug("info.system.mac-address", WiFi.macAddress());
 
   persistentWifi.setDebug(debug);
 
-  #ifdef DEFER_INITIAL_LOGGING
+  #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
     persistentWifi.wifiDebug(true);
   #endif
 }
@@ -97,11 +99,11 @@ void setupInfoLog() {
 void setup() {
   Serial.begin(74880);
 
-  #ifndef DEFER_INITIAL_LOGGING
+  #ifndef IOT_NODE_DEFER_INITIAL_LOGGING
     setupInfoLog();
   #endif
 
-  #ifdef DEFER_INITIAL_LOGGING
+  #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
     persistentWifi.onGotIP([](WiFiEventStationModeGotIP event) {
       if (infoLog != 0) return;
       infoLog = 1;
@@ -114,7 +116,7 @@ void setup() {
 void loop() {
   persistentWifi.update();
 
-  #ifdef DEFER_INITIAL_LOGGING
+  #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
     setupInfoLog();
   #endif
 
