@@ -43,9 +43,14 @@ PersistentLink persistentWifi({
   }
 });
 
-UDPMessaging udp({
-  8266
-});
+UDPService testService(1);
+
+UDPMessaging udp(
+  8266,
+  {
+    &testService
+  }
+);
 
 #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
   // 0: wifi not started yet, defer infoLog
@@ -96,6 +101,7 @@ void setupInfoLog() {
 
   persistentWifi.setDebug(debug);
   udp.setDebug(debug);
+  testService.setDebug(debug);
 
   #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
     persistentWifi.wifiDebug(true);
@@ -119,33 +125,6 @@ void setup() {
   });
 
   persistentWifi.connect();
-
-  udp.addService({
-    1,
-    [](
-      UDPIncomingMessage request,
-      UDPOutgoingMessage response
-    ) {
-      debug("udp-service.got", String(request.payload.message[0]));
-
-      response.payloadLength = 1;
-      response.payload.message[0] = 44;
-
-      udp.write(response);
-
-      // yield();
-
-      // UDPEventMessage event;
-
-      // event.remoteAddress = udp.lastPeerAddress();
-      // event.remotePort = udp.lastPeerPort();
-      // event.payload.eventId = 90;
-      // event.payload.message[0] = 5;
-      // event.payloadLength = 1;
-
-      // udp.event(event);
-    }
-  });
 }
 
 void loop() {
@@ -154,6 +133,20 @@ void loop() {
 
   udp.update();
   yield();
+
+  Request *request = testService.getRequest();
+  Peer *peer = testService.getPeer();
+  if (request != nullptr) {
+    debug("request.length", String(*request->length));
+    debug("request.remote-ip", peer->remoteAddress.toString());
+    debug("request.remote-port", String(peer->remotePort));
+
+    auto responsePayload = new ResponsePayload({
+      0
+    });
+
+    testService.ingestResponsePayload(responsePayload, 0);
+  }
 
   #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
     setupInfoLog();
