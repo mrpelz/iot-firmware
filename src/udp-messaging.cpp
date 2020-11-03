@@ -1,127 +1,40 @@
 #include <Arduino.h>
-#include <ESP8266WiFi.h>
-#include <WiFiUdp.h>
+#include <ESPAsyncUDP.h>
 
 #define UDP_MAX_LENGTH 508
 
-#define REQUEST_HEADER_LENGTH 2
-#define REQUEST_MAX_LENGTH UDP_MAX_LENGTH - REQUEST_HEADER_LENGTH
+#define MESSAGE_ID_LENGTH 1
+#define SERVICE_ID_LENGTH 1
+#define EVENT_ID_LENGTH 1
 
-#define RESPONSE_HEADER_LENGTH 1
-#define RESPONSE_MAX_LENGTH UDP_MAX_LENGTH - RESPONSE_HEADER_LENGTH
+#define REQUEST_MIN_LENGTH MESSAGE_ID_LENGTH + SERVICE_ID_LENGTH
+#define REQUEST_MAX_LENGTH UDP_MAX_LENGTH - REQUEST_MIN_LENGTH
 
-#define EVENT_HEADER_LENGTH 2
-#define EVENT_MAX_LENGTH UDP_MAX_LENGTH - EVENT_HEADER_LENGTH
+#define RESPONSE_MAX_LENGTH UDP_MAX_LENGTH - MESSAGE_ID_LENGTH
+
+#define EVENT_ID_FIELD 0x00
+#define EVENT_MAX_LENGTH UDP_MAX_LENGTH - MESSAGE_ID_LENGTH - EVENT_ID_LENGTH
+
+struct UDPService {
+  uint8_t serviceId;
+  std::function<void (
+    std::vector<uint8_t> *request,
+    std::function<void (
+      std::vector<uint8_t> response
+    )> respond
+  )> handler;
+};
 
 struct Peer {
   IPAddress remoteAddress;
   uint16_t remotePort;
 };
 
-struct EventPayload {
-  uint8_t requestId = 0;
-  uint8_t eventId;
-};
-
-struct Event {
-  uint16_t *length;
-  EventPayload *payload;
-};
-
-struct ResponsePayload {
-  uint8_t requestId;
-};
-
-struct Response {
-  uint16_t *length;
-  ResponsePayload *payload;
-};
-
-struct RequestPayload {
-  uint8_t requestId;
-  uint8_t serviceId;
-};
-
-struct Request {
-  uint16_t *length;
-  RequestPayload *payload;
-};
-
-struct UDPServiceState {
-  uint8_t serviceId;
-  Request *request;
-  Response *response;
-  Peer *peer;
-  std::function<void (const String &, const String &)> debugCallback =
-    [](String key, String value) {};
-};
-
-class UDPService {
-  private:
-    UDPServiceState state;
-
-  public:
-    UDPService(uint8_t serviceId) {
-      state.serviceId = serviceId;
-    }
-
-    uint8_t *serviceId() {
-      return &state.serviceId;
-    }
-
-    Peer *getPeer() {
-      return state.peer;
-    }
-
-    Request *getRequest() {
-      if (state.request == nullptr) return nullptr;
-
-      Request *request = state.request;
-      state.request = nullptr;
-
-      return request;
-    }
-
-    Response *getResponse() {
-      if (state.response == nullptr) return nullptr;
-
-      Response *response = state.response;
-      state.response = nullptr;
-
-      return response;
-    }
-
-    void ingestRequest(Request *request, Peer *peer) {
-      delete state.request;
-      state.request = request;
-
-      state.peer = peer;
-    }
-
-    void ingestResponsePayload(ResponsePayload *responsePayload, uint16_t length) {
-      uint16_t packetLength = length + RESPONSE_HEADER_LENGTH;
-
-      responsePayload->requestId = state.request->payload->requestId;
-
-      delete state.response;
-      state.response = new Response({
-        &packetLength,
-        responsePayload
-      });
-    }
-
-    void setDebug(std::function<void (const String &, const String &)> callback) {
-      state.debugCallback = callback;
-    }
-};
-
 struct UDPMessagingState {
-  bool isListening;
-  WiFiUDP udp;
+  AsyncUDP udp;
   uint16_t port;
+  Peer peer;
   std::vector<UDPService *> services;
-  Event *event;
-  Peer *peer;
   std::function<void (const String &, const String &)> debugCallback =
     [](String key, String value) {};
 };
@@ -130,104 +43,125 @@ class UDPMessaging {
   private:
     UDPMessagingState state;
 
-    void handleEvent() {
-      if (state.event == nullptr) return;
+    void handleRequest(AsyncUDPPacket *packet) {
+      state.debugCallback("event", "udp.request");
 
-      Event *event = state.event;
-      state.event = nullptr;
+      size_t length = packet->length();
 
-      state.udp.beginPacket(state.peer->remoteAddress, state.peer->remotePort);
-      state.udp.write((uint8_t *)event->payload, *event->length);
-      state.udp.endPacket();
-    }
+      if (length < REQUEST_MIN_LENGTH) {
+        packet->flush();
+        return;
+      }
 
-    void handleRequests() {
-      uint16_t length = state.udp.parsePacket();
-      if (!length) return;
+      state.peer = {
+        packet->remoteIP(),
+        packet->remotePort()
+      };
 
-      delete state.peer;
-      state.peer = new Peer({
-        state.udp.remoteIP(),
-        state.udp.remotePort()
-      });
+      auto payload = packet->data();
+      uint8_t messageId = *payload;
+      uint8_t serviceId = *(payload + MESSAGE_ID_LENGTH);
+      uint8_t *messageStart = payload + MESSAGE_ID_LENGTH + SERVICE_ID_LENGTH;
+      uint8_t *messageEnd = payload + length;
+      
+      std::vector<uint8_t> message;
+      message.insert(message.end(), messageStart, messageEnd);
 
-      RequestPayload *payload = (RequestPayload *)malloc(length);
+      state.debugCallback("udp.request.length", String(length));
+      state.debugCallback("udp.request.remote-ip", packet->remoteIP().toString());
+      state.debugCallback("udp.request.remote-port", String(packet->remotePort()));
+      state.debugCallback("udp.request.message-id", String(messageId, HEX));
+      state.debugCallback("udp.request.service-id", String(serviceId, HEX));
+      state.debugCallback("udp.request.message-length", String(message.size()));
 
-      state.udp.read((uint8_t *)payload, length);
+      auto respond = [&](std::vector<uint8_t> response) {
+        std::vector<uint8_t> outgoing = {
+          messageId
+        };
 
-      auto request = new Request({
-        &length,
-        payload
-      });
+        uint8_t *responseStart = response.data();
+        uint8_t *responseEnd = responseStart + response.size();
+        outgoing.insert(outgoing.end(), responseStart, responseEnd);
 
+        state.debugCallback("udp.response.length", String(outgoing.size()));
+        state.debugCallback("udp.response.message-id", String(messageId, HEX));
+        state.debugCallback("udp.response.message-length", String(response.size()));
+
+        packet->write(outgoing.data(), outgoing.size());
+      };
+
+      bool match = false;
       std::for_each(
         std::begin(state.services),
         std::end(state.services),
-        [&](UDPService * const service) {
-          if (*(service->serviceId()) != payload->serviceId) return;
+        [&](UDPService *service) {
+          if (service->serviceId != serviceId) return;
 
-          service->ingestRequest(request, state.peer);
+          match = true;
+          service->handler(&message, respond);
         }
       );
-    }
 
-    void handleResponses() {
-      std::for_each(
-        std::begin(state.services),
-        std::end(state.services),
-        [&](UDPService * const service) {
-          Response *response = service->getResponse();
-
-          if (!response) return;
-
-          state.udp.beginPacket(state.peer->remoteAddress, state.peer->remotePort);
-          state.udp.write((uint8_t *)response->payload, *response->length);
-          state.udp.endPacket();
-        }
-      );
+      if (!match) {
+        state.debugCallback("event", "udp.request.no-matching-service");
+        packet->flush();
+      }
     }
     
   public:
-    UDPMessaging(uint16_t port, std::vector<UDPService *> services) {
-      state.isListening = false;
-
+    UDPMessaging(uint16_t port) {
       state.port = port;
-      state.services = services;
+
+      state.udp.onPacket([&](AsyncUDPPacket packet) {
+        handleRequest(&packet);
+      });
+    }
+
+    void addService(UDPService *service) {
+      state.services.insert(state.services.end(), service);
     }
 
     void begin() {
-      state.isListening = true;
-
       state.debugCallback("event", "udp.listening");
       state.debugCallback("udp.listening.port", String(state.port));
 
-      state.udp.begin(state.port);
+      state.udp.listen(state.port);
     }
 
-    void ingestEventPayload(EventPayload *eventPayload, uint16_t length) {
-      uint16_t packetLength = length + EVENT_HEADER_LENGTH;
+    void close() {
+      state.debugCallback("event", "udp.listening");
+      state.debugCallback("udp.listening", "close");
 
-      delete state.event;
-      state.event = new Event({
-        &packetLength,
-        eventPayload
-      });
+      state.udp.close();
+    }
+
+    void event(uint8_t eventId, std::vector<uint8_t> event) {
+      if (!state.peer.remotePort) return;
+
+      std::vector<uint8_t> outgoing = {
+          EVENT_ID_FIELD,
+          eventId
+        };
+
+        uint8_t *eventStart = event.data();
+        uint8_t *eventEnd = eventStart + event.size();
+        outgoing.insert(outgoing.end(), eventStart, eventEnd);
+
+        state.debugCallback("udp.event.length", String(outgoing.size()));
+        state.debugCallback("udp.event.remote-ip", state.peer.remoteAddress.toString());
+        state.debugCallback("udp.event.remote-port", String(state.peer.remotePort));
+        state.debugCallback("udp.event.event-id", String(eventId, HEX));
+        state.debugCallback("udp.event.message-length", String(event.size()));
+
+        state.udp.writeTo(
+          outgoing.data(),
+          outgoing.size(),
+          state.peer.remoteAddress,
+          state.peer.remotePort
+        );
     }
 
     void setDebug(std::function<void (const String &, const String &)> callback) {
       state.debugCallback = callback;
-    }
-
-    void stop() {
-      state.isListening = false;
-      state.udp.stop();
-    }
-
-    void update() {
-      if (!state.isListening) return;
-
-      handleEvent();
-      handleResponses();
-      handleRequests();
     }
 };
