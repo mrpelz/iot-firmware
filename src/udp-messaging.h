@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <ESPAsyncUDP.h>
+#include "./services/service-ids.h"
 
 #define UDP_MAX_LENGTH 508
 
@@ -15,7 +16,6 @@
 
 #define RESPONSE_MAX_LENGTH UDP_MAX_LENGTH - MESSAGE_ID_LENGTH
 
-#define EVENT_ID_FIELD 0x00
 #define EVENT_MAX_LENGTH UDP_MAX_LENGTH - MESSAGE_ID_LENGTH - EVENT_ID_LENGTH
 
 struct UDPService {

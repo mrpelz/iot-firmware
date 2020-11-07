@@ -30,7 +30,7 @@ void UDPMessaging::event(uint8_t eventId, std::vector<uint8_t> event) {
   if (!state.peer.remotePort) return;
 
   std::vector<uint8_t> outgoing = {
-    EVENT_ID_FIELD,
+    serviceIds::_reserved_event,
     eventId
   };
 

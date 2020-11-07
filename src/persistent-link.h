@@ -4,6 +4,8 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 
+String printMacAddress(uint8_t input[6]);
+
 #ifndef IOT_NODE_DHCP
   struct InterfaceConfig {
     IPAddress ip;
@@ -103,7 +105,6 @@ class PersistentLink {
   private:
     PersistentLinkState state;
     void configDebug();
-    String printMacAddress(uint8_t input[6]);
     void wifiConnect();
 
   public:

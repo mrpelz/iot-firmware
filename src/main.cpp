@@ -14,8 +14,8 @@ PersistentLink persistentWifi({
     },
   #endif
   {
-    "iot.wurstsalat.cloud", // ssid iot
-    "xyz", // password iot
+    STR(IOT_NODE_WIFI_SSID),
+    STR(IOT_NODE_WIFI_PSK),
     #if defined(IOT_NODE_AP_ALGORE)
       { 0x78, 0x8a, 0x20, 0x83, 0x69, 0x8c }, // bssid algore
       11, // channel algore
@@ -70,12 +70,17 @@ void setup() {
     udp.close();
   });
 
-  udp.addService(&testService);
+  udp.addService(&helloService);
+  udp.addService(&systemInfoService);
+  udp.addService(&keepAliveService);
 
   persistentWifi.connect();
 }
 
 void loop() {
+  TimeoutUpdate();
+  yield();
+
   persistentWifi.update();
   yield();
 
