@@ -27,7 +27,7 @@ void UDPMessaging::close() {
 }
 
 void UDPMessaging::event(uint8_t eventId, std::vector<uint8_t> event) {
-  if (!state.peer.remotePort) return;
+  if (!state.eventPeer.remoteAddress.isSet() || !state.eventPeer.remotePort) return;
 
   std::vector<uint8_t> outgoing = {
     serviceIds::_reserved_event,
@@ -39,16 +39,16 @@ void UDPMessaging::event(uint8_t eventId, std::vector<uint8_t> event) {
   outgoing.insert(outgoing.end(), eventStart, eventEnd);
 
   state.debugCallback("udp.event.length", String(outgoing.size()));
-  state.debugCallback("udp.event.remote-ip", state.peer.remoteAddress.toString());
-  state.debugCallback("udp.event.remote-port", String(state.peer.remotePort));
+  state.debugCallback("udp.event.remote-ip", state.eventPeer.remoteAddress.toString());
+  state.debugCallback("udp.event.remote-port", String(state.eventPeer.remotePort));
   state.debugCallback("udp.event.event-id", String(eventId, HEX));
   state.debugCallback("udp.event.message-length", String(event.size()));
 
   state.udp.writeTo(
     outgoing.data(),
     outgoing.size(),
-    state.peer.remoteAddress,
-    state.peer.remotePort
+    state.eventPeer.remoteAddress,
+    state.eventPeer.remotePort
   );
 }
 
@@ -61,11 +61,6 @@ void UDPMessaging::handleRequest(AsyncUDPPacket *packet) {
     packet->flush();
     return;
   }
-
-  state.peer = {
-    packet->remoteIP(),
-    packet->remotePort()
-  };
 
   auto payload = packet->data();
   uint8_t messageId = *payload;
@@ -82,6 +77,19 @@ void UDPMessaging::handleRequest(AsyncUDPPacket *packet) {
   state.debugCallback("udp.request.message-id", String(messageId, HEX));
   state.debugCallback("udp.request.service-id", String(serviceId, HEX));
   state.debugCallback("udp.request.message-length", String(message.size()));
+
+  if (serviceId == serviceIds::_reserved_event) {
+    state.eventPeer = {
+      packet->remoteIP(),
+      packet->remotePort()
+    };
+
+    state.debugCallback("udp.request.set-event-peer.ip", packet->remoteIP().toString());
+    state.debugCallback("udp.request.set-event-peer.port", String(packet->remotePort()));
+
+    packet->flush();
+    return;
+  }
 
   auto respond = [&](std::vector<uint8_t> response) {
     std::vector<uint8_t> outgoing = {

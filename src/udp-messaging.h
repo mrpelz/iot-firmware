@@ -36,7 +36,7 @@ struct Peer {
 struct UDPMessagingState {
   AsyncUDP udp;
   uint16_t port;
-  Peer peer;
+  Peer eventPeer;
   std::vector<UDPService *> services;
   std::function<void (const String &, const String &)> debugCallback =
     [](String key, String value) {};
