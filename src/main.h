@@ -11,6 +11,7 @@
 #include "./udp-messaging.h"
 #include "./services/hello/service.h"
 #include "./services/system-info/service.h"
+#include "./services/async/service.h"
 #include "./services/keepalive/service.h"
 #include "./logging.h"
 

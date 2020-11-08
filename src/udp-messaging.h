@@ -29,8 +29,8 @@ struct UDPService {
 };
 
 struct Peer {
-  IPAddress remoteAddress;
-  uint16_t remotePort;
+  IPAddress ip;
+  uint16_t port;
 };
 
 struct UDPMessagingState {

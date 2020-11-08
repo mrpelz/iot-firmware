@@ -5,6 +5,7 @@ enum serviceIds {
   _reserved_event,
   hello,
   systemInfo,
+  async,
   keepalive = 0xFF
 };
 

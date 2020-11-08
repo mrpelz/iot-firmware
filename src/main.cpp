@@ -72,6 +72,7 @@ void setup() {
 
   udp.addService(&helloService);
   udp.addService(&systemInfoService);
+  udp.addService(&asyncService);
   udp.addService(&keepAliveService);
 
   persistentWifi.connect();
@@ -88,6 +89,9 @@ void loop() {
     possiblyDeferredSetup();
     yield();
   #endif
+
+  asyncUpdate();
+  yield();
 }
 
 #endif

@@ -27,7 +27,7 @@ void UDPMessaging::close() {
 }
 
 void UDPMessaging::event(uint8_t eventId, std::vector<uint8_t> event) {
-  if (!state.eventPeer.remoteAddress.isSet() || !state.eventPeer.remotePort) return;
+  if (!state.eventPeer.ip.isSet() || !state.eventPeer.port) return;
 
   std::vector<uint8_t> outgoing = {
     serviceIds::_reserved_event,
@@ -39,16 +39,16 @@ void UDPMessaging::event(uint8_t eventId, std::vector<uint8_t> event) {
   outgoing.insert(outgoing.end(), eventStart, eventEnd);
 
   state.debugCallback("udp.event.length", String(outgoing.size()));
-  state.debugCallback("udp.event.remote-ip", state.eventPeer.remoteAddress.toString());
-  state.debugCallback("udp.event.remote-port", String(state.eventPeer.remotePort));
+  state.debugCallback("udp.event.remote-ip", state.eventPeer.ip.toString());
+  state.debugCallback("udp.event.remote-port", String(state.eventPeer.port));
   state.debugCallback("udp.event.event-id", String(eventId, HEX));
   state.debugCallback("udp.event.message-length", String(event.size()));
 
   state.udp.writeTo(
     outgoing.data(),
     outgoing.size(),
-    state.eventPeer.remoteAddress,
-    state.eventPeer.remotePort
+    state.eventPeer.ip,
+    state.eventPeer.port
   );
 }
 
@@ -62,6 +62,11 @@ void UDPMessaging::handleRequest(AsyncUDPPacket *packet) {
     return;
   }
 
+  Peer peer = {
+    packet->remoteIP(),
+    packet->remotePort()
+  };
+
   auto payload = packet->data();
   uint8_t messageId = *payload;
   uint8_t serviceId = *(payload + MESSAGE_ID_LENGTH);
@@ -71,41 +76,23 @@ void UDPMessaging::handleRequest(AsyncUDPPacket *packet) {
   std::vector<uint8_t> message;
   message.insert(message.end(), messageStart, messageEnd);
 
+  packet->flush();
+
   state.debugCallback("udp.request.length", String(length));
-  state.debugCallback("udp.request.remote-ip", packet->remoteIP().toString());
-  state.debugCallback("udp.request.remote-port", String(packet->remotePort()));
+  state.debugCallback("udp.request.remote-ip", peer.ip.toString());
+  state.debugCallback("udp.request.remote-port", String(peer.port));
   state.debugCallback("udp.request.message-id", String(messageId, HEX));
   state.debugCallback("udp.request.service-id", String(serviceId, HEX));
   state.debugCallback("udp.request.message-length", String(message.size()));
 
   if (serviceId == serviceIds::_reserved_event) {
-    state.eventPeer = {
-      packet->remoteIP(),
-      packet->remotePort()
-    };
+    state.eventPeer = peer;
 
-    state.debugCallback("udp.request.set-event-peer.ip", packet->remoteIP().toString());
-    state.debugCallback("udp.request.set-event-peer.port", String(packet->remotePort()));
+    state.debugCallback("udp.request.set-event-peer.ip", peer.ip.toString());
+    state.debugCallback("udp.request.set-event-peer.port", String(peer.port));
 
-    packet->flush();
     return;
   }
-
-  auto respond = [&](std::vector<uint8_t> response) {
-    std::vector<uint8_t> outgoing = {
-      messageId
-    };
-
-    uint8_t *responseStart = response.data();
-    uint8_t *responseEnd = responseStart + response.size();
-    outgoing.insert(outgoing.end(), responseStart, responseEnd);
-
-    state.debugCallback("udp.response.length", String(outgoing.size()));
-    state.debugCallback("udp.response.message-id", String(messageId, HEX));
-    state.debugCallback("udp.response.message-length", String(response.size()));
-
-    packet->write(outgoing.data(), outgoing.size());
-  };
 
   bool match = false;
   std::for_each(
@@ -113,15 +100,39 @@ void UDPMessaging::handleRequest(AsyncUDPPacket *packet) {
     std::end(state.services),
     [&](UDPService *service) {
       if (service->serviceId != serviceId) return;
-
       match = true;
-      service->handler(&message, respond);
+
+      service->handler(
+        &message,
+        [this, peer, messageId, serviceId](std::vector<uint8_t> response) {
+          std::vector<uint8_t> outgoing = {
+            messageId
+          };
+
+          uint8_t *responseStart = response.data();
+          uint8_t *responseEnd = responseStart + response.size();
+          outgoing.insert(outgoing.end(), responseStart, responseEnd);
+
+          state.debugCallback("udp.response.length", String(outgoing.size()));
+          state.debugCallback("udp.response.remote-ip", peer.ip.toString());
+          state.debugCallback("udp.response.remote-port", String(peer.port));
+          state.debugCallback("udp.response.message-id", String(messageId, HEX));
+          state.debugCallback("udp.response.service-id", String(serviceId, HEX));
+          state.debugCallback("udp.response.message-length", String(response.size()));
+
+          state.udp.writeTo(
+            outgoing.data(),
+            outgoing.size(),
+            peer.ip,
+            peer.port
+          );
+        }
+      );
     }
   );
 
   if (!match) {
     state.debugCallback("event", "udp.request.no-matching-service");
-    packet->flush();
   }
 }
 
