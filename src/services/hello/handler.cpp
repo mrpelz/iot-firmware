@@ -31,9 +31,12 @@ void helloHandler(
   addLineToRespone(&response, STR(IOT_NODE_PIO_FRAMEWORK));
   addLineToRespone(&response, String(ESP.getChipId(), HEX));
   addLineToRespone(&response, String(ESP.getFlashChipId(), HEX));
-  addLineToRespone(&response, String(WiFi.RSSI()));
+  addLineToRespone(&response, WiFi.macAddress());
   addLineToRespone(&response, printMacAddress(WiFi.BSSID()));
   addLineToRespone(&response, String(WiFi.channel()));
+  addLineToRespone(&response, String(WiFi.RSSI()));
+  addLineToRespone(&response, String(WiFi.getPhyMode()));
+  addLineToRespone(&response, WiFi.SSID());
 
   addLineToRespone(&response, "BYE");
 

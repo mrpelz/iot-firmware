@@ -11,11 +11,16 @@ void systemInfoHandler(
   auto chipId = ESP.getChipId();
   response.insert(response.end(), &chipId, &chipId + sizeof(chipId));
 
-  auto flashId = ESP.getChipId();
+  auto flashId = ESP.getFlashChipId();
   response.insert(response.end(), &flashId, &flashId + sizeof(flashId));
 
+  auto macAddress = new uint8_t[WL_MAC_ADDR_LENGTH];
+  WiFi.macAddress(macAddress);
+  response.insert(response.end(), macAddress, macAddress + WL_MAC_ADDR_LENGTH);
+  delete macAddress;
+
   auto bssid = WiFi.BSSID();
-  response.insert(response.end(), bssid, bssid + 6);
+  response.insert(response.end(), bssid, bssid + WL_MAC_ADDR_LENGTH);
 
   auto channel = WiFi.channel();
   response.insert(response.end(), &channel, &channel + sizeof(channel));

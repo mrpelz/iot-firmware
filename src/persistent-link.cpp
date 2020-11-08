@@ -320,8 +320,12 @@ void PersistentLink::wifiDebug(bool deep) {
   state.callbacks.debug("info.wifi.rssi", String(WiFi.RSSI()));
 
   #ifdef IOT_NODE_DHCP
-    state.callbacks.debug("info.wifi.network-config.ip", WiFi.localIP().toString());
-    state.callbacks.debug("info.wifi.network-config.gateway", WiFi.gatewayIP().toString());
-    state.callbacks.debug("info.wifi.network-config.netmask", WiFi.subnetMask().toString());
+    IPAddress ip = WiFi.localIP();
+    IPAddress gateway = WiFi.gatewayIP();
+    IPAddress netmask = WiFi.subnetMask();
+
+    if (ip.isSet()) state.callbacks.debug("info.wifi.network-config.ip", ip.toString());
+    if (gateway.isSet()) state.callbacks.debug("info.wifi.network-config.gateway", gateway.toString());
+    if (netmask.isSet()) state.callbacks.debug("info.wifi.network-config.netmask", netmask.toString());
   #endif
 }
