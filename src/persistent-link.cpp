@@ -32,83 +32,90 @@ PersistentLink::PersistentLink(PersistentLinkConfig config) {
   state.credentials = config.credentials;
   state.timings = config.timings;
 
-  state.eventListeners.onStationModeAuthModeChanged = WiFi.onStationModeAuthModeChanged(
-    [&](WiFiEventStationModeAuthModeChanged event) {
-      state.callbacks.debug("event", "wifi.change.auth-mode");
-      state.callbacks.debug("event.wifi.change.auth-mode.old", String(event.oldMode));
-      state.callbacks.debug("event.wifi.change.auth-mode.new", String(event.newMode));
+  #ifdef ARDUINO_ARCH_ESP8266
+    state.eventListeners.onStationModeConnected = WiFi.onStationModeConnected(
+      [&](WiFiEventStationModeConnected event) {
+        handleConnected(event.ssid, event.bssid, event.channel);
+      }
+    );
 
-      state.callbacks.authModeChanged(event);
-    }
-  );
-
-  state.eventListeners.onStationModeConnected = WiFi.onStationModeConnected(
-    [&](WiFiEventStationModeConnected event) {
-      state.wifiIsConnected = true;
-
-      state.callbacks.debug("event", "wifi.connect");
-      state.callbacks.debug("event.wifi.connect.ssid", event.ssid);
-      state.callbacks.debug("event.wifi.connect.channel", String(event.channel));
-
-      update();
-
-      state.callbacks.connected(event);
-    }
-  );
-
-  #ifdef IOT_NODE_DHCP
     state.eventListeners.onStationModeDHCPTimeout = WiFi.onStationModeDHCPTimeout(
       [&]() {
-        state.callbacks.debug("event", "wifi.network-config.dhcp-timeout");
+        handleDhcpTimeout();
+      }
+    );
+    
+    state.eventListeners.onStationModeDisconnected = WiFi.onStationModeDisconnected(
+      [&](WiFiEventStationModeDisconnected event) {
+        handleDisconnected(event.ssid, event.bssid, event.reason);
+      }
+    );
 
-        state.callbacks.dhcpTimeout();
+    state.eventListeners.onStationModeGotIP = WiFi.onStationModeGotIP(
+      [&](WiFiEventStationModeGotIP event) {
+        handleGotIP(event.ip, event.gw, event.mask);
       }
     );
   #endif
-  
-  state.eventListeners.onStationModeDisconnected = WiFi.onStationModeDisconnected(
-    [&](WiFiEventStationModeDisconnected event) {
-      state.wifiIsConnected = false;
+  #ifdef ARDUINO_ARCH_ESP32
+    state.eventListeners.onStationModeConnected = WiFi.onEvent(
+      [&](system_event_id_t event, system_event_info_t info) {
+        handleConnected(
+          String((char *)info.connected.ssid),
+          info.connected.bssid,
+          info.connected.channel
+        );
+      },
+      SYSTEM_EVENT_STA_CONNECTED
+    );
 
-      state.callbacks.debug("event", "wifi.disconnect");
-      state.callbacks.debug("event.wifi.disconnect.ssid", event.ssid);
-      state.callbacks.debug("event.wifi.disconnect.reason", String(event.reason));
+    state.eventListeners.onStationModeDHCPTimeout = WiFi.onEvent(
+      [&](system_event_id_t event, system_event_info_t info) {
+        handleDhcpTimeout();
+      },
+      SYSTEM_EVENT_STA_LOST_IP
+    );
 
-      update();
+    state.eventListeners.onStationModeDisconnected = WiFi.onEvent(
+      [&](system_event_id_t event, system_event_info_t info) {
+        handleDisconnected(
+          String((char *)info.disconnected.ssid),
+          info.disconnected.bssid,
+          info.disconnected.reason
+        );
+      },
+      SYSTEM_EVENT_STA_DISCONNECTED
+    );
 
-      state.callbacks.disconnected(event);
-    }
-  );
-
-  state.eventListeners.onStationModeGotIP = WiFi.onStationModeGotIP(
-    [&](WiFiEventStationModeGotIP event) {
-      state.callbacks.debug("event", "wifi.network-config");
-      state.callbacks.debug("event.wifi.network-config.ip", event.ip.toString());
-      state.callbacks.debug("event.wifi.network-config.gateway", event.gw.toString());
-      state.callbacks.debug("event.wifi.network-config.netmask", event.mask.toString());
-
-      state.callbacks.gotIP(event);
-    }
-  );
-
-  state.eventListeners.onWiFiModeChange = WiFi.onWiFiModeChange(
-    [&](WiFiEventModeChange event) {
-      state.callbacks.debug("event", "wifi.change.mode");
-      state.callbacks.debug("event.wifi.change.mode.old", String(event.oldMode));
-      state.callbacks.debug("event.wifi.change.mode.new", String(event.newMode));
-
-      state.callbacks.modeChange(event);
-    }
-  );
+    state.eventListeners.onStationModeGotIP = WiFi.onEvent(
+      [&](system_event_id_t event, system_event_info_t info) {
+        handleGotIP(
+          IPAddress(info.got_ip.ip_info.ip.addr),
+          IPAddress(info.got_ip.ip_info.gw.addr),
+          IPAddress(info.got_ip.ip_info.netmask.addr)
+        );
+      },
+      SYSTEM_EVENT_STA_GOT_IP
+    );
+  #endif
 
   WiFi.mode(WIFI_STA);
   WiFi.persistent(false);
   WiFi.setAutoConnect(false);
   WiFi.setAutoReconnect(false);
-  WiFi.setPhyMode(state.phyMode);
+
+  #ifdef ARDUINO_ARCH_ESP8266
+    WiFi.setPhyMode(state.phyMode);
+    WiFi.setSleepMode(WIFI_NONE_SLEEP);
+  #endif
 
   if (state.outputPower != 0) {
-    WiFi.setOutputPower(state.outputPower);
+    #ifdef ARDUINO_ARCH_ESP8266
+      WiFi.setOutputPower(state.outputPower);
+    #endif
+    #ifdef ARDUINO_ARCH_ESP32
+      WiFi.setTxPower(state.outputPower);
+    #endif
   }
 
   #ifndef IOT_NODE_DHCP
@@ -151,38 +158,69 @@ void PersistentLink::disconnect() {
   update();
 }
 
-bool PersistentLink::isConnected() {
-  return state.wifiIsConnected;
+void PersistentLink::handleConnected(String ssid, uint8_t *bssid, uint8_t channel) {
+  state.wifiIsConnected = true;
+
+  state.callbacks.debug("event", "wifi.connect");
+  state.callbacks.debug("event.wifi.connect.ssid", ssid);
+  state.callbacks.debug("event.wifi.connect.bssid", printMacAddress(bssid));
+  state.callbacks.debug("event.wifi.connect.channel", String(channel));
+
+  update();
+
+  state.callbacks.connected();
 }
 
-void PersistentLink::onAuthModeChanged(std::function<void (const WiFiEventStationModeAuthModeChanged &)> callback) {
-  state.callbacks.authModeChanged = callback;
+void PersistentLink::handleDhcpTimeout() {
+  state.callbacks.debug("event", "wifi.network-config.dhcp-timeout");
+
+  state.callbacks.dhcpTimeout();
+}
+
+void PersistentLink::handleDisconnected(String ssid, uint8_t *bssid, DisconnectReason_t reason) {
+  state.wifiIsConnected = false;
+
+  state.callbacks.debug("event", "wifi.disconnect");
+  state.callbacks.debug("event.wifi.disconnect.ssid", ssid);
+  state.callbacks.debug("event.wifi.disconnect.bssid", printMacAddress(bssid));
+  state.callbacks.debug("event.wifi.disconnect.reason", String(reason));
+
+  update();
+
+  state.callbacks.disconnected();
+}
+
+void PersistentLink::handleGotIP(IPAddress ip, IPAddress gateway, IPAddress netmask) {
+  state.callbacks.debug("event", "wifi.network-config");
+  state.callbacks.debug("event.wifi.network-config.ip", ip.toString());
+  state.callbacks.debug("event.wifi.network-config.gateway", gateway.toString());
+  state.callbacks.debug("event.wifi.network-config.netmask", netmask.toString());
+
+  state.callbacks.gotIP();
+}
+
+bool PersistentLink::isConnected() {
+  return state.wifiIsConnected;
 }
 
 void PersistentLink::onBeforeRestart(std::function<void ()> callback) {
   state.callbacks.beforeRestart = callback;
 }
 
-void PersistentLink::onConnected(std::function<void (const WiFiEventStationModeConnected &)> callback) {
+void PersistentLink::onConnected(std::function<void ()> callback) {
   state.callbacks.connected = callback;
 }
 
-#ifdef IOT_NODE_DHCP
-  void PersistentLink::onDhcpTimeout(std::function<void ()> callback) {
-    state.callbacks.dhcpTimeout = callback;
-  }
-#endif
+void PersistentLink::onDhcpTimeout(std::function<void ()> callback) {
+  state.callbacks.dhcpTimeout = callback;
+}
 
-void PersistentLink::onDisconnected(std::function<void (const WiFiEventStationModeDisconnected &)> callback) {
+void PersistentLink::onDisconnected(std::function<void ()> callback) {
   state.callbacks.disconnected = callback;
 }
 
-void PersistentLink::onGotIP(std::function<void (const WiFiEventStationModeGotIP &)> callback) {
+void PersistentLink::onGotIP(std::function<void ()> callback) {
   state.callbacks.gotIP = callback;
-}
-
-void PersistentLink::onModeChange(std::function<void (const WiFiEventModeChange &)> callback) {
-  state.callbacks.modeChange = callback;
 }
 
 void PersistentLink::onReconnect(std::function<void ()> callback) {
@@ -291,19 +329,22 @@ void PersistentLink::wifiConnect() {
 
   #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
     WiFi.begin(
-      state.credentials.ssid,
-      state.credentials.password,
+      state.credentials.ssid.c_str(),
+      state.credentials.password.c_str(),
       state.credentials.channel,
       state.credentials.bssid
     );
   #else
-    WiFi.begin(state.credentials.ssid, state.credentials.password);
+    WiFi.begin(state.credentials.ssid.c_str(), state.credentials.password.c_str());
   #endif
 }
 
 void PersistentLink::wifiDebug(bool deep) {
   if (deep) {
-    state.callbacks.debug("info.wifi.phy-mode", String(WiFi.getPhyMode()));
+    #ifdef ARDUINO_ARCH_ESP8266
+      state.callbacks.debug("info.wifi.phy-mode", String(WiFi.getPhyMode()));
+    #endif
+
     state.callbacks.debug("info.wifi.ssid", WiFi.SSID());
 
     #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
@@ -324,8 +365,8 @@ void PersistentLink::wifiDebug(bool deep) {
     IPAddress gateway = WiFi.gatewayIP();
     IPAddress netmask = WiFi.subnetMask();
 
-    if (ip.isSet()) state.callbacks.debug("info.wifi.network-config.ip", ip.toString());
-    if (gateway.isSet()) state.callbacks.debug("info.wifi.network-config.gateway", gateway.toString());
-    if (netmask.isSet()) state.callbacks.debug("info.wifi.network-config.netmask", netmask.toString());
+    state.callbacks.debug("info.wifi.network-config.ip", ip.toString());
+    state.callbacks.debug("info.wifi.network-config.gateway", gateway.toString());
+    state.callbacks.debug("info.wifi.network-config.netmask", netmask.toString());
   #endif
 }

@@ -33,6 +33,14 @@
     "tuple": "cpp",
     "type_traits": "cpp",
     "utility": "cpp",
-    "typeinfo": "cpp"
+    "typeinfo": "cpp",
+    "cstddef": "cpp",
+    "cstring": "cpp",
+    "ctime": "cpp",
+    "unordered_set": "cpp",
+    "algorithm": "cpp",
+    "system_error": "cpp",
+    "iomanip": "cpp",
+    "memory": "cpp"
   }
 }

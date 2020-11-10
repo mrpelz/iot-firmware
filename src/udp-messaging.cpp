@@ -13,21 +13,27 @@ void UDPMessaging::addService(UDPService *service) {
 }
 
 void UDPMessaging::begin() {
+  if (state.isListening) return;
+
   state.debugCallback("event", "udp.listening");
   state.debugCallback("udp.listening.port", String(state.port));
 
+  state.isListening = true;
   state.udp.listen(state.port);
 }
 
 void UDPMessaging::close() {
+  if (!state.isListening) return;
+
   state.debugCallback("event", "udp.listening");
   state.debugCallback("udp.listening", "close");
 
+  state.isListening = false;
   state.udp.close();
 }
 
 void UDPMessaging::event(uint8_t eventId, std::vector<uint8_t> event) {
-  if (!state.eventPeer.ip.isSet() || !state.eventPeer.port) return;
+  if (!state.eventPeer.port) return;
 
   std::vector<uint8_t> outgoing = {
     serviceIds::_reserved_event,
@@ -59,6 +65,7 @@ void UDPMessaging::handleRequest(AsyncUDPPacket *packet) {
 
   if (length < REQUEST_MIN_LENGTH) {
     packet->flush();
+
     return;
   }
 

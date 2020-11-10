@@ -2,7 +2,13 @@
 #define _LOGGING
 
 #include <Arduino.h>
-#include <ESP8266WiFi.h>
+
+#ifdef ARDUINO_ARCH_ESP8266
+  #include <ESP8266WiFi.h>
+#endif
+#ifdef ARDUINO_ARCH_ESP32
+  #include <WiFi.h>
+#endif
 
 #define TOSTRING(x) #x
 #define STR(x) TOSTRING(x)

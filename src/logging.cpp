@@ -43,7 +43,11 @@ void setupInfoLog() {
   debug("info.build.pio.env", STR(IOT_NODE_PIO_ENV));
   debug("info.build.pio.platform", STR(IOT_NODE_PIO_PLATFORM));
   debug("info.build.pio.framework", STR(IOT_NODE_PIO_FRAMEWORK));
-  debug("info.system.chip-id", String(ESP.getChipId(), HEX));
-  debug("info.system.flash-id", String(ESP.getFlashChipId(), HEX));
+
+  #ifdef ARDUINO_ARCH_ESP8266
+    debug("info.system.chip-id", String(ESP.getChipId(), HEX));
+    debug("info.system.flash-id", String(ESP.getFlashChipId(), HEX));
+  #endif
+
   debug("info.system.mac-address", WiFi.macAddress());
 }

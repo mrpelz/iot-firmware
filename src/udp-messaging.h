@@ -2,7 +2,14 @@
 #define _UDP_MESSAGING
 
 #include <Arduino.h>
-#include <ESPAsyncUDP.h>
+
+#ifdef ARDUINO_ARCH_ESP8266
+  #include <ESPAsyncUDP.h>  
+#endif
+#ifdef ARDUINO_ARCH_ESP32
+  #include <AsyncUDP.h>
+#endif
+
 #include "./services/service-ids.h"
 
 #define UDP_MAX_LENGTH 508
@@ -34,6 +41,7 @@ struct Peer {
 };
 
 struct UDPMessagingState {
+  bool isListening = false;
   AsyncUDP udp;
   uint16_t port;
   Peer eventPeer;

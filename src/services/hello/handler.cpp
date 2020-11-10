@@ -29,13 +29,21 @@ void helloHandler(
   addLineToRespone(&response, STR(IOT_NODE_PIO_ENV));
   addLineToRespone(&response, STR(IOT_NODE_PIO_PLATFORM));
   addLineToRespone(&response, STR(IOT_NODE_PIO_FRAMEWORK));
-  addLineToRespone(&response, String(ESP.getChipId(), HEX));
-  addLineToRespone(&response, String(ESP.getFlashChipId(), HEX));
+
+  #ifdef ARDUINO_ARCH_ESP8266
+    addLineToRespone(&response, String(ESP.getChipId(), HEX));
+    addLineToRespone(&response, String(ESP.getFlashChipId(), HEX));
+  #endif
+
   addLineToRespone(&response, WiFi.macAddress());
   addLineToRespone(&response, printMacAddress(WiFi.BSSID()));
   addLineToRespone(&response, String(WiFi.channel()));
   addLineToRespone(&response, String(WiFi.RSSI()));
-  addLineToRespone(&response, String(WiFi.getPhyMode()));
+
+  #ifdef ARDUINO_ARCH_ESP8266
+    addLineToRespone(&response, String(WiFi.getPhyMode()));
+  #endif
+
   addLineToRespone(&response, WiFi.SSID());
 
   addLineToRespone(&response, "BYE");
