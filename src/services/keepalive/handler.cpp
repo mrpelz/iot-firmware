@@ -6,12 +6,12 @@ RestartOnTimeout::RestartOnTimeout(unsigned long timeout) {
 }
 
 void RestartOnTimeout::start() {
-  debug("event", "keepalive.stop");
+  debug("event", "keepalive.start");
   state.running = true;
 }
 
 void RestartOnTimeout::stop() {
-  debug("event", "keepalive.start");
+  debug("event", "keepalive.stop");
   state.running = false;
 }
 

@@ -10,6 +10,8 @@
   #include <WiFi.h>
 #endif
 
+#include "./persistent-link/tools.h"
+
 #ifdef IOT_NODE_LINK_ETH
   #include "./persistent-link/eth.h"
 #else

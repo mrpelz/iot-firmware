@@ -2,7 +2,7 @@
 
 #ifndef IOT_NODE_LINK_ETH
 
-PersistentLink::PersistentLink(PersistentLinkConfig config) {
+PersistentWiFi::PersistentWiFi(PersistentWiFiConfig config) {
   state.phyMode = config.phyMode;
   state.outputPower = config.outputPower;
 
@@ -14,32 +14,32 @@ PersistentLink::PersistentLink(PersistentLinkConfig config) {
   state.timings = config.timings;
 
   #ifdef ARDUINO_ARCH_ESP8266
-    state.eventListeners.onStationModeConnected = WiFi.onStationModeConnected(
+    state.eventListeners.onConnected = WiFi.onStationModeConnected(
       [&](WiFiEventStationModeConnected event) {
         handleConnected(event.ssid, event.bssid, event.channel);
       }
     );
 
-    state.eventListeners.onStationModeDHCPTimeout = WiFi.onStationModeDHCPTimeout(
+    state.eventListeners.onDHCPTimeout = WiFi.onStationModeDHCPTimeout(
       [&]() {
         handleDhcpTimeout();
       }
     );
     
-    state.eventListeners.onStationModeDisconnected = WiFi.onStationModeDisconnected(
+    state.eventListeners.onDisconnected = WiFi.onStationModeDisconnected(
       [&](WiFiEventStationModeDisconnected event) {
         handleDisconnected(event.ssid, event.bssid, event.reason);
       }
     );
 
-    state.eventListeners.onStationModeGotIP = WiFi.onStationModeGotIP(
+    state.eventListeners.onGotIP = WiFi.onStationModeGotIP(
       [&](WiFiEventStationModeGotIP event) {
         handleGotIP(event.ip, event.gw, event.mask);
       }
     );
   #endif
   #ifdef ARDUINO_ARCH_ESP32
-    state.eventListeners.onStationModeConnected = WiFi.onEvent(
+    state.eventListeners.onConnected = WiFi.onEvent(
       [&](system_event_id_t event, system_event_info_t info) {
         handleConnected(
           String((char *)info.connected.ssid),
@@ -50,14 +50,14 @@ PersistentLink::PersistentLink(PersistentLinkConfig config) {
       SYSTEM_EVENT_STA_CONNECTED
     );
 
-    state.eventListeners.onStationModeDHCPTimeout = WiFi.onEvent(
+    state.eventListeners.onDHCPTimeout = WiFi.onEvent(
       [&](system_event_id_t event, system_event_info_t info) {
         handleDhcpTimeout();
       },
       SYSTEM_EVENT_STA_LOST_IP
     );
 
-    state.eventListeners.onStationModeDisconnected = WiFi.onEvent(
+    state.eventListeners.onDisconnected = WiFi.onEvent(
       [&](system_event_id_t event, system_event_info_t info) {
         handleDisconnected(
           String((char *)info.disconnected.ssid),
@@ -68,7 +68,7 @@ PersistentLink::PersistentLink(PersistentLinkConfig config) {
       SYSTEM_EVENT_STA_DISCONNECTED
     );
 
-    state.eventListeners.onStationModeGotIP = WiFi.onEvent(
+    state.eventListeners.onGotIP = WiFi.onEvent(
       [&](system_event_id_t event, system_event_info_t info) {
         handleGotIP(
           IPAddress(info.got_ip.ip_info.ip.addr),
@@ -109,7 +109,7 @@ PersistentLink::PersistentLink(PersistentLinkConfig config) {
   #endif
 }
 
-void PersistentLink::configDebug() {
+void PersistentWiFi::configDebug() {
   state.callbacks.debug("config.wifi.phy-mode", String(state.phyMode));
   state.callbacks.debug("config.wifi.output-power", String(state.outputPower));
   state.callbacks.debug("config.wifi.ssid", state.credentials.ssid);
@@ -129,18 +129,18 @@ void PersistentLink::configDebug() {
   #endif
 }
 
-void PersistentLink::connect() {
-  state.wifiShouldBeConnected = true;
+void PersistentWiFi::connect() {
+  state.shouldBeConnected = true;
   update();
 }
 
-void PersistentLink::disconnect() {
-  state.wifiShouldBeConnected = false;
+void PersistentWiFi::disconnect() {
+  state.shouldBeConnected = false;
   update();
 }
 
-void PersistentLink::handleConnected(String ssid, uint8_t *bssid, uint8_t channel) {
-  state.wifiIsConnected = true;
+void PersistentWiFi::handleConnected(String ssid, uint8_t *bssid, uint8_t channel) {
+  state.isConnected = true;
 
   state.callbacks.debug("event", "wifi.connect");
   state.callbacks.debug("event.wifi.connect.ssid", ssid);
@@ -152,14 +152,14 @@ void PersistentLink::handleConnected(String ssid, uint8_t *bssid, uint8_t channe
   state.callbacks.connected();
 }
 
-void PersistentLink::handleDhcpTimeout() {
+void PersistentWiFi::handleDhcpTimeout() {
   state.callbacks.debug("event", "wifi.network-config.dhcp-timeout");
 
   state.callbacks.dhcpTimeout();
 }
 
-void PersistentLink::handleDisconnected(String ssid, uint8_t *bssid, DisconnectReason_t reason) {
-  state.wifiIsConnected = false;
+void PersistentWiFi::handleDisconnected(String ssid, uint8_t *bssid, DisconnectReason_t reason) {
+  state.isConnected = false;
 
   state.callbacks.debug("event", "wifi.disconnect");
   state.callbacks.debug("event.wifi.disconnect.ssid", ssid);
@@ -171,7 +171,7 @@ void PersistentLink::handleDisconnected(String ssid, uint8_t *bssid, DisconnectR
   state.callbacks.disconnected();
 }
 
-void PersistentLink::handleGotIP(IPAddress ip, IPAddress gateway, IPAddress netmask) {
+void PersistentWiFi::handleGotIP(IPAddress ip, IPAddress gateway, IPAddress netmask) {
   state.callbacks.debug("event", "wifi.network-config");
   state.callbacks.debug("event.wifi.network-config.ip", ip.toString());
   state.callbacks.debug("event.wifi.network-config.gateway", gateway.toString());
@@ -180,47 +180,47 @@ void PersistentLink::handleGotIP(IPAddress ip, IPAddress gateway, IPAddress netm
   state.callbacks.gotIP();
 }
 
-bool PersistentLink::isConnected() {
-  return state.wifiIsConnected;
+bool PersistentWiFi::isConnected() {
+  return state.isConnected;
 }
 
-void PersistentLink::onBeforeRestart(std::function<void ()> callback) {
+void PersistentWiFi::onBeforeRestart(std::function<void ()> callback) {
   state.callbacks.beforeRestart = callback;
 }
 
-void PersistentLink::onConnected(std::function<void ()> callback) {
+void PersistentWiFi::onConnected(std::function<void ()> callback) {
   state.callbacks.connected = callback;
 }
 
-void PersistentLink::onDhcpTimeout(std::function<void ()> callback) {
+void PersistentWiFi::onDhcpTimeout(std::function<void ()> callback) {
   state.callbacks.dhcpTimeout = callback;
 }
 
-void PersistentLink::onDisconnected(std::function<void ()> callback) {
+void PersistentWiFi::onDisconnected(std::function<void ()> callback) {
   state.callbacks.disconnected = callback;
 }
 
-void PersistentLink::onGotIP(std::function<void ()> callback) {
+void PersistentWiFi::onGotIP(std::function<void ()> callback) {
   state.callbacks.gotIP = callback;
 }
 
-void PersistentLink::onReconnect(std::function<void ()> callback) {
+void PersistentWiFi::onReconnect(std::function<void ()> callback) {
   state.callbacks.reconnect = callback;
 }
 
-void PersistentLink::setDebug(std::function<void (const String &, const String &)> callback) {
+void PersistentWiFi::setDebug(std::function<void (const String &, const String &)> callback) {
   state.callbacks.debug = callback;
 
   configDebug();
 }
 
-void PersistentLink::update() {
+void PersistentWiFi::update() {
   unsigned long now = millis();
 
   // do not act if WiFi is connected
   // set disconnection time to 0
-  if (state.wifiIsConnected) {
-    if (!state.wifiShouldBeConnected) {
+  if (state.isConnected) {
+    if (!state.shouldBeConnected) {
       WiFi.disconnect();
     }
 
@@ -228,36 +228,36 @@ void PersistentLink::update() {
       state.firstConnectionSucceeded = true;
 
       state.callbacks.debug("info.wifi.first-connect", "succeeded");
-      wifiDebug(true);
+      debug(true);
     }
 
-    state.wifiIsReconnecting = false;
-    state.wifiDisconnectionTime = 0;
+    state.isReconnecting = false;
+    state.disconnectionTime = 0;
 
-    unsigned long timeSinceWifiMaintenance = now - state.wifiMaintenanceTime;
+    unsigned long timeSinceWifiMaintenance = now - state.maintenanceTime;
 
     if (
-      now > state.timings.runWifiDebugEvery
-      && timeSinceWifiMaintenance > state.timings.runWifiDebugEvery
+      now > state.timings.runDebugEvery
+      && timeSinceWifiMaintenance > state.timings.runDebugEvery
     ) {
-      state.wifiMaintenanceTime = now;
+      state.maintenanceTime = now;
 
       state.callbacks.debug("info.wifi.maintenance", String(timeSinceWifiMaintenance));
-      wifiDebug(false);
+      debug(false);
     }
 
     return;
   };
 
-  if (!state.wifiShouldBeConnected) return;
+  if (!state.shouldBeConnected) return;
 
   if (!state.firstConnectionAttempted) {
     state.firstConnectionAttempted = true;
 
-    if (!state.wifiIsReconnecting) {
+    if (!state.isReconnecting) {
       state.callbacks.debug("info.wifi.first-connect", "attempting");
 
-      state.wifiIsReconnecting = true;
+      state.isReconnecting = true;
       wifiConnect();
     }
 
@@ -267,23 +267,23 @@ void PersistentLink::update() {
   // as soon as WiFi becomes disconnected,
   // save time of disconnection
   if (
-    !state.wifiIsReconnecting
-    && state.wifiDisconnectionTime == 0
+    !state.isReconnecting
+    && state.disconnectionTime == 0
   ) {
-    state.wifiDisconnectionTime = now;
+    state.disconnectionTime = now;
 
     state.callbacks.debug("info.timing.disconnection", String(now));
 
     return;
   }
 
-  unsigned long timeSinceWifiDisconnect = now - state.wifiDisconnectionTime;
+  unsigned long timeSinceWifiDisconnect = now - state.disconnectionTime;
 
   if (
-    !state.wifiIsReconnecting
-    && timeSinceWifiDisconnect > state.timings.tryWifiReconnectAfter
+    !state.isReconnecting
+    && timeSinceWifiDisconnect > state.timings.tryReconnectAfter
   ) {
-    state.wifiIsReconnecting = true;
+    state.isReconnecting = true;
 
     state.callbacks.debug("info.wifi.attempt-reconnect", String(timeSinceWifiDisconnect));
 
@@ -305,7 +305,7 @@ void PersistentLink::update() {
   }
 }
 
-void PersistentLink::wifiConnect() {
+void PersistentWiFi::wifiConnect() {
   WiFi.disconnect();
 
   #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
@@ -320,7 +320,7 @@ void PersistentLink::wifiConnect() {
   #endif
 }
 
-void PersistentLink::wifiDebug(bool deep) {
+void PersistentWiFi::debug(bool deep) {
   if (deep) {
     #ifdef ARDUINO_ARCH_ESP8266
       state.callbacks.debug("info.wifi.phy-mode", String(WiFi.getPhyMode()));

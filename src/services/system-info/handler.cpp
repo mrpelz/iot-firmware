@@ -21,14 +21,16 @@ void systemInfoHandler(
   response.insert(response.end(), macAddress, macAddress + 6);
   delete macAddress;
 
-  auto bssid = WiFi.BSSID();
-  response.insert(response.end(), bssid, bssid + 6);
+  #ifndef IOT_NODE_LINK_ETH
+    auto bssid = WiFi.BSSID();
+    response.insert(response.end(), bssid, bssid + 6);
 
-  auto channel = WiFi.channel();
-  response.insert(response.end(), &channel, &channel + sizeof(channel));
+    auto channel = WiFi.channel();
+    response.insert(response.end(), &channel, &channel + sizeof(channel));
 
-  auto rssi = WiFi.RSSI();
-  response.insert(response.end(), &rssi, &rssi + sizeof(rssi));
+    auto rssi = WiFi.RSSI();
+    response.insert(response.end(), &rssi, &rssi + sizeof(rssi));
+  #endif
 
   respond(response);
 }

@@ -19,24 +19,12 @@
 #include "./tools.h"
 
 #ifdef ARDUINO_ARCH_ESP8266
-  typedef WiFiEventHandler EventHandler_t;
   typedef float OutputPower_t;
-  typedef WiFiDisconnectReason DisconnectReason_t;
   typedef WiFiPhyMode_t PhyMode_t;
 #endif
 #ifdef ARDUINO_ARCH_ESP32
-  typedef wifi_event_id_t EventHandler_t;
-  typedef uint8_t DisconnectReason_t;
   typedef wifi_phy_rate_t PhyMode_t;
   typedef wifi_power_t OutputPower_t;
-#endif
-
-#ifndef IOT_NODE_DHCP
-  struct InterfaceConfig {
-    IPAddress ip;
-    IPAddress gateway;
-    IPAddress netmask;
-  };
 #endif
 
 struct WiFiCredentials {
@@ -49,33 +37,7 @@ struct WiFiCredentials {
   #endif
 };
 
-struct Timings {
-  unsigned long runWifiDebugEvery;
-  unsigned long tryWifiReconnectAfter;
-  unsigned long restartAfter;
-};
-
-struct EventListeners {
-  EventHandler_t onStationModeConnected;
-  EventHandler_t onStationModeDisconnected;
-  EventHandler_t onStationModeGotIP;
-  EventHandler_t onStationModeDHCPTimeout;
-};
-
-struct Callbacks {
-  std::function<void (const String &, const String &)> debug =
-    [](String key, String value) {};
-
-  std::function<void ()> beforeRestart = []() {};
-  std::function<void ()> reconnect = []() {};
-
-  std::function<void ()> connected = []() {};
-  std::function<void ()> dhcpTimeout = []() {};
-  std::function<void ()> disconnected = []() {};
-  std::function<void ()> gotIP = []() {};
-};
-
-struct PersistentLinkConfig {
+struct PersistentWiFiConfig {
   PhyMode_t phyMode;
   OutputPower_t outputPower;
 
@@ -87,14 +49,14 @@ struct PersistentLinkConfig {
   Timings timings;
 };
 
-struct PersistentLinkState {
+struct PersistentWiFiState {
   bool firstConnectionAttempted = false;
   bool firstConnectionSucceeded = false;
-  bool wifiIsConnected = false;
-  bool wifiIsReconnecting = false;
-  bool wifiShouldBeConnected = false;
-  unsigned long wifiDisconnectionTime = 0;
-  unsigned long wifiMaintenanceTime = 0;
+  bool isConnected = false;
+  bool isReconnecting = false;
+  bool shouldBeConnected = false;
+  unsigned long disconnectionTime = 0;
+  unsigned long maintenanceTime = 0;
   PhyMode_t phyMode;
   OutputPower_t outputPower;
 
@@ -108,9 +70,9 @@ struct PersistentLinkState {
   Callbacks callbacks;
 };
 
-class PersistentLink {
+class PersistentWiFi {
   private:
-    PersistentLinkState state;
+    PersistentWiFiState state;
     void configDebug();
     void wifiConnect();
     void handleConnected(String ssid, uint8_t *bssid, uint8_t channel);
@@ -119,7 +81,7 @@ class PersistentLink {
     void handleGotIP(IPAddress ip, IPAddress gateway, IPAddress netmask);
 
   public:
-    PersistentLink(PersistentLinkConfig config);
+    PersistentWiFi(PersistentWiFiConfig config);
     void connect();
     void disconnect();
     bool isConnected();
@@ -131,7 +93,7 @@ class PersistentLink {
     void onReconnect(std::function<void ()> callback);
     void setDebug(std::function<void (const String &, const String &)> callback);
     void update();
-    void wifiDebug(bool deep);
+    void debug(bool deep);
 };
 
 #endif

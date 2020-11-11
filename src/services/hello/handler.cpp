@@ -36,15 +36,18 @@ void helloHandler(
   #endif
 
   addLineToRespone(&response, WiFi.macAddress());
-  addLineToRespone(&response, printMacAddress(WiFi.BSSID()));
-  addLineToRespone(&response, String(WiFi.channel()));
-  addLineToRespone(&response, String(WiFi.RSSI()));
 
-  #ifdef ARDUINO_ARCH_ESP8266
-    addLineToRespone(&response, String(WiFi.getPhyMode()));
+  #ifndef IOT_NODE_LINK_ETH
+    addLineToRespone(&response, printMacAddress(WiFi.BSSID()));
+    addLineToRespone(&response, String(WiFi.channel()));
+    addLineToRespone(&response, String(WiFi.RSSI()));
+
+    #ifdef ARDUINO_ARCH_ESP8266
+      addLineToRespone(&response, String(WiFi.getPhyMode()));
+    #endif
+
+    addLineToRespone(&response, WiFi.SSID());
   #endif
-
-  addLineToRespone(&response, WiFi.SSID());
 
   addLineToRespone(&response, "BYE");
 
