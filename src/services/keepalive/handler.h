@@ -5,6 +5,7 @@
 #include "../../logging.h"
 
 struct RestartOnTimeoutState {
+  bool ticked = false;
   bool running = false;
   unsigned long timeout = 0;
   unsigned long lastTick = 0;

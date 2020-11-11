@@ -20,14 +20,21 @@ void RestartOnTimeout::tick() {
     start();
   }
 
-  debug("event", "keepalive.tick");
-  state.lastTick = millis();
+  state.ticked = true;
 }
 
 void RestartOnTimeout::update() {
+  unsigned long now = millis();
+
+  if (state.ticked) {
+    state.ticked = false;
+
+    debug("event", "keepalive.tick");
+    state.lastTick = now;
+  }
+
   if (!state.running) return;
 
-  unsigned long now = millis();
   unsigned long timeSinceTick = now - state.lastTick;
 
   if (timeSinceTick > state.timeout) {
