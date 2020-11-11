@@ -6,7 +6,9 @@ enum serviceIds {
   hello,
   systemInfo,
   async,
-  keepalive = 0xFF
+  relais0 = 0xd0,
+  led0 = 0xe0,
+  keepalive = 0xff
 };
 
 #endif

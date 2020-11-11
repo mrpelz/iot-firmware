@@ -65,6 +65,7 @@ Timings timings = {
 #endif
 
 UDPMessaging udp(8266);
+UDPService relais0Service;
 
 void possiblyDeferredSetup() {
   setupInfoLog();
@@ -75,6 +76,8 @@ void possiblyDeferredSetup() {
   #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
     persistentLink.debug(true);
   #endif
+
+  relais0Service = makeRelaisService(0, 4, false);
 }
 
 void setup() {
@@ -105,6 +108,7 @@ void setup() {
   udp.addService(&helloService);
   udp.addService(&systemInfoService);
   udp.addService(&asyncService);
+  udp.addService(&relais0Service);
   udp.addService(&keepAliveService);
 
   persistentLink.connect();
