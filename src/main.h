@@ -10,7 +10,12 @@
   #include <WiFi.h>
 #endif
 
-#include "./persistent-link.h"
+#ifdef IOT_NODE_LINK_ETH
+  #include "./persistent-link/eth.h"
+#else
+  #include "./persistent-link/wifi.h"
+#endif
+
 #include "./udp-messaging.h"
 #include "./services/hello/service.h"
 #include "./services/system-info/service.h"

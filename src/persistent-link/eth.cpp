@@ -1,25 +1,6 @@
-#include "./persistent-link.h"
+#include "./eth.h"
 
-String printMacAddress(uint8_t input[6]) {
-  char result[18];
-
-  snprintf(
-    result,
-    sizeof(result),
-    "%02x:%02x:%02x:%02x:%02x:%02x",
-    input[0],
-    input[1],
-    input[2],
-    input[3],
-    input[4],
-    input[5]
-  );
-
-  String output(result);
-  output.toUpperCase();
-
-  return output;
-}
+#ifdef IOT_NODE_LINK_ETH
 
 PersistentLink::PersistentLink(PersistentLinkConfig config) {
   state.phyMode = config.phyMode;
@@ -370,3 +351,5 @@ void PersistentLink::wifiDebug(bool deep) {
     state.callbacks.debug("info.wifi.network-config.netmask", netmask.toString());
   #endif
 }
+
+#endif

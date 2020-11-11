@@ -1,5 +1,7 @@
-#ifndef _PERSISTENT_LINK
-#define _PERSISTENT_LINK
+#ifndef _PERSISTENT_LINK_WIFI
+#define _PERSISTENT_LINK_WIFI
+
+#ifndef IOT_NODE_LINK_ETH
 
 #if defined(IOT_NODE_AP_ALGORE) || defined(IOT_NODE_AP_ELZAR) || defined(IOT_NODE_AP_RICHARDNIXON) || defined(IOT_NODE_AP_SPIROAGNEW)
   #define IOT_NODE_ADVANCED_WIFI_CONFIG
@@ -14,7 +16,7 @@
   #include <WiFi.h>
 #endif
 
-String printMacAddress(uint8_t input[6]);
+#include "./tools.h"
 
 #ifdef ARDUINO_ARCH_ESP8266
   typedef WiFiEventHandler EventHandler_t;
@@ -131,5 +133,7 @@ class PersistentLink {
     void update();
     void wifiDebug(bool deep);
 };
+
+#endif
 
 #endif
