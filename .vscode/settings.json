@@ -41,6 +41,7 @@
     "algorithm": "cpp",
     "system_error": "cpp",
     "iomanip": "cpp",
-    "memory": "cpp"
+    "memory": "cpp",
+    "*.ccp": "cpp"
   }
 }

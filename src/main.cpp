@@ -1,6 +1,3 @@
-#ifndef _MAIN
-#define _MAIN
-
 #include "./main.h"
 
 #ifndef IOT_NODE_DHCP
@@ -67,11 +64,24 @@ Timings timings = {
 UDPMessaging udp(8266);
 UDPService relais0Service;
 
+ButtonTiming buttons({
+  {
+    {
+      0,
+      5,
+      true,
+      true
+    }
+  },
+  100
+});
+
 void possiblyDeferredSetup() {
   setupInfoLog();
 
   persistentLink.setDebug(debug);
   udp.setDebug(debug);
+  buttons.setDebug(debug);
 
   #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
     persistentLink.debug(true);
@@ -99,6 +109,7 @@ void setup() {
     #endif
 
     udp.begin();
+    buttons.begin();
   });
 
   persistentLink.onDisconnected([]() {
@@ -111,13 +122,18 @@ void setup() {
   udp.addService(&relais0Service);
   udp.addService(&keepAliveService);
 
+  buttons.setChangeCallback([](
+    uint8_t index,
+    bool isPressed,
+    uint32_t prevDuration
+  ) {
+    buttonEvent(&udp, index, isPressed, prevDuration);
+  });
+
   persistentLink.connect();
 }
 
 void loop() {
-  TimeoutUpdate();
-  yield();
-
   persistentLink.update();
   yield();
 
@@ -126,8 +142,12 @@ void loop() {
     yield();
   #endif
 
+  TimeoutUpdate();
+  yield();
+
   asyncUpdate();
   yield();
-}
 
-#endif
+  buttons.update();
+  yield();
+}

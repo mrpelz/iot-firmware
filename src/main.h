@@ -1,3 +1,6 @@
+#ifndef _MAIN
+#define _MAIN
+
 #define TOSTRING(x) #x
 #define STR(x) TOSTRING(x)
 
@@ -18,16 +21,20 @@
   #include "./persistent-link/wifi.h"
 #endif
 
+#include "./button-timing.h"
 #include "./udp-messaging.h"
+#include "./logging.h"
 #include "./services/hello/service.h"
 #include "./services/system-info/service.h"
 #include "./services/async/service.h"
 #include "./services/relais/service.h"
 #include "./services/keepalive/service.h"
-#include "./logging.h"
+#include "./events/button/event.h"
 
 void possiblyDeferredSetup();
 
 void setup();
 
 void loop();
+
+#endif
