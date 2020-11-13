@@ -65,15 +65,17 @@ UDPMessaging udp(8266);
 UDPService relais0Service;
 
 ButtonTiming buttons({
+  50, // debounceTime
+  3000, // repeatTime
+  125, // longpressTime (step duration)
   {
     {
       0,
       5,
       true,
-      true
+      false
     }
-  },
-  100
+  }
 });
 
 void possiblyDeferredSetup() {
@@ -87,7 +89,10 @@ void possiblyDeferredSetup() {
     persistentLink.debug(true);
   #endif
 
+  yield();
+
   relais0Service = makeRelaisService(0, 4, false);
+  buttons.start();
 }
 
 void setup() {
@@ -109,7 +114,6 @@ void setup() {
     #endif
 
     udp.begin();
-    buttons.begin();
   });
 
   persistentLink.onDisconnected([]() {
@@ -124,10 +128,21 @@ void setup() {
 
   buttons.setChangeCallback([](
     uint8_t index,
-    bool isPressed,
-    uint32_t prevDuration
+    bool down,
+    bool downChanged,
+    unsigned long prevDuration,
+    uint8_t repeat,
+    uint8_t longpress
   ) {
-    buttonEvent(&udp, index, isPressed, prevDuration);
+    buttonEvent(
+      &udp,
+      index,
+      down,
+      downChanged,
+      repeat,
+      longpress,
+      prevDuration
+    );
   });
 
   persistentLink.connect();

@@ -9,8 +9,11 @@
 void buttonEvent(
   UDPMessaging *udp,
   uint8_t index,
-  bool isPressed,
-  uint32_t prevDuration
+  bool down,
+  bool downChanged,
+  uint8_t repeat,
+  uint8_t longpress,
+  unsigned long prevDuration
 );
 
 #endif

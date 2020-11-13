@@ -2,7 +2,16 @@
 #define _BUTTON_TIMING
 
 #include <Arduino.h>
-#include <JC_Button_ESP.h>
+#include "./logging.h"
+
+typedef std::function<void (
+  uint8_t index,
+  bool down,
+  bool downChanged,
+  unsigned long prevDuration,
+  uint8_t repeat,
+  uint8_t longpress
+)> ChangeCallback;
 
 struct ButtonAttributes {
   uint8_t index;
@@ -12,43 +21,51 @@ struct ButtonAttributes {
 };
 
 struct ButtonState {
-  uint8_t index;
-  Button instance;
-  bool isPressed;
-  uint32_t lastChange;
+  ButtonAttributes attributes;
+  bool down;
+  unsigned long changeTime;
+  uint8_t repeat;
+  uint8_t longpress;
+  unsigned long longpressTime;
 };
 
+typedef std::function<void (ButtonState *button)> EachButtonCallback;
+
 struct ButtonTimingConfig {
+  unsigned long debounceTime;
+  unsigned long repeatTime;
+  unsigned long longpressTime;
   std::vector<ButtonAttributes> buttons;
-  uint32_t debounceTime;
 };
 
 struct ButtonTimingState {
-  bool begun = false;
+  bool running = false;
+  unsigned long debounceTime;
+  unsigned long repeatTime;
+  unsigned long longpressTime;
   std::vector<ButtonState> buttons;
-  std::function<void (
+  ChangeCallback changeCallback = [](
     uint8_t index,
-    bool isPressed,
-    uint32_t prevDuration
-  )> changeCallback = [](uint8_t index, bool isPressed, uint32_t prevDuration) {};
-  std::function<void (const String &, const String &)> debugCallback =
-    [](String key, String value) {};
+    bool down,
+    bool downChanged,
+    unsigned long prevDuration,
+    uint8_t repeat,
+    uint8_t longpress
+  ) {};
+  LoggingCallback debugCallback = [](String key, String value) {};
 };
 
 class ButtonTiming {
   private:
     ButtonTimingState state;
+    void eachButton(EachButtonCallback callback);
 
   public:
     ButtonTiming(ButtonTimingConfig config);
-    void begin();
-    void setChangeCallback(
-      std::function<void (
-        uint8_t index,
-        bool isPressed,
-        uint32_t prevDuration
-      )> callback);
-    void setDebug(std::function<void (const String &, const String &)> callback);
+    void setChangeCallback(ChangeCallback callback);
+    void setDebug(LoggingCallback callback);
+    void start();
+    void stop();
     void update();
 };
 

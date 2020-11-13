@@ -1,90 +1,116 @@
 #include "./button-timing.h"
 
 ButtonTiming::ButtonTiming(ButtonTimingConfig config) {
+  state.debounceTime = config.debounceTime;
+  state.repeatTime = config.repeatTime;
+  state.longpressTime = config.longpressTime;
+
   std::for_each(
     std::begin(config.buttons),
     std::end(config.buttons),
-    [&](ButtonAttributes buttonConfig) {
-      state.buttons.push_back({
-        buttonConfig.index,
-        Button(
-          buttonConfig.pin,
-          config.debounceTime,
-          buttonConfig.pullupEnable,
-          buttonConfig.invert
-        ),
-        false,
-        0
-      });
+    [&](ButtonAttributes attributes) {
+      state.buttons.push_back({ attributes, false, 0, 0, 0, 0 });
     }
   );
 }
 
-void ButtonTiming::begin() {
-  state.begun = true;
-
-  std::for_each(
-    std::begin(state.buttons),
-    std::end(state.buttons),
-    [&](ButtonState button) {
-      button.instance.begin();
-    }
-  );
+void ButtonTiming::eachButton(EachButtonCallback callback) {
+  for (
+    std::vector<ButtonState>::iterator iterator = std::begin(state.buttons);
+    iterator != std::end(state.buttons);
+    ++iterator
+  ) {
+    callback(iterator.base());
+  }
 }
 
-void ButtonTiming::setChangeCallback(
-  std::function<void (
-    uint8_t index,
-    bool isPressed,
-    uint32_t prevDuration
-  )> callback
-) {
+void ButtonTiming::setChangeCallback(ChangeCallback callback) {
   state.changeCallback = callback;
 }
 
-void ButtonTiming::setDebug(std::function<void (const String &, const String &)> callback) {
+void ButtonTiming::setDebug(LoggingCallback callback) {
   state.debugCallback = callback;
 }
 
+void ButtonTiming::start() {
+  state.running = true;
+
+  eachButton([](ButtonState *button) {
+    pinMode(
+      button->attributes.pin,
+      button->attributes.pullupEnable ? INPUT_PULLUP : INPUT
+    );
+  });
+}
+
+void ButtonTiming::stop() {
+  state.running = false;
+
+  eachButton([](ButtonState *button) {
+    pinMode(
+      button->attributes.pin,
+      INPUT
+    );
+  });
+}
+
 void ButtonTiming::update() {
-  if (!state.begun) return;
+  if (!state.running) return;
 
-  std::for_each(
-    std::begin(state.buttons),
-    std::end(state.buttons),
-    [&](ButtonState button) {
-      button.instance.read();
+  auto now = millis();
 
-      uint32_t lastChange = button.instance.lastChange();
+  eachButton([&](ButtonState *button) {
+    bool down = digitalRead(button->attributes.pin);
+    bool downChanged = down != button->down;
 
-      if (lastChange == button.lastChange) return;
-      button.lastChange = lastChange;
+    auto timeSinceLastChange = now - button->changeTime;
+    if (timeSinceLastChange < state.debounceTime) return;
 
-      if (button.instance.wasPressed()) {
-        button.isPressed = true;
-        uint32_t releasedFor = lastChange - button.lastChange;
+    bool longpressChanged = false;
 
-        state.debugCallback("event", "button.down");
-        state.debugCallback("button.down.index", String(button.index));
-        state.debugCallback("button.down.time", String(lastChange));
-        state.debugCallback("button.down.prev-duration", String(releasedFor));
+    if (!down || (down && downChanged)) {
+      button->longpress = 0;
+      button->longpressTime = now;
+    } else {
+      auto timeSinceLastLongpress = now - button->longpressTime;
 
-        state.changeCallback(button.index, button.isPressed, releasedFor);
-
-        return;
-      }
-
-      if (button.instance.wasReleased()) {
-        button.isPressed = false;
-        uint32_t pressedFor = lastChange - button.lastChange;
-
-        state.debugCallback("event", "button.up");
-        state.debugCallback("button.up.index", String(button.index));
-        state.debugCallback("button.up.time", String(lastChange));
-        state.debugCallback("button.up.prev-duration", String(pressedFor));
-
-        state.changeCallback(button.index, button.isPressed, pressedFor);
+      if (timeSinceLastLongpress > state.longpressTime) {
+        longpressChanged = true;
+        button->longpress = button->longpress + 1;
+        button->longpressTime = now;
       }
     }
-  );
+
+    if (downChanged) {
+      button->changeTime = now;
+      button->down = down;
+
+      if (down) {
+        if (timeSinceLastChange < state.repeatTime) {
+          button->repeat = button->repeat + 1;
+        } else {
+          button->repeat = 0;
+        }
+      }
+    }
+
+    if (!(downChanged || longpressChanged)) return;
+
+    state.debugCallback("event", "button");
+    state.debugCallback("button.index", String(button->attributes.index));
+    state.debugCallback("button.down", String(button->down));
+    state.debugCallback("button.down.changed", String(downChanged));
+    state.debugCallback("button.down.change-period", String(timeSinceLastChange));
+    state.debugCallback("button.repeat", String(button->repeat));
+    state.debugCallback("button.longpress", String(button->longpress));
+
+    state.changeCallback(
+      button->attributes.index,
+      button->down,
+      downChanged,
+      timeSinceLastChange,
+      button->repeat,
+      button->longpress
+    );
+  });
 }
