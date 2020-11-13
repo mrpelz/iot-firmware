@@ -208,7 +208,7 @@ void PersistentWiFi::onReconnect(std::function<void ()> callback) {
   state.callbacks.reconnect = callback;
 }
 
-void PersistentWiFi::setDebug(std::function<void (const String &, const String &)> callback) {
+void PersistentWiFi::setDebug(LoggingCallback callback) {
   state.callbacks.debug = callback;
 
   configDebug();

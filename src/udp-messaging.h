@@ -11,6 +11,7 @@
 #endif
 
 #include "./services/service-ids.h"
+#include "./logging.h"
 
 #define UDP_MAX_LENGTH 508
 
@@ -46,8 +47,7 @@ struct UDPMessagingState {
   uint16_t port;
   Peer eventPeer;
   std::vector<UDPService *> services;
-  std::function<void (const String &, const String &)> debugCallback =
-    [](String key, String value) {};
+  LoggingCallback debugCallback = [](String key, String value) {};
 };
 
 class UDPMessaging {
@@ -61,7 +61,7 @@ class UDPMessaging {
     void begin();
     void close();
     void event(uint8_t eventId, std::vector<uint8_t> event);
-    void setDebug(std::function<void (const String &, const String &)> callback);
+    void setDebug(LoggingCallback callback);
 };
 
 #endif

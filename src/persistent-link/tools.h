@@ -10,6 +10,8 @@
   #include <WiFi.h>
 #endif
 
+#include "../logging.h"
+
 #ifdef ARDUINO_ARCH_ESP8266
   typedef WiFiEventHandler EventHandler_t;
   typedef WiFiDisconnectReason DisconnectReason_t;
@@ -43,8 +45,7 @@ struct EventListeners {
 };
 
 struct Callbacks {
-  std::function<void (const String &, const String &)> debug =
-    [](String key, String value) {};
+  LoggingCallback debug = [](String key, String value) {};
 
   std::function<void ()> beforeRestart = []() {};
   std::function<void ()> reconnect = []() {};

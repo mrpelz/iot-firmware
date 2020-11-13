@@ -136,7 +136,7 @@ void PersistentEth::onReconnect(std::function<void ()> callback) {
   state.callbacks.reconnect = callback;
 }
 
-void PersistentEth::setDebug(std::function<void (const String &, const String &)> callback) {
+void PersistentEth::setDebug(LoggingCallback callback) {
   state.callbacks.debug = callback;
 
   configDebug();

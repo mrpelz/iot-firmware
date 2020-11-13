@@ -143,6 +143,6 @@ void UDPMessaging::handleRequest(AsyncUDPPacket *packet) {
   }
 }
 
-void UDPMessaging::setDebug(std::function<void (const String &, const String &)> callback) {
+void UDPMessaging::setDebug(LoggingCallback callback) {
   state.debugCallback = callback;
 }

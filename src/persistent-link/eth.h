@@ -53,7 +53,7 @@ class PersistentEth {
     void onDisconnected(std::function<void ()> callback);
     void onGotIP(std::function<void ()> callback);
     void onReconnect(std::function<void ()> callback);
-    void setDebug(std::function<void (const String &, const String &)> callback);
+    void setDebug(LoggingCallback callback);
     void update();
     void debug(bool deep);
 };
