@@ -62,7 +62,9 @@ Timings timings = {
 #endif
 
 UDPMessaging udp(8266);
-UDPService relais0Service;
+
+bool relais0OverrideIsOn = false;
+auto relais0Service = makeRelaisService(0, 4, false);
 
 ButtonTiming buttons({
   50, // debounceTime
@@ -88,11 +90,6 @@ void possiblyDeferredSetup() {
   #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
     persistentLink.debug(true);
   #endif
-
-  yield();
-
-  relais0Service = makeRelaisService(0, 4, false);
-  buttons.start();
 }
 
 void setup() {
@@ -104,6 +101,7 @@ void setup() {
   #endif
 
   #ifndef IOT_NODE_DEFER_INITIAL_LOGGING
+    delay(100);
     possiblyDeferredSetup();
   #endif
 
@@ -123,29 +121,29 @@ void setup() {
   udp.addService(&helloService);
   udp.addService(&systemInfoService);
   udp.addService(&asyncService);
-  udp.addService(&relais0Service);
+  udp.addService(&relais0Service.service);
   udp.addService(&keepAliveService);
 
-  buttons.setChangeCallback([](
-    uint8_t index,
-    bool down,
-    bool downChanged,
-    unsigned long prevDuration,
-    uint8_t repeat,
-    uint8_t longpress
-  ) {
-    buttonEvent(
-      &udp,
-      index,
-      down,
-      downChanged,
-      repeat,
-      longpress,
-      prevDuration
-    );
+  buttons.setChangeCallback([](ButtonUpdate update) {
+    if (udp.hasEventPeer()) {
+      buttonEvent(&udp, update);
+      return;
+    }
+
+    if (
+      update.index == 0
+      && update.downChanged
+      && !update.down
+    ) {
+      bool on = !relais0OverrideIsOn;
+      relais0OverrideIsOn = on;
+      relais0Service.override(on);
+    }
   });
 
   persistentLink.connect();
+  relais0Service.init();
+  buttons.start();
 }
 
 void loop() {

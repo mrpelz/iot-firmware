@@ -4,14 +4,16 @@
 #include <Arduino.h>
 #include "./logging.h"
 
-typedef std::function<void (
-  uint8_t index,
-  bool down,
-  bool downChanged,
-  unsigned long prevDuration,
-  uint8_t repeat,
-  uint8_t longpress
-)> ChangeCallback;
+struct ButtonUpdate {
+  uint8_t index;
+  bool down;
+  bool downChanged;
+  unsigned long prevDuration;
+  uint8_t repeat;
+  uint8_t longpress;
+};
+
+typedef std::function<void (ButtonUpdate update)> ChangeCallback;
 
 struct ButtonAttributes {
   uint8_t index;
@@ -44,14 +46,7 @@ struct ButtonTimingState {
   unsigned long repeatTime;
   unsigned long longpressTime;
   std::vector<ButtonState> buttons;
-  ChangeCallback changeCallback = [](
-    uint8_t index,
-    bool down,
-    bool downChanged,
-    unsigned long prevDuration,
-    uint8_t repeat,
-    uint8_t longpress
-  ) {};
+  ChangeCallback changeCallback = [](ButtonUpdate update) {};
   LoggingCallback debugCallback = [](String key, String value) {};
 };
 

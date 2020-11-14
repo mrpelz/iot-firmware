@@ -61,6 +61,7 @@ class UDPMessaging {
     void begin();
     void close();
     void event(uint8_t eventId, std::vector<uint8_t> event);
+    bool hasEventPeer();
     void setDebug(LoggingCallback callback);
 };
 

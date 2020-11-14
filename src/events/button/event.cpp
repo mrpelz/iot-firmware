@@ -1,28 +1,20 @@
 #include "./event.h"
 
-void buttonEvent(
-  UDPMessaging *udp,
-  uint8_t index,
-  bool down,
-  bool downChanged,
-  uint8_t repeat,
-  uint8_t longpress,
-  unsigned long prevDuration
-) {
+void buttonEvent(UDPMessaging *udp, ButtonUpdate update) {
   debug("event", "button-event");
 
   std::vector<uint8_t> response = {
-    index,
-    (uint8_t)(down ? 0x01 : 0x00),
-    (uint8_t)(downChanged ? 0x01 : 0x00),
-    repeat,
-    longpress
+    update.index,
+    (uint8_t)(update.down ? 0x01 : 0x00),
+    (uint8_t)(update.downChanged ? 0x01 : 0x00),
+    update.repeat,
+    update.longpress
   };
 
   response.insert(
     response.end(),
-    &prevDuration,
-    &prevDuration + sizeof(prevDuration)
+    &update.prevDuration,
+    &update.prevDuration + sizeof(update.prevDuration)
   );
 
   udp->event(eventIds::button, response);

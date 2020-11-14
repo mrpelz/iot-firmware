@@ -104,13 +104,13 @@ void ButtonTiming::update() {
     state.debugCallback("button.repeat", String(button->repeat));
     state.debugCallback("button.longpress", String(button->longpress));
 
-    state.changeCallback(
+    state.changeCallback({
       button->attributes.index,
       button->down,
       downChanged,
       timeSinceLastChange,
       button->repeat,
       button->longpress
-    );
+    });
   });
 }

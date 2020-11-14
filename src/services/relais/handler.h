@@ -12,6 +12,16 @@ typedef std::function<void (
   std::function<void (std::vector<uint8_t> response)> respond
 )> RelaisHandler;
 
-RelaisHandler makeRelaisHandler(uint8_t pin, bool invert);
+typedef std::function<void ()> RelaisInitializer;
+
+typedef std::function<void (bool on)> RelaisOverride;
+
+struct RelaisResult {
+  RelaisHandler handler;
+  RelaisInitializer init;
+  RelaisOverride override;
+};
+
+RelaisResult makeRelais(uint8_t pin, bool invert);
 
 #endif

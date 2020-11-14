@@ -93,10 +93,16 @@ void UDPMessaging::handleRequest(AsyncUDPPacket *packet) {
   state.debugCallback("udp.request.message-length", String(message.size()));
 
   if (serviceId == serviceIds::_reserved_event) {
-    state.eventPeer = peer;
+    if (message.empty() || message[0] == 0) {
+      state.eventPeer.port = 0;
+      state.debugCallback("udp.request.set-event-peer", "clear");
+    } else {
+      state.eventPeer = peer;
 
-    state.debugCallback("udp.request.set-event-peer.ip", peer.ip.toString());
-    state.debugCallback("udp.request.set-event-peer.port", String(peer.port));
+      state.debugCallback("udp.request.set-event-peer", "set");
+      state.debugCallback("udp.request.set-event-peer.ip", peer.ip.toString());
+      state.debugCallback("udp.request.set-event-peer.port", String(peer.port));
+    }
 
     return;
   }
@@ -141,6 +147,10 @@ void UDPMessaging::handleRequest(AsyncUDPPacket *packet) {
   if (!match) {
     state.debugCallback("event", "udp.request.no-matching-service");
   }
+}
+
+bool UDPMessaging::hasEventPeer() {
+  return !!state.eventPeer.port;
 }
 
 void UDPMessaging::setDebug(LoggingCallback callback) {
