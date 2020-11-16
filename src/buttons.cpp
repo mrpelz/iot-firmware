@@ -1,6 +1,6 @@
-#include "./button-timing.h"
+#include "./buttons.h"
 
-ButtonTiming::ButtonTiming(ButtonTimingConfig config) {
+Buttons::Buttons(ButtonsClassConfig config) {
   state.debounceTime = config.debounceTime;
   state.repeatTime = config.repeatTime;
   state.longpressTime = config.longpressTime;
@@ -14,7 +14,7 @@ ButtonTiming::ButtonTiming(ButtonTimingConfig config) {
   );
 }
 
-void ButtonTiming::eachButton(EachButtonCallback callback) {
+void Buttons::eachButton(EachButtonCallback callback) {
   for (
     std::vector<ButtonState>::iterator iterator = std::begin(state.buttons);
     iterator != std::end(state.buttons);
@@ -24,15 +24,15 @@ void ButtonTiming::eachButton(EachButtonCallback callback) {
   }
 }
 
-void ButtonTiming::setChangeCallback(ChangeCallback callback) {
+void Buttons::setChangeCallback(ChangeCallback callback) {
   state.changeCallback = callback;
 }
 
-void ButtonTiming::setDebug(LoggingCallback callback) {
+void Buttons::setDebug(LoggingCallback callback) {
   state.debugCallback = callback;
 }
 
-void ButtonTiming::start() {
+void Buttons::start() {
   state.running = true;
 
   eachButton([](ButtonState *button) {
@@ -43,7 +43,7 @@ void ButtonTiming::start() {
   });
 }
 
-void ButtonTiming::stop() {
+void Buttons::stop() {
   state.running = false;
 
   eachButton([](ButtonState *button) {
@@ -54,7 +54,7 @@ void ButtonTiming::stop() {
   });
 }
 
-void ButtonTiming::update() {
+void Buttons::update() {
   if (!state.running) return;
 
   auto now = millis();

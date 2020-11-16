@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include "../event-ids.h"
 #include "../../udp-messaging.h"
-#include "../../button-timing.h"
+#include "../../buttons.h"
 #include "../../logging.h"
 
 void buttonEvent(UDPMessaging *udp, ButtonUpdate update);

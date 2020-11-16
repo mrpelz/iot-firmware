@@ -66,7 +66,7 @@ UDPMessaging udp(8266);
 bool relais0OverrideIsOn = false;
 auto relais0Service = makeRelaisService(0, 4, false);
 
-ButtonTiming buttons({
+Buttons buttons({
   50, // debounceTime
   3000, // repeatTime
   125, // longpressTime (step duration)

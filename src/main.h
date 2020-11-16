@@ -21,7 +21,7 @@
   #include "./persistent-link/wifi.h"
 #endif
 
-#include "./button-timing.h"
+#include "./buttons.h"
 #include "./udp-messaging.h"
 #include "./logging.h"
 #include "./services/hello/service.h"

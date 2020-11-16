@@ -33,14 +33,14 @@ struct ButtonState {
 
 typedef std::function<void (ButtonState *button)> EachButtonCallback;
 
-struct ButtonTimingConfig {
+struct ButtonsClassConfig {
   unsigned long debounceTime;
   unsigned long repeatTime;
   unsigned long longpressTime;
   std::vector<ButtonAttributes> buttons;
 };
 
-struct ButtonTimingState {
+struct ButtonsClassState {
   bool running = false;
   unsigned long debounceTime;
   unsigned long repeatTime;
@@ -50,13 +50,13 @@ struct ButtonTimingState {
   LoggingCallback debugCallback = [](String key, String value) {};
 };
 
-class ButtonTiming {
+class Buttons {
   private:
-    ButtonTimingState state;
+    ButtonsClassState state;
     void eachButton(EachButtonCallback callback);
 
   public:
-    ButtonTiming(ButtonTimingConfig config);
+    Buttons(ButtonsClassConfig config);
     void setChangeCallback(ChangeCallback callback);
     void setDebug(LoggingCallback callback);
     void start();
