@@ -2,11 +2,12 @@
 #define _ASYNC_HANDLER
 
 #include <Arduino.h>
+#include "../../udp-messaging.h"
 #include "../../logging.h"
 
 void asyncHandler(
     std::vector<uint8_t> *request,
-    std::function<void (std::vector<uint8_t> response)> respond
+    RespondCallback respond
 );
 
 void asyncUpdate();

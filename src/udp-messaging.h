@@ -26,14 +26,18 @@
 
 #define EVENT_MAX_LENGTH UDP_MAX_LENGTH - MESSAGE_ID_LENGTH - EVENT_ID_LENGTH
 
+typedef std::function<void (
+  std::vector<uint8_t> response
+)> RespondCallback;
+
+typedef std::function<void (
+  std::vector<uint8_t> *request,
+  RespondCallback respond
+)> RequestHandler;
+
 struct UDPService {
   uint8_t serviceId;
-  std::function<void (
-    std::vector<uint8_t> *request,
-    std::function<void (
-      std::vector<uint8_t> response
-    )> respond
-  )> handler;
+  RequestHandler handler;
 };
 
 struct Peer {

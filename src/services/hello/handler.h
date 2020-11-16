@@ -5,6 +5,7 @@
 #define STR(x) TOSTRING(x)
 
 #include <Arduino.h>
+#include "../../udp-messaging.h"
 #include "../../logging.h"
 #include "../../persistent-link/tools.h"
 
@@ -19,7 +20,7 @@ void addLineToRespone(std::vector<uint8_t> response, String line);
 
 void helloHandler(
     std::vector<uint8_t> *request,
-    std::function<void (std::vector<uint8_t> response)> respond
+    RespondCallback respond
 );
 
 #endif

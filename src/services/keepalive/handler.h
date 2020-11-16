@@ -2,6 +2,7 @@
 #define _KEEPALIVE_HANDLER
 
 #include <Arduino.h>
+#include "../../udp-messaging.h"
 #include "../../logging.h"
 
 struct RestartOnTimeoutState {
@@ -25,7 +26,7 @@ class RestartOnTimeout {
 
 void keepAliveHandler(
     std::vector<uint8_t> *request,
-    std::function<void (std::vector<uint8_t> response)> respond
+    RespondCallback respond
 );
 
 void TimeoutUpdate();

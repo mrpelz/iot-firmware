@@ -6,12 +6,6 @@
 #include "../service-ids.h"
 #include "./handler.h"
 
-struct RelaisServiceResult {
-  UDPService service;
-  RelaisInitializer init;
-  RelaisOverride override;
-};
-
-RelaisServiceResult makeRelaisService(uint8_t index, uint8_t pin, bool invert);
+UDPService makeRelaisService(Relais *relais, uint8_t index);
 
 #endif

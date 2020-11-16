@@ -64,7 +64,8 @@ Timings timings = {
 UDPMessaging udp(8266);
 
 bool relais0OverrideIsOn = false;
-auto relais0Service = makeRelaisService(0, 4, false);
+Relais relais0({ 4, false });
+auto relais0Service = makeRelaisService(&relais0, 0);
 
 Buttons buttons({
   50, // debounceTime
@@ -121,7 +122,7 @@ void setup() {
   udp.addService(&helloService);
   udp.addService(&systemInfoService);
   udp.addService(&asyncService);
-  udp.addService(&relais0Service.service);
+  udp.addService(&relais0Service);
   udp.addService(&keepAliveService);
 
   buttons.setChangeCallback([](ButtonUpdate update) {
@@ -135,14 +136,12 @@ void setup() {
       && update.downChanged
       && !update.down
     ) {
-      bool on = !relais0OverrideIsOn;
-      relais0OverrideIsOn = on;
-      relais0Service.override(on);
+      relais0.toggle();
     }
   });
 
   persistentLink.connect();
-  relais0Service.init();
+  relais0.init();
   buttons.start();
 }
 

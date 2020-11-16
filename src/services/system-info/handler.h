@@ -13,11 +13,12 @@
   #include <WiFi.h>
 #endif
 
+#include "../../udp-messaging.h"
 #include "../../logging.h"
 
 void systemInfoHandler(
     std::vector<uint8_t> *request,
-    std::function<void (std::vector<uint8_t> response)> respond
+    RespondCallback respond
 );
 
 #endif

@@ -1,35 +1,40 @@
 #include "./handler.h"
 
-RelaisResult makeRelais(uint8_t pin, bool invert) {
-  return {
-    [pin, invert](
-      std::vector<uint8_t> *request,
-      std::function<void (std::vector<uint8_t> response)> respond
-    ) {
-      bool on = (*request)[0] != 0;
+Relais::Relais(RelaisConfig config) {
+  state.pin = config.pin;
+  state.invert = config.invert;
+}
 
-      debug("event", "relais.switch");
-      debug("relais.pin", String(pin));
-      debug("relais.on", String(on));
+void Relais::commit() {
+  if (!state.wasInitialized) return;
 
-      digitalWrite(pin, (invert ? !on : on));
+  debug("event", "relais.switch");
+  debug("relais.pin", String(state.pin));
+  debug("relais.on", String(state.on));
 
-      uint8_t response = on ? 0x01 : 0x00;
-      respond({ response });
-    },
-    [pin, invert]() {
-      debug("event", "relais.init");
-      debug("relais.pin", String(pin));
+  digitalWrite(state.pin, (state.invert ? !state.on : state.on));
+}
 
-      pinMode(pin, OUTPUT);
-      digitalWrite(pin, invert);
-    },
-    [pin, invert](bool on) {
-      debug("event", "relais.override");
-      debug("relais.pin", String(pin));
-      debug("relais.on", String(on));
+bool Relais::isOn() {
+  return state.on;
+}
 
-      digitalWrite(pin, (invert ? !on : on));
-    }
-  };
+void Relais::init() {
+  debug("event", "relais.init");
+  debug("relais.pin", String(state.pin));
+
+  pinMode(state.pin, OUTPUT);
+  state.wasInitialized = true;
+
+  commit();
+}
+
+void Relais::setOn(bool on) {
+  state.on = on;
+  commit();
+}
+
+void Relais::toggle() {
+  state.on = !state.on;
+  commit();
 }
