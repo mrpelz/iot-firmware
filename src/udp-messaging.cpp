@@ -93,16 +93,31 @@ void UDPMessaging::handleRequest(AsyncUDPPacket *packet) {
   state.debugCallback("udp.request.message-length", String(message.size()));
 
   if (serviceId == serviceIds::_reserved_event) {
+    std::vector<uint8_t> peerAckOutgoing = {
+      messageId
+    };
+
     if (message.empty() || message[0] == 0) {
       state.eventPeer.port = 0;
+      peerAckOutgoing.insert(peerAckOutgoing.end(), 0x00);
+
       state.debugCallback("udp.request.set-event-peer", "clear");
     } else {
       state.eventPeer = peer;
+      peerAckOutgoing.insert(peerAckOutgoing.end(), 0x01);
 
       state.debugCallback("udp.request.set-event-peer", "set");
       state.debugCallback("udp.request.set-event-peer.ip", peer.ip.toString());
       state.debugCallback("udp.request.set-event-peer.port", String(peer.port));
+
     }
+
+    state.udp.writeTo(
+      peerAckOutgoing.data(),
+      peerAckOutgoing.size(),
+      peer.ip,
+      peer.port
+    );
 
     return;
   }

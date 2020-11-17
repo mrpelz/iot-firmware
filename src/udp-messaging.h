@@ -10,6 +10,7 @@
   #include <AsyncUDP.h>
 #endif
 
+#include "./events/event-ids.h"
 #include "./services/service-ids.h"
 #include "./logging.h"
 
