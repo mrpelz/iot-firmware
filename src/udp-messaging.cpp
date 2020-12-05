@@ -168,6 +168,10 @@ bool UDPMessaging::hasEventPeer() {
   return !!state.eventPeer.port;
 }
 
+bool UDPMessaging::isListening() {
+  return !!state.isListening;
+}
+
 void UDPMessaging::setDebug(LoggingCallback callback) {
   state.debugCallback = callback;
 }

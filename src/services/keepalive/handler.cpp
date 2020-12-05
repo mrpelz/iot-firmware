@@ -56,6 +56,6 @@ void keepAliveHandler(
   respond({});
 }
 
-void TimeoutUpdate() {
+void timeoutUpdate() {
   restartOnTimeout.update();
 }

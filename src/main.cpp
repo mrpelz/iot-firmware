@@ -63,7 +63,6 @@ Timings timings = {
 
 UDPMessaging udp(8266);
 
-bool relais0OverrideIsOn = false;
 Relais relais0({ 4, false });
 auto relais0Service = makeRelaisService(&relais0, 0);
 
@@ -126,7 +125,7 @@ void setup() {
   udp.addService(&keepAliveService);
 
   buttons.setChangeCallback([](ButtonUpdate update) {
-    if (udp.hasEventPeer()) {
+    if (udp.isListening() && udp.hasEventPeer()) {
       buttonEvent(&udp, update);
       return;
     }
@@ -154,7 +153,7 @@ void loop() {
     yield();
   #endif
 
-  TimeoutUpdate();
+  timeoutUpdate();
   yield();
 
   asyncUpdate();

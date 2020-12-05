@@ -29,6 +29,6 @@ void keepAliveHandler(
     RespondCallback respond
 );
 
-void TimeoutUpdate();
+void timeoutUpdate();
 
 #endif
