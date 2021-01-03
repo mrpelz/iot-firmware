@@ -13,7 +13,7 @@
 #define TOSTRING(x) #x
 #define STR(x) TOSTRING(x)
 
-typedef std::function<void (const String &, const String &)> LoggingCallback;
+typedef std::function<void (String key, String value)> LoggingCallback;
 
 void debug(String key, String value);
 
