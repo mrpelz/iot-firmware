@@ -80,10 +80,12 @@ PersistentWiFi::PersistentWiFi(PersistentWiFiConfig config) {
     );
   #endif
 
-  WiFi.mode(WIFI_STA);
   WiFi.persistent(false);
+
   WiFi.setAutoConnect(false);
   WiFi.setAutoReconnect(false);
+
+  WiFi.mode(WIFI_STA);
 
   #ifdef ARDUINO_ARCH_ESP8266
     WiFi.setPhyMode(state.phyMode);
@@ -307,6 +309,11 @@ void PersistentWiFi::update() {
 
 void PersistentWiFi::wifiConnect() {
   WiFi.disconnect();
+
+  #ifdef ARDUINO_ARCH_ESP8266
+    WiFi.forceSleepBegin();
+    WiFi.forceSleepWake();
+  #endif
 
   #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
     WiFi.begin(

@@ -43,5 +43,6 @@
     "iomanip": "cpp",
     "memory": "cpp",
     "*.ccp": "cpp"
-  }
+  },
+  "editor.formatOnSave": false
 }
