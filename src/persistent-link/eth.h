@@ -37,6 +37,7 @@ class PersistentEth {
   private:
     PersistentEthState state;
     void configDebug();
+    void ethConnect();
     void handleConnected();
     void handleDhcpTimeout();
     void handleDisconnected(uint8_t reason);

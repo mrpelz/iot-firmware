@@ -63,29 +63,29 @@ Timings timings = {
 
 UDPMessaging udp(8266);
 
-Relais relais0({ 4, false });
-auto relais0Service = makeRelaisService(&relais0, 0);
+// Relais relais0({ 4, false });
+// auto relais0Service = makeRelaisService(&relais0, 0);
 
-Buttons buttons({
-  50, // debounceTime
-  3000, // repeatTime
-  125, // longpressTime (step duration)
-  {
-    {
-      0,
-      5,
-      true,
-      false
-    }
-  }
-});
+// Buttons buttons({
+//   50, // debounceTime
+//   3000, // repeatTime
+//   125, // longpressTime (step duration)
+//   {
+//     {
+//       0,
+//       5,
+//       true,
+//       false
+//     }
+//   }
+// });
 
 void possiblyDeferredSetup() {
   setupInfoLog();
 
   persistentLink.setDebug(debug);
   udp.setDebug(debug);
-  buttons.setDebug(debug);
+  // buttons.setDebug(debug);
 
   #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
     persistentLink.debug(true);
@@ -121,27 +121,27 @@ void setup() {
   udp.addService(&helloService);
   udp.addService(&systemInfoService);
   udp.addService(&asyncService);
-  udp.addService(&relais0Service);
+  // udp.addService(&relais0Service);
   udp.addService(&keepAliveService);
 
-  buttons.setChangeCallback([](ButtonUpdate update) {
-    if (udp.isListening() && udp.hasEventPeer()) {
-      buttonEvent(&udp, update);
-      return;
-    }
+  // buttons.setChangeCallback([](ButtonUpdate update) {
+  //   if (udp.isListening() && udp.hasEventPeer()) {
+  //     buttonEvent(&udp, update);
+  //     return;
+  //   }
 
-    if (
-      update.index == 0
-      && update.downChanged
-      && !update.down
-    ) {
-      relais0.toggle();
-    }
-  });
+  //   if (
+  //     update.index == 0
+  //     && update.downChanged
+  //     && !update.down
+  //   ) {
+  //     relais0.toggle();
+  //   }
+  // });
 
   persistentLink.connect();
-  relais0.init();
-  buttons.start();
+  // relais0.init();
+  // buttons.start();
 }
 
 void loop() {
@@ -159,6 +159,6 @@ void loop() {
   asyncUpdate();
   yield();
 
-  buttons.update();
-  yield();
+  // buttons.update();
+  // yield();
 }

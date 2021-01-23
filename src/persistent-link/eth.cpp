@@ -72,6 +72,18 @@ void PersistentEth::disconnect() {
   update();
 }
 
+void PersistentEth::ethConnect() {
+  // yep, even with Ethernet, one must call WiFi.diconnect,
+  // because reasons
+  WiFi.disconnect();
+
+  #ifdef IOT_NODE_WT32_ETH01
+    ETH.begin(1, 16, 23, 18, ETH_PHY_LAN8720, ETH_CLOCK_GPIO0_IN);
+  #else
+    ETH.begin();
+  #endif
+}
+
 void PersistentEth::handleConnected() {
   state.isConnected = true;
 
@@ -145,7 +157,7 @@ void PersistentEth::setDebug(LoggingCallback callback) {
 void PersistentEth::update() {
   unsigned long now = millis();
 
-  // do not act if WiFi is connected
+  // do not act if ETH is connected
   // set disconnection time to 0
   if (state.isConnected) {
     if (!state.shouldBeConnected) {
@@ -186,7 +198,7 @@ void PersistentEth::update() {
       state.callbacks.debug("info.first-connect", "attempting");
 
       state.isReconnecting = true;
-      ETH.begin();
+      ethConnect();
     }
 
     return;
@@ -215,7 +227,7 @@ void PersistentEth::update() {
 
     state.callbacks.debug("info.attempt-reconnect", String(timeSinceWifiDisconnect));
 
-    ETH.begin();
+    ethConnect();
 
     state.callbacks.reconnect();
   }
