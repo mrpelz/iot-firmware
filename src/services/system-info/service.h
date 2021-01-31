@@ -7,8 +7,8 @@
 #include "./handler.h"
 
 UDPService systemInfoService = {
-  serviceIds::systemInfo,
-  systemInfoHandler
+  .serviceId = serviceIds::systemInfo,
+  .handler = systemInfoHandler,
 };
 
 #endif

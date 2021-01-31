@@ -1,5 +1,5 @@
-#ifndef _BUTTON_TIMING
-#define _BUTTON_TIMING
+#ifndef _BUTTONS
+#define _BUTTONS
 
 #include <Arduino.h>
 #include "./logging.h"

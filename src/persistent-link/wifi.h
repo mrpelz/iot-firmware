@@ -27,7 +27,7 @@
   typedef wifi_power_t OutputPower_t;
 #endif
 
-struct WiFiCredentials {
+struct Credentials {
   String ssid;
   String password;
 
@@ -45,7 +45,7 @@ struct PersistentWiFiConfig {
     InterfaceConfig interfaceConfig;
   #endif
 
-  WiFiCredentials credentials;
+  Credentials credentials;
   Timings timings;
 };
 
@@ -64,7 +64,7 @@ struct PersistentWiFiState {
     InterfaceConfig interfaceConfig;
   #endif
 
-  WiFiCredentials credentials;
+  Credentials credentials;
   Timings timings;
   EventListeners eventListeners;
   Callbacks callbacks;

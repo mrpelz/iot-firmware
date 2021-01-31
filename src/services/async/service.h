@@ -7,8 +7,8 @@
 #include "./handler.h"
 
 UDPService asyncService = {
-  serviceIds::async,
-  asyncHandler
+  .serviceId = serviceIds::async,
+  .handler = asyncHandler,
 };
 
 #endif

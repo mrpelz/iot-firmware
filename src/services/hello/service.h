@@ -7,8 +7,8 @@
 #include "./handler.h"
 
 UDPService helloService = {
-  serviceIds::hello,
-  helloHandler
+  .serviceId = serviceIds::hello,
+  .handler = helloHandler,
 };
 
 #endif

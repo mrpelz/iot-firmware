@@ -1,9 +1,6 @@
 #ifndef _MAIN
 #define _MAIN
 
-#define TOSTRING(x) #x
-#define STR(x) TOSTRING(x)
-
 #include <Arduino.h>
 
 #ifdef ARDUINO_ARCH_ESP8266
@@ -13,15 +10,15 @@
   #include <WiFi.h>
 #endif
 
-#include "./persistent-link/tools.h"
-
 #ifdef IOT_NODE_LINK_ETH
   #include "./persistent-link/eth.h"
 #else
   #include "./persistent-link/wifi.h"
 #endif
 
-#include "./buttons.h"
+#include "./persistent-link/config.h"
+#include "./buttons/config.h"
+#include "./buttons/main.h"
 #include "./udp-messaging.h"
 #include "./logging.h"
 #include "./services/hello/service.h"

@@ -1,91 +1,26 @@
 #include "./main.h"
 
-#ifndef IOT_NODE_DHCP
-  InterfaceConfig interfaceConfig = {
-    IPAddress(10, 97, 4, 254),
-    IPAddress(10, 97, 4, 1),
-    IPAddress(255, 255, 255, 0),
-  };
-#endif
-
-Timings timings = {
-  60000, // runDebugEvery
-  2000, // tryReconnectAfter
-  10000 // restartAfter
-};
-
 #ifdef IOT_NODE_LINK_ETH
   #ifdef ARDUINO_ARCH_ESP32
-    PersistentEth persistentLink({
-      #ifndef IOT_NODE_DHCP
-        interfaceConfig,
-      #endif
-      timings
-    });
+    PersistentEth persistentLink(persistentLinkConfig);
   #endif
 #else
-  PersistentWiFi persistentLink({
-    #ifdef ARDUINO_ARCH_ESP8266
-      WIFI_PHY_MODE_11N, // phyMode
-      6, // outputPower (dBm)
-    #endif
-    #ifdef ARDUINO_ARCH_ESP32
-      WIFI_PHY_RATE_54M, // phyMode
-      WIFI_POWER_7dBm,
-    #endif
-    #ifndef IOT_NODE_DHCP
-      interfaceConfig,
-    #endif
-    {
-      STR(IOT_NODE_WIFI_SSID),
-      STR(IOT_NODE_WIFI_PSK),
-      #if defined(IOT_NODE_AP_ALGORE)
-        // { 0x78, 0x8a, 0x20, 0x83, 0x69, 0x8c }, // bssid algore iot
-        { 0x7a, 0x8a, 0x20, 0x84, 0x69, 0x8c }, // bssid algore legacy
-        11, // channel algore
-      #elif defined(IOT_NODE_AP_ELZAR)
-        // { 0x78, 0x8a, 0x20, 0x2c, 0x4b, 0x91 }, // bssid elzar iot
-        { 0x7a, 0x8a, 0x20, 0x2d, 0x4b, 0x91 }, // bssid elzar legacy
-        1, // channel elzar
-      #elif defined(IOT_NODE_AP_RICHARDNIXON)
-        // { 0x78, 0x8a, 0x20, 0x81, 0xd3, 0x2b }, // bssid richardnixon iot
-        { 0x7a, 0x8a, 0x20, 0x81, 0xd3, 0x2b }, // bssid richardnixon legacy
-        6, // channel richardnixon
-      #elif defined(IOT_NODE_AP_SPIROAGNEW)
-        // { 0xf0, 0x9f, 0xc2, 0xc8, 0xb6, 0x18 }, // bssid spiroagnew iot
-        { 0xf2, 0x9f, 0xc2, 0xc9, 0xb6, 0x18 }, // bssid spiroagnew legacy
-        6, // channel spiroagnew
-      #endif
-    },
-    timings
-  });
+  PersistentWiFi persistentLink(persistentLinkConfig);
 #endif
 
 UDPMessaging udp(8266);
 
-// Relais relais0({ 4, false });
-// auto relais0Service = makeRelaisService(&relais0, 0);
+Relais relais0({ 4, false });
+auto relais0Service = makeRelaisService(&relais0, 0);
 
-// Buttons buttons({
-//   50, // debounceTime
-//   3000, // repeatTime
-//   125, // longpressTime (step duration)
-//   {
-//     {
-//       0,
-//       5,
-//       true,
-//       false
-//     }
-//   }
-// });
+Buttons buttons(buttons);
 
 void possiblyDeferredSetup() {
   setupInfoLog();
 
   persistentLink.setDebug(debug);
   udp.setDebug(debug);
-  // buttons.setDebug(debug);
+  buttons.setDebug(debug);
 
   #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
     persistentLink.debug(true);
@@ -121,27 +56,27 @@ void setup() {
   udp.addService(&helloService);
   udp.addService(&systemInfoService);
   udp.addService(&asyncService);
-  // udp.addService(&relais0Service);
+  udp.addService(&relais0Service);
   udp.addService(&keepAliveService);
 
-  // buttons.setChangeCallback([](ButtonUpdate update) {
-  //   if (udp.isListening() && udp.hasEventPeer()) {
-  //     buttonEvent(&udp, update);
-  //     return;
-  //   }
+  buttons.setChangeCallback([](ButtonUpdate update) {
+    if (udp.isListening() && udp.hasEventPeer()) {
+      buttonEvent(&udp, update);
+      return;
+    }
 
-  //   if (
-  //     update.index == 0
-  //     && update.downChanged
-  //     && !update.down
-  //   ) {
-  //     relais0.toggle();
-  //   }
-  // });
+    if (
+      update.index == 0
+      && update.downChanged
+      && !update.down
+    ) {
+      relais0.toggle();
+    }
+  });
 
   persistentLink.connect();
-  // relais0.init();
-  // buttons.start();
+  relais0.init();
+  buttons.start();
 }
 
 void loop() {
@@ -159,6 +94,6 @@ void loop() {
   asyncUpdate();
   yield();
 
-  // buttons.update();
-  // yield();
+  buttons.update();
+  yield();
 }

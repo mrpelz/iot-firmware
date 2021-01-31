@@ -1,4 +1,4 @@
-#include "./buttons.h"
+#include "./main.h"
 
 Buttons::Buttons(ButtonsClassConfig config) {
   state.debounceTime = config.debounceTime;

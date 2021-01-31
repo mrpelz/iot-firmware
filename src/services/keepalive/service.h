@@ -7,8 +7,8 @@
 #include "./handler.h"
 
 UDPService keepAliveService = {
-  serviceIds::keepalive,
-  keepAliveHandler
+  .serviceId = serviceIds::keepalive,
+  .handler = keepAliveHandler,
 };
 
 #endif

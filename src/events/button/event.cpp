@@ -8,7 +8,7 @@ void buttonEvent(UDPMessaging *udp, ButtonUpdate update) {
     (uint8_t)(update.down ? 0x01 : 0x00),
     (uint8_t)(update.downChanged ? 0x01 : 0x00),
     update.repeat,
-    update.longpress
+    update.longpress,
   };
 
   response.insert(
