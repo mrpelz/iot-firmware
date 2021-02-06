@@ -26,11 +26,12 @@ RequestHandler makeMcp9808Handler() {
       return;
     }
 
+    std::vector<uint8_t> response;
+
     sensor.wake();
     float reading = sensor.readTempC();
     sensor.shutdown();
 
-    std::vector<uint8_t> response;
     response.insert(response.end(), &reading, &reading + sizeof(reading));
 
     respond(response);

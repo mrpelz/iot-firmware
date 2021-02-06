@@ -19,18 +19,19 @@
   #include "./utils/persistent-link/wifi.h"
 #endif
 
-#include "./utils/logging.h"
-#include "./utils/persistent-link/config.h"
-#include "./utils/udp-messaging.h"
 #include "./events/button/config.h"
 #include "./events/button/event.h"
 #include "./events/button/handler.h"
 #include "./services/async/service.h"
+#include "./services/bme280/service.h"
 #include "./services/hello/service.h"
 #include "./services/keepalive/service.h"
 #include "./services/mcp9808/service.h"
 #include "./services/relais/service.h"
 #include "./services/system-info/service.h"
+#include "./utils/logging.h"
+#include "./utils/persistent-link/config.h"
+#include "./utils/udp-messaging.h"
 
 void possiblyDeferredSetup();
 

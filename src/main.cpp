@@ -57,6 +57,7 @@ void setup() {
   udp.addService(&systemInfoService);
   udp.addService(&asyncService);
   udp.addService(&mcp9808Service);
+  udp.addService(&bme280Service);
   udp.addService(&relais0Service);
   udp.addService(&keepAliveService);
 
