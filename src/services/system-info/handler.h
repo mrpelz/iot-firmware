@@ -13,8 +13,8 @@
   #include <WiFi.h>
 #endif
 
-#include "../../udp-messaging.h"
-#include "../../logging.h"
+#include "../../utils/udp-messaging.h"
+#include "../../utils/logging.h"
 
 void systemInfoHandler(
     std::vector<uint8_t> *request,

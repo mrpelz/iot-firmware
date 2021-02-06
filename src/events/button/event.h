@@ -2,10 +2,10 @@
 #define _BUTTON_EVENT
 
 #include <Arduino.h>
+#include "./handler.h"
 #include "../event-ids.h"
-#include "../../udp-messaging.h"
-#include "../../buttons/main.h"
-#include "../../logging.h"
+#include "../../utils/udp-messaging.h"
+#include "../../utils/logging.h"
 
 void buttonEvent(UDPMessaging *udp, ButtonUpdate update);
 

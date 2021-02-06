@@ -13,7 +13,7 @@ UDPMessaging udp(8266);
 Relais relais0({ 4, false });
 auto relais0Service = makeRelaisService(&relais0, 0);
 
-Buttons buttons(buttons);
+Buttons buttons(buttonsConfig);
 
 void possiblyDeferredSetup() {
   setupInfoLog();
@@ -56,6 +56,7 @@ void setup() {
   udp.addService(&helloService);
   udp.addService(&systemInfoService);
   udp.addService(&asyncService);
+  udp.addService(&mcp9808Service);
   udp.addService(&relais0Service);
   udp.addService(&keepAliveService);
 

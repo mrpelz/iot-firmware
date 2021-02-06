@@ -2,8 +2,8 @@
 #define _KEEPALIVE_HANDLER
 
 #include <Arduino.h>
-#include "../../udp-messaging.h"
-#include "../../logging.h"
+#include "../../utils/udp-messaging.h"
+#include "../../utils/logging.h"
 
 struct RestartOnTimeoutState {
   bool ticked = false;

@@ -5,7 +5,7 @@
 #define STR(x) TOSTRING(x)
 
 #include <Arduino.h>
-#include "../../logging.h"
+#include "../../utils/logging.h"
 
 struct RelaisConfig {
   uint8_t pin;

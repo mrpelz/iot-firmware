@@ -5,9 +5,9 @@
 #define STR(x) TOSTRING(x)
 
 #include <Arduino.h>
-#include "../../udp-messaging.h"
-#include "../../logging.h"
-#include "../../persistent-link/tools.h"
+#include "../../utils/udp-messaging.h"
+#include "../../utils/logging.h"
+#include "../../utils/persistent-link/tools.h"
 
 #ifdef ARDUINO_ARCH_ESP8266
   #include <ESP8266WiFi.h>

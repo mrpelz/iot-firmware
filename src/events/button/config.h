@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#include "./main.h"
+#include "./handler.h"
 
 static const ButtonAttributes button0 = {
   .index = 0,

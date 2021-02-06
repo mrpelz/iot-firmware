@@ -1,8 +1,8 @@
-#ifndef _BUTTONS
-#define _BUTTONS
+#ifndef _BUTTON_HANDLER
+#define _BUTTON_HANDLER
 
 #include <Arduino.h>
-#include "./logging.h"
+#include "../../utils/logging.h"
 
 struct ButtonUpdate {
   uint8_t index;

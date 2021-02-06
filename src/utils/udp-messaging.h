@@ -10,8 +10,8 @@
   #include <AsyncUDP.h>
 #endif
 
-#include "./events/event-ids.h"
-#include "./services/service-ids.h"
+#include "../events/event-ids.h"
+#include "../services/service-ids.h"
 #include "./logging.h"
 
 #define UDP_MAX_LENGTH 508
