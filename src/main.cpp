@@ -58,6 +58,7 @@ void setup() {
   udp.addService(&asyncService);
   udp.addService(&mcp9808Service);
   udp.addService(&bme280Service);
+  udp.addService(&tsl2561Service);
   udp.addService(&relais0Service);
   udp.addService(&keepAliveService);
 
@@ -97,5 +98,8 @@ void loop() {
   yield();
 
   buttons.update();
+  yield();
+
+  tsl2561UpdateHandler.update();
   yield();
 }

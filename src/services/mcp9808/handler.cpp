@@ -8,8 +8,8 @@ RequestHandler makeMcp9808Handler() {
     if (working) return;
 
     working = sensor.begin();
-
     if (!working) return;
+
     sensor.setResolution(3);
   };
 

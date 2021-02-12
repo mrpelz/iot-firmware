@@ -8,8 +8,8 @@ RequestHandler makeBme280Handler() {
     if (working) return;
 
     working = sensor.begin();
-
     if (!working) return;
+
     sensor.setSampling(
       Adafruit_BME280::MODE_FORCED,
       Adafruit_BME280::SAMPLING_X1, // temperature

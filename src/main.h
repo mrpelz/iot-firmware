@@ -29,6 +29,8 @@
 #include "./services/mcp9808/service.h"
 #include "./services/relais/service.h"
 #include "./services/system-info/service.h"
+#include "./services/tsl2561/handler.h"
+#include "./services/tsl2561/service.h"
 #include "./utils/logging.h"
 #include "./utils/persistent-link/config.h"
 #include "./utils/udp-messaging.h"

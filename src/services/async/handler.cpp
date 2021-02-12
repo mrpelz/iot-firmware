@@ -21,8 +21,8 @@ void asyncUpdate() {
 
   unsigned long timeSinceRequest = millis() - requestTime;
   if (timeSinceRequest < 30000) return;
+  requestTime = 0;
 
   debug("event", "udp-service.async.delayed-response");
-  requestTime = 0;
   responseCallback({ 0x0a, 0x0b, 0x0c });
 }
