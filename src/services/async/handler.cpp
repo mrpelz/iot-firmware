@@ -1,28 +1,31 @@
 #include "./handler.h"
 
-unsigned long requestTime = 0;
+uint32_t requestTime = 0;
+bool requestRunning = false;
 std::function<void (std::vector<uint8_t> response)> responseCallback;
 
 void asyncHandler(
     std::vector<uint8_t> *request,
     std::function<void (std::vector<uint8_t> response)> respond
 ) {
-  debug("event", "udp-service.async.request");
+  debug("async-service", "got request");
 
   requestTime = millis();
+  requestRunning = true;
   responseCallback = [respond](std::vector<uint8_t> response) {
-    debug("event", "udp-service.async.response");
     respond(response);
   };
 }
 
 void asyncUpdate() {
-  if (!requestTime) return;
+  if (!requestRunning) return;
 
-  unsigned long timeSinceRequest = millis() - requestTime;
-  if (timeSinceRequest < 30000) return;
+  uint32_t timeSinceRequest = millis() - requestTime;
+  if (timeSinceRequest < ASYNC_RESPONSE_DELAY) return;
   requestTime = 0;
+  requestRunning = false;
 
-  debug("event", "udp-service.async.delayed-response");
+  debug("async-service", "sending delayed response");
+
   responseCallback({ 0x0a, 0x0b, 0x0c });
 }

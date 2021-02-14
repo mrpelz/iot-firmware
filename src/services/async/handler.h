@@ -1,6 +1,8 @@
 #ifndef _ASYNC_HANDLER
 #define _ASYNC_HANDLER
 
+#define ASYNC_RESPONSE_DELAY 30000
+
 #include <Arduino.h>
 #include "../../utils/udp-messaging.h"
 #include "../../utils/logging.h"

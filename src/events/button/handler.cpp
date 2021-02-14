@@ -60,7 +60,9 @@ void Buttons::update() {
   auto now = millis();
 
   eachButton([&](ButtonState *button) {
-    bool down = digitalRead(button->attributes.pin);
+    bool rawDown = digitalRead(button->attributes.pin);
+
+    bool down = button->attributes.invert ? !rawDown : rawDown;
     bool downChanged = down != button->down;
 
     auto timeSinceLastChange = now - button->changeTime;

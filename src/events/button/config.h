@@ -7,8 +7,8 @@
 
 static const ButtonAttributes button0 = {
   .index = 0,
-  .pin = 5,
-  .invert = false,
+  .pin = 2,
+  .invert = true,
   .pullupEnable = true,
 };
 

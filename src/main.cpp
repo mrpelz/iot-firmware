@@ -68,11 +68,14 @@ void setup() {
       return;
     }
 
+    debug("info.buttons.change-callback", "udp event not usable");
+
     if (
       update.index == 0
       && update.downChanged
       && !update.down
     ) {
+      debug("info.buttons.change-callback", "triggering override");
       relais0.toggle();
     }
   });

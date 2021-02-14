@@ -7,8 +7,13 @@ RequestHandler makeBme280Handler() {
   auto initializer = [&]() {
     if (working) return;
 
+    debug("bme280-service", "initializing sensor");
+
     working = sensor.begin();
-    if (!working) return;
+    if (!working) {
+      debug("bme280-service", "sensor initialization failed");
+      return;
+    }
 
     sensor.setSampling(
       Adafruit_BME280::MODE_FORCED,
@@ -19,15 +24,17 @@ RequestHandler makeBme280Handler() {
     );
   };
 
-  initializer();
-
   auto handler = [&](
     std::vector<uint8_t> *request,
     std::function<void (std::vector<uint8_t> response)> respond
   ) {
+    debug("bme280-service", "got request");
+
     initializer();
 
     if (!working) {
+      debug("bme280-service", "sensor not working, sending null response");
+
       respond({});
       return;
     }
@@ -42,6 +49,8 @@ RequestHandler makeBme280Handler() {
     response.insert(response.end(), &temperature, &temperature + sizeof(temperature));
     response.insert(response.end(), &humidity, &humidity + sizeof(humidity));
     response.insert(response.end(), &pressure, &pressure + sizeof(pressure));
+
+    debug("bme280-service", "sending response");
 
     respond(response);
   };

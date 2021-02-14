@@ -1,17 +1,16 @@
 #include "./handler.h"
 
-RestartOnTimeout::RestartOnTimeout(unsigned long timeout) {
+RestartOnTimeout::RestartOnTimeout(uint32_t timeout) {
   state.timeout = timeout;
-  debug("keepalive.timeout", String(state.timeout));
 }
 
 void RestartOnTimeout::start() {
-  debug("event", "keepalive.start");
+  debug("keepalive", "start");
   state.running = true;
 }
 
 void RestartOnTimeout::stop() {
-  debug("event", "keepalive.stop");
+  debug("keepalive", "stop");
   state.running = false;
 }
 
@@ -24,21 +23,21 @@ void RestartOnTimeout::tick() {
 }
 
 void RestartOnTimeout::update() {
-  unsigned long now = millis();
+  uint32_t now = millis();
 
   if (state.ticked) {
     state.ticked = false;
 
-    debug("event", "keepalive.tick");
+    debug("keepalive", "tick");
     state.lastTick = now;
   }
 
   if (!state.running) return;
 
-  unsigned long timeSinceTick = now - state.lastTick;
+  uint32_t timeSinceTick = now - state.lastTick;
 
   if (timeSinceTick > state.timeout) {
-    debug("event", "keepalive.trip");
+    debug("keepalive", "trip");
     ESP.restart();
   }
 }
@@ -49,9 +48,11 @@ void keepAliveHandler(
     std::vector<uint8_t> *request,
     std::function<void (std::vector<uint8_t> response)> respond
 ) {
-  debug("event", "udp-service.keepalive");
+  debug("keepalive-service", "got request");
 
   restartOnTimeout.tick();
+
+  debug("keepalive-service", "sending response");
 
   respond({});
 }

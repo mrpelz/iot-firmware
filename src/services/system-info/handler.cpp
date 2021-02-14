@@ -4,7 +4,7 @@ void systemInfoHandler(
     std::vector<uint8_t> *request,
     std::function<void (std::vector<uint8_t> response)> respond
 ) {
-  debug("event", "udp-service.systemInfo");
+  debug("system-info-service", "got request");
 
   std::vector<uint8_t> response;
 
@@ -31,6 +31,8 @@ void systemInfoHandler(
     auto rssi = WiFi.RSSI();
     response.insert(response.end(), &rssi, &rssi + sizeof(rssi));
   #endif
+
+  debug("system-info-service", "sending response");
 
   respond(response);
 }

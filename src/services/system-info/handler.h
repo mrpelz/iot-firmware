@@ -1,9 +1,6 @@
 #ifndef _SYSTEM_INFO_HANDLER
 #define _SYSTEM_INFO_HANDLER
 
-#define TOSTRING(x) #x
-#define STR(x) TOSTRING(x)
-
 #include <Arduino.h>
 
 #ifdef ARDUINO_ARCH_ESP8266

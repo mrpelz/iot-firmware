@@ -4,37 +4,47 @@ UpdateHandler makeTsl2561UpdateHandler() {
   std::function<void (std::vector<uint8_t> response)> responseCallback;
 
   bool working = false;
-  unsigned long requestTime = 0;
+  bool requestRunning = false;
+  uint32_t requestTime = 0;
+
   SFE_TSL2561 sensor;
   uint32_t ms;
 
   auto initializer = [&]() {
     if (working) return;
 
+    debug("tsl2561-service", "initializing sensor");
+
     uint8_t id;
 
     sensor.begin();
     working = sensor.getID(id);
 
-    if (!working) return;
+    if (!working) {
+      debug("tsl2561-service", "sensor initialization failed");
+      return;
+    }
 
     sensor.setTiming(false, 2, ms);
   };
-
-  initializer();
 
   auto handler = [&](
     std::vector<uint8_t> *request,
     std::function<void (std::vector<uint8_t> response)> respond
   ) {
+    debug("tsl2561-service", "got request");
+
     initializer();
 
     if (!working) {
+      debug("tsl2561-service", "sensor not working, sending null response");
+
       respond({});
       return;
     }
 
     requestTime = millis();
+    requestRunning = true;
     sensor.setPowerUp();
 
     responseCallback = [respond](std::vector<uint8_t> response) {
@@ -43,11 +53,12 @@ UpdateHandler makeTsl2561UpdateHandler() {
   };
 
   auto update = [&]() {
-    if (!requestTime) return;
+    if (!requestRunning) return;
 
-    unsigned long timeSinceRequest = millis() - requestTime;
-    if (timeSinceRequest < 30000) return;
+    uint32_t timeSinceRequest = millis() - requestTime;
+    if (timeSinceRequest < ms) return;
     requestTime = 0;
+    requestRunning = false;
 
     if (!working) {
       responseCallback({});
@@ -71,6 +82,8 @@ UpdateHandler makeTsl2561UpdateHandler() {
     std::vector<uint8_t> response;
 
     response.insert(response.end(), &lux, &lux + sizeof(lux));
+
+    debug("tsl2561-service", "sending delayed response");
 
     responseCallback(response);
   };

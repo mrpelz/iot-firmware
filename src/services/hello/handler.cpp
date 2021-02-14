@@ -11,16 +11,7 @@ void helloHandler(
     std::vector<uint8_t> *request,
     std::function<void (std::vector<uint8_t> response)> respond
 ) {
-  debug("event", "udp-service.hello");
-  debug("udp-service.test.hello.length", String(request->size()));
-
-  std::for_each(
-    std::begin(*request),
-    std::end(*request),
-    [&](uint8_t byte) {
-      debug("udp-service.hello.request.byte", String(byte, HEX));
-    }
-  );
+  debug("hello-service", "got request");
 
   std::vector<uint8_t> response;
 
@@ -50,6 +41,8 @@ void helloHandler(
   #endif
 
   addLineToRespone(&response, "BYE");
+
+  debug("hello-service", "sending response");
 
   respond(response);
 }

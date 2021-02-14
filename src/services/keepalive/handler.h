@@ -8,8 +8,8 @@
 struct RestartOnTimeoutState {
   bool ticked = false;
   bool running = false;
-  unsigned long timeout = 0;
-  unsigned long lastTick = 0;
+  uint32_t timeout = 0;
+  uint32_t lastTick = 0;
 };
 
 class RestartOnTimeout {
@@ -17,7 +17,7 @@ class RestartOnTimeout {
     RestartOnTimeoutState state;
 
   public:
-    RestartOnTimeout(unsigned long timeout);
+    RestartOnTimeout(uint32_t timeout);
     void start();
     void stop();
     void tick();

@@ -8,6 +8,7 @@
 #include <Adafruit_BME280.h>
 
 #include "../../utils/udp-messaging.h"
+#include "../../utils/logging.h"
 
 RequestHandler makeBme280Handler();
 

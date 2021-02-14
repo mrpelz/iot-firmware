@@ -8,9 +8,7 @@ Relais::Relais(RelaisConfig config) {
 void Relais::commit() {
   if (!state.wasInitialized) return;
 
-  debug("event", "relais.switch");
-  debug("relais.pin", String(state.pin));
-  debug("relais.on", String(state.on));
+  debug("relais", "commit");
 
   digitalWrite(state.pin, (state.invert ? !state.on : state.on));
 }
@@ -20,7 +18,7 @@ bool Relais::isOn() {
 }
 
 void Relais::init() {
-  debug("event", "relais.init");
+  debug("relais", "init");
   debug("relais.pin", String(state.pin));
 
   pinMode(state.pin, OUTPUT);
@@ -30,11 +28,17 @@ void Relais::init() {
 }
 
 void Relais::setOn(bool on) {
+  debug("relais.set-on", on ? "true" : "false");
+  debug("relais.pin", String(state.pin));
+
   state.on = on;
   commit();
 }
 
 void Relais::toggle() {
+  debug("relais.toggle", state.on ? "on2off" : "off2on");
+  debug("relais.pin", String(state.pin));
+
   state.on = !state.on;
   commit();
 }

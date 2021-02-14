@@ -1,9 +1,6 @@
 #ifndef _RELAIS_HANDLER
 #define _RELAIS_HANDLER
 
-#define TOSTRING(x) #x
-#define STR(x) TOSTRING(x)
-
 #include <Arduino.h>
 #include "../../utils/logging.h"
 
