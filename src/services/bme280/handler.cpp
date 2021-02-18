@@ -1,21 +1,21 @@
 #include "./handler.h"
 
 RequestHandler makeBme280Handler() {
-  bool working = false;
-  Adafruit_BME280 sensor;
+  auto working = std::make_shared<bool>(false);
+  auto sensor = std::make_shared<Adafruit_BME280>(Adafruit_BME280());
 
-  auto initializer = [&]() {
-    if (working) return;
+  auto initializer = [&, working, sensor]() {
+    if (*working) return;
 
     debug("bme280-service", "initializing sensor");
 
-    working = sensor.begin();
+    *working = sensor->begin();
     if (!working) {
       debug("bme280-service", "sensor initialization failed");
       return;
     }
 
-    sensor.setSampling(
+    sensor->setSampling(
       Adafruit_BME280::MODE_FORCED,
       Adafruit_BME280::SAMPLING_X1, // temperature
       Adafruit_BME280::SAMPLING_X1, // pressure
@@ -24,7 +24,7 @@ RequestHandler makeBme280Handler() {
     );
   };
 
-  auto handler = [&](
+  auto handler = [&, working, sensor](
     std::vector<uint8_t> *request,
     std::function<void (std::vector<uint8_t> response)> respond
   ) {
@@ -32,7 +32,7 @@ RequestHandler makeBme280Handler() {
 
     initializer();
 
-    if (!working) {
+    if (!*working) {
       debug("bme280-service", "sensor not working, sending null response");
 
       respond({});
@@ -41,10 +41,10 @@ RequestHandler makeBme280Handler() {
 
     std::vector<uint8_t> response;
 
-    sensor.takeForcedMeasurement();
-    float temperature = sensor.readTemperature();
-    float humidity = sensor.readHumidity();
-    float pressure = sensor.readPressure();
+    sensor->takeForcedMeasurement();
+    float temperature = sensor->readTemperature();
+    float humidity = sensor->readHumidity();
+    float pressure = sensor->readPressure();
 
     response.insert(response.end(), &temperature, &temperature + sizeof(temperature));
     response.insert(response.end(), &humidity, &humidity + sizeof(humidity));

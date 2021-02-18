@@ -1,24 +1,24 @@
 #include "./handler.h"
 
 RequestHandler makeMcp9808Handler() {
-  bool working = false;
-  Adafruit_MCP9808 sensor = Adafruit_MCP9808();
+  auto working = std::make_shared<bool>(false);
+  auto sensor = std::make_shared<Adafruit_MCP9808>(Adafruit_MCP9808());
 
-  auto initializer = [&]() {
-    if (working) return;
+  auto initializer = [&, working, sensor]() {
+    if (*working) return;
 
     debug("mcp9808-service", "initializing sensor");
 
-    working = sensor.begin();
-    if (!working) {
+    *working = sensor->begin();
+    if (!*working) {
       debug("mcp9808-service", "sensor initialization failed");
       return;
     }
 
-    sensor.setResolution(3);
+    sensor->setResolution(3);
   };
 
-  auto handler = [&](
+  auto handler = [&, working, sensor](
     std::vector<uint8_t> *request,
     std::function<void (std::vector<uint8_t> response)> respond
   ) {
@@ -26,7 +26,7 @@ RequestHandler makeMcp9808Handler() {
 
     initializer();
 
-    if (!working) {
+    if (!*working) {
       debug("mcp9808-service", "sensor not working, sending null response");
 
       respond({});
@@ -35,9 +35,9 @@ RequestHandler makeMcp9808Handler() {
 
     std::vector<uint8_t> response;
 
-    sensor.wake();
-    float reading = sensor.readTempC();
-    sensor.shutdown();
+    sensor->wake();
+    float reading = sensor->readTempC();
+    sensor->shutdown();
 
     response.insert(response.end(), &reading, &reading + sizeof(reading));
 

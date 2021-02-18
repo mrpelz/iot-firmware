@@ -1,34 +1,46 @@
 #include "./handler.h"
 
 UpdateHandler makeTsl2561UpdateHandler() {
-  std::function<void (std::vector<uint8_t> response)> responseCallback;
+  auto responseCallback = std::make_shared<std::function<void (std::vector<uint8_t> response)>>();
 
-  bool working = false;
-  bool requestRunning = false;
-  uint32_t requestTime = 0;
+  auto working = std::make_shared<bool>(false);
+  auto requestTime = std::make_shared<uint32_t>(0);
+  auto requestRunning = std::make_shared<bool>(false);
 
-  SFE_TSL2561 sensor;
-  uint32_t ms;
+  auto sensor = std::make_shared<SFE_TSL2561>(SFE_TSL2561());
+  auto ms = std::make_shared<uint32_t>();
 
-  auto initializer = [&]() {
-    if (working) return;
+  auto initializer = [
+    &,
+    ms,
+    sensor,
+    working
+  ]() {
+    if (*working) return;
 
     debug("tsl2561-service", "initializing sensor");
 
     uint8_t id;
 
-    sensor.begin();
-    working = sensor.getID(id);
+    sensor->begin();
+    *working = sensor->getID(id);
 
-    if (!working) {
+    if (!*working) {
       debug("tsl2561-service", "sensor initialization failed");
       return;
     }
 
-    sensor.setTiming(false, 2, ms);
+    sensor->setTiming(false, 2, *ms);
   };
 
-  auto handler = [&](
+  auto handler = [
+    &,
+    requestRunning,
+    requestTime,
+    responseCallback,
+    sensor,
+    working
+  ](
     std::vector<uint8_t> *request,
     std::function<void (std::vector<uint8_t> response)> respond
   ) {
@@ -36,46 +48,53 @@ UpdateHandler makeTsl2561UpdateHandler() {
 
     initializer();
 
-    if (!working) {
+    if (!*working) {
       debug("tsl2561-service", "sensor not working, sending null response");
 
       respond({});
       return;
     }
 
-    requestTime = millis();
-    requestRunning = true;
-    sensor.setPowerUp();
+    *requestTime = millis();
+    *requestRunning = true;
+    sensor->setPowerUp();
 
-    responseCallback = [respond](std::vector<uint8_t> response) {
+    *responseCallback = [respond](std::vector<uint8_t> response) {
       respond(response);
     };
   };
 
-  auto update = [&]() {
-    if (!requestRunning) return;
+  auto update = [
+    &,
+    ms,
+    requestRunning,
+    requestTime,
+    responseCallback,
+    sensor,
+    working
+  ]() {
+    if (!*requestRunning) return;
 
-    uint32_t timeSinceRequest = millis() - requestTime;
-    if (timeSinceRequest < ms) return;
-    requestTime = 0;
-    requestRunning = false;
+    uint32_t timeSinceRequest = millis() - *requestTime;
+    if (timeSinceRequest < *ms) return;
+    *requestTime = 0;
+    *requestRunning = false;
 
-    if (!working) {
-      responseCallback({});
+    if (!*working) {
+      (*responseCallback)({});
       return;
     }
 
     uint32_t data0, data1;
     double lux;
-    bool good;
 
-    sensor.getData(data0, data1);
-    good = sensor.getLux(2,ms,data0,data1,lux);
+    sensor->getData(data0, data1);
+    bool good = sensor->getLux(2, *ms, data0, data1, lux);
 
-    sensor.setPowerDown();
+    sensor->setPowerDown();
 
     if (!good) {
-      responseCallback({});
+      (*responseCallback)({});
       return;
     }
 
@@ -85,7 +104,7 @@ UpdateHandler makeTsl2561UpdateHandler() {
 
     debug("tsl2561-service", "sending delayed response");
 
-    responseCallback(response);
+    (*responseCallback)(response);
   };
 
   return {
