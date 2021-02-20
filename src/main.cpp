@@ -8,21 +8,12 @@ auto relais0Service = makeRelaisService(&relais0, 0);
 Buttons buttons(buttonsConfig);
 
 void setup() {
-  #ifdef ARDUINO_ARCH_ESP8266
-    Serial.begin(74880);
-  #endif
-  #ifdef ARDUINO_ARCH_ESP32
-    Serial.begin(115200);
-  #endif
-
-  delay(100);
-  
-  setupInfoLog();
+  Log::setup();
 
   Link::setup(&udp);
 
-  udp.setDebug(debug);
-  buttons.setDebug(debug);
+  udp.setDebug(Log::debug);
+  buttons.setDebug(Log::debug);
 
   udp.addService(&helloService);
   udp.addService(&systemInfoService);
@@ -39,14 +30,14 @@ void setup() {
       return;
     }
 
-    debug("info.buttons.change-callback", "udp event not usable");
+    Log::debug("info.buttons.change-callback", "udp event not usable");
 
     if (
       update.index == 0
       && update.downChanged
       && !update.down
     ) {
-      debug("info.buttons.change-callback", "triggering override");
+      Log::debug("info.buttons.change-callback", "triggering override");
       relais0.toggle();
     }
   });

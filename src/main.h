@@ -18,7 +18,7 @@
 #include "./services/system-info/service.h"
 #include "./services/tsl2561/handler.h"
 #include "./services/tsl2561/service.h"
-#include "./utils/logging.h"
+#include "./utils/log.h"
 #include "./utils/link/setup.h"
 #include "./utils/udp-messaging.h"
 

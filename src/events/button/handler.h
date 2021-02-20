@@ -2,7 +2,7 @@
 #define _BUTTON_HANDLER
 
 #include <Arduino.h>
-#include "../../utils/logging.h"
+#include "../../utils/log.h"
 
 struct ButtonUpdate {
   uint8_t index;
@@ -47,7 +47,7 @@ struct ButtonsClassState {
   unsigned long longpressTime;
   std::vector<ButtonState> buttons;
   ChangeCallback changeCallback = [](ButtonUpdate update) {};
-  LoggingCallback debugCallback = [](String key, String value) {};
+  Log::Callback debugCallback = [](String key, String value) {};
 };
 
 class Buttons {
@@ -58,7 +58,7 @@ class Buttons {
   public:
     Buttons(ButtonsClassConfig config);
     void setChangeCallback(ChangeCallback callback);
-    void setDebug(LoggingCallback callback);
+    void setDebug(Log::Callback callback);
     void start();
     void stop();
     void update();

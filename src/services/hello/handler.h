@@ -6,7 +6,7 @@
 
 #include <Arduino.h>
 #include "../../utils/udp-messaging.h"
-#include "../../utils/logging.h"
+#include "../../utils/log.h"
 #include "../../utils/link/tools.h"
 
 #ifdef ARDUINO_ARCH_ESP8266

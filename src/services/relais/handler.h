@@ -2,7 +2,7 @@
 #define _RELAIS_HANDLER
 
 #include <Arduino.h>
-#include "../../utils/logging.h"
+#include "../../utils/log.h"
 
 struct RelaisConfig {
   uint8_t pin;

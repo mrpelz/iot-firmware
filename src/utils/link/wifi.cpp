@@ -211,7 +211,7 @@ namespace Link {
     state.callbacks.reconnect = callback;
   }
 
-  void Class::setDebug(LoggingCallback callback) {
+  void Class::setDebug(Log::Callback callback) {
     state.callbacks.debug = callback;
 
     configDebug();

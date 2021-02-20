@@ -5,7 +5,7 @@
 #include "./handler.h"
 #include "../event-ids.h"
 #include "../../utils/udp-messaging.h"
-#include "../../utils/logging.h"
+#include "../../utils/log.h"
 
 void buttonEvent(UDPMessaging *udp, ButtonUpdate update);
 

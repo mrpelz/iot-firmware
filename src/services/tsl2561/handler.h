@@ -7,7 +7,7 @@
 #include <SparkFunTSL2561.h>
 
 #include "../../utils/udp-messaging.h"
-#include "../../utils/logging.h"
+#include "../../utils/log.h"
 
 struct UpdateHandler {
   RequestHandler handler;

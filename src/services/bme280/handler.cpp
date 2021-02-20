@@ -7,11 +7,11 @@ RequestHandler makeBme280Handler() {
   auto initializer = [&, working, sensor]() {
     if (*working) return;
 
-    debug("bme280-service", "initializing sensor");
+    Log::debug("bme280-service", "initializing sensor");
 
     *working = sensor->begin();
     if (!working) {
-      debug("bme280-service", "sensor initialization failed");
+      Log::debug("bme280-service", "sensor initialization failed");
       return;
     }
 
@@ -28,12 +28,12 @@ RequestHandler makeBme280Handler() {
     std::vector<uint8_t> *request,
     std::function<void (std::vector<uint8_t> response)> respond
   ) {
-    debug("bme280-service", "got request");
+    Log::debug("bme280-service", "got request");
 
     initializer();
 
     if (!*working) {
-      debug("bme280-service", "sensor not working, sending null response");
+      Log::debug("bme280-service", "sensor not working, sending null response");
 
       respond({});
       return;
@@ -50,7 +50,7 @@ RequestHandler makeBme280Handler() {
     response.insert(response.end(), &humidity, &humidity + sizeof(humidity));
     response.insert(response.end(), &pressure, &pressure + sizeof(pressure));
 
-    debug("bme280-service", "sending response");
+    Log::debug("bme280-service", "sending response");
 
     respond(response);
   };

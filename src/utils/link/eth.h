@@ -55,7 +55,7 @@ namespace Link {
       void onDisconnected(std::function<void ()> callback);
       void onGotIP(std::function<void ()> callback);
       void onReconnect(std::function<void ()> callback);
-      void setDebug(LoggingCallback callback);
+      void setDebug(Log::Callback callback);
       void update();
       void debug(bool deep);
   };

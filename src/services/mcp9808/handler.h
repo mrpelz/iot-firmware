@@ -7,7 +7,7 @@
 #include "Adafruit_MCP9808.h"
 
 #include "../../utils/udp-messaging.h"
-#include "../../utils/logging.h"
+#include "../../utils/log.h"
 
 RequestHandler makeMcp9808Handler();
 

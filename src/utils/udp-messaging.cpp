@@ -172,6 +172,6 @@ bool UDPMessaging::isListening() {
   return !!state.isListening;
 }
 
-void UDPMessaging::setDebug(LoggingCallback callback) {
+void UDPMessaging::setDebug(Log::Callback callback) {
   state.debugCallback = callback;
 }

@@ -28,7 +28,7 @@ void Buttons::setChangeCallback(ChangeCallback callback) {
   state.changeCallback = callback;
 }
 
-void Buttons::setDebug(LoggingCallback callback) {
+void Buttons::setDebug(Log::Callback callback) {
   state.debugCallback = callback;
 }
 

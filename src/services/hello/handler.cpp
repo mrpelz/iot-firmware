@@ -11,7 +11,7 @@ void helloHandler(
     std::vector<uint8_t> *request,
     std::function<void (std::vector<uint8_t> response)> respond
 ) {
-  debug("hello-service", "got request");
+  Log::debug("hello-service", "got request");
 
   std::vector<uint8_t> response;
 
@@ -42,7 +42,7 @@ void helloHandler(
 
   addLineToRespone(&response, "BYE");
 
-  debug("hello-service", "sending response");
+  Log::debug("hello-service", "sending response");
 
   respond(response);
 }

@@ -17,7 +17,7 @@ namespace Link {
   }
 
   void setup(UDPMessaging *udp) {
-    link.setDebug(debug);
+    link.setDebug(Log::debug);
 
     link.onGotIP([udp]() {
       udp->begin();

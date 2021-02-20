@@ -1,7 +1,7 @@
 #include "./event.h"
 
 void buttonEvent(UDPMessaging *udp, ButtonUpdate update) {
-  debug("button-event", "triggered");
+  Log::debug("button-event", "triggered");
 
   std::vector<uint8_t> response = {
     update.index,
@@ -17,7 +17,7 @@ void buttonEvent(UDPMessaging *udp, ButtonUpdate update) {
     &update.prevDuration + sizeof(update.prevDuration)
   );
 
-  debug("button-event", "sending event");
+  Log::debug("button-event", "sending event");
 
   udp->event(eventIds::button, response);
 }

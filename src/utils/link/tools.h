@@ -10,7 +10,7 @@
   #include <WiFi.h>
 #endif
 
-#include "../logging.h"
+#include "../log.h"
 
 namespace Link {
   #ifdef ARDUINO_ARCH_ESP8266
@@ -46,7 +46,7 @@ namespace Link {
   };
 
   struct Callbacks {
-    LoggingCallback debug = [](String key, String value) {};
+    Log::Callback debug = [](String key, String value) {};
 
     std::function<void ()> beforeRestart = []() {};
     std::function<void ()> reconnect = []() {};

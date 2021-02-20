@@ -5,12 +5,12 @@ RestartOnTimeout::RestartOnTimeout(uint32_t timeout) {
 }
 
 void RestartOnTimeout::start() {
-  debug("keepalive", "start");
+  Log::debug("keepalive", "start");
   state.running = true;
 }
 
 void RestartOnTimeout::stop() {
-  debug("keepalive", "stop");
+  Log::debug("keepalive", "stop");
   state.running = false;
 }
 
@@ -28,7 +28,7 @@ void RestartOnTimeout::update() {
   if (state.ticked) {
     state.ticked = false;
 
-    debug("keepalive", "tick");
+    Log::debug("keepalive", "tick");
     state.lastTick = now;
   }
 
@@ -37,7 +37,7 @@ void RestartOnTimeout::update() {
   uint32_t timeSinceTick = now - state.lastTick;
 
   if (timeSinceTick > state.timeout) {
-    debug("keepalive", "trip");
+    Log::debug("keepalive", "trip");
     ESP.restart();
   }
 }
@@ -48,11 +48,11 @@ void keepAliveHandler(
     std::vector<uint8_t> *request,
     std::function<void (std::vector<uint8_t> response)> respond
 ) {
-  debug("keepalive-service", "got request");
+  Log::debug("keepalive-service", "got request");
 
   restartOnTimeout.tick();
 
-  debug("keepalive-service", "sending response");
+  Log::debug("keepalive-service", "sending response");
 
   respond({});
 }

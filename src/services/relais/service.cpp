@@ -9,9 +9,9 @@ UDPService makeRelaisService(Relais *relais, uint8_t index) {
   ) {
     bool on = (*request)[0] != 0;
 
-    debug("event", "relais-service.switch");
-    debug("relais-service.index", String(index));
-    debug("relais-service.on", String(on));
+    Log::debug("event", "relais-service.switch");
+    Log::debug("relais-service.index", String(index));
+    Log::debug("relais-service.on", String(on));
 
     relais->setOn(on);
 

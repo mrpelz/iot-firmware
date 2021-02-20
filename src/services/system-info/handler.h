@@ -11,7 +11,7 @@
 #endif
 
 #include "../../utils/udp-messaging.h"
-#include "../../utils/logging.h"
+#include "../../utils/log.h"
 
 void systemInfoHandler(
     std::vector<uint8_t> *request,

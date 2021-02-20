@@ -18,7 +18,7 @@ UpdateHandler makeTsl2561UpdateHandler() {
   ]() {
     if (*working) return;
 
-    debug("tsl2561-service", "initializing sensor");
+    Log::debug("tsl2561-service", "initializing sensor");
 
     uint8_t id;
 
@@ -26,7 +26,7 @@ UpdateHandler makeTsl2561UpdateHandler() {
     *working = sensor->getID(id);
 
     if (!*working) {
-      debug("tsl2561-service", "sensor initialization failed");
+      Log::debug("tsl2561-service", "sensor initialization failed");
       return;
     }
 
@@ -44,12 +44,12 @@ UpdateHandler makeTsl2561UpdateHandler() {
     std::vector<uint8_t> *request,
     std::function<void (std::vector<uint8_t> response)> respond
   ) {
-    debug("tsl2561-service", "got request");
+    Log::debug("tsl2561-service", "got request");
 
     initializer();
 
     if (!*working) {
-      debug("tsl2561-service", "sensor not working, sending null response");
+      Log::debug("tsl2561-service", "sensor not working, sending null response");
 
       respond({});
       return;
@@ -102,7 +102,7 @@ UpdateHandler makeTsl2561UpdateHandler() {
 
     response.insert(response.end(), &lux, &lux + sizeof(lux));
 
-    debug("tsl2561-service", "sending delayed response");
+    Log::debug("tsl2561-service", "sending delayed response");
 
     (*responseCallback)(response);
   };

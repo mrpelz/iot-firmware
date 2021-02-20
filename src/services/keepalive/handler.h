@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include "../../utils/udp-messaging.h"
-#include "../../utils/logging.h"
+#include "../../utils/log.h"
 
 struct RestartOnTimeoutState {
   bool ticked = false;
