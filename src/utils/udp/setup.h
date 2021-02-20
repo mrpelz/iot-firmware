@@ -4,6 +4,7 @@
 #include <Arduino.h>
 
 #include "./main.h"
+#include "./utils/log.h"
 
 namespace IotNode {
 

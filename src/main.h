@@ -6,9 +6,9 @@
 #include <Wire.h>
 #include <SPI.h>
 
-#include "./events/button/config.h"
 #include "./events/button/event.h"
-#include "./events/button/handler.h"
+#include "./events/button/main.h"
+#include "./events/button/setup.h"
 #include "./services/async/handler.h"
 #include "./services/async/service.h"
 #include "./services/bme280/service.h"

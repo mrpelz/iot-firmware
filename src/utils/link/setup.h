@@ -8,6 +8,7 @@
 
 #include "./main.h"
 #include "../udp/main.h"
+#include "./utils/log.h"
 
 #ifdef IOT_NODE_LINK_ETH
   #include "./eth.h"
