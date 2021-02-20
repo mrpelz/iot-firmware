@@ -1,31 +1,11 @@
 #include "./main.h"
 
-#ifdef IOT_NODE_LINK_ETH
-  #ifdef ARDUINO_ARCH_ESP32
-    PersistentEth persistentLink(persistentLinkConfig);
-  #endif
-#else
-  PersistentWiFi persistentLink(persistentLinkConfig);
-#endif
-
 UDPMessaging udp(8266);
 
 Relais relais0({ 4, false });
 auto relais0Service = makeRelaisService(&relais0, 0);
 
 Buttons buttons(buttonsConfig);
-
-void possiblyDeferredSetup() {
-  setupInfoLog();
-
-  persistentLink.setDebug(debug);
-  udp.setDebug(debug);
-  buttons.setDebug(debug);
-
-  #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
-    persistentLink.debug(true);
-  #endif
-}
 
 void setup() {
   #ifdef ARDUINO_ARCH_ESP8266
@@ -35,23 +15,14 @@ void setup() {
     Serial.begin(115200);
   #endif
 
-  #ifndef IOT_NODE_DEFER_INITIAL_LOGGING
-    delay(100);
-    possiblyDeferredSetup();
-  #endif
+  delay(100);
+  
+  setupInfoLog();
 
-  persistentLink.onGotIP([]() {
-    #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
-      if (infoLog != 0) return;
-      infoLog = 1;
-    #endif
+  Link::setup(&udp);
 
-    udp.begin();
-  });
-
-  persistentLink.onDisconnected([]() {
-    udp.close();
-  });
+  udp.setDebug(debug);
+  buttons.setDebug(debug);
 
   udp.addService(&helloService);
   udp.addService(&systemInfoService);
@@ -80,20 +51,11 @@ void setup() {
     }
   });
 
-  persistentLink.connect();
   relais0.init();
   buttons.start();
 }
 
 void loop() {
-  persistentLink.update();
-  yield();
-
-  #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
-    possiblyDeferredSetup();
-    yield();
-  #endif
-
   timeoutUpdate();
   yield();
 

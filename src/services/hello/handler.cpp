@@ -29,7 +29,7 @@ void helloHandler(
   addLineToRespone(&response, WiFi.macAddress());
 
   #ifndef IOT_NODE_LINK_ETH
-    addLineToRespone(&response, printMacAddress(WiFi.BSSID()));
+    addLineToRespone(&response, Link::printMacAddress(WiFi.BSSID()));
     addLineToRespone(&response, String(WiFi.channel()));
     addLineToRespone(&response, String(WiFi.RSSI()));
 

@@ -6,19 +6,6 @@
 #include <Wire.h>
 #include <SPI.h>
 
-#ifdef ARDUINO_ARCH_ESP8266
-  #include <ESP8266WiFi.h>
-#endif
-#ifdef ARDUINO_ARCH_ESP32
-  #include <WiFi.h>
-#endif
-
-#ifdef IOT_NODE_LINK_ETH
-  #include "./utils/persistent-link/eth.h"
-#else
-  #include "./utils/persistent-link/wifi.h"
-#endif
-
 #include "./events/button/config.h"
 #include "./events/button/event.h"
 #include "./events/button/handler.h"
@@ -32,7 +19,7 @@
 #include "./services/tsl2561/handler.h"
 #include "./services/tsl2561/service.h"
 #include "./utils/logging.h"
-#include "./utils/persistent-link/config.h"
+#include "./utils/link/setup.h"
 #include "./utils/udp-messaging.h"
 
 void possiblyDeferredSetup();

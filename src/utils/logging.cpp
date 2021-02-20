@@ -1,12 +1,5 @@
 #include "./logging.h"
 
-#ifdef IOT_NODE_DEFER_INITIAL_LOGGING
-  // 0: wifi not started yet, defer infoLog
-  // 1: wifi started, run infoLog
-  // 2: infoLog has already been executed, do nothing
-  uint8_t infoLog = 0;
-#endif
-
 void debug(String key, String value) {
   unsigned long now = millis();
 
@@ -20,20 +13,9 @@ void debug(String key, String value) {
 }
 
 void setupInfoLog() {
-  #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
-    if (infoLog != 1) return;
-    infoLog = 2;
-  #endif
-
   yield();
 
   Serial.println();
-
-  #ifdef IOT_NODE_DEFER_INITIAL_LOGGING
-    debug("info.ititial-loging", "deferred");
-  #else
-    debug("info.ititial-loging", "real-time");
-  #endif
 
   #ifdef IOT_NODE_BUILD_TIME
     debug("info.build.time", STR(IOT_NODE_BUILD_TIME));

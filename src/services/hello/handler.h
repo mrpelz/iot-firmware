@@ -7,7 +7,7 @@
 #include <Arduino.h>
 #include "../../utils/udp-messaging.h"
 #include "../../utils/logging.h"
-#include "../../utils/persistent-link/tools.h"
+#include "../../utils/link/tools.h"
 
 #ifdef ARDUINO_ARCH_ESP8266
   #include <ESP8266WiFi.h>
