@@ -2,13 +2,13 @@
 #define _ASYNC_SERVICE
 
 #include <Arduino.h>
-#include "../../utils/udp.h"
+#include "../../utils/udp/main.h"
 #include "../service-ids.h"
 #include "./handler.h"
 
 namespace IotNode {
 
-UDPService asyncService = {
+UDP::Service asyncService = {
   .serviceId = serviceIds::async,
   .handler = asyncHandler,
 };

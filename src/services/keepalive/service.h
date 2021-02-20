@@ -2,13 +2,13 @@
 #define _KEEPALIVE_SERVICE
 
 #include <Arduino.h>
-#include "../../utils/udp.h"
+#include "../../utils/udp/main.h"
 #include "../service-ids.h"
 #include "./handler.h"
 
 namespace IotNode {
 
-UDPService keepAliveService = {
+UDP::Service keepAliveService = {
   .serviceId = serviceIds::keepalive,
   .handler = keepAliveHandler,
 };

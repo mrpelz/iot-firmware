@@ -9,18 +9,20 @@
 #include "./events/button/config.h"
 #include "./events/button/event.h"
 #include "./events/button/handler.h"
+#include "./services/async/handler.h"
 #include "./services/async/service.h"
 #include "./services/bme280/service.h"
 #include "./services/hello/service.h"
+#include "./services/keepalive/handler.h"
 #include "./services/keepalive/service.h"
 #include "./services/mcp9808/service.h"
+#include "./services/relais/handler.h"
 #include "./services/relais/service.h"
 #include "./services/system-info/service.h"
-#include "./services/tsl2561/handler.h"
 #include "./services/tsl2561/service.h"
 #include "./utils/link/setup.h"
 #include "./utils/log.h"
-#include "./utils/udp.h"
+#include "./utils/udp/setup.h"
 
 namespace IotNode {} // project namespace
 

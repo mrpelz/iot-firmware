@@ -7,12 +7,12 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
 
-#include "../../utils/udp.h"
+#include "../../utils/udp/main.h"
 #include "../../utils/log.h"
 
 namespace IotNode {
 
-RequestHandler makeBme280Handler();
+UDP::RequestHandler makeBme280Handler();
 
 } // project namespace
 

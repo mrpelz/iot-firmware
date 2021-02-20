@@ -3,7 +3,7 @@
 namespace IotNode {
 
 UpdateHandler makeTsl2561UpdateHandler() {
-  auto responseCallback = std::make_shared<std::function<void (std::vector<uint8_t> response)>>();
+  auto responseCallback = std::make_shared<UDP::RespondCallback>();
 
   auto working = std::make_shared<bool>(false);
   auto requestTime = std::make_shared<uint32_t>(0);
@@ -43,8 +43,8 @@ UpdateHandler makeTsl2561UpdateHandler() {
     sensor,
     working
   ](
-    std::vector<uint8_t> *request,
-    std::function<void (std::vector<uint8_t> response)> respond
+    UDP::Payload *request,
+    UDP::RespondCallback respond
   ) {
     Log::debug("tsl2561-service", "got request");
 
@@ -61,7 +61,7 @@ UpdateHandler makeTsl2561UpdateHandler() {
     *requestRunning = true;
     sensor->setPowerUp();
 
-    *responseCallback = [respond](std::vector<uint8_t> response) {
+    *responseCallback = [respond](UDP::Payload response) {
       respond(response);
     };
   };
@@ -100,7 +100,7 @@ UpdateHandler makeTsl2561UpdateHandler() {
       return;
     }
 
-    std::vector<uint8_t> response;
+    UDP::Payload response;
 
     response.insert(response.end(), &lux, &lux + sizeof(lux));
 

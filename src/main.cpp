@@ -1,34 +1,35 @@
 #include "./main.h"
 
+namespace IotNode {
+  Relais relais0({ 4, false });
+  auto relais0Service = makeRelaisService(&relais0, 0);
+
+  Buttons buttons(buttonsConfig);
+}
+
 using namespace IotNode;
-
-UDPMessaging udp(8266);
-
-Relais relais0({ 4, false });
-auto relais0Service = makeRelaisService(&relais0, 0);
-
-Buttons buttons(buttonsConfig);
 
 void setup() {
   Log::setup();
 
-  Link::setup(&udp);
+  auto udp = IotNode::UDP::setup();
 
-  udp.setDebug(Log::debug);
+  Link::setup(udp);
+
+  udp->addService(&helloService);
+  udp->addService(&systemInfoService);
+  udp->addService(&asyncService);
+  udp->addService(&mcp9808Service);
+  udp->addService(&bme280Service);
+  udp->addService(&tsl2561Service);
+  udp->addService(&keepAliveService);
+  udp->addService(&relais0Service);
+
   buttons.setDebug(Log::debug);
 
-  udp.addService(&helloService);
-  udp.addService(&systemInfoService);
-  udp.addService(&asyncService);
-  udp.addService(&mcp9808Service);
-  udp.addService(&bme280Service);
-  udp.addService(&tsl2561Service);
-  udp.addService(&relais0Service);
-  udp.addService(&keepAliveService);
-
-  buttons.setChangeCallback([](ButtonUpdate update) {
-    if (udp.isListening() && udp.hasEventPeer()) {
-      buttonEvent(&udp, update);
+  buttons.setChangeCallback([udp](ButtonUpdate update) {
+    if (udp->isListening() && udp->hasEventPeer()) {
+      buttonEvent(udp, update);
       return;
     }
 

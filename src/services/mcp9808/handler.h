@@ -6,12 +6,12 @@
 
 #include "Adafruit_MCP9808.h"
 
-#include "../../utils/udp.h"
+#include "../../utils/udp/main.h"
 #include "../../utils/log.h"
 
 namespace IotNode {
 
-RequestHandler makeMcp9808Handler();
+UDP::RequestHandler makeMcp9808Handler();
 
 } // project namespace
 

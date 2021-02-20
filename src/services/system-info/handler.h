@@ -10,14 +10,14 @@
   #include <WiFi.h>
 #endif
 
-#include "../../utils/udp.h"
+#include "../../utils/udp/main.h"
 #include "../../utils/log.h"
 
 namespace IotNode {
 
 void systemInfoHandler(
-    std::vector<uint8_t> *request,
-    RespondCallback respond
+    UDP::Payload *request,
+    UDP::RespondCallback respond
 );
 
 } // project namespace

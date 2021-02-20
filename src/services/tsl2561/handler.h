@@ -6,13 +6,13 @@
 
 #include <SparkFunTSL2561.h>
 
-#include "../../utils/udp.h"
+#include "../../utils/udp/main.h"
 #include "../../utils/log.h"
 
 namespace IotNode {
 
 struct UpdateHandler {
-  RequestHandler handler;
+  UDP::RequestHandler handler;
   std::function<void ()> update;
 };
 

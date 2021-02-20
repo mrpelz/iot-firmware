@@ -5,9 +5,9 @@
 #define STR(x) TOSTRING(x)
 
 #include <Arduino.h>
-#include "../../utils/udp.h"
+#include "../../utils/udp/main.h"
 #include "../../utils/log.h"
-#include "../../utils/link/tools.h"
+#include "../../utils/link/main.h"
 
 #ifdef ARDUINO_ARCH_ESP8266
   #include <ESP8266WiFi.h>
@@ -18,11 +18,11 @@
 
 namespace IotNode {
 
-void addLineToRespone(std::vector<uint8_t> response, String line);
+void addLineToRespone(UDP::Payload response, String line);
 
 void helloHandler(
-    std::vector<uint8_t> *request,
-    RespondCallback respond
+    UDP::Payload *request,
+    UDP::RespondCallback respond
 );
 
 } // project namespace

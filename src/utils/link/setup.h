@@ -6,8 +6,8 @@
 
 #include <Arduino.h>
 
-#include "./tools.h"
-#include "../udp.h"
+#include "./main.h"
+#include "../udp/main.h"
 
 #ifdef IOT_NODE_LINK_ETH
   #include "./eth.h"
@@ -102,7 +102,7 @@ namespace Link {
 
   void task(void * parameter);
 
-  void setup(UDPMessaging *udp);
+  Class *setup(UDP::Class *udp);
 }
 
 } // project namespace

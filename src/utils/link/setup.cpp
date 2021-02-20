@@ -18,7 +18,7 @@ namespace Link {
     }
   }
 
-  void setup(UDPMessaging *udp) {
+  Class *setup(UDP::Class *udp) {
     link.setDebug(Log::debug);
 
     link.onGotIP([udp]() {
@@ -32,6 +32,8 @@ namespace Link {
     link.connect();
 
     xTaskCreate(task, "link_maintenance", 10000, NULL, 1, NULL);
+
+    return &link;
   }
 }
 

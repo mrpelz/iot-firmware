@@ -4,14 +4,14 @@
 #define ASYNC_RESPONSE_DELAY 30000
 
 #include <Arduino.h>
-#include "../../utils/udp.h"
+#include "../../utils/udp/main.h"
 #include "../../utils/log.h"
 
 namespace IotNode {
 
 void asyncHandler(
-    std::vector<uint8_t> *request,
-    RespondCallback respond
+    UDP::Payload *request,
+    UDP::RespondCallback respond
 );
 
 void asyncUpdate();

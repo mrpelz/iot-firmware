@@ -2,7 +2,7 @@
 
 namespace IotNode {
 
-RequestHandler makeBme280Handler() {
+UDP::RequestHandler makeBme280Handler() {
   auto working = std::make_shared<bool>(false);
   auto sensor = std::make_shared<Adafruit_BME280>(Adafruit_BME280());
 
@@ -27,8 +27,8 @@ RequestHandler makeBme280Handler() {
   };
 
   auto handler = [&, working, sensor](
-    std::vector<uint8_t> *request,
-    std::function<void (std::vector<uint8_t> response)> respond
+    UDP::Payload *request,
+    UDP::RespondCallback respond
   ) {
     Log::debug("bme280-service", "got request");
 
@@ -41,7 +41,7 @@ RequestHandler makeBme280Handler() {
       return;
     }
 
-    std::vector<uint8_t> response;
+    UDP::Payload response;
 
     sensor->takeForcedMeasurement();
     float temperature = sensor->readTemperature();

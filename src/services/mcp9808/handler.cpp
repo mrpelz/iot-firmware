@@ -2,7 +2,7 @@
 
 namespace IotNode {
 
-RequestHandler makeMcp9808Handler() {
+UDP::RequestHandler makeMcp9808Handler() {
   auto working = std::make_shared<bool>(false);
   auto sensor = std::make_shared<Adafruit_MCP9808>(Adafruit_MCP9808());
 
@@ -21,8 +21,8 @@ RequestHandler makeMcp9808Handler() {
   };
 
   auto handler = [&, working, sensor](
-    std::vector<uint8_t> *request,
-    std::function<void (std::vector<uint8_t> response)> respond
+    UDP::Payload *request,
+    UDP::RespondCallback respond
   ) {
     Log::debug("mcp9808-service", "got request");
 
@@ -35,7 +35,7 @@ RequestHandler makeMcp9808Handler() {
       return;
     }
 
-    std::vector<uint8_t> response;
+    UDP::Payload response;
 
     sensor->wake();
     float reading = sensor->readTempC();

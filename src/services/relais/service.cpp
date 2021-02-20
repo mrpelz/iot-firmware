@@ -2,12 +2,12 @@
 
 namespace IotNode {
 
-UDPService makeRelaisService(Relais *relais, uint8_t index) {
+UDP::Service makeRelaisService(Relais *relais, uint8_t index) {
   uint8_t serviceId = serviceIds::relais + index;
 
   auto handler = [relais, index](
-    std::vector<uint8_t> *request,
-    std::function<void (std::vector<uint8_t> response)> respond
+    UDP::Payload *request,
+    UDP::RespondCallback respond
   ) {
     bool on = (*request)[0] != 0;
 

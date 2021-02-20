@@ -2,7 +2,7 @@
 #define _KEEPALIVE_HANDLER
 
 #include <Arduino.h>
-#include "../../utils/udp.h"
+#include "../../utils/udp/main.h"
 #include "../../utils/log.h"
 
 namespace IotNode {
@@ -27,8 +27,8 @@ class RestartOnTimeout {
 };
 
 void keepAliveHandler(
-    std::vector<uint8_t> *request,
-    RespondCallback respond
+    UDP::Payload *request,
+    UDP::RespondCallback respond
 );
 
 void timeoutUpdate();

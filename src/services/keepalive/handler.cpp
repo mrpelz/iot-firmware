@@ -47,8 +47,8 @@ void RestartOnTimeout::update() {
 RestartOnTimeout restartOnTimeout(120000);
 
 void keepAliveHandler(
-    std::vector<uint8_t> *request,
-    std::function<void (std::vector<uint8_t> response)> respond
+    UDP::Payload *request,
+    UDP::RespondCallback respond
 ) {
   Log::debug("keepalive-service", "got request");
 

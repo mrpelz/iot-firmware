@@ -4,18 +4,18 @@ namespace IotNode {
 
 auto delimiter = String(",");
 
-void addLineToRespone(std::vector<uint8_t> *response, String line) {
+void addLineToRespone(UDP::Payload *response, String line) {
   response->insert(response->end(), line.begin(), line.end());
   response->insert(response->end(), delimiter.begin(), delimiter.end());
 }
 
 void helloHandler(
-    std::vector<uint8_t> *request,
-    std::function<void (std::vector<uint8_t> response)> respond
+    UDP::Payload *request,
+    UDP::RespondCallback respond
 ) {
   Log::debug("hello-service", "got request");
 
-  std::vector<uint8_t> response;
+  UDP::Payload response;
 
   addLineToRespone(&response, "HELLO");
   addLineToRespone(&response, STR(IOT_NODE_BUILD_GIT_REV));

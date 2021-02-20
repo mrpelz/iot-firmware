@@ -5,7 +5,7 @@
 
 #include <Arduino.h>
 #include <ETH.h>
-#include "./tools.h"
+#include "./main.h"
 
 namespace IotNode {
 

@@ -2,7 +2,7 @@
 
 namespace IotNode {
 
-void buttonEvent(UDPMessaging *udp, ButtonUpdate update) {
+void buttonEvent(UDP::Class *udp, ButtonUpdate update) {
   Log::debug("button-event", "triggered");
 
   std::vector<uint8_t> response = {

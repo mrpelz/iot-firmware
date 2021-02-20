@@ -3,13 +3,13 @@
 
 #include <Arduino.h>
 
-#include "../../utils/udp.h"
+#include "../../utils/udp/main.h"
 #include "../service-ids.h"
 #include "./handler.h"
 
 namespace IotNode {
 
-UDPService bme280Service = {
+UDP::Service bme280Service = {
   .serviceId = serviceIds::bme280,
   .handler = makeBme280Handler(),
 };

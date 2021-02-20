@@ -3,12 +3,12 @@
 namespace IotNode {
 
 void systemInfoHandler(
-    std::vector<uint8_t> *request,
-    std::function<void (std::vector<uint8_t> response)> respond
+    UDP::Payload *request,
+    UDP::RespondCallback respond
 ) {
   Log::debug("system-info-service", "got request");
 
-  std::vector<uint8_t> response;
+  UDP::Payload response;
 
   #ifdef ARDUINO_ARCH_ESP8266
     auto chipId = ESP.getChipId();
