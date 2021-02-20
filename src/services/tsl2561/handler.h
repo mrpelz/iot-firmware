@@ -6,8 +6,10 @@
 
 #include <SparkFunTSL2561.h>
 
-#include "../../utils/udp-messaging.h"
+#include "../../utils/udp.h"
 #include "../../utils/log.h"
+
+namespace IotNode {
 
 struct UpdateHandler {
   RequestHandler handler;
@@ -15,5 +17,7 @@ struct UpdateHandler {
 };
 
 UpdateHandler makeTsl2561UpdateHandler();
+
+} // project namespace
 
 #endif

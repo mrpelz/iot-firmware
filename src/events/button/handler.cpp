@@ -1,5 +1,7 @@
 #include "./handler.h"
 
+namespace IotNode {
+
 Buttons::Buttons(ButtonsClassConfig config) {
   state.debounceTime = config.debounceTime;
   state.repeatTime = config.repeatTime;
@@ -116,3 +118,5 @@ void Buttons::update() {
     });
   });
 }
+
+} // project namespace

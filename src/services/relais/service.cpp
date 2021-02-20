@@ -1,5 +1,7 @@
 #include "./service.h"
 
+namespace IotNode {
+
 UDPService makeRelaisService(Relais *relais, uint8_t index) {
   uint8_t serviceId = serviceIds::relais + index;
 
@@ -24,3 +26,5 @@ UDPService makeRelaisService(Relais *relais, uint8_t index) {
     handler
   };
 }
+
+} // project namespace

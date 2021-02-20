@@ -1,5 +1,7 @@
 #include "./main.h"
 
+using namespace IotNode;
+
 UDPMessaging udp(8266);
 
 Relais relais0({ 4, false });

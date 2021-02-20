@@ -4,9 +4,13 @@
 #include <Arduino.h>
 #include "./handler.h"
 #include "../event-ids.h"
-#include "../../utils/udp-messaging.h"
+#include "../../utils/udp.h"
 #include "../../utils/log.h"
 
+namespace IotNode {
+
 void buttonEvent(UDPMessaging *udp, ButtonUpdate update);
+
+} // project namespace
 
 #endif

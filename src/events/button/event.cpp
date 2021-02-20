@@ -1,5 +1,7 @@
 #include "./event.h"
 
+namespace IotNode {
+
 void buttonEvent(UDPMessaging *udp, ButtonUpdate update) {
   Log::debug("button-event", "triggered");
 
@@ -21,3 +23,5 @@ void buttonEvent(UDPMessaging *udp, ButtonUpdate update) {
 
   udp->event(eventIds::button, response);
 }
+
+} // project namespace

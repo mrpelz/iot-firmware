@@ -1,5 +1,7 @@
 #include "./handler.h"
 
+namespace IotNode {
+
 auto delimiter = String(",");
 
 void addLineToRespone(std::vector<uint8_t> *response, String line) {
@@ -46,3 +48,5 @@ void helloHandler(
 
   respond(response);
 }
+
+} // project namespace

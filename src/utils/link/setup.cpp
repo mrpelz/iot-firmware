@@ -1,5 +1,7 @@
 #include "./setup.h"
 
+namespace IotNode {
+
 namespace Link {
   #ifdef IOT_NODE_LINK_ETH
     #ifdef ARDUINO_ARCH_ESP32
@@ -32,3 +34,5 @@ namespace Link {
     xTaskCreate(task, "link_maintenance", 10000, NULL, 1, NULL);
   }
 }
+
+} // project namespace

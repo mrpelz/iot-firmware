@@ -1,5 +1,7 @@
 #include "./handler.h"
 
+namespace IotNode {
+
 UpdateHandler makeTsl2561UpdateHandler() {
   auto responseCallback = std::make_shared<std::function<void (std::vector<uint8_t> response)>>();
 
@@ -112,3 +114,5 @@ UpdateHandler makeTsl2561UpdateHandler() {
     update
   };
 }
+
+} // project namespace

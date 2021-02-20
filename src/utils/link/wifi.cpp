@@ -2,6 +2,8 @@
 
 #ifndef IOT_NODE_LINK_ETH
 
+namespace IotNode {
+
 namespace Link {
   Class::Class(Config config) {
     state.phyMode = config.phyMode;
@@ -360,5 +362,7 @@ namespace Link {
     #endif
   }
 }
+
+} // project namespace
 
 #endif

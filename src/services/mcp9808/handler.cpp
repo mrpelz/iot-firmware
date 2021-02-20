@@ -1,5 +1,7 @@
 #include "./handler.h"
 
+namespace IotNode {
+
 RequestHandler makeMcp9808Handler() {
   auto working = std::make_shared<bool>(false);
   auto sensor = std::make_shared<Adafruit_MCP9808>(Adafruit_MCP9808());
@@ -48,3 +50,5 @@ RequestHandler makeMcp9808Handler() {
 
   return handler;
 }
+
+} // project namespace

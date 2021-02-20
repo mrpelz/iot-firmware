@@ -1,4 +1,6 @@
-#include "./udp-messaging.h"
+#include "./udp.h"
+
+namespace IotNode {
 
 UDPMessaging::UDPMessaging(uint16_t port) {
   state.port = port;
@@ -175,3 +177,5 @@ bool UDPMessaging::isListening() {
 void UDPMessaging::setDebug(Log::Callback callback) {
   state.debugCallback = callback;
 }
+
+} // project namespace

@@ -1,5 +1,7 @@
 #include "./handler.h"
 
+namespace IotNode {
+
 RequestHandler makeBme280Handler() {
   auto working = std::make_shared<bool>(false);
   auto sensor = std::make_shared<Adafruit_BME280>(Adafruit_BME280());
@@ -57,3 +59,5 @@ RequestHandler makeBme280Handler() {
 
   return handler;
 }
+
+} // project namespace

@@ -13,6 +13,8 @@
 #define TOSTRING(x) #x
 #define STR(x) TOSTRING(x)
 
+namespace IotNode {
+
 namespace Log {
   typedef std::function<void (String key, String value)> Callback;
 
@@ -22,5 +24,7 @@ namespace Log {
 
   void info();
 }
+
+} // project namespace
 
 #endif

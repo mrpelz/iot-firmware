@@ -5,6 +5,8 @@
 
 #include "./handler.h"
 
+namespace IotNode {
+
 static const ButtonAttributes button0 = {
   .index = 0,
   .pin = 2,
@@ -20,5 +22,7 @@ static const ButtonsClassConfig buttonsConfig = {
     button0
   },
 };
+
+} // project namespace
 
 #endif

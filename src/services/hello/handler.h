@@ -5,7 +5,7 @@
 #define STR(x) TOSTRING(x)
 
 #include <Arduino.h>
-#include "../../utils/udp-messaging.h"
+#include "../../utils/udp.h"
 #include "../../utils/log.h"
 #include "../../utils/link/tools.h"
 
@@ -16,11 +16,15 @@
   #include <WiFi.h>
 #endif
 
+namespace IotNode {
+
 void addLineToRespone(std::vector<uint8_t> response, String line);
 
 void helloHandler(
     std::vector<uint8_t> *request,
     RespondCallback respond
 );
+
+} // project namespace
 
 #endif

@@ -7,6 +7,8 @@
 #include <ETH.h>
 #include "./tools.h"
 
+namespace IotNode {
+
 namespace Link {
   struct Config {
     #ifndef IOT_NODE_DHCP
@@ -60,6 +62,8 @@ namespace Link {
       void debug(bool deep);
   };
 }
+
+} // project namespace
 
 #endif
 

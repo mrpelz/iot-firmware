@@ -4,6 +4,8 @@
 #include <Arduino.h>
 #include "../../utils/log.h"
 
+namespace IotNode {
+
 struct RelaisConfig {
   uint8_t pin;
   bool invert;
@@ -28,5 +30,7 @@ class Relais {
     void setOn(bool on);
     void toggle();
 };
+
+} // project namespace
 
 #endif

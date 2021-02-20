@@ -1,5 +1,7 @@
 #include "./handler.h"
 
+namespace IotNode {
+
 uint32_t requestTime = 0;
 bool requestRunning = false;
 std::function<void (std::vector<uint8_t> response)> responseCallback;
@@ -29,3 +31,5 @@ void asyncUpdate() {
 
   responseCallback({ 0x0a, 0x0b, 0x0c });
 }
+
+} // project namespace

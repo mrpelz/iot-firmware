@@ -1,5 +1,7 @@
 #include "./handler.h"
 
+namespace IotNode {
+
 void systemInfoHandler(
     std::vector<uint8_t> *request,
     std::function<void (std::vector<uint8_t> response)> respond
@@ -36,3 +38,5 @@ void systemInfoHandler(
 
   respond(response);
 }
+
+} // project namespace

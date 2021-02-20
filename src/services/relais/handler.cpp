@@ -1,5 +1,7 @@
 #include "./handler.h"
 
+namespace IotNode {
+
 Relais::Relais(RelaisConfig config) {
   state.pin = config.pin;
   state.invert = config.invert;
@@ -42,3 +44,5 @@ void Relais::toggle() {
   state.on = !state.on;
   commit();
 }
+
+} // project namespace

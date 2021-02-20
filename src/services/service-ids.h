@@ -1,6 +1,8 @@
 #ifndef _SERVICE_IDS
 #define _SERVICE_IDS
 
+namespace IotNode {
+
 enum serviceIds {
   _reserved_event,
   hello,
@@ -13,5 +15,7 @@ enum serviceIds {
   led = 0xe0, // led0 (start id)
   keepalive = 0xff
 };
+
+} // project namespace
 
 #endif

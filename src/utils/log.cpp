@@ -1,5 +1,7 @@
 #include "./log.h"
 
+namespace IotNode {
+
 namespace Log {
   void setup() {
     #ifdef ARDUINO_ARCH_ESP8266
@@ -48,3 +50,5 @@ namespace Log {
     debug("info.system.mac-address", WiFi.macAddress());
   }
 }
+
+} // project namespace

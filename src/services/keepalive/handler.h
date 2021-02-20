@@ -2,8 +2,10 @@
 #define _KEEPALIVE_HANDLER
 
 #include <Arduino.h>
-#include "../../utils/udp-messaging.h"
+#include "../../utils/udp.h"
 #include "../../utils/log.h"
+
+namespace IotNode {
 
 struct RestartOnTimeoutState {
   bool ticked = false;
@@ -30,5 +32,7 @@ void keepAliveHandler(
 );
 
 void timeoutUpdate();
+
+} // project namespace
 
 #endif

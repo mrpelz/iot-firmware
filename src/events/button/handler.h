@@ -4,6 +4,8 @@
 #include <Arduino.h>
 #include "../../utils/log.h"
 
+namespace IotNode {
+
 struct ButtonUpdate {
   uint8_t index;
   bool down;
@@ -63,5 +65,7 @@ class Buttons {
     void stop();
     void update();
 };
+
+} // project namespace
 
 #endif

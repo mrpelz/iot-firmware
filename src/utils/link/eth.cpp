@@ -2,6 +2,8 @@
 
 #if defined(IOT_NODE_LINK_ETH) && defined(ARDUINO_ARCH_ESP32)
 
+namespace IotNode {
+
 namespace Link {
   Class::Class(Config config) {
     #ifndef IOT_NODE_DHCP
@@ -260,5 +262,7 @@ namespace Link {
     #endif
   }
 }
+
+} // project namespace
 
 #endif

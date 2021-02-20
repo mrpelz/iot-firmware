@@ -1,5 +1,5 @@
-#ifndef _UDP_MESSAGING
-#define _UDP_MESSAGING
+#ifndef _UDP
+#define _UDP
 
 #include <Arduino.h>
 
@@ -26,6 +26,10 @@
 #define RESPONSE_MAX_LENGTH UDP_MAX_LENGTH - MESSAGE_ID_LENGTH
 
 #define EVENT_MAX_LENGTH UDP_MAX_LENGTH - MESSAGE_ID_LENGTH - EVENT_ID_LENGTH
+
+namespace IotNode {
+
+namespace UDP {}
 
 typedef std::function<void (
   std::vector<uint8_t> response
@@ -70,5 +74,7 @@ class UDPMessaging {
     bool isListening();
     void setDebug(Log::Callback callback);
 };
+
+} // project namespace
 
 #endif

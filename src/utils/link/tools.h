@@ -12,6 +12,8 @@
 
 #include "../log.h"
 
+namespace IotNode {
+
 namespace Link {
   #ifdef ARDUINO_ARCH_ESP8266
     typedef WiFiEventHandler EventHandler_t;
@@ -57,5 +59,7 @@ namespace Link {
     std::function<void ()> gotIP = []() {};
   };
 }
+
+} // project namespace
 
 #endif

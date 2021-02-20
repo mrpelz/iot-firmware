@@ -7,13 +7,15 @@
 #include <Arduino.h>
 
 #include "./tools.h"
-#include "../udp-messaging.h"
+#include "../udp.h"
 
 #ifdef IOT_NODE_LINK_ETH
   #include "./eth.h"
 #else
   #include "./wifi.h"
 #endif
+
+namespace IotNode {
 
 namespace Link {
   static const Timings timings = {
@@ -102,5 +104,7 @@ namespace Link {
 
   void setup(UDPMessaging *udp);
 }
+
+} // project namespace
 
 #endif

@@ -1,5 +1,7 @@
 #include "./handler.h"
 
+namespace IotNode {
+
 RestartOnTimeout::RestartOnTimeout(uint32_t timeout) {
   state.timeout = timeout;
 }
@@ -60,3 +62,5 @@ void keepAliveHandler(
 void timeoutUpdate() {
   restartOnTimeout.update();
 }
+
+} // project namespace

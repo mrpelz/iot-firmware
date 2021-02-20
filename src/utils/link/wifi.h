@@ -18,6 +18,8 @@
 
 #include "./tools.h"
 
+namespace IotNode {
+
 namespace Link {
   #ifdef ARDUINO_ARCH_ESP8266
     typedef float OutputPower_t;
@@ -97,6 +99,8 @@ namespace Link {
       void debug(bool deep);
   };
 }
+
+} // project namespace
 
 #endif
 
