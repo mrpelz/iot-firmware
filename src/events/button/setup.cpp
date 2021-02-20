@@ -12,26 +12,8 @@ namespace Button {
     }
   }
 
-  Class *setup(UDP::Class *udp, Relais *relais) {
+  Class *setup() {
     buttons.setDebug(Log::debug);
-
-    buttons.setChangeCallback([udp, relais](Button::Update update) {
-      if (udp->isListening() && udp->hasEventPeer()) {
-        buttonEvent(udp, update);
-        return;
-      }
-
-      Log::debug("info.buttons.change-callback", "udp event not usable");
-
-      if (
-        update.index == 0
-        && update.downChanged
-        && !update.down
-      ) {
-        Log::debug("info.buttons.change-callback", "triggering override");
-        relais->toggle();
-      }
-    });
 
     buttons.start();
 

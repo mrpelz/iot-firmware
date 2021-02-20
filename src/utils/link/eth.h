@@ -1,5 +1,5 @@
-#ifndef _PERSISTENT_LINK_ETH
-#define _PERSISTENT_LINK_ETH
+#ifndef _LINK_ETH
+#define _LINK_ETH
 
 #if defined(IOT_NODE_LINK_ETH) && defined(ARDUINO_ARCH_ESP32)
 

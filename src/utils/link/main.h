@@ -1,5 +1,5 @@
-#ifndef _PERSISTENT_LINK_MAIN
-#define _PERSISTENT_LINK_MAIN
+#ifndef _LINK_MAIN
+#define _LINK_MAIN
 
 #include <Arduino.h>
 

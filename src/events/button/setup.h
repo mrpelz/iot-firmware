@@ -3,8 +3,6 @@
 
 #include <Arduino.h>
 
-#include "../../services/relais/handler.h"
-#include "../../utils/udp/main.h"
 #include "./event.h"
 #include "./main.h"
 
@@ -29,7 +27,7 @@ namespace Button {
 
   void task(void * parameter);
 
-  Class *setup(UDP::Class *udp, Relais *relais);
+  Class *setup();
 }
 
 } // project namespace

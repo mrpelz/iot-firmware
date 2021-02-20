@@ -1,38 +1,30 @@
 #include "./main.h"
 
-namespace IotNode {
-  Relais relais0({ 4, false });
-  auto relais0Service = makeRelaisService(&relais0, 0);
-}
-
-using namespace IotNode;
-
 void setup() {
-  Log::setup();
+  IotNode::Log::setup();
 
   auto udp = IotNode::UDP::setup();
-  Link::setup(udp);
-  Button::setup(udp, &relais0);
+  IotNode::Link::setup(udp);
 
-  udp->addService(&helloService);
-  udp->addService(&systemInfoService);
-  udp->addService(&asyncService);
-  udp->addService(&mcp9808Service);
-  udp->addService(&bme280Service);
-  udp->addService(&tsl2561Service);
-  udp->addService(&keepAliveService);
-  udp->addService(&relais0Service);
+  auto buttons = IotNode::Button::setup();
+  IotNode::Relais::setup(udp, buttons);
 
-  relais0.init();
+  udp->addService(&IotNode::helloService);
+  udp->addService(&IotNode::systemInfoService);
+  udp->addService(&IotNode::asyncService);
+  udp->addService(&IotNode::mcp9808Service);
+  udp->addService(&IotNode::bme280Service);
+  udp->addService(&IotNode::tsl2561Service);
+  udp->addService(&IotNode::keepAliveService);
 }
 
 void loop() {
-  timeoutUpdate();
+  IotNode::timeoutUpdate();
   yield();
 
-  asyncUpdate();
+  IotNode::asyncUpdate();
   yield();
 
-  tsl2561UpdateHandler.update();
+  IotNode::tsl2561UpdateHandler.update();
   yield();
 }

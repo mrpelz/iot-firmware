@@ -6,8 +6,6 @@
 #include <Wire.h>
 #include <SPI.h>
 
-#include "./events/button/event.h"
-#include "./events/button/main.h"
 #include "./events/button/setup.h"
 #include "./services/async/handler.h"
 #include "./services/async/service.h"
@@ -16,8 +14,7 @@
 #include "./services/keepalive/handler.h"
 #include "./services/keepalive/service.h"
 #include "./services/mcp9808/service.h"
-#include "./services/relais/handler.h"
-#include "./services/relais/service.h"
+#include "./services/relais/setup.h"
 #include "./services/system-info/service.h"
 #include "./services/tsl2561/service.h"
 #include "./utils/link/setup.h"

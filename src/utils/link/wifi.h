@@ -1,5 +1,5 @@
-#ifndef _PERSISTENT_LINK_WIFI
-#define _PERSISTENT_LINK_WIFI
+#ifndef _LINK_WIFI
+#define _LINK_WIFI
 
 #ifndef IOT_NODE_LINK_ETH
 

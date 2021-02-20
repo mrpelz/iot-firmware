@@ -1,5 +1,5 @@
-#ifndef _PERSISTENT_LINK_SETUP
-#define _PERSISTENT_LINK_SETUP
+#ifndef _LINK_SETUP
+#define _LINK_SETUP
 
 #define TOSTRING(x) #x
 #define STR(x) TOSTRING(x)
@@ -103,7 +103,7 @@ namespace Link {
 
   void task(void * parameter);
 
-  Class *setup(UDP::Class *udp);
+  void setup(UDP::Class *udp);
 }
 
 } // project namespace
