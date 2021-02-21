@@ -4,10 +4,10 @@ namespace IotNode {
 
 namespace Relais {
   Relais::Class relais0({ 4, false });
-  auto relais0Service = makeRelaisService(&relais0, 0);
+  auto service0 = makeService(&relais0, 0);
 
   void setup(UDP::Class *udp, Button::Class *buttons) {
-    udp->addService(&relais0Service);
+    udp->addService(&service0);
 
     buttons->setChangeCallback([udp](Button::Update update) {
       if (udp->isListening() && udp->hasEventPeer()) {

@@ -31,7 +31,7 @@ namespace Link {
 
     link.connect();
 
-    xTaskCreate(task, "link_maintenance", 10000, NULL, 1, NULL);
+    xTaskCreate(task, "link_maintenance", 10000, NULL, 2, NULL);
   }
 }
 

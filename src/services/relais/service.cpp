@@ -3,7 +3,7 @@
 namespace IotNode {
 
 namespace Relais {
-  UDP::Service makeRelaisService(Class *relais, uint8_t index) {
+  UDP::Service makeService(Class *relais, uint8_t index) {
     uint8_t serviceId = serviceIds::relais + index;
 
     auto handler = [relais, index](

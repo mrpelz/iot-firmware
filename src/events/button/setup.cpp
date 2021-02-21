@@ -17,7 +17,7 @@ namespace Button {
 
     buttons.start();
 
-    xTaskCreate(task, "button_maintenance", 10000, NULL, 1, NULL);
+    xTaskCreate(task, "button_maintenance", 10000, NULL, 3, NULL);
 
     return &buttons;
   }
