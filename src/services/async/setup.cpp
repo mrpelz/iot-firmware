@@ -1,0 +1,16 @@
+#include "./setup.h"
+
+namespace IotNode {
+
+namespace Async {
+  UDP::Service service = {
+    .serviceId = serviceIds::async,
+    .handler = handler,
+  };
+
+  void setup(UDP::Class *udp) {
+    udp->addService(&service);
+  }
+}
+
+} // project namespace

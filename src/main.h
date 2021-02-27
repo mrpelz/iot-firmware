@@ -7,8 +7,7 @@
 #include <SPI.h>
 
 #include "./events/button/setup.h"
-#include "./services/async/handler.h"
-#include "./services/async/service.h"
+#include "./services/async/setup.h"
 #include "./services/bme280/service.h"
 #include "./services/hello/service.h"
 #include "./services/keepalive/setup.h"
