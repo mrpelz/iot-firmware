@@ -1,17 +1,17 @@
-#ifndef _MCP9808_MAIN
-#define _MCP9808_MAIN
+#ifndef _TSL2561_MAIN
+#define _TSL2561_MAIN
 
 #include <Arduino.h>
 #include <Wire.h>
 
-#include "Adafruit_MCP9808.h"
+#include <SparkFunTSL2561.h>
 
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"
 
 namespace IotNode {
 
-namespace Mcp9808 {
+namespace Tsl2561 {
   void initializer();
 
   void responseTask(void * parameter);

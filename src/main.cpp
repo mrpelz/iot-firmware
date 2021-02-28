@@ -12,14 +12,12 @@ void setup() {
   IotNode::Keepalive::setup(udp);
   IotNode::Mcp9808::setup(udp);
   IotNode::SystemInfo::setup(udp);
+  IotNode::Tsl2561::setup(udp);
 
   auto buttons = IotNode::Button::setup();
   IotNode::Relais::setup(udp, buttons);
-
-  udp->addService(&IotNode::tsl2561Service);
 }
 
 void loop() {
-  IotNode::tsl2561UpdateHandler.update();
   yield();
 }

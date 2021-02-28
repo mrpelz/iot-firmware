@@ -14,7 +14,7 @@
 #include "./services/mcp9808/setup.h"
 #include "./services/relais/setup.h"
 #include "./services/system-info/setup.h"
-#include "./services/tsl2561/service.h"
+#include "./services/tsl2561/setup.h"
 #include "./utils/link/setup.h"
 #include "./utils/log.h"
 #include "./utils/udp/setup.h"
