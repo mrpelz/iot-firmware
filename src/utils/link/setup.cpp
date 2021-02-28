@@ -11,10 +11,12 @@ namespace Link {
     Class link(config);
   #endif
 
+  const TickType_t delay = 10 / portTICK_PERIOD_MS;
+
   void task(void * parameter) {
     for(;;) {
       link.update();
-      yield();
+      vTaskDelay(delay);
     }
   }
 
@@ -31,7 +33,7 @@ namespace Link {
 
     link.connect();
 
-    xTaskCreate(task, "link_maintenance", 10000, NULL, 2, NULL);
+    xTaskCreate(task, "link_maintenance", 2048, NULL, 2, NULL);
   }
 }
 

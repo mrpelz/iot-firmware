@@ -220,23 +220,23 @@ namespace Link {
       return;
     }
 
-    unsigned long timeSinceWifiDisconnect = now - state.disconnectionTime;
+    unsigned long timeSinceEthDisconnect = now - state.disconnectionTime;
 
     if (
       !state.isReconnecting
-      && timeSinceWifiDisconnect > state.timings.tryReconnectAfter
+      && timeSinceEthDisconnect > state.timings.tryReconnectAfter
     ) {
       state.isReconnecting = true;
 
-      state.callbacks.debug("info.attempt-reconnect", String(timeSinceWifiDisconnect));
+      state.callbacks.debug("info.attempt-reconnect", String(timeSinceEthDisconnect));
 
       ethConnect();
 
       state.callbacks.reconnect();
     }
 
-    if (timeSinceWifiDisconnect > state.timings.restartAfter) {
-      state.callbacks.debug("info.attempt-restart", String(timeSinceWifiDisconnect));
+    if (timeSinceEthDisconnect > state.timings.restartAfter) {
+      state.callbacks.debug("info.attempt-restart", String(timeSinceEthDisconnect));
 
       state.callbacks.beforeRestart();
 

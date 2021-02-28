@@ -64,7 +64,7 @@ namespace Bme280 {
     }
 
     respondCallback = respond;
-    xTaskCreate(responseTask, "bme280_handling", 10000, NULL, 1, NULL);
+    xTaskCreate(responseTask, "bme280_handling", 2048, NULL, 1, NULL);
   }
 }
 

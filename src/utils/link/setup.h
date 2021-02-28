@@ -22,7 +22,7 @@ namespace Link {
   static const Timings timings = {
     .runDebugEvery = 60000,
     .tryReconnectAfter = 2000,
-    .restartAfter = 10000
+    .restartAfter = 20000
   };
 
   #ifndef IOT_NODE_LINK_ETH

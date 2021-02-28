@@ -40,8 +40,8 @@ namespace Mcp9808 {
     respondCallback(response);
     respondCallback == NULL;
 
-    const TickType_t xDelay = 2000 / portTICK_PERIOD_MS;
-    vTaskDelay(xDelay);
+    const TickType_t delay = 2000 / portTICK_PERIOD_MS;
+    vTaskDelay(delay);
 
     sensor.shutdown();
 
@@ -59,7 +59,7 @@ namespace Mcp9808 {
     }
 
     respondCallback = respond;
-    xTaskCreate(responseTask, "mcp9808_handling", 10000, NULL, 1, NULL);
+    xTaskCreate(responseTask, "mcp9808_handling", 2048, NULL, 1, NULL);
   }
 }
 

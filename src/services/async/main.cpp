@@ -4,6 +4,7 @@ namespace IotNode {
 
 namespace Async {
   UDP::RespondCallback respondCallback = NULL;
+  const TickType_t delay = ASYNC_RESPONSE_DELAY / portTICK_PERIOD_MS;
 
   void responseTask(void * parameter) {
     if (respondCallback == NULL) {
@@ -11,8 +12,7 @@ namespace Async {
       return;
     }
 
-    const TickType_t xDelay = ASYNC_RESPONSE_DELAY / portTICK_PERIOD_MS;
-    vTaskDelay(xDelay);
+    vTaskDelay(delay);
 
     Log::debug("async-service", "sending delayed response");
 
@@ -26,7 +26,7 @@ namespace Async {
     Log::debug("async-service", "got request");
 
     respondCallback = respond;
-    xTaskCreate(responseTask, "async_handling", 10000, NULL, 1, NULL);
+    xTaskCreate(responseTask, "async_handling", 2048, NULL, 1, NULL);
   }
 }
 

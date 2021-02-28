@@ -12,8 +12,8 @@ namespace Keepalive {
   struct State {
     bool ticked = false;
     bool running = false;
-    uint32_t timeout = 0;
-    uint32_t lastTick = 0;
+    unsigned long timeout = 0;
+    unsigned long lastTick = 0;
   };
 
   class Class {
@@ -21,7 +21,7 @@ namespace Keepalive {
       State state;
 
     public:
-      Class(uint32_t timeout);
+      Class(unsigned long timeout);
       void start();
       void stop();
       void tick();

@@ -3,7 +3,7 @@
 namespace IotNode {
 
 namespace Keepalive {
-  Class::Class(uint32_t timeout) {
+  Class::Class(unsigned long timeout) {
     state.timeout = timeout;
   }
 
@@ -26,7 +26,7 @@ namespace Keepalive {
   }
 
   void Class::update() {
-    uint32_t now = millis();
+    unsigned long now = millis();
 
     if (state.ticked) {
       state.ticked = false;
@@ -37,7 +37,7 @@ namespace Keepalive {
 
     if (!state.running) return;
 
-    uint32_t timeSinceTick = now - state.lastTick;
+    unsigned long timeSinceTick = now - state.lastTick;
 
     if (timeSinceTick > state.timeout) {
       Log::debug("keepalive", "trip");

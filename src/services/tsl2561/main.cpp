@@ -37,8 +37,8 @@ namespace Tsl2561 {
 
     sensor.setPowerUp();
 
-    const TickType_t xDelay = ms / portTICK_PERIOD_MS;
-    vTaskDelay(xDelay);
+    const TickType_t delay = ms / portTICK_PERIOD_MS;
+    vTaskDelay(delay);
 
     uint32_t data0, data1;
     double lux;
@@ -76,7 +76,7 @@ namespace Tsl2561 {
     }
 
     respondCallback = respond;
-    xTaskCreate(responseTask, "tsl2561_handling", 10000, NULL, 1, NULL);
+    xTaskCreate(responseTask, "tsl2561_handling", 2048, NULL, 1, NULL);
   }
 }
 

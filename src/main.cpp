@@ -1,5 +1,7 @@
 #include "./main.h"
 
+const TickType_t watchdogDelay = 10 / portTICK_PERIOD_MS;
+
 void setup() {
   IotNode::Log::setup();
 
@@ -28,5 +30,5 @@ void setup() {
 }
 
 void loop() {
-  yield();
+  vTaskDelay(watchdogDelay);
 }
