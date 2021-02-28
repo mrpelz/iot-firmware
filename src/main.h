@@ -13,7 +13,7 @@
 #include "./services/keepalive/setup.h"
 #include "./services/mcp9808/service.h"
 #include "./services/relais/setup.h"
-#include "./services/system-info/service.h"
+#include "./services/system-info/setup.h"
 #include "./services/tsl2561/service.h"
 #include "./utils/link/setup.h"
 #include "./utils/log.h"

@@ -2,9 +2,9 @@
 
 namespace IotNode {
 
-namespace Hello {
+namespace SystemInfo {
   UDP::Service service = {
-    .serviceId = serviceIds::hello,
+    .serviceId = serviceIds::systemInfo,
     .handler = handler,
   };
 

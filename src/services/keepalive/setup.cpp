@@ -4,6 +4,7 @@ namespace IotNode {
 
 namespace Keepalive {
   Class restartOnTimeout(120000);
+
   UDP::Service service = {
     .serviceId = serviceIds::keepalive,
     .handler = makeHandler(&restartOnTimeout),
