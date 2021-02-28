@@ -9,7 +9,7 @@
 #include "./events/button/setup.h"
 #include "./services/async/setup.h"
 #include "./services/bme280/service.h"
-#include "./services/hello/service.h"
+#include "./services/hello/setup.h"
 #include "./services/keepalive/setup.h"
 #include "./services/mcp9808/service.h"
 #include "./services/relais/setup.h"
