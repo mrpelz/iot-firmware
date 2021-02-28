@@ -7,6 +7,7 @@ void setup() {
   IotNode::Link::setup(udp);
 
   IotNode::Async::setup(udp);
+  IotNode::Bme280::setup(udp);
   IotNode::Hello::setup(udp);
   IotNode::Keepalive::setup(udp);
   IotNode::Mcp9808::setup(udp);
@@ -15,7 +16,6 @@ void setup() {
   auto buttons = IotNode::Button::setup();
   IotNode::Relais::setup(udp, buttons);
 
-  udp->addService(&IotNode::bme280Service);
   udp->addService(&IotNode::tsl2561Service);
 }
 
