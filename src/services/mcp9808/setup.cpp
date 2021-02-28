@@ -1,0 +1,18 @@
+#include "./setup.h"
+
+namespace IotNode {
+
+namespace Mcp9808 {
+  UDP::Service service = {
+    .serviceId = serviceIds::mcp9808,
+    .handler = handler,
+  };
+
+  void setup(UDP::Class *udp) {
+    initializer();
+
+    udp->addService(&service);
+  }
+}
+
+} // project namespace

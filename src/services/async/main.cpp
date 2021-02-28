@@ -17,8 +17,8 @@ namespace Async {
     Log::debug("async-service", "sending delayed response");
 
     respondCallback({ 0x0a, 0x0b, 0x0c });
-
     respondCallback == NULL;
+
     vTaskDelete(NULL);
   }
 
