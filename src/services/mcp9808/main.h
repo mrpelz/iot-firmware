@@ -1,6 +1,8 @@
 #ifndef _MCP9808_MAIN
 #define _MCP9808_MAIN
 
+#ifdef IOT_NODE_MCP9808
+
 #include <Arduino.h>
 #include <Wire.h>
 
@@ -20,5 +22,7 @@ namespace Mcp9808 {
 }
 
 } // project namespace
+
+#endif
 
 #endif

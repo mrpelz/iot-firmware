@@ -1,6 +1,8 @@
 #ifndef _TSL2561_MAIN
 #define _TSL2561_MAIN
 
+#ifdef IOT_NODE_TSL2561
+
 #include <Arduino.h>
 #include <Wire.h>
 
@@ -20,5 +22,7 @@ namespace Tsl2561 {
 }
 
 } // project namespace
+
+#endif
 
 #endif

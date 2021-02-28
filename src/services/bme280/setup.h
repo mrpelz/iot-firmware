@@ -1,6 +1,8 @@
 #ifndef _BME280_SETUP
 #define _BME280_SETUP
 
+#ifdef IOT_NODE_BME280
+
 #include <Arduino.h>
 
 #include "../../utils/udp/main.h"
@@ -13,5 +15,7 @@ namespace Bme280 {
 }
 
 } // project namespace
+
+#endif
 
 #endif

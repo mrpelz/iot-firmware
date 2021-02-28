@@ -1,3 +1,5 @@
+#ifdef IOT_NODE_BME280
+
 #include "./main.h"
 
 namespace IotNode {
@@ -67,3 +69,5 @@ namespace Bme280 {
 }
 
 } // project namespace
+
+#endif

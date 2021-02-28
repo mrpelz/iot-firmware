@@ -1,6 +1,8 @@
 #ifndef _BME280_MAIN
 #define _BME280_MAIN
 
+#ifdef IOT_NODE_BME280
+
 #include <Arduino.h>
 #include <Wire.h>
 
@@ -21,5 +23,7 @@ namespace Bme280 {
 }
 
 } // project namespace
+
+#endif
 
 #endif

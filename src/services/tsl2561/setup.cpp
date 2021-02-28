@@ -1,3 +1,5 @@
+#ifdef IOT_NODE_TSL2561
+
 #include "./setup.h"
 
 namespace IotNode {
@@ -16,3 +18,5 @@ namespace Tsl2561 {
 }
 
 } // project namespace
+
+#endif

@@ -1,3 +1,5 @@
+#ifdef IOT_NODE_MCP9808
+
 #include "./setup.h"
 
 namespace IotNode {
@@ -16,3 +18,5 @@ namespace Mcp9808 {
 }
 
 } // project namespace
+
+#endif

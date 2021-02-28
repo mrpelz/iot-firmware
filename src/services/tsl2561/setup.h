@@ -1,6 +1,8 @@
 #ifndef _TSL2561_SETUP
 #define _TSL2561_SETUP
 
+#ifdef IOT_NODE_TSL2561
+
 #include <Arduino.h>
 
 #include "../../utils/udp/main.h"
@@ -13,5 +15,7 @@ namespace Tsl2561 {
 }
 
 } // project namespace
+
+#endif
 
 #endif

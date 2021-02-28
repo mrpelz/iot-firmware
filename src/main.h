@@ -3,9 +3,6 @@
 
 #include <Arduino.h>
 
-#include <Wire.h>
-#include <SPI.h>
-
 #include "./events/button/setup.h"
 #include "./services/async/setup.h"
 #include "./services/bme280/setup.h"

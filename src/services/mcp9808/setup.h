@@ -1,6 +1,8 @@
 #ifndef _MCP9808_SETUP
 #define _MCP9808_SETUP
 
+#ifdef IOT_NODE_MCP9808
+
 #include <Arduino.h>
 
 #include "../../utils/udp/main.h"
@@ -13,5 +15,7 @@ namespace Mcp9808 {
 }
 
 } // project namespace
+
+#endif
 
 #endif
