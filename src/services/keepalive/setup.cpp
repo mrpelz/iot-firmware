@@ -21,7 +21,15 @@ namespace Keepalive {
   void setup(UDP::Class *udp) {
     udp->addService(&service);
 
-    xTaskCreate(task, "keepalive_maintenance", 2048, NULL, 1, NULL);
+    xTaskCreatePinnedToCore(
+      task,
+      "keepalive_maintenance",
+      2048,
+      NULL,
+      1,
+      NULL,
+      CONFIG_ARDUINO_RUNNING_CORE
+    );
   }
 }
 

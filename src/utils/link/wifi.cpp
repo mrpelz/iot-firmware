@@ -4,6 +4,8 @@
 
 namespace IotNode {
 
+const TickType_t delay = 1000 / portTICK_PERIOD_MS;
+
 namespace Link {
   Class::Class(Config config) {
     state.phyMode = config.phyMode;
@@ -136,12 +138,10 @@ namespace Link {
 
   void Class::connect() {
     state.shouldBeConnected = true;
-    update();
   }
 
   void Class::disconnect() {
     state.shouldBeConnected = false;
-    update();
   }
 
   void Class::handleConnected(String ssid, uint8_t *bssid, uint8_t channel) {
@@ -317,6 +317,8 @@ namespace Link {
       WiFi.forceSleepBegin();
       WiFi.forceSleepWake();
     #endif
+
+    vTaskDelay(delay);
 
     #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
       WiFi.begin(

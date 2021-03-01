@@ -33,7 +33,15 @@ namespace Link {
 
     link.connect();
 
-    xTaskCreate(task, "link_maintenance", 2048, NULL, 2, NULL);
+    xTaskCreatePinnedToCore(
+      task,
+      "link_maintenance",
+      2048,
+      NULL,
+      2,
+      NULL,
+      CONFIG_ARDUINO_RUNNING_CORE
+    );
   }
 }
 

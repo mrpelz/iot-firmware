@@ -18,7 +18,15 @@ namespace Button {
 
     buttons.start();
 
-    xTaskCreate(task, "button_maintenance", 2048, NULL, 3, NULL);
+    xTaskCreatePinnedToCore(
+      task,
+      "button_maintenance",
+      2048,
+      NULL,
+      3,
+      NULL,
+      CONFIG_ARDUINO_RUNNING_CORE
+    );
 
     return &buttons;
   }

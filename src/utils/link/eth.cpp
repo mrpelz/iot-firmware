@@ -4,6 +4,8 @@
 
 namespace IotNode {
 
+const TickType_t delay = 1000 / portTICK_PERIOD_MS;
+
 namespace Link {
   Class::Class(Config config) {
     #ifndef IOT_NODE_DHCP
@@ -67,18 +69,18 @@ namespace Link {
 
   void Class::connect() {
     state.shouldBeConnected = true;
-    update();
   }
 
   void Class::disconnect() {
     state.shouldBeConnected = false;
-    update();
   }
 
   void Class::ethConnect() {
     // yep, even with Ethernet, one must call WiFi.diconnect,
     // because reasons
     WiFi.disconnect();
+
+    vTaskDelay(delay);
 
     #ifdef IOT_NODE_WT32_ETH01
       ETH.begin(1, 16, 23, 18, ETH_PHY_LAN8720, ETH_CLOCK_GPIO0_IN);
@@ -177,15 +179,15 @@ namespace Link {
       state.isReconnecting = false;
       state.disconnectionTime = 0;
 
-      unsigned long timeSinceWifiMaintenance = now - state.maintenanceTime;
+      unsigned long timeSinceEthMaintenance = now - state.maintenanceTime;
 
       if (
         now > state.timings.runDebugEvery
-        && timeSinceWifiMaintenance > state.timings.runDebugEvery
+        && timeSinceEthMaintenance > state.timings.runDebugEvery
       ) {
         state.maintenanceTime = now;
 
-        state.callbacks.debug("info.maintenance", String(timeSinceWifiMaintenance));
+        state.callbacks.debug("info.maintenance", String(timeSinceEthMaintenance));
         debug(false);
       }
 

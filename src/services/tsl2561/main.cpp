@@ -76,7 +76,15 @@ namespace Tsl2561 {
     }
 
     respondCallback = respond;
-    xTaskCreate(responseTask, "tsl2561_handling", 2048, NULL, 1, NULL);
+    xTaskCreatePinnedToCore(
+      responseTask,
+      "tsl2561_handling",
+      2048,
+      NULL,
+      1,
+      NULL,
+      CONFIG_ARDUINO_RUNNING_CORE
+    );
   }
 }
 

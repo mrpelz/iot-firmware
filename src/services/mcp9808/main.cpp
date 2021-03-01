@@ -59,7 +59,15 @@ namespace Mcp9808 {
     }
 
     respondCallback = respond;
-    xTaskCreate(responseTask, "mcp9808_handling", 2048, NULL, 1, NULL);
+    xTaskCreatePinnedToCore(
+      responseTask,
+      "mcp9808_handling",
+      2048,
+      NULL,
+      1,
+      NULL,
+      CONFIG_ARDUINO_RUNNING_CORE
+    );
   }
 }
 

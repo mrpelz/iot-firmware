@@ -64,7 +64,15 @@ namespace Bme280 {
     }
 
     respondCallback = respond;
-    xTaskCreate(responseTask, "bme280_handling", 2048, NULL, 1, NULL);
+    xTaskCreatePinnedToCore(
+      responseTask,
+      "bme280_handling",
+      2048,
+      NULL,
+      1,
+      NULL,
+      CONFIG_ARDUINO_RUNNING_CORE
+    );
   }
 }
 

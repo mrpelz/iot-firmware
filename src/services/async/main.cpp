@@ -26,7 +26,15 @@ namespace Async {
     Log::debug("async-service", "got request");
 
     respondCallback = respond;
-    xTaskCreate(responseTask, "async_handling", 2048, NULL, 1, NULL);
+    xTaskCreatePinnedToCore(
+      responseTask,
+      "async_handling",
+      2048,
+      NULL,
+      1,
+      NULL,
+      CONFIG_ARDUINO_RUNNING_CORE
+    );
   }
 }
 
