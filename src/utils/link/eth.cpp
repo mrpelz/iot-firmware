@@ -45,15 +45,6 @@ namespace Link {
       },
       SYSTEM_EVENT_ETH_GOT_IP
     );
-
-    #ifndef IOT_NODE_DHCP
-      ETH.config(
-        state.interfaceConfig.ip,
-        state.interfaceConfig.gateway,
-        state.interfaceConfig.netmask,
-        state.interfaceConfig.gateway
-      );
-    #endif
   }
 
   void Class::configDebug() {
@@ -87,14 +78,21 @@ namespace Link {
     #else
       ETH.begin();
     #endif
+
+    #ifndef IOT_NODE_DHCP
+      ETH.config(
+        state.interfaceConfig.ip,
+        state.interfaceConfig.gateway,
+        state.interfaceConfig.netmask,
+        state.interfaceConfig.gateway
+      );
+    #endif
   }
 
   void Class::handleConnected() {
     state.isConnected = true;
 
     state.callbacks.debug("event", "connect");
-
-    update();
 
     state.callbacks.connected();
   }
@@ -111,12 +109,12 @@ namespace Link {
     state.callbacks.debug("event", "disconnect");
     state.callbacks.debug("event.disconnect.reason", String(reason));
 
-    update();
-
     state.callbacks.disconnected();
   }
 
   void Class::handleGotIP(IPAddress ip, IPAddress gateway, IPAddress netmask) {
+    state.isConnected = true;
+
     state.callbacks.debug("event", "network-config");
     state.callbacks.debug("event.network-config.ip", ip.toString());
     state.callbacks.debug("event.network-config.gateway", gateway.toString());

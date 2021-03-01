@@ -68,8 +68,8 @@ namespace Link {
 
   #ifndef IOT_NODE_DHCP
     static const InterfaceConfig interfaceConfig = {
-      .ip = IPAddress(10, 97, 4, 254),
-      .gateway = IPAddress(10, 97, 4, 1),
+      .ip = IPAddress(10, 97, 0, 198),
+      .gateway = IPAddress(10, 97, 0, 1),
       .netmask = IPAddress(255, 255, 255, 0),
     };
   #endif

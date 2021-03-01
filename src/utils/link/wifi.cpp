@@ -105,15 +105,6 @@ namespace Link {
         WiFi.setTxPower(state.outputPower);
       #endif
     }
-
-    #ifndef IOT_NODE_DHCP
-      WiFi.config(
-        state.interfaceConfig.ip,
-        state.interfaceConfig.gateway,
-        state.interfaceConfig.netmask,
-        state.interfaceConfig.gateway
-      );
-    #endif
   }
 
   void Class::configDebug() {
@@ -152,8 +143,6 @@ namespace Link {
     state.callbacks.debug("event.wifi.connect.bssid", printMacAddress(bssid));
     state.callbacks.debug("event.wifi.connect.channel", String(channel));
 
-    update();
-
     state.callbacks.connected();
   }
 
@@ -171,12 +160,12 @@ namespace Link {
     state.callbacks.debug("event.wifi.disconnect.bssid", printMacAddress(bssid));
     state.callbacks.debug("event.wifi.disconnect.reason", String(reason));
 
-    update();
-
     state.callbacks.disconnected();
   }
 
   void Class::handleGotIP(IPAddress ip, IPAddress gateway, IPAddress netmask) {
+    state.isConnected = true;
+
     state.callbacks.debug("event", "wifi.network-config");
     state.callbacks.debug("event.wifi.network-config.ip", ip.toString());
     state.callbacks.debug("event.wifi.network-config.gateway", gateway.toString());
@@ -329,6 +318,15 @@ namespace Link {
       );
     #else
       WiFi.begin(state.credentials.ssid.c_str(), state.credentials.password.c_str());
+    #endif
+
+    #ifndef IOT_NODE_DHCP
+      WiFi.config(
+        state.interfaceConfig.ip,
+        state.interfaceConfig.gateway,
+        state.interfaceConfig.netmask,
+        state.interfaceConfig.gateway
+      );
     #endif
   }
 
