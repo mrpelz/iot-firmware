@@ -3,6 +3,8 @@
 namespace IotNode {
 
 namespace Log {
+  const TickType_t serialInitDelay = 100 / portTICK_PERIOD_MS;
+
   void setup() {
     #ifdef ARDUINO_ARCH_ESP8266
       Serial.begin(74880);
@@ -11,7 +13,7 @@ namespace Log {
       Serial.begin(115200);
     #endif
 
-    delay(100);
+    vTaskDelay(serialInitDelay);
     
     info();
   }
