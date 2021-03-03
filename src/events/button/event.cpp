@@ -14,10 +14,12 @@ namespace Button {
       update.longpress,
     };
 
+    auto prevDuration = reinterpret_cast<uint8_t*>(&(update.prevDuration));
+
     response.insert(
       response.end(),
-      &update.prevDuration,
-      &update.prevDuration + sizeof(update.prevDuration)
+      prevDuration,
+      prevDuration + sizeof(update.prevDuration)
     );
 
     Log::debug("button-event", "sending event");

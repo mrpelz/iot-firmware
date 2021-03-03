@@ -31,11 +31,17 @@ namespace Mcp9808 {
     UDP::Payload response;
 
     sensor.wake();
-    float reading = sensor.readTempC();
+    auto reading = sensor.readTempC();
 
     Log::debug("mcp9808-service.reading", String(reading));
 
-    response.insert(response.end(), &reading, &reading + sizeof(reading));
+    auto result = reinterpret_cast<uint8_t*>(&reading);
+
+    response.insert(
+      response.end(),
+      result,
+      result + sizeof(reading)
+    );
 
     Log::debug("mcp9808-service", "sending response");
 

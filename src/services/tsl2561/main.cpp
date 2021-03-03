@@ -55,7 +55,9 @@ namespace Tsl2561 {
 
     Log::debug("tsl2561-service.lux", String(lux));
 
-    response.insert(response.end(), &lux, &lux + sizeof(lux));
+    auto result = reinterpret_cast<uint8_t*>(&lux);
+
+    response.insert(response.end(), result, result + sizeof(lux));
 
     Log::debug("tsl2561-service", "sending response");
 

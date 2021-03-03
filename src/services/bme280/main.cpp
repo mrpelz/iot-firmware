@@ -37,17 +37,35 @@ namespace Bme280 {
     UDP::Payload response;
 
     sensor.takeForcedMeasurement();
-    float temperature = sensor.readTemperature();
-    float humidity = sensor.readHumidity();
-    float pressure = sensor.readPressure();
+    float temperatureReading = sensor.readTemperature();
+    float humidityReading = sensor.readHumidity();
+    float pressureReading = sensor.readPressure();
 
-    Log::debug("bme280-service.temperature", String(temperature));
-    Log::debug("bme280-service.humidity", String(humidity));
-    Log::debug("bme280-service.pressure", String(pressure));
+    Log::debug("bme280-service.temperature", String(temperatureReading));
+    Log::debug("bme280-service.humidity", String(humidityReading));
+    Log::debug("bme280-service.pressure", String(pressureReading));
 
-    response.insert(response.end(), &temperature, &temperature + sizeof(temperature));
-    response.insert(response.end(), &humidity, &humidity + sizeof(humidity));
-    response.insert(response.end(), &pressure, &pressure + sizeof(pressure));
+    auto temperatureResult = reinterpret_cast<uint8_t*>(&temperatureReading);
+    auto humidityResult = reinterpret_cast<uint8_t*>(&humidityReading);
+    auto pressureResult = reinterpret_cast<uint8_t*>(&pressureReading);
+
+    response.insert(
+      response.end(),
+      temperatureResult,
+      temperatureResult + sizeof(temperatureReading)
+    );
+
+    response.insert(
+      response.end(),
+      humidityResult,
+      humidityResult + sizeof(humidityReading)
+    );
+
+    response.insert(
+      response.end(),
+      pressureResult,
+      pressureResult + sizeof(pressureReading)
+    );
 
     Log::debug("bme280-service", "sending response");
 
