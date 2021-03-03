@@ -14,7 +14,7 @@
 namespace IotNode {
 
 namespace Mcp9808 {
-  void initializer();
+  void initializer(TwoWire *i2c);
 
   void responseTask(void * parameter);
 

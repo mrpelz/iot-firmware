@@ -14,7 +14,7 @@
 namespace IotNode {
 
 namespace Tsl2561 {
-  void initializer();
+  void initializer(TwoWire *i2c);
 
   void responseTask(void * parameter);
 

@@ -10,8 +10,8 @@ namespace Bme280 {
     .handler = handler,
   };
 
-  void setup(UDP::Class *udp) {
-    initializer();
+  void setup(UDP::Class *udp, TwoWire *i2c) {
+    initializer(i2c);
 
     udp->addService(&service);
   }

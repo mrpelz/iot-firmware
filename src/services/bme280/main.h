@@ -15,7 +15,7 @@
 namespace IotNode {
 
 namespace Bme280 {
-  void initializer();
+  void initializer(TwoWire *i2c);
 
   void responseTask(void * parameter);
 

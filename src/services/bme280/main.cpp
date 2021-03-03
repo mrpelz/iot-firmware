@@ -10,10 +10,10 @@ namespace Bme280 {
   bool working = false;
   auto sensor = Adafruit_BME280();
 
-  void initializer() {
+  void initializer(TwoWire *i2c) {
     Log::debug("bme280-service", "initializing sensor");
 
-    working = sensor.begin();
+    working = sensor.begin(BME280_ADDRESS_ALTERNATE, i2c);
     if (!working) {
       Log::debug("bme280-service", "sensor initialization failed");
       return;
@@ -40,6 +40,10 @@ namespace Bme280 {
     float temperature = sensor.readTemperature();
     float humidity = sensor.readHumidity();
     float pressure = sensor.readPressure();
+
+    Log::debug("bme280-service.temperature", String(temperature));
+    Log::debug("bme280-service.humidity", String(humidity));
+    Log::debug("bme280-service.pressure", String(pressure));
 
     response.insert(response.end(), &temperature, &temperature + sizeof(temperature));
     response.insert(response.end(), &humidity, &humidity + sizeof(humidity));

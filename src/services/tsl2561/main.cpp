@@ -11,7 +11,7 @@ namespace Tsl2561 {
   auto sensor = SFE_TSL2561();
   uint32_t ms;
 
-  void initializer() {
+  void initializer(TwoWire *i2c) {
     Log::debug("tsl2561-service", "initializing sensor");
 
     uint8_t id;
@@ -53,6 +53,8 @@ namespace Tsl2561 {
       return;
     }
 
+    Log::debug("tsl2561-service.lux", String(lux));
+
     response.insert(response.end(), &lux, &lux + sizeof(lux));
 
     Log::debug("tsl2561-service", "sending response");
@@ -65,8 +67,6 @@ namespace Tsl2561 {
 
   void handler(UDP::Payload *request, UDP::RespondCallback respond) {
     Log::debug("tsl2561-service", "got request");
-
-    initializer();
 
     if (!working) {
       Log::debug("tsl2561-service", "sensor not working, sending null response");

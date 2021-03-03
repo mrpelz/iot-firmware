@@ -10,10 +10,10 @@ namespace Mcp9808 {
   bool working = false;
   auto sensor = Adafruit_MCP9808();
 
-  void initializer() {
+  void initializer(TwoWire *i2c) {
     Log::debug("mcp9808-service", "initializing sensor");
 
-    working = sensor.begin();
+    working = sensor.begin(MCP9808_I2CADDR_DEFAULT, i2c);
     if (!working) {
       Log::debug("mcp9808-service", "sensor initialization failed");
       return;
@@ -32,6 +32,8 @@ namespace Mcp9808 {
 
     sensor.wake();
     float reading = sensor.readTempC();
+
+    Log::debug("mcp9808-service.reading", String(reading));
 
     response.insert(response.end(), &reading, &reading + sizeof(reading));
 
