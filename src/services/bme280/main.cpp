@@ -37,9 +37,9 @@ namespace Bme280 {
     UDP::Payload response;
 
     sensor.takeForcedMeasurement();
-    float temperatureReading = sensor.readTemperature();
-    float humidityReading = sensor.readHumidity();
-    float pressureReading = sensor.readPressure();
+    auto temperatureReading = sensor.readTemperature();
+    auto humidityReading = sensor.readHumidity();
+    auto pressureReading = sensor.readPressure();
 
     Log::debug("bme280-service.temperature", String(temperatureReading));
     Log::debug("bme280-service.humidity", String(humidityReading));

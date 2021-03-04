@@ -6,22 +6,21 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#include <SparkFunTSL2561.h>
+#include <Adafruit_Sensor.h>
 
-#define TSL2561_CHOSEN_ADDR TSL2561_ADDR
+#define private protected
+#include <Adafruit_TSL2561_U.h>
+#undef private
+
+#define TSL2561_CHOSEN_ADDRESS TSL2561_ADDR_FLOAT
 
 namespace IotNode {
 
 namespace Tsl2561 {
-  class Sensor : public SFE_TSL2561 {
-    private:
-      TwoWire *_i2c;
+  class Sensor : public Adafruit_TSL2561_Unified {
     public:
-      void begin(TwoWire *i2c);
-      boolean clearInterrupt(void);
-      boolean readByte(unsigned char address, unsigned char &value);
-      boolean writeByte(unsigned char address, unsigned char value);
-      boolean readUInt(unsigned char address, unsigned int &value);
+      Sensor();
+      float calculateLux(uint16_t broadband, uint16_t ir);
   };
 }
 

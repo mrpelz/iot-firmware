@@ -20,6 +20,7 @@ namespace Mcp9808 {
     }
 
     sensor.setResolution(3);
+    sensor.shutdown();
   }
 
   void responseTask(void * parameter) {

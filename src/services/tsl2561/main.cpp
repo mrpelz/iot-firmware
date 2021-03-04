@@ -9,22 +9,19 @@ namespace Tsl2561 {
 
   bool working = false;
   auto sensor = Sensor();
-  uint32_t ms;
 
   void initializer(TwoWire *i2c) {
     Log::debug("tsl2561-service", "initializing sensor");
 
-    uint8_t id;
-
-    sensor.begin(i2c);
-    working = sensor.getID(id);
+    working = sensor.begin(i2c);
 
     if (!working) {
       Log::debug("tsl2561-service", "sensor initialization failed");
       return;
     }
 
-    sensor.setTiming(false, 2, ms);
+    sensor.enableAutoRange(true);
+    sensor.setIntegrationTime(TSL2561_INTEGRATIONTIME_402MS);
   }
 
   void responseTask(void * parameter) {
@@ -35,29 +32,17 @@ namespace Tsl2561 {
 
     UDP::Payload response;
 
-    sensor.setPowerUp();
+    uint16_t broadband;
+    uint16_t infrared;
 
-    const TickType_t delay = ms / portTICK_PERIOD_MS;
-    vTaskDelay(delay);
+    sensor.getLuminosity(&broadband, &infrared);
+    auto reading = sensor.calculateLux(broadband, infrared);
 
-    uint32_t data0, data1;
-    double lux;
+    Log::debug("tsl2561-service.reading", String(reading));
 
-    sensor.getData(data0, data1);
-    bool good = sensor.getLux(2, ms, data0, data1, lux);
+    auto result = reinterpret_cast<uint8_t*>(&reading);
 
-    sensor.setPowerDown();
-
-    if (!good) {
-      respondCallback({});
-      return;
-    }
-
-    Log::debug("tsl2561-service.lux", String(lux));
-
-    auto result = reinterpret_cast<uint8_t*>(&lux);
-
-    response.insert(response.end(), result, result + sizeof(lux));
+    response.insert(response.end(), result, result + sizeof(reading));
 
     Log::debug("tsl2561-service", "sending response");
 
