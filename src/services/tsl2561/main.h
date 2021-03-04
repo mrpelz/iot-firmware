@@ -6,10 +6,9 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#include <SparkFunTSL2561.h>
-
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"
+#include "./sensor.h"
 
 namespace IotNode {
 

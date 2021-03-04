@@ -8,7 +8,7 @@ namespace Tsl2561 {
   UDP::RespondCallback respondCallback = NULL;
 
   bool working = false;
-  auto sensor = SFE_TSL2561();
+  auto sensor = Sensor();
   uint32_t ms;
 
   void initializer(TwoWire *i2c) {
@@ -16,7 +16,7 @@ namespace Tsl2561 {
 
     uint8_t id;
 
-    sensor.begin();
+    sensor.begin(i2c);
     working = sensor.getID(id);
 
     if (!working) {
