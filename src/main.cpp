@@ -14,7 +14,7 @@ void setup() {
   IotNode::Keepalive::setup(udp);
   IotNode::SystemInfo::setup(udp);
 
-  #if defined(IOT_NODE_BME280) || defined(IOT_NODE_MCP9808) || defined(IOT_NODE_TSL2561)
+  #if defined(IOT_NODE_BME280) || defined(IOT_NODE_MCP9808) || defined(IOT_NODE_SGP30) || defined(IOT_NODE_TSL2561)
     auto i2c = IotNode::I2C::setup();
   #endif
 
@@ -25,6 +25,10 @@ void setup() {
 
     #ifdef IOT_NODE_MCP9808
       IotNode::Mcp9808::setup(udp, i2c);
+    #endif
+
+    #ifdef IOT_NODE_SGP30
+      IotNode::Sgp30::setup(udp, i2c);
     #endif
 
     #ifdef IOT_NODE_TSL2561

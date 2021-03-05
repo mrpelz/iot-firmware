@@ -34,9 +34,19 @@ namespace Bme280 {
       return;
     }
 
+    auto measurementSuccess = sensor.takeForcedMeasurement();
+    if (!measurementSuccess) {
+      Log::debug("bme280-service", "measurement not successful, sending null response");
+
+      respondCallback({});
+      respondCallback = NULL;
+
+      vTaskDelete(NULL);
+      return;
+    }
+
     UDP::Payload response;
 
-    sensor.takeForcedMeasurement();
     auto temperatureReading = sensor.readTemperature();
     auto humidityReading = sensor.readHumidity();
     auto pressureReading = sensor.readPressure();
