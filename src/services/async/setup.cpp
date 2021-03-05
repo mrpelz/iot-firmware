@@ -1,3 +1,5 @@
+#ifdef ARDUINO_ARCH_ESP32
+
 #include "./setup.h"
 
 namespace IotNode {
@@ -14,3 +16,5 @@ namespace Async {
 }
 
 } // project namespace
+
+#endif

@@ -1,10 +1,11 @@
+#ifdef ARDUINO_ARCH_ESP32
+
 #include "./main.h"
 
 namespace IotNode {
 
 namespace Async {
   UDP::RespondCallback respondCallback = NULL;
-  const TickType_t delay = ASYNC_RESPONSE_DELAY / portTICK_PERIOD_MS;
 
   void responseTask(void * parameter) {
     if (respondCallback == NULL) {
@@ -12,7 +13,7 @@ namespace Async {
       return;
     }
 
-    vTaskDelay(delay);
+    vTaskDelay(ASYNC_RESPONSE_DELAY / portTICK_PERIOD_MS);
 
     Log::debug("async-service", "sending delayed response");
 
@@ -39,3 +40,5 @@ namespace Async {
 }
 
 } // project namespace
+
+#endif

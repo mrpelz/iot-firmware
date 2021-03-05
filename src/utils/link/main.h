@@ -12,6 +12,8 @@
 
 #include "../log.h"
 
+#define LINK_DELAY 1000
+
 namespace IotNode {
 
 namespace Link {

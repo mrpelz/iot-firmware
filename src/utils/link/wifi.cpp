@@ -4,8 +4,6 @@
 
 namespace IotNode {
 
-const TickType_t delay = 1000 / portTICK_PERIOD_MS;
-
 namespace Link {
   Class::Class(Config config) {
     state.phyMode = config.phyMode;
@@ -307,7 +305,12 @@ namespace Link {
       WiFi.forceSleepWake();
     #endif
 
-    vTaskDelay(delay);
+    #ifdef ARDUINO_ARCH_ESP8266
+      delay(LINK_DELAY);
+    #endif
+    #ifdef ARDUINO_ARCH_ESP32
+      vTaskDelay(LINK_DELAY / portTICK_PERIOD_MS);
+    #endif
 
     #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
       WiFi.begin(

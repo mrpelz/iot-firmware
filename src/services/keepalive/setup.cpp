@@ -4,32 +4,39 @@ namespace IotNode {
 
 namespace Keepalive {
   Class restartOnTimeout(120000);
-  const TickType_t delay = 10 / portTICK_PERIOD_MS;
 
   UDP::Service service = {
     .serviceId = serviceIds::keepalive,
     .handler = makeHandler(&restartOnTimeout),
   };
 
-  void task(void * parameter) {
-    for(;;) {
-      restartOnTimeout.update();
-      vTaskDelay(delay);
-    }
+  void update() {
+    restartOnTimeout.update();
   }
+
+  #ifdef ARDUINO_ARCH_ESP32
+    void task(void * parameter) {
+      for(;;) {
+        update();
+        vTaskDelay(10 / portTICK_PERIOD_MS);
+      }
+    }
+  #endif
 
   void setup(UDP::Class *udp) {
     udp->addService(&service);
 
-    xTaskCreatePinnedToCore(
-      task,
-      "keepalive_maintenance",
-      2048,
-      NULL,
-      1,
-      NULL,
-      CONFIG_ARDUINO_RUNNING_CORE
-    );
+    #ifdef ARDUINO_ARCH_ESP32
+      xTaskCreatePinnedToCore(
+        task,
+        "keepalive_maintenance",
+        2048,
+        NULL,
+        1,
+        NULL,
+        CONFIG_ARDUINO_RUNNING_CORE
+      );
+    #endif
   }
 }
 

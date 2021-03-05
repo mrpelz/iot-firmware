@@ -4,8 +4,6 @@
 
 namespace IotNode {
 
-const TickType_t delay = 1000 / portTICK_PERIOD_MS;
-
 namespace Link {
   Class::Class(Config config) {
     #ifndef IOT_NODE_DHCP
@@ -71,7 +69,7 @@ namespace Link {
     // because reasons
     WiFi.disconnect();
 
-    vTaskDelay(delay);
+    vTaskDelay(LINK_DELAY / portTICK_PERIOD_MS);
 
     #ifdef IOT_NODE_WT32_ETH01
       ETH.begin(1, 16, 23, 18, ETH_PHY_LAN8720, ETH_CLOCK_GPIO0_IN);

@@ -42,7 +42,8 @@
     "system_error": "cpp",
     "iomanip": "cpp",
     "memory": "cpp",
-    "*.ccp": "cpp"
+    "*.ccp": "cpp",
+    "string": "cpp"
   },
   "editor.formatOnSave": false
 }

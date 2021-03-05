@@ -1,6 +1,8 @@
 #ifndef _ASYNC_MAIN
 #define _ASNYC_MAIN
 
+#ifdef ARDUINO_ARCH_ESP32
+
 #include <Arduino.h>
 
 #include "../../utils/log.h"
@@ -17,5 +19,7 @@ namespace Async {
 }
 
 } // project namespace
+
+#endif
 
 #endif

@@ -13,6 +13,8 @@
 #define TOSTRING(x) #x
 #define STR(x) TOSTRING(x)
 
+#define LOG_DELAY 100
+
 namespace IotNode {
 
 namespace Log {

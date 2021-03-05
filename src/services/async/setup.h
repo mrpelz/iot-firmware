@@ -1,6 +1,8 @@
 #ifndef _ASYNC_SETUP
 #define _ASYNC_SETUP
 
+#ifdef ARDUINO_ARCH_ESP32
+
 #include <Arduino.h>
 
 #include "../../utils/udp/main.h"
@@ -13,5 +15,7 @@ namespace Async {
 }
 
 } // project namespace
+
+#endif
 
 #endif

@@ -11,14 +11,18 @@ namespace Link {
     Class link(config);
   #endif
 
-  const TickType_t delay = 10 / portTICK_PERIOD_MS;
-
-  void task(void * parameter) {
-    for(;;) {
-      link.update();
-      vTaskDelay(delay);
-    }
+  void update() {
+    link.update();
   }
+
+  #ifdef ARDUINO_ARCH_ESP32
+    void task(void * parameter) {
+      for(;;) {
+        update();
+        vTaskDelay(10 / portTICK_PERIOD_MS);
+      }
+    }
+  #endif
 
   void setup(UDP::Class *udp) {
     link.setDebug(Log::debug);
@@ -33,15 +37,17 @@ namespace Link {
 
     link.connect();
 
-    xTaskCreatePinnedToCore(
-      task,
-      "link_maintenance",
-      2048,
-      NULL,
-      2,
-      NULL,
-      CONFIG_ARDUINO_RUNNING_CORE
-    );
+    #ifdef ARDUINO_ARCH_ESP32
+      xTaskCreatePinnedToCore(
+        task,
+        "link_maintenance",
+        2048,
+        NULL,
+        2,
+        NULL,
+        CONFIG_ARDUINO_RUNNING_CORE
+      );
+    #endif
   }
 }
 

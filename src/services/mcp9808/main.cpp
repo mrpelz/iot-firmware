@@ -49,8 +49,7 @@ namespace Mcp9808 {
     respondCallback(response);
     respondCallback == NULL;
 
-    const TickType_t delay = 2000 / portTICK_PERIOD_MS;
-    vTaskDelay(delay);
+    vTaskDelay(2000 / portTICK_PERIOD_MS);
 
     sensor.shutdown();
 
