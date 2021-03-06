@@ -103,8 +103,8 @@ namespace UDP {
       if (message.size() < PEER_SET_MIN_LENGTH) {
         state.debugCallback("udp.request.set-event-peer", "missing parameters");
       } else {
-        auto setPeer = message.data()[0];
-        auto setPeerPriority = message.data()[1];
+        auto setPeer = message.at(0);
+        auto setPeerPriority = message.at(1);
 
         if (setPeerPriority > 0 && setPeerPriority >= state.eventPeerPriority) {
           if (setPeer == 0) {
@@ -123,6 +123,7 @@ namespace UDP {
             state.debugCallback("udp.request.set-event-peer", "set");
             state.debugCallback("udp.request.set-event-peer.ip", peer.ip.toString());
             state.debugCallback("udp.request.set-event-peer.port", String(peer.port));
+            state.debugCallback("udp.request.set-event-peer.priority", String(setPeerPriority));
           }
         } else {
           peerAckOutgoing.insert(peerAckOutgoing.end(), 0x03);

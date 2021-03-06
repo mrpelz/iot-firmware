@@ -17,12 +17,13 @@ namespace Keepalive {
     state.running = false;
   }
 
-  void Class::tick() {
+  void Class::tick(bool forceRestart) {
     if (!state.running) {
       start();
     }
 
     state.ticked = true;
+    state.forceRestart = forceRestart;
   }
 
   void Class::update() {
@@ -39,6 +40,11 @@ namespace Keepalive {
 
     unsigned long timeSinceTick = now - state.lastTick;
 
+    if (state.forceRestart) {
+      Log::debug("keepalive", "force restart");
+      ESP.restart();
+    }
+
     if (timeSinceTick > state.timeout) {
       Log::debug("keepalive", "trip");
       ESP.restart();
@@ -52,7 +58,10 @@ namespace Keepalive {
     ) {
       Log::debug("keepalive-service", "got request");
 
-      restartOnTimeout->tick();
+      auto restart = request->size() >= 1 && request->at(0) != 0;
+      Log::debug("keepalive-service.restart", restart ? "true" : "false");
+
+      restartOnTimeout->tick(restart);
 
       Log::debug("keepalive-service", "sending response");
 

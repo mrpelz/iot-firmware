@@ -10,7 +10,7 @@ namespace Relais {
       UDP::Payload *request,
       UDP::RespondCallback respond
     ) {
-      bool on = (*request)[0] != 0;
+      bool on = request->size() >= 1 && request->at(0) != 0;
 
       Log::debug("event", "relais-service.switch");
       Log::debug("relais-service.index", String(index));
