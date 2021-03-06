@@ -104,7 +104,7 @@ namespace Link {
   void update();
 
   #ifdef ARDUINO_ARCH_ESP32
-    void task(void * parameter);
+    void task(void *parameter);
   #endif
 
   void setup(UDP::Class *udp);

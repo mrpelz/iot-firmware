@@ -28,7 +28,7 @@ namespace Button {
   void update();
 
   #ifdef ARDUINO_ARCH_ESP32
-    void task(void * parameter);
+    void task(void *parameter);
   #endif
 
   Class *setup();

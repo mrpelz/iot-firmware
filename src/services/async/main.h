@@ -13,7 +13,7 @@
 namespace IotNode {
 
 namespace Async {
-  void responseTask(void * parameter);
+  void responseTask(void *parameter);
 
   void handler(UDP::Payload *request, UDP::RespondCallback respond);
 }

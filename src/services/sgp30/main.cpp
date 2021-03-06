@@ -10,6 +10,13 @@ namespace Sgp30 {
   bool working = false;
   auto sensor = Adafruit_SGP30();
 
+  uint32_t getAbsoluteHumidity(float temperature, float humidity) {
+    // approximation formula from Sensirion SGP30 Driver Integration chapter 3.15
+    const float absoluteHumidity = 216.7f * ((humidity / 100.0f) * 6.112f * exp((17.62f * temperature) / (243.12f + temperature)) / (273.15f + temperature)); // [g/m^3]
+    const uint32_t absoluteHumidityScaled = static_cast<uint32_t>(1000.0f * absoluteHumidity); // [mg/m^3]
+    return absoluteHumidityScaled;
+  }
+
   void initializer(TwoWire *i2c) {
     Log::debug("sgp30-service", "initializing sensor");
 
@@ -19,8 +26,36 @@ namespace Sgp30 {
     }
   }
 
-  void responseTask(void * parameter) {
+  void responseTask(void *parameter) {
     if (respondCallback == NULL) {
+      vTaskDelete(NULL);
+      return;
+    }
+
+    auto request = (UDP::Payload *)parameter;
+
+    if (request->size() < (sizeof(float) * 2)) {
+      Log::debug("sgp30-service", "request does not contain temperature and humidity");
+
+      respondCallback({});
+      respondCallback = NULL;
+
+      vTaskDelete(NULL);
+      return;
+    }
+    auto calibrationTemperature = ((float *)request->data())[0];
+    auto calibrationHumidity = ((float *)request->data())[1];
+
+    Log::debug("sgp30-service.calibration-temperature", String(calibrationTemperature));
+    Log::debug("sgp30-service.calibration-humidity", String(calibrationHumidity));
+
+    auto calibrationSuccess = sensor.setHumidity(getAbsoluteHumidity(calibrationTemperature, calibrationHumidity));
+    if (!calibrationSuccess) {
+      Log::debug("sgp30-service", "calibration not successful, sending null response");
+
+      respondCallback({});
+      respondCallback = NULL;
+
       vTaskDelete(NULL);
       return;
     }
@@ -128,7 +163,7 @@ namespace Sgp30 {
       responseTask,
       "sgp30_handling",
       2048,
-      NULL,
+      (void *)request,
       1,
       NULL,
       CONFIG_ARDUINO_RUNNING_CORE

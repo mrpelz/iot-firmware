@@ -23,7 +23,7 @@ namespace Mcp9808 {
     sensor.shutdown();
   }
 
-  void responseTask(void * parameter) {
+  void responseTask(void *parameter) {
     if (respondCallback == NULL) {
       vTaskDelete(NULL);
       return;

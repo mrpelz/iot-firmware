@@ -16,7 +16,7 @@ namespace Link {
   }
 
   #ifdef ARDUINO_ARCH_ESP32
-    void task(void * parameter) {
+    void task(void *parameter) {
       for(;;) {
         update();
         vTaskDelay(10 / portTICK_PERIOD_MS);

@@ -24,7 +24,7 @@ namespace Tsl2561 {
     sensor.setIntegrationTime(TSL2561_INTEGRATIONTIME_402MS);
   }
 
-  void responseTask(void * parameter) {
+  void responseTask(void *parameter) {
     if (respondCallback == NULL) {
       vTaskDelete(NULL);
       return;

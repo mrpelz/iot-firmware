@@ -28,7 +28,7 @@ namespace Bme280 {
     );
   }
 
-  void responseTask(void * parameter) {
+  void responseTask(void *parameter) {
     if (respondCallback == NULL) {
       vTaskDelete(NULL);
       return;

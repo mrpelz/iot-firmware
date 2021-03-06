@@ -7,7 +7,7 @@ namespace IotNode {
 namespace Async {
   UDP::RespondCallback respondCallback = NULL;
 
-  void responseTask(void * parameter) {
+  void responseTask(void *parameter) {
     if (respondCallback == NULL) {
       vTaskDelete(NULL);
       return;
