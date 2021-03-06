@@ -60,19 +60,9 @@ namespace Sgp30 {
       return;
     }
 
-    uint16_t eco2BaseReading;
-    uint16_t tvocBaseReading;
-
-    auto measurementBaseSuccess = sensor.getIAQBaseline(
-      &eco2BaseReading,
-      &tvocBaseReading
-    );
     auto measurementRawSuccess = sensor.IAQmeasureRaw();
     auto measurementSuccess = sensor.IAQmeasure();
-    if (
-      !measurementBaseSuccess
-      || !measurementRawSuccess
-      || !measurementSuccess
+    if (!measurementRawSuccess || !measurementSuccess
     ) {
       Log::debug("sgp30-service", "measurement not successful, sending null response");
 
@@ -90,31 +80,15 @@ namespace Sgp30 {
     auto tvocReading = sensor.TVOC;
     auto eco2Reading = sensor.eCO2;
 
-    Log::debug("sgp30-service.eco2-base", String(eco2BaseReading));
-    Log::debug("sgp30-service.tvoc-base", String(tvocBaseReading));
     Log::debug("sgp30-service.h2", String(h2Reading));
     Log::debug("sgp30-service.ethanol", String(ethanolReading));
     Log::debug("sgp30-service.tvoc", String(tvocReading));
     Log::debug("sgp30-service.eco2", String(eco2Reading));
 
-    auto eco2BaseResult = reinterpret_cast<uint8_t*>(&eco2BaseReading);
-    auto tvocBaseResult = reinterpret_cast<uint8_t*>(&tvocBaseReading);
     auto h2Result = reinterpret_cast<uint8_t*>(&h2Reading);
     auto ethanolResult = reinterpret_cast<uint8_t*>(&ethanolReading);
     auto tvocResult = reinterpret_cast<uint8_t*>(&tvocReading);
     auto eco2Result = reinterpret_cast<uint8_t*>(&eco2Reading);
-
-    response.insert(
-      response.end(),
-      eco2BaseResult,
-      eco2BaseResult + sizeof(eco2BaseReading)
-    );
-
-    response.insert(
-      response.end(),
-      tvocBaseResult,
-      tvocBaseResult + sizeof(tvocBaseReading)
-    );
 
     response.insert(
       response.end(),

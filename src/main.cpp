@@ -23,6 +23,10 @@ void setup() {
       IotNode::Bme280::setup(udp, i2c);
     #endif
 
+    #ifdef IOT_NODE_CCS811
+      IotNode::Ccs811::setup(udp, i2c);
+    #endif
+
     #ifdef IOT_NODE_MCP9808
       IotNode::Mcp9808::setup(udp, i2c);
     #endif

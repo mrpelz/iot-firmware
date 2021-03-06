@@ -1,21 +1,18 @@
-#ifndef _SGP30_MAIN
-#define _SGP30_MAIN
+#ifndef _CCS811_MAIN
+#define _CCS811_MAIN
 
-#ifdef IOT_NODE_SGP30
+#ifdef IOT_NODE_CCS811
 
 #include <Arduino.h>
 #include <Wire.h>
 
-#include <Adafruit_SGP30.h>
-
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"
+#include "./sensor.h"
 
 namespace IotNode {
 
-namespace Sgp30 {
-  uint32_t getAbsoluteHumidity(float temperature, float humidity);
-
+namespace Ccs811 {
   void initializer(TwoWire *i2c);
 
   void responseTask(void *parameter);
