@@ -35,10 +35,10 @@ namespace UDP {
     state.udp.close();
   }
 
-  void Class::event(uint8_t eventId, std::vector<uint8_t> event) {
+  void Class::event(uint8_t eventId, Payload event) {
     if (!state.eventPeer.port) return;
 
-    std::vector<uint8_t> outgoing = {
+    Payload outgoing = {
       serviceIds::_reserved_event,
       eventId
     };
@@ -78,12 +78,12 @@ namespace UDP {
     };
 
     auto payload = packet->data();
-    uint8_t messageId = *payload;
-    uint8_t serviceId = *(payload + MESSAGE_ID_LENGTH);
+    auto messageId = ((uint8_t *)payload)[0];
+    auto serviceId = ((uint8_t *)payload)[1];
     uint8_t *messageStart = payload + MESSAGE_ID_LENGTH + SERVICE_ID_LENGTH;
     uint8_t *messageEnd = payload + length;
     
-    std::vector<uint8_t> message;
+    Payload message;
     message.insert(message.end(), messageStart, messageEnd);
 
     packet->flush();
@@ -96,24 +96,41 @@ namespace UDP {
     state.debugCallback("udp.request.message-length", String(message.size()));
 
     if (serviceId == serviceIds::_reserved_event) {
-      std::vector<uint8_t> peerAckOutgoing = {
+      Payload peerAckOutgoing = {
         messageId
       };
 
-      if (message.empty() || message[0] == 0) {
-        state.eventPeer.port = 0;
-        peerAckOutgoing.insert(peerAckOutgoing.end(), 0x00);
-
-        state.debugCallback("udp.request.set-event-peer", "clear");
+      if (message.size() < PEER_SET_MIN_LENGTH) {
+        state.debugCallback("udp.request.set-event-peer", "missing parameters");
       } else {
-        state.eventPeer = peer;
-        peerAckOutgoing.insert(peerAckOutgoing.end(), 0x01);
+        auto setPeer = message.data()[0];
+        auto setPeerPriority = message.data()[1];
 
-        state.debugCallback("udp.request.set-event-peer", "set");
-        state.debugCallback("udp.request.set-event-peer.ip", peer.ip.toString());
-        state.debugCallback("udp.request.set-event-peer.port", String(peer.port));
+        if (setPeerPriority > 0 && setPeerPriority >= state.eventPeerPriority) {
+          if (setPeer == 0) {
+            state.eventPeer.port = 0;
+            state.eventPeerPriority = 0;
 
+            peerAckOutgoing.insert(peerAckOutgoing.end(), 0x00);
+
+            state.debugCallback("udp.request.set-event-peer", "clear");
+          } else {
+            state.eventPeer = peer;
+            state.eventPeerPriority = setPeerPriority;
+
+            peerAckOutgoing.insert(peerAckOutgoing.end(), 0x01);
+
+            state.debugCallback("udp.request.set-event-peer", "set");
+            state.debugCallback("udp.request.set-event-peer.ip", peer.ip.toString());
+            state.debugCallback("udp.request.set-event-peer.port", String(peer.port));
+          }
+        } else {
+          peerAckOutgoing.insert(peerAckOutgoing.end(), 0x03);
+
+          state.debugCallback("udp.request.set-event-peer", "rejected");
+        }
       }
+
 
       state.udp.writeTo(
         peerAckOutgoing.data(),
@@ -135,8 +152,8 @@ namespace UDP {
 
         service->handler(
           &message,
-          [this, peer, messageId, serviceId](std::vector<uint8_t> response) {
-            std::vector<uint8_t> outgoing = {
+          [this, peer, messageId, serviceId](Payload response) {
+            Payload outgoing = {
               messageId
             };
 

@@ -20,6 +20,8 @@
 #define SERVICE_ID_LENGTH 1
 #define EVENT_ID_LENGTH 1
 
+#define PEER_SET_MIN_LENGTH 2
+
 #define REQUEST_MIN_LENGTH MESSAGE_ID_LENGTH + SERVICE_ID_LENGTH
 #define REQUEST_MAX_LENGTH UDP_MAX_LENGTH - REQUEST_MIN_LENGTH
 
@@ -56,6 +58,7 @@ namespace UDP {
     AsyncUDP udp;
     uint16_t port;
     Peer eventPeer;
+    uint8_t eventPeerPriority = 0;
     std::vector<Service *> services;
     Log::Callback debugCallback = [](String key, String value) {};
   };
