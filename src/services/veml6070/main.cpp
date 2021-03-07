@@ -1,26 +1,25 @@
-#ifdef IOT_NODE_MCP9808
+#ifdef IOT_NODE_VEML6070
 
 #include "./main.h"
 
 namespace IotNode {
 
-namespace Mcp9808 {
+namespace Veml6070 {
   UDP::RespondCallback respondCallback = NULL;
 
   bool working = false;
-  auto sensor = Adafruit_MCP9808();
+  auto sensor = Sensor();
 
   void initializer(TwoWire *i2c) {
-    Log::debug("mcp9808-service", "initializing sensor");
+    Log::debug("veml6070-service", "initializing sensor");
 
-    working = sensor.begin(MCP9808_I2CADDR_DEFAULT, i2c);
+    working = sensor.begin(i2c);
     if (!working) {
-      Log::debug("mcp9808-service", "sensor initialization failed");
+      Log::debug("veml6070-service", "sensor initialization failed");
       return;
     }
 
-    sensor.setResolution(3);
-    sensor.shutdown();
+    sensor.sleep(true);
   }
 
   void responseTask(void *parameter) {
@@ -31,13 +30,14 @@ namespace Mcp9808 {
 
     UDP::Payload response;
 
-    sensor.wake();
+    sensor.sleep(false);
+    sensor.waitForNext();
 
-    auto reading = sensor.readTempC();
+    auto reading = sensor.readUV();
 
-    sensor.shutdown();
+    sensor.sleep(true);
 
-    Log::debug("mcp9808-service.reading", String(reading));
+    Log::debug("veml6070-service.reading", String(reading));
 
     auto result = reinterpret_cast<uint8_t*>(&reading);
 
@@ -47,19 +47,20 @@ namespace Mcp9808 {
       result + sizeof(reading)
     );
 
-    Log::debug("mcp9808-service", "sending response");
+    Log::debug("veml6070-service", "sending response");
 
     respondCallback(response);
     respondCallback == NULL;
+
 
     vTaskDelete(NULL);
   }
 
   void handler(UDP::Payload *request, UDP::RespondCallback respond) {
-    Log::debug("mcp9808-service", "got request");
+    Log::debug("veml6070-service", "got request");
 
     if (!working) {
-      Log::debug("mcp9808-service", "sensor not working, sending null response");
+      Log::debug("veml6070-service", "sensor not working, sending null response");
 
       respond({});
       return;
@@ -68,7 +69,7 @@ namespace Mcp9808 {
     respondCallback = respond;
     xTaskCreatePinnedToCore(
       responseTask,
-      "mcp9808_handling",
+      "veml6070_handling",
       2048,
       NULL,
       1,

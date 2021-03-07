@@ -14,7 +14,7 @@ void setup() {
   IotNode::Keepalive::setup(udp);
   IotNode::SystemInfo::setup(udp);
 
-  #if defined(IOT_NODE_BME280) || defined(IOT_NODE_CCS811) || defined(IOT_NODE_MCP9808) || defined(IOT_NODE_SGP30) || defined(IOT_NODE_TSL2561) || defined(IOT_NODE_I2C_SCAN)
+  #if defined(IOT_NODE_BME280) || defined(IOT_NODE_CCS811) || defined(IOT_NODE_MCP9808) || defined(IOT_NODE_SGP30) || defined(IOT_NODE_TSL2561) || defined(IOT_NODE_VEML6070) || defined(IOT_NODE_I2C_SCAN)
     auto i2c = IotNode::I2C::setup();
 
     #ifdef IOT_NODE_I2C_SCAN
@@ -41,6 +41,10 @@ void setup() {
 
     #ifdef IOT_NODE_TSL2561
       IotNode::Tsl2561::setup(udp, i2c);
+    #endif
+
+    #ifdef IOT_NODE_VEML6070
+      IotNode::Veml6070::setup(udp, i2c);
     #endif
   #endif
 
