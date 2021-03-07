@@ -14,8 +14,12 @@ void setup() {
   IotNode::Keepalive::setup(udp);
   IotNode::SystemInfo::setup(udp);
 
-  #if defined(IOT_NODE_BME280) || defined(IOT_NODE_MCP9808) || defined(IOT_NODE_SGP30) || defined(IOT_NODE_TSL2561)
+  #if defined(IOT_NODE_BME280) || defined(IOT_NODE_CCS811) || defined(IOT_NODE_MCP9808) || defined(IOT_NODE_SGP30) || defined(IOT_NODE_TSL2561) || defined(IOT_NODE_I2C_SCAN)
     auto i2c = IotNode::I2C::setup();
+
+    #ifdef IOT_NODE_I2C_SCAN
+      IotNode::I2C::scan();
+    #endif
   #endif
 
   #ifdef ARDUINO_ARCH_ESP32
