@@ -45,8 +45,6 @@ namespace Bme280 {
       return;
     }
 
-    UDP::Payload response;
-
     auto temperatureReading = sensor.readTemperature();
     auto humidityReading = sensor.readHumidity();
     auto pressureReading = sensor.readPressure();
@@ -58,6 +56,8 @@ namespace Bme280 {
     auto temperatureResult = reinterpret_cast<uint8_t*>(&temperatureReading);
     auto humidityResult = reinterpret_cast<uint8_t*>(&humidityReading);
     auto pressureResult = reinterpret_cast<uint8_t*>(&pressureReading);
+
+    UDP::Payload response;
 
     response.insert(
       response.end(),

@@ -29,8 +29,6 @@ namespace Mcp9808 {
       return;
     }
 
-    UDP::Payload response;
-
     sensor.wake();
 
     auto reading = sensor.readTempC();
@@ -40,6 +38,8 @@ namespace Mcp9808 {
     Log::debug("mcp9808-service.reading", String(reading));
 
     auto result = reinterpret_cast<uint8_t*>(&reading);
+
+    UDP::Payload response;
 
     response.insert(
       response.end(),

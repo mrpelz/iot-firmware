@@ -73,8 +73,6 @@ namespace Sgp30 {
       return;
     }
 
-    UDP::Payload response;
-
     auto h2Reading = sensor.rawH2;
     auto ethanolReading = sensor.rawEthanol;
     auto tvocReading = sensor.TVOC;
@@ -89,6 +87,8 @@ namespace Sgp30 {
     auto ethanolResult = reinterpret_cast<uint8_t*>(&ethanolReading);
     auto tvocResult = reinterpret_cast<uint8_t*>(&tvocReading);
     auto eco2Result = reinterpret_cast<uint8_t*>(&eco2Reading);
+
+    UDP::Payload response;
 
     response.insert(
       response.end(),

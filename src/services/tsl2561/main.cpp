@@ -30,8 +30,6 @@ namespace Tsl2561 {
       return;
     }
 
-    UDP::Payload response;
-
     uint16_t broadband;
     uint16_t infrared;
 
@@ -41,6 +39,8 @@ namespace Tsl2561 {
     Log::debug("tsl2561-service.reading", String(reading));
 
     auto result = reinterpret_cast<uint8_t*>(&reading);
+
+    UDP::Payload response;
 
     response.insert(response.end(), result, result + sizeof(reading));
 

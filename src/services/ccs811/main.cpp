@@ -54,8 +54,6 @@ namespace Ccs811 {
       return;
     }
 
-    UDP::Payload response;
-
     auto temperatureReading = sensor.calculateTemperature();
     auto tvocReading = sensor.getTVOC();
     auto eco2Reading = sensor.geteCO2();
@@ -67,6 +65,8 @@ namespace Ccs811 {
     auto temperatureResult = reinterpret_cast<uint8_t*>(&temperatureReading);
     auto tvocResult = reinterpret_cast<uint8_t*>(&tvocReading);
     auto eco2Result = reinterpret_cast<uint8_t*>(&eco2Reading);
+
+    UDP::Payload response;
 
     response.insert(
       response.end(),

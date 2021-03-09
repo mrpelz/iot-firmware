@@ -28,8 +28,6 @@ namespace Veml6070 {
       return;
     }
 
-    UDP::Payload response;
-
     sensor.sleep(false);
     sensor.waitForNext();
 
@@ -40,6 +38,8 @@ namespace Veml6070 {
     Log::debug("veml6070-service.reading", String(reading));
 
     auto result = reinterpret_cast<uint8_t*>(&reading);
+
+    UDP::Payload response;
 
     response.insert(
       response.end(),
