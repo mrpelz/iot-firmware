@@ -3,6 +3,9 @@
 void setup() {
   IotNode::Log::setup();
 
+  IotNode::Indicator::setup();
+  IotNode::Indicator::rxdLed.setOn(true);
+
   auto udp = IotNode::UDP::setup();
   IotNode::Link::setup(udp);
 
@@ -50,11 +53,14 @@ void setup() {
 
   auto buttons = IotNode::Button::setup();
   IotNode::Relais::setup(udp, buttons);
+
+  IotNode::Indicator::rxdLed.blink();
 }
 
 void loop() {
   #ifdef ARDUINO_ARCH_ESP8266
     delay(WATCHDOG_DELAY);
+    IotNode::Indicator::update();
     IotNode::Button::update();
     IotNode::Keepalive::update();
     IotNode::Link::update();

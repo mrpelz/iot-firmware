@@ -3,7 +3,7 @@
 namespace IotNode {
 
 namespace Relais {
-  Relais::Class relais0({ 4, true });
+  Class relais0({ 4, true });
   auto service0 = makeService(&relais0, 0);
 
   void setup(UDP::Class *udp, Button::Class *buttons) {

@@ -31,7 +31,7 @@ namespace Relais {
   }
 
   void Class::setOn(bool on) {
-    Log::debug("relais.set-on", on ? "true" : "false");
+    Log::debug("relais.set-on", on ? "on" : "off");
     Log::debug("relais.pin", String(state.pin));
 
     state.on = on;

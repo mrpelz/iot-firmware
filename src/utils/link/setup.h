@@ -6,8 +6,9 @@
 
 #include <Arduino.h>
 
-#include "./main.h"
 #include "../udp/main.h"
+#include "./main.h"
+#include "./utils/indicator/setup.h"
 #include "./utils/log.h"
 
 #ifdef IOT_NODE_LINK_ETH
