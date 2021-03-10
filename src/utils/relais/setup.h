@@ -13,6 +13,7 @@ namespace Utils {
 
 namespace Relais {
   extern Class relais0;
+  extern Class relais1;
 
   void setup(UDP::Class *udp, Events::Button::Class *buttons);
 }

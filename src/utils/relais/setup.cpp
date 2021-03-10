@@ -5,6 +5,7 @@ namespace Utils {
 
 namespace Relais {
   Class relais0({ 4, true });
+  Class relais1({ 32, true });
 
   void setup(UDP::Class *udp, Events::Button::Class *buttons) {
     buttons->setChangeCallback([udp](Events::Button::Update update) {
@@ -26,6 +27,7 @@ namespace Relais {
     });
 
     relais0.init();
+    relais1.init();
   }
 }
 
