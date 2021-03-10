@@ -4,7 +4,7 @@
 namespace IotNode {
 namespace Events {
 
-enum eventIds {
+enum ids {
   button
 };
 

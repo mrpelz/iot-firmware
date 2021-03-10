@@ -4,13 +4,12 @@ namespace IotNode {
 namespace Services {
 
 namespace Indicator {
-  Utils::UDP::Service service = {
-    .serviceId = serviceIds::blink,
-    .handler = handler,
-  };
+  auto service0 = makeService(&Utils::Indicator::rxdLed, 0);
+  auto service1 = makeService(&Utils::Indicator::txdLed, 1);
 
   void setup(Utils::UDP::Class *udp) {
-    udp->addService(&service);
+    udp->addService(&service0);
+    udp->addService(&service1);
   }
 }
 

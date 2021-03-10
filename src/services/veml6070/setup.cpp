@@ -7,7 +7,7 @@ namespace Services {
 
 namespace Veml6070 {
   Utils::UDP::Service service = {
-    .serviceId = serviceIds::veml6070,
+    .serviceId = ids::veml6070,
     .handler = handler,
   };
 

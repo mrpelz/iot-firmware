@@ -7,7 +7,7 @@ namespace Services {
 
 namespace Mcp9808 {
   Utils::UDP::Service service = {
-    .serviceId = serviceIds::mcp9808,
+    .serviceId = ids::mcp9808,
     .handler = handler,
   };
 

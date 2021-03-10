@@ -7,11 +7,15 @@
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"
 
+#define INDICATOR_CMD_OFF 0
+#define INDICATOR_CMD_ON 1
+#define INDICATOR_CMD_BLINK 2
+
 namespace IotNode {
 namespace Services {
 
 namespace Indicator {
-  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond);
+  Utils::UDP::Service makeService(Utils::Indicator::Class *relais, uint8_t index);
 }
 
 } // section namespace

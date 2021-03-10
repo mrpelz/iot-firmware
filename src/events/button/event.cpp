@@ -25,7 +25,7 @@ namespace Button {
 
     Utils::Log::debug("button-event", "sending event");
 
-    udp->event(eventIds::button, response);
+    udp->event(ids::button, response);
   }
 }
 

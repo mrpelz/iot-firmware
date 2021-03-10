@@ -7,7 +7,7 @@ namespace Services {
 
 namespace Ccs811 {
   Utils::UDP::Service service = {
-    .serviceId = serviceIds::ccs811,
+    .serviceId = ids::ccs811,
     .handler = handler,
   };
 

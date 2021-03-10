@@ -20,6 +20,7 @@
 #include "./utils/indicator/setup.h"
 #include "./utils/link/setup.h"
 #include "./utils/log.h"
+#include "./utils/relais/setup.h"
 #include "./utils/udp/setup.h"
 
 #define WATCHDOG_DELAY 10

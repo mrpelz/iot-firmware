@@ -7,7 +7,7 @@ namespace Keepalive {
   Class restartOnTimeout(120000);
 
   Utils::UDP::Service service = {
-    .serviceId = serviceIds::keepalive,
+    .serviceId = ids::keepalive,
     .handler = makeHandler(&restartOnTimeout),
   };
 

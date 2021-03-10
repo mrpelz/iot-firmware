@@ -7,7 +7,7 @@ namespace Services {
 
 namespace Bme280 {
   Utils::UDP::Service service = {
-    .serviceId = serviceIds::bme280,
+    .serviceId = ids::bme280,
     .handler = handler,
   };
 

@@ -4,35 +4,47 @@ namespace IotNode {
 namespace Services {
 
 namespace Indicator {
-  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
-    Utils::Log::debug("indicator-service", "got request");
+  Utils::UDP::Service makeService(Utils::Indicator::Class *indicator, uint8_t index) {
+    uint8_t serviceId = ids::indicator + index;
 
-    if (request->size() < 2) {
-      Utils::Log::debug("indicator-service", "missing parameters");
-    }
-
-    auto index = request->at(0);
-    auto cmd = request->at(1);
-
-    auto indicator = &Utils::Indicator::rxdLed;
-    if (index == 1) {
-      indicator = &Utils::Indicator::txdLed;
-    }
-
-    if (cmd == 0) {
-      indicator->setOn(false);
-    } else if (cmd == 1) {
-      if (request->size() >= 3) {
-        auto count = request->at(2);
-        indicator->blink(count);
-      } else {
-        indicator->blink();
+    auto handler = [indicator, index](
+      Utils::UDP::Payload *request,
+      Utils::UDP::RespondCallback respond
+    ) {
+      Utils::Log::debug("indicator-service", "got request");
+      
+      if (request->size() < 1) {
+        Utils::Log::debug("indicator-service", "missing parameters");
       }
-    }
 
-    Utils::Log::debug("indicator-service", "sending response");
+      auto cmd = request->at(0);
 
-    respond({});
+      switch (cmd) {
+      case INDICATOR_CMD_ON:
+        indicator->setOn(true);
+        break;
+      case INDICATOR_CMD_OFF:
+        indicator->setOn(false);
+        break;
+      case INDICATOR_CMD_BLINK:
+        if (request->size() >= 2) {
+          auto count = request->at(1);
+
+          indicator->blink(count);
+        } else {
+          indicator->blink();
+        }
+      }
+
+      Utils::Log::debug("indicator-service", "sending response");
+
+      respond({});
+    };
+
+    return {
+      serviceId,
+      handler
+    };
   }
 }
 

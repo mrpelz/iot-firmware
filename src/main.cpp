@@ -53,7 +53,8 @@ void setup() {
   #endif
 
   auto buttons = IotNode::Events::Button::setup();
-  IotNode::Services::Relais::setup(udp, buttons);
+  IotNode::Utils::Relais::setup(udp, buttons);
+  IotNode::Services::Relais::setup(udp);
 
   IotNode::Utils::Indicator::rxdLed.blink();
 }

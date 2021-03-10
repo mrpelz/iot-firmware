@@ -7,7 +7,7 @@ namespace Services {
 
 namespace Sgp30 {
   Utils::UDP::Service service = {
-    .serviceId = serviceIds::sgp30,
+    .serviceId = ids::sgp30,
     .handler = handler,
   };
 

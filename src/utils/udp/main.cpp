@@ -40,7 +40,7 @@ namespace UDP {
     if (!state.eventPeer.port) return;
 
     Payload outgoing = {
-      Services::serviceIds::_reserved_event,
+      Services::ids::_reserved_event,
       eventId
     };
 
@@ -96,7 +96,7 @@ namespace UDP {
     state.debugCallback("udp.request.service-id", String(serviceId, HEX));
     state.debugCallback("udp.request.message-length", String(message.size()));
 
-    if (serviceId == Services::serviceIds::_reserved_event) {
+    if (serviceId == Services::ids::_reserved_event) {
       Payload peerAckOutgoing = {
         messageId
       };

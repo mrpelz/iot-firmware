@@ -4,47 +4,30 @@ namespace IotNode {
 namespace Services {
 
 namespace Relais {
-  Class::Class(Config config) {
-    state.pin = config.pin;
-    state.invert = config.invert;
-  }
+  Utils::UDP::Service makeService(Utils::Relais::Class *relais, uint8_t index) {
+    uint8_t serviceId = ids::relais + index;
 
-  void Class::commit() {
-    if (!state.wasInitialized) return;
+    auto handler = [relais, index](
+      Utils::UDP::Payload *request,
+      Utils::UDP::RespondCallback respond
+    ) {
+      Utils::Log::debug("relais-service", "got request");
+      Utils::Log::debug("relais-service.index", String(index));
 
-    Utils::Log::debug("relais", "commit");
+      bool on = request->size() >= 1 && request->at(0) != 0;
 
-    digitalWrite(state.pin, (state.invert ? !state.on : state.on));
-  }
+      Utils::Log::debug("relais-service.on", String(on));
 
-  bool Class::isOn() {
-    return state.on;
-  }
+      relais->setOn(on);
 
-  void Class::init() {
-    Utils::Log::debug("relais", "init");
-    Utils::Log::debug("relais.pin", String(state.pin));
+      Utils::Log::debug("relais-service", "sending response");
+      respond({});
+    };
 
-    pinMode(state.pin, OUTPUT);
-    state.wasInitialized = true;
-
-    commit();
-  }
-
-  void Class::setOn(bool on) {
-    Utils::Log::debug("relais.set-on", on ? "on" : "off");
-    Utils::Log::debug("relais.pin", String(state.pin));
-
-    state.on = on;
-    commit();
-  }
-
-  void Class::toggle() {
-    Utils::Log::debug("relais.toggle", state.on ? "on2off" : "off2on");
-    Utils::Log::debug("relais.pin", String(state.pin));
-
-    state.on = !state.on;
-    commit();
+    return {
+      serviceId,
+      handler
+    };
   }
 }
 

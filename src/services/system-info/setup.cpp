@@ -5,7 +5,7 @@ namespace Services {
 
 namespace SystemInfo {
   Utils::UDP::Service service = {
-    .serviceId = serviceIds::systemInfo,
+    .serviceId = ids::systemInfo,
     .handler = handler,
   };
 
