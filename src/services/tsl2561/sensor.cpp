@@ -3,6 +3,7 @@
 #include "./sensor.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Tsl2561 {
   Sensor::Sensor() : Adafruit_TSL2561_Unified(TSL2561_CHOSEN_ADDRESS, 12345) {}
@@ -127,6 +128,7 @@ namespace Tsl2561 {
   }
 }
 
+} // section namespace
 } // project namespace
 
 #endif

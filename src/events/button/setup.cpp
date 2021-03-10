@@ -1,6 +1,7 @@
 #include "./setup.h"
 
 namespace IotNode {
+namespace Events {
 
 namespace Button {
   Class buttons(config);
@@ -19,7 +20,7 @@ namespace Button {
   #endif
 
   Class *setup() {
-    buttons.setDebug(Log::debug);
+    buttons.setDebug(Utils::Log::debug);
 
     buttons.start();
 
@@ -39,4 +40,5 @@ namespace Button {
   }
 }
 
+} // section namespace
 } // project namespace

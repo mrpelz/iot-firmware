@@ -1,6 +1,7 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Keepalive {
   Class::Class(unsigned long timeout) {
@@ -8,12 +9,12 @@ namespace Keepalive {
   }
 
   void Class::start() {
-    Log::debug("keepalive", "start");
+    Utils::Log::debug("keepalive", "start");
     state.running = true;
   }
 
   void Class::stop() {
-    Log::debug("keepalive", "stop");
+    Utils::Log::debug("keepalive", "stop");
     state.running = false;
   }
 
@@ -32,7 +33,7 @@ namespace Keepalive {
     if (state.ticked) {
       state.ticked = false;
 
-      Log::debug("keepalive", "tick");
+      Utils::Log::debug("keepalive", "tick");
       state.lastTick = now;
     }
 
@@ -41,29 +42,29 @@ namespace Keepalive {
     unsigned long timeSinceTick = now - state.lastTick;
 
     if (state.forceRestart) {
-      Log::debug("keepalive", "force restart");
+      Utils::Log::debug("keepalive", "force restart");
       ESP.restart();
     }
 
     if (timeSinceTick > state.timeout) {
-      Log::debug("keepalive", "trip");
+      Utils::Log::debug("keepalive", "trip");
       ESP.restart();
     }
   }
 
-  UDP::RequestHandler makeHandler(Class *restartOnTimeout) {
+  Utils::UDP::RequestHandler makeHandler(Class *restartOnTimeout) {
     auto handler = [restartOnTimeout](
-      UDP::Payload *request,
-      UDP::RespondCallback respond
+      Utils::UDP::Payload *request,
+      Utils::UDP::RespondCallback respond
     ) {
-      Log::debug("keepalive-service", "got request");
+      Utils::Log::debug("keepalive-service", "got request");
 
       auto restart = request->size() >= 1 && request->at(0) != 0;
-      Log::debug("keepalive-service.restart", restart ? "true" : "false");
+      Utils::Log::debug("keepalive-service.restart", restart ? "true" : "false");
 
       restartOnTimeout->tick(restart);
 
-      Log::debug("keepalive-service", "sending response");
+      Utils::Log::debug("keepalive-service", "sending response");
 
       respond({});
     };
@@ -72,4 +73,5 @@ namespace Keepalive {
   }
 }
 
+} // section namespace
 } // project namespace

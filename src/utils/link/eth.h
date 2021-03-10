@@ -1,5 +1,5 @@
-#ifndef _LINK_ETH
-#define _LINK_ETH
+#ifndef _UTILS_LINK_ETH
+#define _UTILS_LINK_ETH
 
 #if defined(IOT_NODE_LINK_ETH) && defined(ARDUINO_ARCH_ESP32)
 
@@ -8,6 +8,7 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Utils {
 
 namespace Link {
   struct Config {
@@ -63,6 +64,7 @@ namespace Link {
   };
 }
 
+} // section namespace
 } // project namespace
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef _TSL2561_MAIN
-#define _TSL2561_MAIN
+#ifndef _SERVICES_TSL2561_MAIN
+#define _SERVICES_TSL2561_MAIN
 
 #ifdef IOT_NODE_TSL2561
 
@@ -11,15 +11,17 @@
 #include "./sensor.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Tsl2561 {
   void initializer(TwoWire *i2c);
 
   void responseTask(void *parameter);
 
-  void handler(UDP::Payload *request, UDP::RespondCallback respond);
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond);
 }
 
+} // section namespace
 } // project namespace
 
 #endif

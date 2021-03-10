@@ -1,5 +1,5 @@
-#ifndef _SYSTEM_INFO_SETUP
-#define _SYSTEM_INFO_SETUP
+#ifndef _SERVICES_SYSTEM_INFO_SETUP
+#define _SERVICES_SYSTEM_INFO_SETUP
 
 #include <Arduino.h>
 
@@ -7,11 +7,13 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace SystemInfo {
-  void setup(UDP::Class *udp);
+  void setup(Utils::UDP::Class *udp);
 }
 
+} // section namespace
 } // project namespace
 
 #endif

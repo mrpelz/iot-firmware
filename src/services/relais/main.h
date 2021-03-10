@@ -1,10 +1,11 @@
-#ifndef _RELAIS_MAIN
-#define _RELAIS_MAIN
+#ifndef _SERVICES_RELAIS_MAIN
+#define _SERVICES_RELAIS_MAIN
 
 #include <Arduino.h>
 #include "../../utils/log.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Relais {
   struct Config {
@@ -33,6 +34,7 @@ namespace Relais {
   };
 }
 
+} // section namespace
 } // project namespace
 
 #endif

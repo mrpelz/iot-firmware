@@ -1,5 +1,5 @@
-#ifndef _BUTTONS_SETUP
-#define _BUTTONS_SETUP
+#ifndef _EVENTS_BUTTONS_SETUP
+#define _EVENTS_BUTTONS_SETUP
 
 #include <Arduino.h>
 
@@ -7,6 +7,7 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Events {
 
 namespace Button {
   static const SingleAttributes button0 = {
@@ -34,6 +35,7 @@ namespace Button {
   Class *setup();
 }
 
+} // section namespace
 } // project namespace
 
 #endif

@@ -1,11 +1,12 @@
-#ifndef _INDICATOR_SETUP
-#define _INDICATOR_SETUP
+#ifndef _UTILS_INDICATOR_SETUP
+#define _UTILS_INDICATOR_SETUP
 
 #include <Arduino.h>
 
 #include "./main.h"
 
 namespace IotNode {
+namespace Utils {
 
 namespace Indicator {
   extern Class rxdLed;
@@ -20,6 +21,7 @@ namespace Indicator {
   void setup();
 }
 
+} // section namespace
 } // project namespace
 
 #endif

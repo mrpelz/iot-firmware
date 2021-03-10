@@ -1,21 +1,22 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Services {
 
-namespace Blink {
-  void handler(UDP::Payload *request, UDP::RespondCallback respond) {
-    Log::debug("blink-service", "got request");
+namespace Indicator {
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
+    Utils::Log::debug("indicator-service", "got request");
 
     if (request->size() < 2) {
-      Log::debug("blink-service", "missing parameters");
+      Utils::Log::debug("indicator-service", "missing parameters");
     }
 
     auto index = request->at(0);
     auto cmd = request->at(1);
 
-    auto indicator = &Indicator::rxdLed;
+    auto indicator = &Utils::Indicator::rxdLed;
     if (index == 1) {
-      indicator = &Indicator::txdLed;
+      indicator = &Utils::Indicator::txdLed;
     }
 
     if (cmd == 0) {
@@ -29,10 +30,11 @@ namespace Blink {
       }
     }
 
-    Log::debug("blink-service", "sending response");
+    Utils::Log::debug("indicator-service", "sending response");
 
     respond({});
   }
 }
 
+} // section namespace
 } // project namespace

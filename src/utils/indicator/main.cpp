@@ -1,6 +1,7 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Utils {
 
 namespace Indicator {
   Class::Class(Config config) {
@@ -105,4 +106,5 @@ namespace Indicator {
   }
 }
 
+} // section namespace
 } // project namespace

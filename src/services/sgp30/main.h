@@ -1,5 +1,5 @@
-#ifndef _SGP30_MAIN
-#define _SGP30_MAIN
+#ifndef _SERVICES_SGP30_MAIN
+#define _SERVICES_SGP30_MAIN
 
 #ifdef IOT_NODE_SGP30
 
@@ -12,6 +12,7 @@
 #include "../../utils/udp/main.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Sgp30 {
   uint32_t getAbsoluteHumidity(float temperature, float humidity);
@@ -20,9 +21,10 @@ namespace Sgp30 {
 
   void responseTask(void *parameter);
 
-  void handler(UDP::Payload *request, UDP::RespondCallback respond);
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond);
 }
 
+} // section namespace
 } // project namespace
 
 #endif

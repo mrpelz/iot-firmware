@@ -1,6 +1,7 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Utils {
 
 namespace Link {
   String printMacAddress(uint8_t input[6]) {
@@ -25,4 +26,5 @@ namespace Link {
   }
 }
 
+} // section namespace
 } // project namespace

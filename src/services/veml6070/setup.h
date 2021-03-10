@@ -1,5 +1,5 @@
-#ifndef _VEML6070_SETUP
-#define _VEML6070_SETUP
+#ifndef _SERVICES_VEML6070_SETUP
+#define _SERVICES_VEML6070_SETUP
 
 #ifdef IOT_NODE_VEML6070
 
@@ -10,11 +10,13 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Veml6070 {
-  void setup(UDP::Class *udp, TwoWire *i2c);
+  void setup(Utils::UDP::Class *udp, TwoWire *i2c);
 }
 
+} // section namespace
 } // project namespace
 
 #endif

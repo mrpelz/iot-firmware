@@ -1,11 +1,12 @@
-#ifndef _BUTTON_MAIN
-#define _BUTTON_MAIN
+#ifndef _EVENTS_BUTTON_MAIN
+#define _EVENTS_BUTTON_MAIN
 
 #include <Arduino.h>
 
 #include "../../utils/log.h"
 
 namespace IotNode {
+namespace Events {
 
 namespace Button {
   struct Update {
@@ -51,7 +52,7 @@ namespace Button {
     unsigned long longpressTime;
     std::vector<SingleState> buttons;
     ChangeCallback changeCallback = [](Update update) {};
-    Log::Callback debugCallback = [](String key, String value) {};
+    Utils::Log::Callback debugCallback = [](String key, String value) {};
   };
 
   class Class {
@@ -62,13 +63,14 @@ namespace Button {
     public:
       Class(Config config);
       void setChangeCallback(ChangeCallback callback);
-      void setDebug(Log::Callback callback);
+      void setDebug(Utils::Log::Callback callback);
       void start();
       void stop();
       void update();
   };
 }
 
+} // section namespace
 } // project namespace
 
 #endif

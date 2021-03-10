@@ -1,5 +1,5 @@
-#ifndef _SYSTEM_INFO_MAIN
-#define _SYSTEM_INFO_MAIN
+#ifndef _SERVICES_SYSTEM_INFO_MAIN
+#define _SERVICES_SYSTEM_INFO_MAIN
 
 #include <Arduino.h>
 
@@ -14,11 +14,13 @@
 #endif
 
 namespace IotNode {
+namespace Services {
 
 namespace SystemInfo {
-  void handler(UDP::Payload *request, UDP::RespondCallback respond);
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond);
 }
 
+} // section namespace
 } // project namespace
 
 #endif

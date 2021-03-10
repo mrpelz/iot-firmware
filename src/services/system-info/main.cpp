@@ -1,12 +1,13 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace SystemInfo {
-  void handler(UDP::Payload *request, UDP::RespondCallback respond) {
-    Log::debug("system-info-service", "got request");
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
+    Utils::Log::debug("system-info-service", "got request");
 
-    UDP::Payload response;
+    Utils::UDP::Payload response;
 
     #ifdef ARDUINO_ARCH_ESP8266
       auto chipId = ESP.getChipId();
@@ -32,10 +33,11 @@ namespace SystemInfo {
       response.insert(response.end(), &rssi, &rssi + sizeof(rssi));
     #endif
 
-    Log::debug("system-info-service", "sending response");
+    Utils::Log::debug("system-info-service", "sending response");
 
     respond(response);
   }
 }
 
+} // section namespace
 } // project namespace

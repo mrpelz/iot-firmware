@@ -1,5 +1,5 @@
-#ifndef _KEEPALIVE_MAIN
-#define _KEEPALIVE_MAIN
+#ifndef _SERVICES_KEEPALIVE_MAIN
+#define _SERVICES_KEEPALIVE_MAIN
 
 #include <Arduino.h>
 
@@ -7,6 +7,7 @@
 #include "../../utils/udp/main.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Keepalive {
   struct State {
@@ -29,9 +30,10 @@ namespace Keepalive {
       void update();
   };
 
-  UDP::RequestHandler makeHandler(Class *restartOnTimeout);
+  Utils::UDP::RequestHandler makeHandler(Class *restartOnTimeout);
 }
 
+} // section namespace
 } // project namespace
 
 #endif

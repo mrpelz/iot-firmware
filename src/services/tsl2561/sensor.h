@@ -1,5 +1,5 @@
-#ifndef _TSL2561_SENSOR
-#define _TSL2561_SENSOR
+#ifndef _SERVICES_TSL2561_SENSOR
+#define _SERVICES_TSL2561_SENSOR
 
 #ifdef IOT_NODE_TSL2561
 
@@ -15,6 +15,7 @@
 #define TSL2561_CHOSEN_ADDRESS TSL2561_ADDR_FLOAT
 
 namespace IotNode {
+namespace Services {
 
 namespace Tsl2561 {
   class Sensor : public Adafruit_TSL2561_Unified {
@@ -24,6 +25,7 @@ namespace Tsl2561 {
   };
 }
 
+} // section namespace
 } // project namespace
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef _RELAIS_SETUP
-#define _RELAIS_SETUP
+#ifndef _SERVICES_RELAIS_SETUP
+#define _SERVICES_RELAIS_SETUP
 
 #include <Arduino.h>
 
@@ -10,11 +10,13 @@
 #include "./service.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Relais {
-  void setup(UDP::Class *udp, Button::Class *buttons);
+  void setup(Utils::UDP::Class *udp, Events::Button::Class *buttons);
 }
 
+} // section namespace
 } // project namespace
 
 #endif

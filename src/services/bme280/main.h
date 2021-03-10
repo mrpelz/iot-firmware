@@ -1,5 +1,5 @@
-#ifndef _BME280_MAIN
-#define _BME280_MAIN
+#ifndef _SERVICES_BME280_MAIN
+#define _SERVICES_BME280_MAIN
 
 #ifdef IOT_NODE_BME280
 
@@ -13,15 +13,17 @@
 #include "../../utils/udp/main.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Bme280 {
   void initializer(TwoWire *i2c);
 
   void responseTask(void *parameter);
 
-  void handler(UDP::Payload *request, UDP::RespondCallback respond);
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond);
 }
 
+} // section namespace
 } // project namespace
 
 #endif

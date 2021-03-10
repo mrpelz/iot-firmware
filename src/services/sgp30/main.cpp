@@ -3,9 +3,10 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Sgp30 {
-  UDP::RespondCallback respondCallback = NULL;
+  Utils::UDP::RespondCallback respondCallback = NULL;
 
   bool working = false;
   auto sensor = Adafruit_SGP30();
@@ -18,11 +19,11 @@ namespace Sgp30 {
   }
 
   void initializer(TwoWire *i2c) {
-    Log::debug("sgp30-service", "initializing sensor");
+    Utils::Log::debug("sgp30-service", "initializing sensor");
 
     working = sensor.begin(i2c);
     if (!working) {
-      Log::debug("sgp30-service", "sensor initialization failed");
+      Utils::Log::debug("sgp30-service", "sensor initialization failed");
     }
   }
 
@@ -32,10 +33,10 @@ namespace Sgp30 {
       return;
     }
 
-    auto request = (UDP::Payload *)parameter;
+    auto request = (Utils::UDP::Payload *)parameter;
 
     if (request->size() < (sizeof(float) * 2)) {
-      Log::debug("sgp30-service", "request does not contain temperature and humidity");
+      Utils::Log::debug("sgp30-service", "request does not contain temperature and humidity");
 
       respondCallback({});
       respondCallback = NULL;
@@ -46,12 +47,12 @@ namespace Sgp30 {
     auto calibrationTemperature = ((float *)request->data())[0];
     auto calibrationHumidity = ((float *)request->data())[1];
 
-    Log::debug("sgp30-service.calibration-temperature", String(calibrationTemperature));
-    Log::debug("sgp30-service.calibration-humidity", String(calibrationHumidity));
+    Utils::Log::debug("sgp30-service.calibration-temperature", String(calibrationTemperature));
+    Utils::Log::debug("sgp30-service.calibration-humidity", String(calibrationHumidity));
 
     auto calibrationSuccess = sensor.setHumidity(getAbsoluteHumidity(calibrationTemperature, calibrationHumidity));
     if (!calibrationSuccess) {
-      Log::debug("sgp30-service", "calibration not successful, sending null response");
+      Utils::Log::debug("sgp30-service", "calibration not successful, sending null response");
 
       respondCallback({});
       respondCallback = NULL;
@@ -64,7 +65,7 @@ namespace Sgp30 {
     auto measurementSuccess = sensor.IAQmeasure();
     if (!measurementRawSuccess || !measurementSuccess
     ) {
-      Log::debug("sgp30-service", "measurement not successful, sending null response");
+      Utils::Log::debug("sgp30-service", "measurement not successful, sending null response");
 
       respondCallback({});
       respondCallback = NULL;
@@ -78,17 +79,17 @@ namespace Sgp30 {
     auto tvocReading = sensor.TVOC;
     auto eco2Reading = sensor.eCO2;
 
-    Log::debug("sgp30-service.h2", String(h2Reading));
-    Log::debug("sgp30-service.ethanol", String(ethanolReading));
-    Log::debug("sgp30-service.tvoc", String(tvocReading));
-    Log::debug("sgp30-service.eco2", String(eco2Reading));
+    Utils::Log::debug("sgp30-service.h2", String(h2Reading));
+    Utils::Log::debug("sgp30-service.ethanol", String(ethanolReading));
+    Utils::Log::debug("sgp30-service.tvoc", String(tvocReading));
+    Utils::Log::debug("sgp30-service.eco2", String(eco2Reading));
 
     auto h2Result = reinterpret_cast<uint8_t*>(&h2Reading);
     auto ethanolResult = reinterpret_cast<uint8_t*>(&ethanolReading);
     auto tvocResult = reinterpret_cast<uint8_t*>(&tvocReading);
     auto eco2Result = reinterpret_cast<uint8_t*>(&eco2Reading);
 
-    UDP::Payload response;
+    Utils::UDP::Payload response;
 
     response.insert(
       response.end(),
@@ -114,7 +115,7 @@ namespace Sgp30 {
       eco2Result + sizeof(eco2Reading)
     );
 
-    Log::debug("sgp30-service", "sending response");
+    Utils::Log::debug("sgp30-service", "sending response");
 
     respondCallback(response);
     respondCallback = NULL;
@@ -122,11 +123,11 @@ namespace Sgp30 {
     vTaskDelete(NULL);
   }
 
-  void handler(UDP::Payload *request, UDP::RespondCallback respond) {
-    Log::debug("sgp30-service", "got request");
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
+    Utils::Log::debug("sgp30-service", "got request");
 
     if (!working) {
-      Log::debug("sgp30-service", "sensor not working, sending null response");
+      Utils::Log::debug("sgp30-service", "sensor not working, sending null response");
 
       respond({});
       return;
@@ -145,6 +146,7 @@ namespace Sgp30 {
   }
 }
 
+} // section namespace
 } // project namespace
 
 #endif

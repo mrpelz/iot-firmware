@@ -1,5 +1,5 @@
-#ifndef _RELAIS_SERVICE
-#define _RELAIS_SERVICE
+#ifndef _SERVICES_RELAIS_SERVICE
+#define _SERVICES_RELAIS_SERVICE
 
 #include <Arduino.h>
 
@@ -8,11 +8,13 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Relais {
-  UDP::Service makeService(Class *relais, uint8_t index);
+  Utils::UDP::Service makeService(Class *relais, uint8_t index);
 }
 
+} // section namespace
 } // project namespace
 
 #endif

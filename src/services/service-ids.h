@@ -1,7 +1,8 @@
-#ifndef _SERVICE_IDS
-#define _SERVICE_IDS
+#ifndef _SERVICES_SERVICE_IDS
+#define _SERVICES_SERVICE_IDS
 
 namespace IotNode {
+namespace Services {
 
 enum serviceIds {
   _reserved_event,
@@ -21,6 +22,7 @@ enum serviceIds {
   keepalive = 0xff
 };
 
+} // section namespace
 } // project namespace
 
 #endif

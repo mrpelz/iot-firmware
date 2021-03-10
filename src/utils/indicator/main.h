@@ -1,5 +1,5 @@
-#ifndef _INDICATOR_MAIN
-#define _INDICATOR_MAIN
+#ifndef _UTILS_INDICATOR_MAIN
+#define _UTILS_INDICATOR_MAIN
 
 #include <Arduino.h>
 #include "../../utils/log.h"
@@ -11,6 +11,7 @@
 #define INDICATOR_BLINK_PERIOD_OFF 250
 
 namespace IotNode {
+namespace Utils {
 
 namespace Indicator {
   struct Config {
@@ -50,6 +51,7 @@ namespace Indicator {
   };
 }
 
+} // section namespace
 } // project namespace
 
 #endif

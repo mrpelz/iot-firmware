@@ -1,16 +1,18 @@
-#ifndef _UDP_SETUP
-#define _UDP_SETUP
+#ifndef _UTILS_UDP_SETUP
+#define _UTILS_UDP_SETUP
 
 #include <Arduino.h>
 
 #include "./main.h"
 
 namespace IotNode {
+namespace Utils {
 
 namespace UDP {
   Class *setup();
 }
 
+} // section namespace
 } // project namespace
 
 #endif

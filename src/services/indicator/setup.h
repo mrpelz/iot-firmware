@@ -1,5 +1,5 @@
-#ifndef _SERVICES_HELLO_SETUP
-#define _SERVICES_HELLO_SETUP
+#ifndef _SERVICES_INDICATOR_SETUP
+#define _SERVICES_INDICATOR_SETUP
 
 #include <Arduino.h>
 
@@ -9,7 +9,7 @@
 namespace IotNode {
 namespace Services {
 
-namespace Hello {
+namespace Indicator {
   void setup(Utils::UDP::Class *udp);
 }
 

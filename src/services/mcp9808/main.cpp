@@ -3,19 +3,20 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Mcp9808 {
-  UDP::RespondCallback respondCallback = NULL;
+  Utils::UDP::RespondCallback respondCallback = NULL;
 
   bool working = false;
   auto sensor = Adafruit_MCP9808();
 
   void initializer(TwoWire *i2c) {
-    Log::debug("mcp9808-service", "initializing sensor");
+    Utils::Log::debug("mcp9808-service", "initializing sensor");
 
     working = sensor.begin(MCP9808_I2CADDR_DEFAULT, i2c);
     if (!working) {
-      Log::debug("mcp9808-service", "sensor initialization failed");
+      Utils::Log::debug("mcp9808-service", "sensor initialization failed");
       return;
     }
 
@@ -35,11 +36,11 @@ namespace Mcp9808 {
 
     sensor.shutdown();
 
-    Log::debug("mcp9808-service.reading", String(reading));
+    Utils::Log::debug("mcp9808-service.reading", String(reading));
 
     auto result = reinterpret_cast<uint8_t*>(&reading);
 
-    UDP::Payload response;
+    Utils::UDP::Payload response;
 
     response.insert(
       response.end(),
@@ -47,7 +48,7 @@ namespace Mcp9808 {
       result + sizeof(reading)
     );
 
-    Log::debug("mcp9808-service", "sending response");
+    Utils::Log::debug("mcp9808-service", "sending response");
 
     respondCallback(response);
     respondCallback == NULL;
@@ -55,11 +56,11 @@ namespace Mcp9808 {
     vTaskDelete(NULL);
   }
 
-  void handler(UDP::Payload *request, UDP::RespondCallback respond) {
-    Log::debug("mcp9808-service", "got request");
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
+    Utils::Log::debug("mcp9808-service", "got request");
 
     if (!working) {
-      Log::debug("mcp9808-service", "sensor not working, sending null response");
+      Utils::Log::debug("mcp9808-service", "sensor not working, sending null response");
 
       respond({});
       return;
@@ -78,6 +79,7 @@ namespace Mcp9808 {
   }
 }
 
+} // section namespace
 } // project namespace
 
 #endif

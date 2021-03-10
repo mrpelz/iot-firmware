@@ -1,5 +1,5 @@
-#ifndef _LINK_SETUP
-#define _LINK_SETUP
+#ifndef _UTILS_LINK_SETUP
+#define _UTILS_LINK_SETUP
 
 #define TOSTRING(x) #x
 #define STR(x) TOSTRING(x)
@@ -18,6 +18,7 @@
 #endif
 
 namespace IotNode {
+namespace Utils {
 
 namespace Link {
   static const Timings timings = {
@@ -111,6 +112,7 @@ namespace Link {
   void setup(UDP::Class *udp);
 }
 
+} // section namespace
 } // project namespace
 
 #endif

@@ -3,19 +3,20 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Veml6070 {
-  UDP::RespondCallback respondCallback = NULL;
+  Utils::UDP::RespondCallback respondCallback = NULL;
 
   bool working = false;
   auto sensor = Sensor();
 
   void initializer(TwoWire *i2c) {
-    Log::debug("veml6070-service", "initializing sensor");
+    Utils::Log::debug("veml6070-service", "initializing sensor");
 
     working = sensor.begin(i2c);
     if (!working) {
-      Log::debug("veml6070-service", "sensor initialization failed");
+      Utils::Log::debug("veml6070-service", "sensor initialization failed");
       return;
     }
 
@@ -35,11 +36,11 @@ namespace Veml6070 {
 
     sensor.sleep(true);
 
-    Log::debug("veml6070-service.reading", String(reading));
+    Utils::Log::debug("veml6070-service.reading", String(reading));
 
     auto result = reinterpret_cast<uint8_t*>(&reading);
 
-    UDP::Payload response;
+    Utils::UDP::Payload response;
 
     response.insert(
       response.end(),
@@ -47,7 +48,7 @@ namespace Veml6070 {
       result + sizeof(reading)
     );
 
-    Log::debug("veml6070-service", "sending response");
+    Utils::Log::debug("veml6070-service", "sending response");
 
     respondCallback(response);
     respondCallback == NULL;
@@ -56,11 +57,11 @@ namespace Veml6070 {
     vTaskDelete(NULL);
   }
 
-  void handler(UDP::Payload *request, UDP::RespondCallback respond) {
-    Log::debug("veml6070-service", "got request");
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
+    Utils::Log::debug("veml6070-service", "got request");
 
     if (!working) {
-      Log::debug("veml6070-service", "sensor not working, sending null response");
+      Utils::Log::debug("veml6070-service", "sensor not working, sending null response");
 
       respond({});
       return;
@@ -79,6 +80,7 @@ namespace Veml6070 {
   }
 }
 
+} // section namespace
 } // project namespace
 
 #endif

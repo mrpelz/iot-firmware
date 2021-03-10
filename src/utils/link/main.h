@@ -1,5 +1,5 @@
-#ifndef _LINK_MAIN
-#define _LINK_MAIN
+#ifndef _UTILS_LINK_MAIN
+#define _UTILS_LINK_MAIN
 
 #include <Arduino.h>
 
@@ -15,6 +15,7 @@
 #define LINK_DELAY 1000
 
 namespace IotNode {
+namespace Utils {
 
 namespace Link {
   #ifdef ARDUINO_ARCH_ESP8266
@@ -62,6 +63,7 @@ namespace Link {
   };
 }
 
+} // section namespace
 } // project namespace
 
 #endif

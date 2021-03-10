@@ -1,5 +1,5 @@
-#ifndef _CCS811_SENSOR
-#define _CCS811_SENSOR
+#ifndef _SERVICES_CCS811_SENSOR
+#define _SERVICES_CCS811_SENSOR
 
 #ifdef IOT_NODE_CCS811
 
@@ -13,6 +13,7 @@
 #undef private
 
 namespace IotNode {
+namespace Services {
 
 namespace Ccs811 {
   class Sensor : public Adafruit_CCS811 {
@@ -26,6 +27,7 @@ namespace Ccs811 {
   };
 }
 
+} // section namespace
 } // project namespace
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef _UDP_MAIN
-#define _UDP_MAIN
+#ifndef _UTILS_UDP_MAIN
+#define _UTILS_UDP_MAIN
 
 #include <Arduino.h>
 
@@ -30,6 +30,7 @@
 #define EVENT_MAX_LENGTH UDP_MAX_LENGTH - MESSAGE_ID_LENGTH - EVENT_ID_LENGTH
 
 namespace IotNode {
+namespace Utils {
 
 namespace UDP {
   typedef std::vector<uint8_t> Payload;
@@ -80,6 +81,7 @@ namespace UDP {
   };
 }
 
+} // section namespace
 } // project namespace
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef _BUTTON_EVENT
-#define _BUTTON_EVENT
+#ifndef _EVENTS_BUTTON_EVENT
+#define _EVENTS_BUTTON_EVENT
 
 #include <Arduino.h>
 
@@ -9,11 +9,13 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Events {
 
 namespace Button {
-  void buttonEvent(UDP::Class *udp, Update update);
+  void buttonEvent(Utils::UDP::Class *udp, Update update);
 }
 
+} // section namespace
 } // project namespace
 
 #endif

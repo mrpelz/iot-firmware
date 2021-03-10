@@ -3,6 +3,7 @@
 #ifndef IOT_NODE_LINK_ETH
 
 namespace IotNode {
+namespace Utils {
 
 namespace Link {
   Class::Class(Config config) {
@@ -366,6 +367,7 @@ namespace Link {
   }
 }
 
+} // section namespace
 } // project namespace
 
 #endif

@@ -1,20 +1,21 @@
 #include "./service.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Relais {
-  UDP::Service makeService(Class *relais, uint8_t index) {
+  Utils::UDP::Service makeService(Class *relais, uint8_t index) {
     uint8_t serviceId = serviceIds::relais + index;
 
     auto handler = [relais, index](
-      UDP::Payload *request,
-      UDP::RespondCallback respond
+      Utils::UDP::Payload *request,
+      Utils::UDP::RespondCallback respond
     ) {
       bool on = request->size() >= 1 && request->at(0) != 0;
 
-      Log::debug("event", "relais-service.switch");
-      Log::debug("relais-service.index", String(index));
-      Log::debug("relais-service.on", String(on));
+      Utils::Log::debug("event", "relais-service.switch");
+      Utils::Log::debug("relais-service.index", String(index));
+      Utils::Log::debug("relais-service.on", String(on));
 
       relais->setOn(on);
 
@@ -29,4 +30,5 @@ namespace Relais {
   }
 }
 
+} // section namespace
 } // project namespace

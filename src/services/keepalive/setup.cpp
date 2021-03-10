@@ -1,11 +1,12 @@
 #include "./setup.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Keepalive {
   Class restartOnTimeout(120000);
 
-  UDP::Service service = {
+  Utils::UDP::Service service = {
     .serviceId = serviceIds::keepalive,
     .handler = makeHandler(&restartOnTimeout),
   };
@@ -23,7 +24,7 @@ namespace Keepalive {
     }
   #endif
 
-  void setup(UDP::Class *udp) {
+  void setup(Utils::UDP::Class *udp) {
     udp->addService(&service);
 
     #ifdef ARDUINO_ARCH_ESP32
@@ -40,4 +41,5 @@ namespace Keepalive {
   }
 }
 
+} // section namespace
 } // project namespace

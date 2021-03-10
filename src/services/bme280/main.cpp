@@ -3,19 +3,20 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Bme280 {
-  UDP::RespondCallback respondCallback = NULL;
+  Utils::UDP::RespondCallback respondCallback = NULL;
 
   bool working = false;
   auto sensor = Adafruit_BME280();
 
   void initializer(TwoWire *i2c) {
-    Log::debug("bme280-service", "initializing sensor");
+    Utils::Log::debug("bme280-service", "initializing sensor");
 
     working = sensor.begin(BME280_ADDRESS_ALTERNATE, i2c);
     if (!working) {
-      Log::debug("bme280-service", "sensor initialization failed");
+      Utils::Log::debug("bme280-service", "sensor initialization failed");
       return;
     }
 
@@ -36,7 +37,7 @@ namespace Bme280 {
 
     auto measurementSuccess = sensor.takeForcedMeasurement();
     if (!measurementSuccess) {
-      Log::debug("bme280-service", "measurement not successful, sending null response");
+      Utils::Log::debug("bme280-service", "measurement not successful, sending null response");
 
       respondCallback({});
       respondCallback = NULL;
@@ -49,15 +50,15 @@ namespace Bme280 {
     auto humidityReading = sensor.readHumidity();
     auto pressureReading = sensor.readPressure();
 
-    Log::debug("bme280-service.temperature", String(temperatureReading));
-    Log::debug("bme280-service.humidity", String(humidityReading));
-    Log::debug("bme280-service.pressure", String(pressureReading));
+    Utils::Log::debug("bme280-service.temperature", String(temperatureReading));
+    Utils::Log::debug("bme280-service.humidity", String(humidityReading));
+    Utils::Log::debug("bme280-service.pressure", String(pressureReading));
 
     auto temperatureResult = reinterpret_cast<uint8_t*>(&temperatureReading);
     auto humidityResult = reinterpret_cast<uint8_t*>(&humidityReading);
     auto pressureResult = reinterpret_cast<uint8_t*>(&pressureReading);
 
-    UDP::Payload response;
+    Utils::UDP::Payload response;
 
     response.insert(
       response.end(),
@@ -77,7 +78,7 @@ namespace Bme280 {
       pressureResult + sizeof(pressureReading)
     );
 
-    Log::debug("bme280-service", "sending response");
+    Utils::Log::debug("bme280-service", "sending response");
 
     respondCallback(response);
     respondCallback = NULL;
@@ -85,11 +86,11 @@ namespace Bme280 {
     vTaskDelete(NULL);
   }
 
-  void handler(UDP::Payload *request, UDP::RespondCallback respond) {
-    Log::debug("bme280-service", "got request");
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
+    Utils::Log::debug("bme280-service", "got request");
 
     if (!working) {
-      Log::debug("bme280-service", "sensor not working, sending null response");
+      Utils::Log::debug("bme280-service", "sensor not working, sending null response");
 
       respond({});
       return;
@@ -108,6 +109,7 @@ namespace Bme280 {
   }
 }
 
+} // section namespace
 } // project namespace
 
 #endif

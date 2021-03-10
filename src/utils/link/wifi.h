@@ -1,5 +1,5 @@
-#ifndef _LINK_WIFI
-#define _LINK_WIFI
+#ifndef _UTILS_LINK_WIFI
+#define _UTILS_LINK_WIFI
 
 #ifndef IOT_NODE_LINK_ETH
 
@@ -19,6 +19,7 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Utils {
 
 namespace Link {
   #ifdef ARDUINO_ARCH_ESP8266
@@ -100,6 +101,7 @@ namespace Link {
   };
 }
 
+} // section namespace
 } // project namespace
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef _HELLO_MAIN
-#define _HELLO_MAIN
+#ifndef _SERVICES_HELLO_MAIN
+#define _SERVICES_HELLO_MAIN
 
 #include <Arduino.h>
 
@@ -18,13 +18,15 @@
 #define STR(x) TOSTRING(x)
 
 namespace IotNode {
+namespace Services {
 
 namespace Hello {
-  void addLineToRespone(UDP::Payload response, String line);
+  void addLineToRespone(Utils::UDP::Payload response, String line);
 
-  void handler(UDP::Payload *request, UDP::RespondCallback respond);
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond);
 }
 
+} // section namespace
 } // project namespace
 
 #endif

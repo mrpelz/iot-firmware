@@ -1,16 +1,18 @@
 #include "./setup.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Hello {
-  UDP::Service service = {
+  Utils::UDP::Service service = {
     .serviceId = serviceIds::hello,
     .handler = handler,
   };
 
-  void setup(UDP::Class *udp) {
+  void setup(Utils::UDP::Class *udp) {
     udp->addService(&service);
   }
 }
 
+} // section namespace
 } // project namespace

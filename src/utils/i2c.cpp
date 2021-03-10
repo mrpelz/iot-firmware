@@ -1,6 +1,7 @@
 #include "./i2c.h"
 
 namespace IotNode {
+namespace Utils {
 
 namespace I2C {
   #ifdef ARDUINO_ARCH_ESP8266
@@ -43,4 +44,5 @@ namespace I2C {
   }
 }
 
+} // section namespace
 } // project namespace

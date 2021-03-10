@@ -1,27 +1,20 @@
-#ifndef _SERVICES_ASYNC_MAIN
-#define _SERVICES_ASNYC_MAIN
-
-#ifdef ARDUINO_ARCH_ESP32
+#ifndef _SERVICES_INDICATOR_MAIN
+#define _SERVICES_INDICATOR_MAIN
 
 #include <Arduino.h>
 
+#include "../../utils/indicator/setup.h"
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"
-
-#define ASYNC_RESPONSE_DELAY 30000
 
 namespace IotNode {
 namespace Services {
 
-namespace Async {
-  void responseTask(void *parameter);
-
+namespace Indicator {
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond);
 }
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

@@ -1,19 +1,20 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Hello {
   auto delimiter = String(",");
 
-  void addLineToRespone(UDP::Payload *response, String line) {
+  void addLineToRespone(Utils::UDP::Payload *response, String line) {
     response->insert(response->end(), line.begin(), line.end());
     response->insert(response->end(), delimiter.begin(), delimiter.end());
   }
 
-  void handler(UDP::Payload *request, UDP::RespondCallback respond) {
-    Log::debug("hello-service", "got request");
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
+    Utils::Log::debug("hello-service", "got request");
 
-    UDP::Payload response;
+    Utils::UDP::Payload response;
 
     addLineToRespone(&response, "HELLO");
     addLineToRespone(&response, STR(IOT_NODE_BUILD_GIT_REV));
@@ -42,10 +43,11 @@ namespace Hello {
 
     addLineToRespone(&response, "BYE");
 
-    Log::debug("hello-service", "sending response");
+    Utils::Log::debug("hello-service", "sending response");
 
     respond(response);
   }
 }
 
+} // section namespace
 } // project namespace

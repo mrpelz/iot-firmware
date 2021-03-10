@@ -3,9 +3,10 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Async {
-  UDP::RespondCallback respondCallback = NULL;
+  Utils::UDP::RespondCallback respondCallback = NULL;
 
   void responseTask(void *parameter) {
     if (respondCallback == NULL) {
@@ -15,7 +16,7 @@ namespace Async {
 
     vTaskDelay(ASYNC_RESPONSE_DELAY / portTICK_PERIOD_MS);
 
-    Log::debug("async-service", "sending delayed response");
+    Utils::Log::debug("async-service", "sending delayed response");
 
     respondCallback({ 0x0a, 0x0b, 0x0c });
     respondCallback == NULL;
@@ -23,8 +24,8 @@ namespace Async {
     vTaskDelete(NULL);
   }
 
-  void handler(UDP::Payload *request, UDP::RespondCallback respond) {
-    Log::debug("async-service", "got request");
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
+    Utils::Log::debug("async-service", "got request");
 
     respondCallback = respond;
     xTaskCreatePinnedToCore(
@@ -39,6 +40,7 @@ namespace Async {
   }
 }
 
+} // section namespace
 } // project namespace
 
 #endif

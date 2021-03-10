@@ -1,6 +1,7 @@
 #include "./setup.h"
 
 namespace IotNode {
+namespace Utils {
 
 namespace Link {
   #ifdef IOT_NODE_LINK_ETH
@@ -54,4 +55,5 @@ namespace Link {
   }
 }
 
+} // section namespace
 } // project namespace

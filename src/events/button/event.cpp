@@ -1,10 +1,11 @@
 #include "./event.h"
 
 namespace IotNode {
+namespace Events {
 
 namespace Button {
-  void buttonEvent(UDP::Class *udp, Update update) {
-    Log::debug("button-event", "triggered");
+  void buttonEvent(Utils::UDP::Class *udp, Update update) {
+    Utils::Log::debug("button-event", "triggered");
 
     std::vector<uint8_t> response = {
       update.index,
@@ -22,10 +23,11 @@ namespace Button {
       prevDuration + sizeof(update.prevDuration)
     );
 
-    Log::debug("button-event", "sending event");
+    Utils::Log::debug("button-event", "sending event");
 
     udp->event(eventIds::button, response);
   }
 }
 
+} // section namespace
 } // project namespace

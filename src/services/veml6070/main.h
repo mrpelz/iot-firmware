@@ -1,5 +1,5 @@
-#ifndef _VEML6070_MAIN
-#define _VEML6070_MAIN
+#ifndef _SERVICES_VEML6070_MAIN
+#define _SERVICES_VEML6070_MAIN
 
 #ifdef IOT_NODE_VEML6070
 
@@ -11,15 +11,17 @@
 #include "./sensor.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Veml6070 {
   void initializer(TwoWire *i2c);
 
   void responseTask(void *parameter);
 
-  void handler(UDP::Payload *request, UDP::RespondCallback respond);
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond);
 }
 
+} // section namespace
 } // project namespace
 
 #endif

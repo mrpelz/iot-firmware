@@ -1,5 +1,5 @@
-#ifndef _KEEPALIVE_SETUP
-#define _KEEPALIVE_SETUP
+#ifndef _SERVICES_KEEPALIVE_SETUP
+#define _SERVICES_KEEPALIVE_SETUP
 
 #include <Arduino.h>
 
@@ -7,6 +7,7 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Keepalive {
   void update();
@@ -15,9 +16,10 @@ namespace Keepalive {
     void task(void *parameter);
   #endif
 
-  void setup(UDP::Class *udp);
+  void setup(Utils::UDP::Class *udp);
 }
 
+} // section namespace
 } // project namespace
 
 #endif

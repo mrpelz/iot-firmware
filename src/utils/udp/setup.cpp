@@ -1,6 +1,7 @@
 #include "./setup.h"
 
 namespace IotNode {
+namespace Utils {
 
 namespace UDP {
   Class udp(8266);
@@ -12,4 +13,5 @@ namespace UDP {
   }
 }
 
+} // section namespace
 } // project namespace

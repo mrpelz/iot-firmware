@@ -1,5 +1,5 @@
-#ifndef _ASYNC_SETUP
-#define _ASYNC_SETUP
+#ifndef _SERVICES_ASYNC_SETUP
+#define _SERVICES_ASYNC_SETUP
 
 #ifdef ARDUINO_ARCH_ESP32
 
@@ -9,11 +9,13 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Async {
-  void setup(UDP::Class *udp);
+  void setup(Utils::UDP::Class *udp);
 }
 
+} // section namespace
 } // project namespace
 
 #endif

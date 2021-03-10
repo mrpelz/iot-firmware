@@ -1,6 +1,7 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Utils {
 
 namespace UDP {
   Class::Class(uint16_t port) {
@@ -39,7 +40,7 @@ namespace UDP {
     if (!state.eventPeer.port) return;
 
     Payload outgoing = {
-      serviceIds::_reserved_event,
+      Services::serviceIds::_reserved_event,
       eventId
     };
 
@@ -95,7 +96,7 @@ namespace UDP {
     state.debugCallback("udp.request.service-id", String(serviceId, HEX));
     state.debugCallback("udp.request.message-length", String(message.size()));
 
-    if (serviceId == serviceIds::_reserved_event) {
+    if (serviceId == Services::serviceIds::_reserved_event) {
       Payload peerAckOutgoing = {
         messageId
       };
@@ -198,4 +199,5 @@ namespace UDP {
   }
 }
 
+} // section namespace
 } // project namespace

@@ -1,5 +1,5 @@
-#ifndef _VEML6070_SENSOR
-#define _VEML6070_SENSOR
+#ifndef _SERVICES_VEML6070_SENSOR
+#define _SERVICES_VEML6070_SENSOR
 
 #ifdef IOT_NODE_VEML6070
 
@@ -13,6 +13,7 @@
 #undef private
 
 namespace IotNode {
+namespace Services {
 
 namespace Veml6070 {
   class Sensor : public Adafruit_VEML6070 {
@@ -21,6 +22,7 @@ namespace Veml6070 {
   };
 }
 
+} // section namespace
 } // project namespace
 
 #endif

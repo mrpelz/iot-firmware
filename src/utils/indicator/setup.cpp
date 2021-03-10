@@ -1,6 +1,7 @@
 #include "./setup.h"
 
 namespace IotNode {
+namespace Utils {
 
 namespace Indicator {
   Class rxdLed({
@@ -49,4 +50,5 @@ namespace Indicator {
   }
 }
 
+} // section namespace
 } // project namespace

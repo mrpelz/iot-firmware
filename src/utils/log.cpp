@@ -1,6 +1,7 @@
 #include "./log.h"
 
 namespace IotNode {
+namespace Utils {
 
 namespace Log {
   void setup() {
@@ -56,4 +57,5 @@ namespace Log {
   }
 }
 
+} // section namespace
 } // project namespace

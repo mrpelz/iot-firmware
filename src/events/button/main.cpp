@@ -1,6 +1,7 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Events {
 
 namespace Button {
   Class::Class(Config config) {
@@ -31,7 +32,7 @@ namespace Button {
     state.changeCallback = callback;
   }
 
-  void Class::setDebug(Log::Callback callback) {
+  void Class::setDebug(Utils::Log::Callback callback) {
     state.debugCallback = callback;
   }
 
@@ -121,4 +122,5 @@ namespace Button {
   }
 }
 
+} // section namespace
 } // project namespace

@@ -1,5 +1,5 @@
-#ifndef _CCS811_SETUP
-#define _CCS811_SETUP
+#ifndef _SERVICES_CCS811_SETUP
+#define _SERVICES_CCS811_SETUP
 
 #ifdef IOT_NODE_CCS811
 
@@ -10,11 +10,13 @@
 #include "./main.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Ccs811 {
-  void setup(UDP::Class *udp, TwoWire *i2c);
+  void setup(Utils::UDP::Class *udp, TwoWire *i2c);
 }
 
+} // section namespace
 } // project namespace
 
 #endif

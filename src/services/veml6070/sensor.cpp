@@ -3,6 +3,7 @@
 #include "./sensor.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Veml6070 {
   bool Sensor::begin(TwoWire *i2c) {
@@ -17,6 +18,7 @@ namespace Veml6070 {
   }
 }
 
+} // section namespace
 } // project namespace
 
 #endif

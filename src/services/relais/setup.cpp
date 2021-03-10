@@ -1,28 +1,29 @@
 #include "./setup.h"
 
 namespace IotNode {
+namespace Services {
 
 namespace Relais {
   Class relais0({ 4, true });
   auto service0 = makeService(&relais0, 0);
 
-  void setup(UDP::Class *udp, Button::Class *buttons) {
+  void setup(Utils::UDP::Class *udp, Events::Button::Class *buttons) {
     udp->addService(&service0);
 
-    buttons->setChangeCallback([udp](Button::Update update) {
+    buttons->setChangeCallback([udp](Events::Button::Update update) {
       if (udp->isListening() && udp->hasEventPeer()) {
         buttonEvent(udp, update);
         return;
       }
 
-      Log::debug("info.buttons.change-callback", "udp event not usable");
+      Utils::Log::debug("info.buttons.change-callback", "udp event not usable");
 
       if (
         update.index == 0
         && update.downChanged
         && !update.down
       ) {
-        Log::debug("info.buttons.change-callback", "triggering override");
+        Utils::Log::debug("info.buttons.change-callback", "triggering override");
         relais0.toggle();
       }
     });
@@ -31,4 +32,5 @@ namespace Relais {
   }
 }
 
+} // section namespace
 } // project namespace

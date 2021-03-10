@@ -1,5 +1,5 @@
-#ifndef _LOGGING
-#define _LOGGING
+#ifndef _UTILS_LOGGING
+#define _UTILS_LOGGING
 
 #include <Arduino.h>
 
@@ -16,6 +16,7 @@
 #define LOG_DELAY 100
 
 namespace IotNode {
+namespace Utils {
 
 namespace Log {
   typedef std::function<void (String key, String value)> Callback;
@@ -27,6 +28,7 @@ namespace Log {
   void info();
 }
 
+} // section namespace
 } // project namespace
 
 #endif

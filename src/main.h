@@ -5,10 +5,10 @@
 
 #include "./events/button/setup.h"
 #include "./services/async/setup.h"
-#include "./services/blink/setup.h"
 #include "./services/bme280/setup.h"
 #include "./services/ccs811/setup.h"
 #include "./services/hello/setup.h"
+#include "./services/indicator/setup.h"
 #include "./services/keepalive/setup.h"
 #include "./services/mcp9808/setup.h"
 #include "./services/relais/setup.h"
