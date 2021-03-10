@@ -13,6 +13,7 @@ void setup() {
     IotNode::Async::setup(udp);
   #endif
 
+  IotNode::Blink::setup(udp);
   IotNode::Hello::setup(udp);
   IotNode::Keepalive::setup(udp);
   IotNode::SystemInfo::setup(udp);

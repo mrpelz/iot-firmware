@@ -5,6 +5,7 @@
 
 #include "./events/button/setup.h"
 #include "./services/async/setup.h"
+#include "./services/blink/setup.h"
 #include "./services/bme280/setup.h"
 #include "./services/ccs811/setup.h"
 #include "./services/hello/setup.h"

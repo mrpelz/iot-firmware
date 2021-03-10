@@ -16,6 +16,8 @@ enum serviceIds {
   veml6070,
   relais = 0xd0, // relais0 (start id)
   led = 0xe0, // led0 (start id)
+  buzzer = 0xfd,
+  blink = 0xfe,
   keepalive = 0xff
 };
 

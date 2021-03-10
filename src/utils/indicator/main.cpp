@@ -6,7 +6,8 @@ namespace Indicator {
   Class::Class(Config config) {
     state.pin = config.pin;
     state.invert = config.invert;
-    state.blinkPeriod = config.blinkPeriod;
+    state.blinkPeriodOn = config.blinkPeriodOn;
+    state.blinkPeriodOff = config.blinkPeriodOff;
   }
 
   void Class::commit() {
@@ -19,7 +20,7 @@ namespace Indicator {
     return state.on;
   }
 
-  void Class::blink(void) {
+  void Class::blink() {
     Log::debug("indicator.blink", "infinite");
     Log::debug("indicator.pin", String(state.pin));
 
@@ -49,6 +50,11 @@ namespace Indicator {
     state.wasInitialized = true;
 
     commit();
+  }
+
+  void Class::setBlinkFrequency(unsigned long blinkPeriodOn, unsigned long blinkPeriodOff) {
+    state.blinkPeriodOn = blinkPeriodOn;
+    state.blinkPeriodOff = blinkPeriodOff;
   }
 
   void Class::setOn(bool on) {
@@ -82,8 +88,11 @@ namespace Indicator {
 
     unsigned long now = millis();
     unsigned long timeSinceLastBlink = now - state.blinkChange;
+    unsigned long relevantBlinkPeriod = state.on
+      ? state.blinkPeriodOn
+      : state.blinkPeriodOff;
 
-    if (timeSinceLastBlink < state.blinkPeriod) return;
+    if (timeSinceLastBlink < relevantBlinkPeriod) return;
 
     state.blinkChange = now;
     state.on = !state.on;

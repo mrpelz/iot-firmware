@@ -6,13 +6,15 @@ namespace Indicator {
   Class rxdLed({
     WT32_ETH01_RXD_LED,
     true,
-    INDICATOR_BLINK_PERIOD
+    INDICATOR_BLINK_PERIOD_ON,
+    INDICATOR_BLINK_PERIOD_OFF
   });
 
   Class txdLed({
     WT32_ETH01_TXD_LED,
     true,
-    INDICATOR_BLINK_PERIOD
+    INDICATOR_BLINK_PERIOD_ON,
+    INDICATOR_BLINK_PERIOD_OFF
   });
 
   void update() {

@@ -29,13 +29,13 @@ namespace Link {
 
     link.onGotIP([udp]() {
       udp->begin();
-      IotNode::Indicator::rxdLed.setOn(false);
-      IotNode::Indicator::txdLed.blink(3);
+      Indicator::rxdLed.setOn(false);
+      Indicator::txdLed.blink(3);
     });
 
     link.onDisconnected([udp]() {
       udp->close();
-      IotNode::Indicator::rxdLed.blink();
+      Indicator::rxdLed.blink();
     });
 
     link.connect();
