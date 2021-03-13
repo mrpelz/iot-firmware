@@ -4,9 +4,8 @@ namespace IotNode {
 namespace Utils {
 
 namespace Relais {
-  Class::Class(Config config) {
-    state.pin = config.pin;
-    state.invert = config.invert;
+  Class::Class(Config _config) {
+    config = _config;
   }
 
   void Class::commit() {
@@ -14,7 +13,7 @@ namespace Relais {
 
     Log::debug("relais", "commit");
 
-    digitalWrite(state.pin, (state.invert ? !state.on : state.on));
+    digitalWrite(config.pin, (config.invert ? !state.on : state.on));
   }
 
   bool Class::isOn() {
@@ -23,9 +22,9 @@ namespace Relais {
 
   void Class::init() {
     Log::debug("relais", "init");
-    Log::debug("relais.pin", String(state.pin));
+    Log::debug("relais.pin", String(config.pin));
 
-    pinMode(state.pin, OUTPUT);
+    pinMode(config.pin, OUTPUT);
     state.wasInitialized = true;
 
     commit();
@@ -33,7 +32,7 @@ namespace Relais {
 
   void Class::setOn(bool on) {
     Log::debug("relais.set-on", on ? "on" : "off");
-    Log::debug("relais.pin", String(state.pin));
+    Log::debug("relais.pin", String(config.pin));
 
     state.on = on;
     commit();
@@ -41,7 +40,7 @@ namespace Relais {
 
   void Class::toggle() {
     Log::debug("relais.toggle", state.on ? "on2off" : "off2on");
-    Log::debug("relais.pin", String(state.pin));
+    Log::debug("relais.pin", String(config.pin));
 
     state.on = !state.on;
     commit();

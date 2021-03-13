@@ -14,19 +14,18 @@ namespace Relais {
   };
 
   struct State {
-    uint8_t pin;
-    bool invert = false;
     bool on = false;
     bool wasInitialized = false;
   };
 
   class Class {
     private:
+      Config config;
       State state;
       void commit();
 
     public:
-      Class(Config config);
+      Class(Config _config);
       bool isOn();
       void init();
       void setOn(bool on);

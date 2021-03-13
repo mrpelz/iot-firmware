@@ -22,10 +22,6 @@ namespace Indicator {
   };
 
   struct State {
-    uint8_t pin;
-    bool invert = false;
-    unsigned long blinkPeriodOn = 0;
-    unsigned long blinkPeriodOff = 0;
     bool on = false;
     bool wasInitialized = false;
     unsigned long blinkChange = 0;
@@ -35,11 +31,12 @@ namespace Indicator {
 
   class Class {
     private:
+      Config config;
       State state;
       void commit();
 
     public:
-      Class(Config config);
+      Class(Config _config);
       bool isOn();
       void blink(uint8_t count);
       void blink(void);

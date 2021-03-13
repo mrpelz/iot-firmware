@@ -4,17 +4,14 @@ namespace IotNode {
 namespace Utils {
 
 namespace Indicator {
-  Class::Class(Config config) {
-    state.pin = config.pin;
-    state.invert = config.invert;
-    state.blinkPeriodOn = config.blinkPeriodOn;
-    state.blinkPeriodOff = config.blinkPeriodOff;
+  Class::Class(Config _config) {
+    config = _config;
   }
 
   void Class::commit() {
     if (!state.wasInitialized) return;
 
-    digitalWrite(state.pin, (state.invert ? !state.on : state.on));
+    digitalWrite(config.pin, (config.invert ? !state.on : state.on));
   }
 
   bool Class::isOn() {
@@ -23,7 +20,7 @@ namespace Indicator {
 
   void Class::blink() {
     Log::debug("indicator.blink", "infinite");
-    Log::debug("indicator.pin", String(state.pin));
+    Log::debug("indicator.pin", String(config.pin));
 
     state.on = false;
 
@@ -34,7 +31,7 @@ namespace Indicator {
 
   void Class::blink(uint8_t count) {
     Log::debug("indicator.blink", String(count));
-    Log::debug("indicator.pin", String(state.pin));
+    Log::debug("indicator.pin", String(config.pin));
 
     state.on = false;
 
@@ -45,22 +42,22 @@ namespace Indicator {
 
   void Class::init() {
     Log::debug("indicator", "init");
-    Log::debug("indicator.pin", String(state.pin));
+    Log::debug("indicator.pin", String(config.pin));
 
-    pinMode(state.pin, OUTPUT);
+    pinMode(config.pin, OUTPUT);
     state.wasInitialized = true;
 
     commit();
   }
 
   void Class::setBlinkFrequency(unsigned long blinkPeriodOn, unsigned long blinkPeriodOff) {
-    state.blinkPeriodOn = blinkPeriodOn;
-    state.blinkPeriodOff = blinkPeriodOff;
+    config.blinkPeriodOn = blinkPeriodOn;
+    config.blinkPeriodOff = blinkPeriodOff;
   }
 
   void Class::setOn(bool on) {
     Log::debug("indicator.set-on", on ? "on" : "off");
-    Log::debug("indicator.pin", String(state.pin));
+    Log::debug("indicator.pin", String(config.pin));
 
     state.on = on;
 
@@ -73,7 +70,7 @@ namespace Indicator {
 
   void Class::toggle() {
     Log::debug("indicator.toggle", state.on ? "on2off" : "off2on");
-    Log::debug("indicator.pin", String(state.pin));
+    Log::debug("indicator.pin", String(config.pin));
 
     state.on = !state.on;
 
@@ -90,8 +87,8 @@ namespace Indicator {
     unsigned long now = millis();
     unsigned long timeSinceLastBlink = now - state.blinkChange;
     unsigned long relevantBlinkPeriod = state.on
-      ? state.blinkPeriodOn
-      : state.blinkPeriodOff;
+      ? config.blinkPeriodOn
+      : config.blinkPeriodOff;
 
     if (timeSinceLastBlink < relevantBlinkPeriod) return;
 
