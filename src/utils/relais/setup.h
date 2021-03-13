@@ -3,9 +3,6 @@
 
 #include <Arduino.h>
 
-#include "../../events/button/event.h"
-#include "../../events/button/main.h"
-#include "../udp/main.h"
 #include "./main.h"
 
 namespace IotNode {
@@ -15,7 +12,7 @@ namespace Relais {
   extern Class relais0;
   extern Class relais1;
 
-  void setup(UDP::Class *udp, Events::Button::Class *buttons);
+  void setup();
 }
 
 } // section namespace

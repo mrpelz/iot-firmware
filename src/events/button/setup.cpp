@@ -4,39 +4,21 @@ namespace IotNode {
 namespace Events {
 
 namespace Button {
-  Class buttons(config);
+  void setup(Utils::UDP::Class *udp) {
+    auto event0 = makeEvent(udp, 0);
 
-  void update() {
-    buttons.update();
-  }
-
-  #ifdef ARDUINO_ARCH_ESP32
-    void task(void *parameter) {
-      for(;;) {
-        update();
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+    Utils::Button::button0.setChangeCallback([udp, event0](Utils::Button::Update update) {
+      if (udp->isListening() && udp->hasEventPeer()) {
+        event0(update);
+        return;
       }
-    }
-  #endif
 
-  Class *setup() {
-    buttons.setDebug(Utils::Log::debug);
-
-    buttons.start();
-
-    #ifdef ARDUINO_ARCH_ESP32
-      xTaskCreatePinnedToCore(
-        task,
-        "button_maintenance",
-        2048,
-        NULL,
-        3,
-        NULL,
-        CONFIG_ARDUINO_RUNNING_CORE
-      );
-    #endif
-
-    return &buttons;
+      Utils::Log::debug("info.buttons.change-callback", "udp event not usable");
+      if (update.downChanged && !update.down) {
+        Utils::Log::debug("info.buttons.change-callback", "triggering override");
+        Utils::Relais::relais0.toggle();
+      }
+    });
   }
 }
 

@@ -4,121 +4,33 @@ namespace IotNode {
 namespace Events {
 
 namespace Button {
-  Class::Class(Config config) {
-    state.debounceTime = config.debounceTime;
-    state.repeatTime = config.repeatTime;
-    state.longpressTime = config.longpressTime;
+  Utils::Button::ChangeCallback makeEvent(Utils::UDP::Class *udp, uint8_t index) {
+    uint8_t serviceId = ids::button + index;
 
-    std::for_each(
-      std::begin(config.buttons),
-      std::end(config.buttons),
-      [&](SingleAttributes attributes) {
-        state.buttons.push_back({ attributes, false, 0, 0, 0, 0 });
-      }
-    );
-  }
+    auto handler = [udp, serviceId](Utils::Button::Update update) {
+      Utils::Log::debug("button-event", "triggered");
 
-  void Class::eachButton(EachCallback callback) {
-    for (
-      std::vector<SingleState>::iterator iterator = std::begin(state.buttons);
-      iterator != std::end(state.buttons);
-      ++iterator
-    ) {
-      callback(iterator.base());
-    }
-  }
+      std::vector<uint8_t> response = {
+        (uint8_t)(update.down ? 0x01 : 0x00),
+        (uint8_t)(update.downChanged ? 0x01 : 0x00),
+        update.repeat,
+        update.longpress,
+      };
 
-  void Class::setChangeCallback(ChangeCallback callback) {
-    state.changeCallback = callback;
-  }
+      auto prevDuration = reinterpret_cast<uint8_t*>(&(update.prevDuration));
 
-  void Class::setDebug(Utils::Log::Callback callback) {
-    state.debugCallback = callback;
-  }
-
-  void Class::start() {
-    state.running = true;
-
-    eachButton([](SingleState *button) {
-      pinMode(
-        button->attributes.pin,
-        button->attributes.pullupEnable ? INPUT_PULLUP : INPUT
+      response.insert(
+        response.end(),
+        prevDuration,
+        prevDuration + sizeof(update.prevDuration)
       );
-    });
-  }
 
-  void Class::stop() {
-    state.running = false;
+      Utils::Log::debug("button-event", "sending event");
 
-    eachButton([](SingleState *button) {
-      pinMode(
-        button->attributes.pin,
-        INPUT
-      );
-    });
-  }
+      udp->event(serviceId, response);
+    };
 
-  void Class::update() {
-    if (!state.running) return;
-
-    auto now = millis();
-
-    eachButton([&](SingleState *button) {
-      bool rawDown = digitalRead(button->attributes.pin);
-
-      bool down = button->attributes.invert ? !rawDown : rawDown;
-      bool downChanged = down != button->down;
-
-      auto timeSinceLastChange = now - button->changeTime;
-      if (timeSinceLastChange < state.debounceTime) return;
-
-      bool longpressChanged = false;
-
-      if (!down || (down && downChanged)) {
-        button->longpress = 0;
-        button->longpressTime = now;
-      } else {
-        auto timeSinceLastLongpress = now - button->longpressTime;
-
-        if (timeSinceLastLongpress > state.longpressTime) {
-          longpressChanged = true;
-          button->longpress = button->longpress + 1;
-          button->longpressTime = now;
-        }
-      }
-
-      if (downChanged) {
-        button->changeTime = now;
-        button->down = down;
-
-        if (down) {
-          if (timeSinceLastChange < state.repeatTime) {
-            button->repeat = button->repeat + 1;
-          } else {
-            button->repeat = 0;
-          }
-        }
-      }
-
-      if (!(downChanged || longpressChanged)) return;
-
-      state.debugCallback("event", "button");
-      state.debugCallback("button.index", String(button->attributes.index));
-      state.debugCallback("button.down", String(button->down));
-      state.debugCallback("button.down.changed", String(downChanged));
-      state.debugCallback("button.down.change-period", String(timeSinceLastChange));
-      state.debugCallback("button.repeat", String(button->repeat));
-      state.debugCallback("button.longpress", String(button->longpress));
-
-      state.changeCallback({
-        button->attributes.index,
-        button->down,
-        downChanged,
-        timeSinceLastChange,
-        button->repeat,
-        button->longpress
-      });
-    });
+    return handler;
   }
 }
 

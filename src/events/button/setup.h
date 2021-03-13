@@ -1,38 +1,19 @@
-#ifndef _EVENTS_BUTTONS_SETUP
-#define _EVENTS_BUTTONS_SETUP
+#ifndef _EVENTS_BUTTON_SETUP
+#define _EVENTS_BUTTON_SETUP
 
 #include <Arduino.h>
 
-#include "./event.h"
+#include "../../utils/button/setup.h"
+#include "../../utils/log.h"
+#include "../../utils/relais/setup.h"
+#include "../../utils/udp/main.h"
 #include "./main.h"
 
 namespace IotNode {
 namespace Events {
 
 namespace Button {
-  static const SingleAttributes button0 = {
-    .index = 0,
-    .pin = 2,
-    .invert = true,
-    .pullupEnable = true,
-  };
-
-  static const Config config = {
-    .debounceTime = 50,
-    .repeatTime = 3000,
-    .longpressTime = 125, // (step duration)
-    .buttons = {
-      button0
-    },
-  };
-
-  void update();
-
-  #ifdef ARDUINO_ARCH_ESP32
-    void task(void *parameter);
-  #endif
-
-  Class *setup();
+  void setup(Utils::UDP::Class *udp);
 }
 
 } // section namespace

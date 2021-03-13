@@ -6,6 +6,10 @@ void setup() {
   IotNode::Utils::Indicator::setup();
   IotNode::Utils::Indicator::rxdLed.setOn(true);
 
+  IotNode::Utils::Relais::setup();
+
+  IotNode::Utils::Button::setup();
+
   auto udp = IotNode::Utils::UDP::setup();
   IotNode::Utils::Link::setup(udp);
 
@@ -13,10 +17,14 @@ void setup() {
     IotNode::Services::Async::setup(udp);
   #endif
 
-  IotNode::Services::Indicator::setup(udp);
   IotNode::Services::Hello::setup(udp);
   IotNode::Services::Keepalive::setup(udp);
   IotNode::Services::SystemInfo::setup(udp);
+
+  IotNode::Services::Indicator::setup(udp);
+  IotNode::Services::Relais::setup(udp);
+
+  IotNode::Events::Button::setup(udp);
 
   #if defined(IOT_NODE_BME280) || defined(IOT_NODE_CCS811) || defined(IOT_NODE_MCP9808) || defined(IOT_NODE_SGP30) || defined(IOT_NODE_TSL2561) || defined(IOT_NODE_VEML6070) || defined(IOT_NODE_I2C_SCAN)
     auto i2c = IotNode::Utils::I2C::setup();
@@ -52,20 +60,16 @@ void setup() {
     #endif
   #endif
 
-  auto buttons = IotNode::Events::Button::setup();
-  IotNode::Utils::Relais::setup(udp, buttons);
-  IotNode::Services::Relais::setup(udp);
-
   IotNode::Utils::Indicator::rxdLed.blink();
 }
 
 void loop() {
   #ifdef ARDUINO_ARCH_ESP8266
     delay(WATCHDOG_DELAY);
-    IotNode::Indicator::update();
-    IotNode::Events::Button::update();
+    IotNode::Utils::Indicator::update();
+    IotNode::Utils::Button::update();
     IotNode::Services::Keepalive::update();
-    IotNode::Link::update();
+    IotNode::Utils::Link::update();
   #endif
   #ifdef ARDUINO_ARCH_ESP32
     vTaskDelay(WATCHDOG_DELAY / portTICK_PERIOD_MS);
