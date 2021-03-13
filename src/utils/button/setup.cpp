@@ -20,6 +20,7 @@ namespace Button {
   #endif
 
   void setup() {
+    button0.setDebug(Log::debug);
     button0.start();
 
     #ifdef ARDUINO_ARCH_ESP32

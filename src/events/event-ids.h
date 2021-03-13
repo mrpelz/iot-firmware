@@ -5,7 +5,8 @@ namespace IotNode {
 namespace Events {
 
 enum ids {
-  button
+  button = 0, // button0 (start id)
+  motionSensor = 0xa0 // motionSensor0 (start id)
 };
 
 } // section namespace

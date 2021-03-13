@@ -11,7 +11,7 @@ namespace Utils {
 namespace Button {
   static const Config button0Config = {
     .pin = 2,
-    .invert = true,
+    .invert = false,
     .pullupEnable = true,
     .debounceTime = 50,
     .repeatTime = 3000,

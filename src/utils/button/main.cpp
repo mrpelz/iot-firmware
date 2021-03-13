@@ -41,7 +41,7 @@ namespace Button {
 
     bool rawDown = digitalRead(config.pin);
 
-    bool down = config.invert ? !rawDown : rawDown;
+    bool down = config.invert ? rawDown : !rawDown;
     bool downChanged = down != state.down;
 
     auto timeSinceLastChange = now - state.changeTime;

@@ -25,6 +25,7 @@ void setup() {
   IotNode::Services::Relais::setup(udp);
 
   IotNode::Events::Button::setup(udp);
+  IotNode::Events::MotionSensor::setup(udp);
 
   #if defined(IOT_NODE_BME280) || defined(IOT_NODE_CCS811) || defined(IOT_NODE_MCP9808) || defined(IOT_NODE_SGP30) || defined(IOT_NODE_TSL2561) || defined(IOT_NODE_VEML6070) || defined(IOT_NODE_I2C_SCAN)
     auto i2c = IotNode::Utils::I2C::setup();
