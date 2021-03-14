@@ -9,8 +9,8 @@ namespace IotNode {
 namespace Utils {
 
 namespace Relais {
-  extern Class relais0;
-  extern Class relais1;
+  // extern Class relais0;
+  // extern Class relais1;
 
   void setup();
 }
