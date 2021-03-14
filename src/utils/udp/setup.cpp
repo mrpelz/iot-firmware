@@ -4,12 +4,10 @@ namespace IotNode {
 namespace Utils {
 
 namespace UDP {
-  Class udp(8266);
+  Class instance(8266);
 
-  Class *setup() {
-    udp.setDebug(Log::debug);
-
-    return &udp;
+  void setup() {
+    instance.setDebug(Log::debug);
   }
 }
 

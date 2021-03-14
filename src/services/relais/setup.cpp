@@ -7,9 +7,9 @@ namespace Relais {
   auto service0 = makeService(&Utils::Relais::relais0, 0);
   auto service1 = makeService(&Utils::Relais::relais1, 1);
 
-  void setup(Utils::UDP::Class *udp) {
-    udp->addService(&service0);
-    udp->addService(&service1);
+  void setup() {
+    Utils::UDP::instance.addService(&service0);
+    Utils::UDP::instance.addService(&service1);
   }
 }
 

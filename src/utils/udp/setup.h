@@ -9,7 +9,9 @@ namespace IotNode {
 namespace Utils {
 
 namespace UDP {
-  Class *setup();
+  extern Class instance;
+
+  void setup();
 }
 
 } // section namespace

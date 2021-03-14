@@ -21,12 +21,12 @@ namespace MotionSensor {
     }
   #endif
 
-  void setup(Utils::UDP::Class *udp) {
+  void setup() {
     motionSensor0.setDebug(Utils::Log::debug);
     motionSensor1.setDebug(Utils::Log::debug);
 
-    auto event0 = makeEvent(udp, 0);
-    auto event1 = makeEvent(udp, 1);
+    auto event0 = makeEvent(&Utils::UDP::instance, 0);
+    auto event1 = makeEvent(&Utils::UDP::instance, 1);
     motionSensor0.setChangeCallback(event0);
     motionSensor1.setChangeCallback(event1);
 

@@ -11,10 +11,10 @@ namespace Mcp9808 {
     .handler = handler,
   };
 
-  void setup(Utils::UDP::Class *udp, TwoWire *i2c) {
-    initializer(i2c);
+  void setup() {
+    initializer(&Utils::I2C::bus);
 
-    udp->addService(&service);
+    Utils::UDP::instance.addService(&service);
   }
 }
 

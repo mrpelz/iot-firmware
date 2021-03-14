@@ -10,25 +10,25 @@ void setup() {
 
   IotNode::Utils::Button::setup();
 
-  auto udp = IotNode::Utils::UDP::setup();
-  IotNode::Utils::Link::setup(udp);
+  IotNode::Utils::UDP::setup();
+  IotNode::Utils::Link::setup();
 
   #ifdef ARDUINO_ARCH_ESP32
-    IotNode::Services::Async::setup(udp);
+    IotNode::Services::Async::setup();
   #endif
 
-  IotNode::Services::Hello::setup(udp);
-  IotNode::Services::Keepalive::setup(udp);
-  IotNode::Services::SystemInfo::setup(udp);
+  IotNode::Services::Hello::setup();
+  IotNode::Services::Keepalive::setup();
+  IotNode::Services::SystemInfo::setup();
 
-  IotNode::Services::Indicator::setup(udp);
-  IotNode::Services::Relais::setup(udp);
+  IotNode::Services::Indicator::setup();
+  IotNode::Services::Relais::setup();
 
-  IotNode::Events::Button::setup(udp);
-  IotNode::Events::MotionSensor::setup(udp);
+  IotNode::Events::Button::setup();
+  IotNode::Events::MotionSensor::setup();
 
   #if defined(IOT_NODE_BME280) || defined(IOT_NODE_CCS811) || defined(IOT_NODE_MCP9808) || defined(IOT_NODE_SGP30) || defined(IOT_NODE_TSL2561) || defined(IOT_NODE_VEML6070) || defined(IOT_NODE_I2C_SCAN)
-    auto i2c = IotNode::Utils::I2C::setup();
+    IotNode::Utils::I2C::setup();
 
     #ifdef IOT_NODE_I2C_SCAN
       IotNode::Utils::I2C::scan();
@@ -37,27 +37,27 @@ void setup() {
 
   #ifdef ARDUINO_ARCH_ESP32
     #ifdef IOT_NODE_BME280
-      IotNode::Services::Bme280::setup(udp, i2c);
+      IotNode::Services::Bme280::setup();
     #endif
 
     #ifdef IOT_NODE_CCS811
-      IotNode::Services::Ccs811::setup(udp, i2c);
+      IotNode::Services::Ccs811::setup();
     #endif
 
     #ifdef IOT_NODE_MCP9808
-      IotNode::Services::Mcp9808::setup(udp, i2c);
+      IotNode::Services::Mcp9808::setup();
     #endif
 
     #ifdef IOT_NODE_SGP30
-      IotNode::Services::Sgp30::setup(udp, i2c);
+      IotNode::Services::Sgp30::setup();
     #endif
 
     #ifdef IOT_NODE_TSL2561
-      IotNode::Services::Tsl2561::setup(udp, i2c);
+      IotNode::Services::Tsl2561::setup();
     #endif
 
     #ifdef IOT_NODE_VEML6070
-      IotNode::Services::Veml6070::setup(udp, i2c);
+      IotNode::Services::Veml6070::setup();
     #endif
   #endif
 

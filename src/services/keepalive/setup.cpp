@@ -24,8 +24,8 @@ namespace Keepalive {
     }
   #endif
 
-  void setup(Utils::UDP::Class *udp) {
-    udp->addService(&service);
+  void setup() {
+    Utils::UDP::instance.addService(&service);
 
     #ifdef ARDUINO_ARCH_ESP32
       xTaskCreatePinnedToCore(

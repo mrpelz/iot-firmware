@@ -4,16 +4,17 @@
 #ifdef IOT_NODE_SGP30
 
 #include <Arduino.h>
-#include <Wire.h>
 
+#include "../../utils/i2c.h"
 #include "../../utils/udp/main.h"
+#include "../../utils/udp/setup.h"
 #include "./main.h"
 
 namespace IotNode {
 namespace Services {
 
 namespace Sgp30 {
-  void setup(Utils::UDP::Class *udp, TwoWire *i2c);
+  void setup();
 }
 
 } // section namespace

@@ -25,17 +25,17 @@ namespace Link {
     }
   #endif
 
-  void setup(UDP::Class *udp) {
+  void setup() {
     link.setDebug(Log::debug);
 
-    link.onGotIP([udp]() {
-      udp->begin();
+    link.onGotIP([]() {
+      UDP::instance.begin();
       Indicator::rxdLed.setOn(false);
       Indicator::txdLed.blink(3);
     });
 
-    link.onDisconnected([udp]() {
-      udp->close();
+    link.onDisconnected([]() {
+      UDP::instance.close();
       Indicator::rxdLed.blink();
     });
 

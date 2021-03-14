@@ -6,7 +6,7 @@
 
 #include <Arduino.h>
 
-#include "../udp/main.h"
+#include "../udp/setup.h"
 #include "./main.h"
 #include "./utils/indicator/setup.h"
 #include "./utils/log.h"
@@ -109,7 +109,7 @@ namespace Link {
     void task(void *parameter);
   #endif
 
-  void setup(UDP::Class *udp);
+  void setup();
 }
 
 } // section namespace

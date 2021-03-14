@@ -6,14 +6,14 @@
 #include "../../utils/button/setup.h"
 #include "../../utils/log.h"
 #include "../../utils/relais/setup.h"
-#include "../../utils/udp/main.h"
+#include "../../utils/udp/setup.h"
 #include "./main.h"
 
 namespace IotNode {
 namespace Events {
 
 namespace Button {
-  void setup(Utils::UDP::Class *udp);
+  void setup();
 }
 
 } // section namespace

@@ -9,8 +9,8 @@ namespace SystemInfo {
     .handler = handler,
   };
 
-  void setup(Utils::UDP::Class *udp) {
-    udp->addService(&service);
+  void setup() {
+    Utils::UDP::instance.addService(&service);
   }
 }
 

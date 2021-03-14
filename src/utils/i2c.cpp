@@ -5,10 +5,10 @@ namespace Utils {
 
 namespace I2C {
   #ifdef ARDUINO_ARCH_ESP8266
-    auto bus = TwoWire();
+    TwoWire bus = TwoWire();
   #endif
   #ifdef ARDUINO_ARCH_ESP32
-    auto bus = TwoWire(0);
+    TwoWire bus = TwoWire(0);
   #endif
 
   #ifdef IOT_NODE_I2C_SCAN
@@ -37,10 +37,8 @@ namespace I2C {
     }
   #endif
 
-  TwoWire *setup() {
+  void setup() {
     bus.begin(14, 15);
-
-    return &bus;
   }
 }
 

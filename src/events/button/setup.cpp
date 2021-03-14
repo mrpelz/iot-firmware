@@ -4,11 +4,11 @@ namespace IotNode {
 namespace Events {
 
 namespace Button {
-  void setup(Utils::UDP::Class *udp) {
-    auto event0 = makeEvent(udp, 0);
+  void setup() {
+    auto event0 = makeEvent(&Utils::UDP::instance, 0);
 
-    Utils::Button::button0.setChangeCallback([udp, event0](Utils::Button::Update update) {
-      if (udp->isListening() && udp->hasEventPeer()) {
+    Utils::Button::button0.setChangeCallback([event0](Utils::Button::Update update) {
+      if (Utils::UDP::instance.isListening() && Utils::UDP::instance.hasEventPeer()) {
         event0(update);
         return;
       }

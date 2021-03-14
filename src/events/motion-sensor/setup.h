@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 #include "../../utils/log.h"
-#include "../../utils/udp/main.h"
+#include "../../utils/udp/setup.h"
 #include "./main.h"
 
 namespace IotNode {
@@ -18,8 +18,6 @@ namespace MotionSensor {
   #endif
 
   void setup();
-
-  void setup(Utils::UDP::Class *udp);
 }
 
 } // section namespace

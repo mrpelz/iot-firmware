@@ -10,11 +10,13 @@ namespace IotNode {
 namespace Utils {
 
 namespace I2C {
+  extern TwoWire bus;
+
   #ifdef IOT_NODE_I2C_SCAN
     void scan();
   #endif
 
-  TwoWire *setup();
+  void setup();
 }
 
 } // section namespace

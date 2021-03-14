@@ -4,6 +4,7 @@
 #include <Arduino.h>
 
 #include "../../utils/udp/main.h"
+#include "../../utils/udp/setup.h"
 #include "./main.h"
 
 namespace IotNode {
@@ -16,7 +17,7 @@ namespace Keepalive {
     void task(void *parameter);
   #endif
 
-  void setup(Utils::UDP::Class *udp);
+  void setup();
 }
 
 } // section namespace
