@@ -9,16 +9,16 @@ namespace IotNode {
 namespace Utils {
 
 namespace Button {
-  static const Config button0Config = {
-    .pin = 2,
-    .invert = false,
-    .pullupEnable = true,
-    .debounceTime = 50,
-    .repeatTime = 3000,
-    .longpressTime = 125, // (step duration)
-  };
+  // static const Config button0Config = {
+  //   .pin = 2,
+  //   .invert = false,
+  //   .pullupEnable = true,
+  //   .debounceTime = 50,
+  //   .repeatTime = 3000,
+  //   .longpressTime = 125, // (step duration)
+  // };
 
-  extern Class button0;
+  // extern Class button0;
 
   void update();
 

@@ -4,12 +4,12 @@ namespace IotNode {
 namespace Events {
 
 namespace MotionSensor {
-  Class motionSensor0(36);
-  Class motionSensor1(39);
+  // Class motionSensor0(36);
+  // Class motionSensor1(39);
 
   void update() {
-    motionSensor0.update();
-    motionSensor1.update();
+    // motionSensor0.update();
+    // motionSensor1.update();
   }
 
   #ifdef ARDUINO_ARCH_ESP32
@@ -22,16 +22,16 @@ namespace MotionSensor {
   #endif
 
   void setup() {
-    motionSensor0.setDebug(Utils::Log::debug);
-    motionSensor1.setDebug(Utils::Log::debug);
+    // motionSensor0.setDebug(Utils::Log::debug);
+    // motionSensor1.setDebug(Utils::Log::debug);
 
-    auto event0 = makeEvent(&Utils::UDP::instance, 0);
-    auto event1 = makeEvent(&Utils::UDP::instance, 1);
-    motionSensor0.setChangeCallback(event0);
-    motionSensor1.setChangeCallback(event1);
+    // auto event0 = makeEvent(&Utils::UDP::instance, 0);
+    // auto event1 = makeEvent(&Utils::UDP::instance, 1);
+    // motionSensor0.setChangeCallback(event0);
+    // motionSensor1.setChangeCallback(event1);
 
-    motionSensor0.start();
-    motionSensor1.start();
+    // motionSensor0.start();
+    // motionSensor1.start();
 
     #ifdef ARDUINO_ARCH_ESP32
       xTaskCreatePinnedToCore(

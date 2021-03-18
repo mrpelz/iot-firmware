@@ -38,7 +38,7 @@ namespace I2C {
   #endif
 
   void setup() {
-    bus.begin(14, 15);
+    bus.begin(32, 33);
   }
 }
 

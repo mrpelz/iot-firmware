@@ -1,0 +1,29 @@
+#ifndef _SERVICES_SDS011_MAIN
+#define _SERVICES_SDS011_MAIN
+
+#ifdef IOT_NODE_SDS011
+
+#include <Arduino.h>
+
+#include "SdsDustSensor.h"
+
+#include "../../utils/log.h"
+#include "../../utils/udp/main.h"
+
+namespace IotNode {
+namespace Services {
+
+namespace Sds011 {
+  void initializer();
+
+  void responseTask(void *parameter);
+
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond);
+}
+
+} // section namespace
+} // project namespace
+
+#endif
+
+#endif

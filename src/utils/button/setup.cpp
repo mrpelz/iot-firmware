@@ -4,10 +4,10 @@ namespace IotNode {
 namespace Utils {
 
 namespace Button {
-  Class button0(button0Config);
+  // Class button0(button0Config);
 
   void update() {
-    button0.update();
+    // button0.update();
   }
 
   #ifdef ARDUINO_ARCH_ESP32
@@ -20,8 +20,8 @@ namespace Button {
   #endif
 
   void setup() {
-    button0.setDebug(Log::debug);
-    button0.start();
+    // button0.setDebug(Log::debug);
+    // button0.start();
 
     #ifdef ARDUINO_ARCH_ESP32
       xTaskCreatePinnedToCore(

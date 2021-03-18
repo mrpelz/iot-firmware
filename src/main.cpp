@@ -48,6 +48,10 @@ void setup() {
       IotNode::Services::Mcp9808::setup();
     #endif
 
+    #ifdef IOT_NODE_SDS011
+      IotNode::Services::Sds011::setup();
+    #endif
+
     #ifdef IOT_NODE_SGP30
       IotNode::Services::Sgp30::setup();
     #endif
