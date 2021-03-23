@@ -12,6 +12,7 @@
 #include "./services/indicator/setup.h"
 #include "./services/keepalive/setup.h"
 #include "./services/mcp9808/setup.h"
+#include "./services/mhz19/setup.h"
 #include "./services/relais/setup.h"
 #include "./services/sds011/setup.h"
 #include "./services/sgp30/setup.h"
