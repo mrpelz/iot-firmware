@@ -98,6 +98,8 @@ namespace Ccs811 {
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
     Utils::Log::debug("ccs811-service", "got request");
 
+    if (respondCallback != NULL) return;
+
     if (!working) {
       Utils::Log::debug("ccs811-service", "sensor not working, sending null response");
 

@@ -56,6 +56,8 @@ namespace Tsl2561 {
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
     Utils::Log::debug("tsl2561-service", "got request");
 
+    if (respondCallback != NULL) return;
+
     if (!working) {
       Utils::Log::debug("tsl2561-service", "sensor not working, sending null response");
 

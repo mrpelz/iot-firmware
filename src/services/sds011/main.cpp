@@ -76,6 +76,8 @@ namespace Sds011 {
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
     Utils::Log::debug("sds011-service", "got request");
 
+    if (respondCallback != NULL) return;
+
     respondCallback = respond;
     xTaskCreatePinnedToCore(
       responseTask,

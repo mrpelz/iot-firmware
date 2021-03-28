@@ -88,6 +88,8 @@ namespace Mhz19 {
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
     Utils::Log::debug("mhz19-service", "got request");
 
+    if (respondCallback != NULL) return;
+
     respondCallback = respond;
     xTaskCreatePinnedToCore(
       responseTask,

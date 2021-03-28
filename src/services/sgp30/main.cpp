@@ -126,6 +126,8 @@ namespace Sgp30 {
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
     Utils::Log::debug("sgp30-service", "got request");
 
+    if (respondCallback != NULL) return;
+
     if (!working) {
       Utils::Log::debug("sgp30-service", "sensor not working, sending null response");
 

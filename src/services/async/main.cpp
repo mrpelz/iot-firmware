@@ -27,6 +27,8 @@ namespace Async {
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
     Utils::Log::debug("async-service", "got request");
 
+    if (respondCallback != NULL) return;
+
     respondCallback = respond;
     xTaskCreatePinnedToCore(
       responseTask,

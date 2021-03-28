@@ -89,6 +89,8 @@ namespace Bme280 {
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
     Utils::Log::debug("bme280-service", "got request");
 
+    if (respondCallback != NULL) return;
+
     if (!working) {
       Utils::Log::debug("bme280-service", "sensor not working, sending null response");
 
