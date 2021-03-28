@@ -8,6 +8,7 @@
 
 #include <Adafruit_SGP30.h>
 
+#include "../../utils/i2c.h"
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"
 

@@ -68,7 +68,7 @@ namespace Sds011 {
     Utils::Log::debug("sds011-service", "sending response");
 
     respondCallback(response);
-    respondCallback == NULL;
+    respondCallback = NULL;
 
     vTaskDelete(NULL);
   }

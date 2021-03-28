@@ -80,7 +80,7 @@ namespace Mhz19 {
     Utils::Log::debug("mhz19-service", "sending response");
 
     respondCallback(response);
-    respondCallback == NULL;
+    respondCallback = NULL;
 
     vTaskDelete(NULL);
   }

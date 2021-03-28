@@ -6,6 +6,8 @@
 
 #include "./utils/log.h"
 
+#define I2C_LOCK_DELAY 10
+
 namespace IotNode {
 namespace Utils {
 
@@ -17,6 +19,10 @@ namespace I2C {
   #endif
 
   void setup();
+
+  void claim();
+
+  void unclaim();
 }
 
 } // section namespace

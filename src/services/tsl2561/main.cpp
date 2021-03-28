@@ -34,8 +34,12 @@ namespace Tsl2561 {
     uint16_t broadband;
     uint16_t infrared;
 
+    Utils::I2C::claim();
+
     sensor.getLuminosity(&broadband, &infrared);
     auto reading = sensor.calculateLux(broadband, infrared);
+
+    Utils::I2C::unclaim();
 
     Utils::Log::debug("tsl2561-service.reading", String(reading));
 
@@ -48,7 +52,7 @@ namespace Tsl2561 {
     Utils::Log::debug("tsl2561-service", "sending response");
 
     respondCallback(response);
-    respondCallback == NULL;
+    respondCallback = NULL;
 
     vTaskDelete(NULL);
   }

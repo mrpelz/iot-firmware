@@ -29,12 +29,16 @@ namespace Veml6070 {
       return;
     }
 
+    Utils::I2C::claim();
+
     sensor.sleep(false);
     sensor.waitForNext();
 
     auto reading = sensor.readUV();
 
     sensor.sleep(true);
+
+    Utils::I2C::unclaim();
 
     Utils::Log::debug("veml6070-service.reading", String(reading));
 
@@ -51,7 +55,7 @@ namespace Veml6070 {
     Utils::Log::debug("veml6070-service", "sending response");
 
     respondCallback(response);
-    respondCallback == NULL;
+    respondCallback = NULL;
 
 
     vTaskDelete(NULL);

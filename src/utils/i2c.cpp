@@ -11,6 +11,8 @@ namespace I2C {
     TwoWire bus = TwoWire(0);
   #endif
 
+  volatile bool lock = false;
+
   #ifdef IOT_NODE_I2C_SCAN
     void scan() {
       uint8_t deviceCount = 0;
@@ -39,6 +41,24 @@ namespace I2C {
 
   void setup() {
     bus.begin(32, 33);
+  }
+
+  void claim() {
+    if (!lock) {
+      lock = true;
+
+      return;
+    }
+
+    while (lock) {
+      vTaskDelay(I2C_LOCK_DELAY / portTICK_PERIOD_MS);
+    }
+
+    lock = true;
+  }
+
+  void unclaim() {
+    lock = false;
   }
 }
 

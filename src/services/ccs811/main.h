@@ -6,6 +6,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
+#include "../../utils/i2c.h"
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"
 #include "./sensor.h"

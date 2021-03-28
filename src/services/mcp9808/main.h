@@ -8,6 +8,7 @@
 
 #include "Adafruit_MCP9808.h"
 
+#include "../../utils/i2c.h"
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"
 

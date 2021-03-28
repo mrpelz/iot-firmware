@@ -30,11 +30,15 @@ namespace Mcp9808 {
       return;
     }
 
+    Utils::I2C::claim();
+
     sensor.wake();
 
     auto reading = sensor.readTempC();
 
     sensor.shutdown();
+
+    Utils::I2C::unclaim();
 
     Utils::Log::debug("mcp9808-service.reading", String(reading));
 
@@ -51,7 +55,7 @@ namespace Mcp9808 {
     Utils::Log::debug("mcp9808-service", "sending response");
 
     respondCallback(response);
-    respondCallback == NULL;
+    respondCallback = NULL;
 
     vTaskDelete(NULL);
   }

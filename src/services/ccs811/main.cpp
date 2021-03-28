@@ -43,10 +43,14 @@ namespace Ccs811 {
     Utils::Log::debug("ccs811-service.calibration-temperature", String(calibrationTemperature));
     Utils::Log::debug("ccs811-service.calibration-humidity", String(calibrationHumidity));
 
+    Utils::I2C::claim();
+
     sensor.setEnvironmentalData(calibrationHumidity, calibrationTemperature);
 
     if (sensor.available() && !sensor.readData()) {
       Utils::Log::debug("ccs811-service", "measurement not successful, sending null response");
+
+      Utils::I2C::unclaim();
 
       respondCallback({});
       respondCallback = NULL;
@@ -58,6 +62,8 @@ namespace Ccs811 {
     auto temperatureReading = sensor.calculateTemperature();
     auto tvocReading = sensor.getTVOC();
     auto eco2Reading = sensor.geteCO2();
+
+    Utils::I2C::unclaim();
 
     Utils::Log::debug("ccs811-service.temperature", String(temperatureReading));
     Utils::Log::debug("ccs811-service.tvoc", String(tvocReading));

@@ -35,9 +35,13 @@ namespace Bme280 {
       return;
     }
 
+    Utils::I2C::claim();
+
     auto measurementSuccess = sensor.takeForcedMeasurement();
     if (!measurementSuccess) {
       Utils::Log::debug("bme280-service", "measurement not successful, sending null response");
+
+      Utils::I2C::unclaim();
 
       respondCallback({});
       respondCallback = NULL;
@@ -49,6 +53,8 @@ namespace Bme280 {
     auto temperatureReading = sensor.readTemperature();
     auto humidityReading = sensor.readHumidity();
     auto pressureReading = sensor.readPressure();
+
+    Utils::I2C::unclaim();
 
     Utils::Log::debug("bme280-service.temperature", String(temperatureReading));
     Utils::Log::debug("bme280-service.humidity", String(humidityReading));

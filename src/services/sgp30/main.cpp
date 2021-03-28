@@ -50,9 +50,13 @@ namespace Sgp30 {
     Utils::Log::debug("sgp30-service.calibration-temperature", String(calibrationTemperature));
     Utils::Log::debug("sgp30-service.calibration-humidity", String(calibrationHumidity));
 
+    Utils::I2C::claim();
+
     auto calibrationSuccess = sensor.setHumidity(getAbsoluteHumidity(calibrationTemperature, calibrationHumidity));
     if (!calibrationSuccess) {
       Utils::Log::debug("sgp30-service", "calibration not successful, sending null response");
+
+      Utils::I2C::unclaim();
 
       respondCallback({});
       respondCallback = NULL;
@@ -63,6 +67,9 @@ namespace Sgp30 {
 
     auto measurementRawSuccess = sensor.IAQmeasureRaw();
     auto measurementSuccess = sensor.IAQmeasure();
+
+    Utils::I2C::unclaim();
+
     if (!measurementRawSuccess || !measurementSuccess
     ) {
       Utils::Log::debug("sgp30-service", "measurement not successful, sending null response");
