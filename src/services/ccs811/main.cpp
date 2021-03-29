@@ -7,6 +7,7 @@ namespace Services {
 
 namespace Ccs811 {
   Utils::UDP::RespondCallback respondCallback = NULL;
+  TaskHandle_t taskHandle = NULL;
 
   bool working = false;
   auto sensor = Sensor();
@@ -21,19 +22,14 @@ namespace Ccs811 {
   }
 
   void responseTask(void *parameter) {
-    if (respondCallback == NULL) {
-      vTaskDelete(NULL);
-      return;
-    }
-
     auto request = (Utils::UDP::Payload *)parameter;
 
     if (request->size() < (sizeof(float) * 2)) {
       Utils::Log::debug("ccs811-service", "request does not contain temperature and humidity");
 
       respondCallback({});
-      respondCallback = NULL;
 
+      taskHandle = NULL;
       vTaskDelete(NULL);
       return;
     }
@@ -53,8 +49,8 @@ namespace Ccs811 {
       Utils::I2C::unclaim();
 
       respondCallback({});
-      respondCallback = NULL;
 
+      taskHandle = NULL;
       vTaskDelete(NULL);
       return;
     }
@@ -96,15 +92,13 @@ namespace Ccs811 {
     Utils::Log::debug("ccs811-service", "sending response");
 
     respondCallback(response);
-    respondCallback = NULL;
 
+    taskHandle = NULL;
     vTaskDelete(NULL);
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
     Utils::Log::debug("ccs811-service", "got request");
-
-    if (respondCallback != NULL) return;
 
     if (!working) {
       Utils::Log::debug("ccs811-service", "sensor not working, sending null response");
@@ -114,13 +108,18 @@ namespace Ccs811 {
     }
 
     respondCallback = respond;
+
+    if(taskHandle != NULL) {
+      return;
+    }
+
     xTaskCreatePinnedToCore(
       responseTask,
       "ccs811_handling",
       2048,
-      (void *)request,
-      1,
       NULL,
+      1,
+      &taskHandle,
       CONFIG_ARDUINO_RUNNING_CORE
     );
   }

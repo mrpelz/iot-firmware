@@ -7,6 +7,7 @@ namespace Services {
 
 namespace Tsl2561 {
   Utils::UDP::RespondCallback respondCallback = NULL;
+  TaskHandle_t taskHandle = NULL;
 
   bool working = false;
   auto sensor = Sensor();
@@ -26,11 +27,6 @@ namespace Tsl2561 {
   }
 
   void responseTask(void *parameter) {
-    if (respondCallback == NULL) {
-      vTaskDelete(NULL);
-      return;
-    }
-
     uint16_t broadband;
     uint16_t infrared;
 
@@ -52,15 +48,13 @@ namespace Tsl2561 {
     Utils::Log::debug("tsl2561-service", "sending response");
 
     respondCallback(response);
-    respondCallback = NULL;
 
+    taskHandle = NULL;
     vTaskDelete(NULL);
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
     Utils::Log::debug("tsl2561-service", "got request");
-
-    if (respondCallback != NULL) return;
 
     if (!working) {
       Utils::Log::debug("tsl2561-service", "sensor not working, sending null response");
@@ -70,13 +64,18 @@ namespace Tsl2561 {
     }
 
     respondCallback = respond;
+
+    if(taskHandle != NULL) {
+      return;
+    }
+
     xTaskCreatePinnedToCore(
       responseTask,
       "tsl2561_handling",
       2048,
       NULL,
       1,
-      NULL,
+      &taskHandle,
       CONFIG_ARDUINO_RUNNING_CORE
     );
   }

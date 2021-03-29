@@ -7,6 +7,7 @@ namespace Services {
 
 namespace Bme280 {
   Utils::UDP::RespondCallback respondCallback = NULL;
+  TaskHandle_t taskHandle = NULL;
 
   bool working = false;
   auto sensor = Adafruit_BME280();
@@ -30,11 +31,6 @@ namespace Bme280 {
   }
 
   void responseTask(void *parameter) {
-    if (respondCallback == NULL) {
-      vTaskDelete(NULL);
-      return;
-    }
-
     Utils::I2C::claim();
 
     auto measurementSuccess = sensor.takeForcedMeasurement();
@@ -44,8 +40,8 @@ namespace Bme280 {
       Utils::I2C::unclaim();
 
       respondCallback({});
-      respondCallback = NULL;
 
+      taskHandle = NULL;
       vTaskDelete(NULL);
       return;
     }
@@ -87,15 +83,13 @@ namespace Bme280 {
     Utils::Log::debug("bme280-service", "sending response");
 
     respondCallback(response);
-    respondCallback = NULL;
 
+    taskHandle = NULL;
     vTaskDelete(NULL);
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
     Utils::Log::debug("bme280-service", "got request");
-
-    if (respondCallback != NULL) return;
 
     if (!working) {
       Utils::Log::debug("bme280-service", "sensor not working, sending null response");
@@ -105,13 +99,18 @@ namespace Bme280 {
     }
 
     respondCallback = respond;
+
+    if(taskHandle != NULL) {
+      return;
+    }
+
     xTaskCreatePinnedToCore(
       responseTask,
       "bme280_handling",
       2048,
       NULL,
       1,
-      NULL,
+      &taskHandle,
       CONFIG_ARDUINO_RUNNING_CORE
     );
   }

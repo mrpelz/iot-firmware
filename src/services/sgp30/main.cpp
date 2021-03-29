@@ -7,6 +7,7 @@ namespace Services {
 
 namespace Sgp30 {
   Utils::UDP::RespondCallback respondCallback = NULL;
+  TaskHandle_t taskHandle = NULL;
 
   bool working = false;
   auto sensor = Adafruit_SGP30();
@@ -28,19 +29,14 @@ namespace Sgp30 {
   }
 
   void responseTask(void *parameter) {
-    if (respondCallback == NULL) {
-      vTaskDelete(NULL);
-      return;
-    }
-
     auto request = (Utils::UDP::Payload *)parameter;
 
     if (request->size() < (sizeof(float) * 2)) {
       Utils::Log::debug("sgp30-service", "request does not contain temperature and humidity");
 
       respondCallback({});
-      respondCallback = NULL;
 
+      taskHandle = NULL;
       vTaskDelete(NULL);
       return;
     }
@@ -59,8 +55,8 @@ namespace Sgp30 {
       Utils::I2C::unclaim();
 
       respondCallback({});
-      respondCallback = NULL;
 
+      taskHandle = NULL;
       vTaskDelete(NULL);
       return;
     }
@@ -75,8 +71,8 @@ namespace Sgp30 {
       Utils::Log::debug("sgp30-service", "measurement not successful, sending null response");
 
       respondCallback({});
-      respondCallback = NULL;
 
+      taskHandle = NULL;
       vTaskDelete(NULL);
       return;
     }
@@ -125,15 +121,13 @@ namespace Sgp30 {
     Utils::Log::debug("sgp30-service", "sending response");
 
     respondCallback(response);
-    respondCallback = NULL;
 
+    taskHandle = NULL;
     vTaskDelete(NULL);
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
     Utils::Log::debug("sgp30-service", "got request");
-
-    if (respondCallback != NULL) return;
 
     if (!working) {
       Utils::Log::debug("sgp30-service", "sensor not working, sending null response");
@@ -143,13 +137,18 @@ namespace Sgp30 {
     }
 
     respondCallback = respond;
+
+    if(taskHandle != NULL) {
+      return;
+    }
+
     xTaskCreatePinnedToCore(
       responseTask,
       "sgp30_handling",
       2048,
-      (void *)request,
-      1,
       NULL,
+      1,
+      &taskHandle,
       CONFIG_ARDUINO_RUNNING_CORE
     );
   }

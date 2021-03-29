@@ -7,6 +7,7 @@ namespace Services {
 
 namespace Mhz19 {
   Utils::UDP::RespondCallback respondCallback = NULL;
+  TaskHandle_t taskHandle = NULL;
 
   auto sensor = MHZ19();
 
@@ -21,11 +22,6 @@ namespace Mhz19 {
   }
 
   void responseTask(void *parameter) {
-    if (respondCallback == NULL) {
-      vTaskDelete(NULL);
-      return;
-    }
-
     auto accuracyReading = sensor.getAccuracy();
     auto abcReading = sensor.getABC();
     auto co2Reading = sensor.getCO2();
@@ -80,24 +76,27 @@ namespace Mhz19 {
     Utils::Log::debug("mhz19-service", "sending response");
 
     respondCallback(response);
-    respondCallback = NULL;
 
+    taskHandle = NULL;
     vTaskDelete(NULL);
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
     Utils::Log::debug("mhz19-service", "got request");
 
-    if (respondCallback != NULL) return;
-
     respondCallback = respond;
+
+    if(taskHandle != NULL) {
+      return;
+    }
+
     xTaskCreatePinnedToCore(
       responseTask,
       "mhz19_handling",
       2048,
       NULL,
       1,
-      NULL,
+      &taskHandle,
       CONFIG_ARDUINO_RUNNING_CORE
     );
   }

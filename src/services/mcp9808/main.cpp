@@ -7,6 +7,7 @@ namespace Services {
 
 namespace Mcp9808 {
   Utils::UDP::RespondCallback respondCallback = NULL;
+  TaskHandle_t taskHandle = NULL;
 
   bool working = false;
   auto sensor = Adafruit_MCP9808();
@@ -25,11 +26,6 @@ namespace Mcp9808 {
   }
 
   void responseTask(void *parameter) {
-    if (respondCallback == NULL) {
-      vTaskDelete(NULL);
-      return;
-    }
-
     Utils::I2C::claim();
 
     sensor.wake();
@@ -55,15 +51,13 @@ namespace Mcp9808 {
     Utils::Log::debug("mcp9808-service", "sending response");
 
     respondCallback(response);
-    respondCallback = NULL;
 
+    taskHandle = NULL;
     vTaskDelete(NULL);
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
     Utils::Log::debug("mcp9808-service", "got request");
-
-    if (respondCallback != NULL) return;
 
     if (!working) {
       Utils::Log::debug("mcp9808-service", "sensor not working, sending null response");
@@ -73,13 +67,18 @@ namespace Mcp9808 {
     }
 
     respondCallback = respond;
+
+    if(taskHandle != NULL) {
+      return;
+    }
+
     xTaskCreatePinnedToCore(
       responseTask,
       "mcp9808_handling",
       2048,
       NULL,
       1,
-      NULL,
+      &taskHandle,
       CONFIG_ARDUINO_RUNNING_CORE
     );
   }

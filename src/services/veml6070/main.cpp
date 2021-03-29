@@ -7,6 +7,7 @@ namespace Services {
 
 namespace Veml6070 {
   Utils::UDP::RespondCallback respondCallback = NULL;
+  TaskHandle_t taskHandle = NULL;
 
   bool working = false;
   auto sensor = Sensor();
@@ -24,11 +25,6 @@ namespace Veml6070 {
   }
 
   void responseTask(void *parameter) {
-    if (respondCallback == NULL) {
-      vTaskDelete(NULL);
-      return;
-    }
-
     Utils::I2C::claim();
 
     sensor.sleep(false);
@@ -55,16 +51,13 @@ namespace Veml6070 {
     Utils::Log::debug("veml6070-service", "sending response");
 
     respondCallback(response);
-    respondCallback = NULL;
 
-
+    taskHandle = NULL;
     vTaskDelete(NULL);
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
     Utils::Log::debug("veml6070-service", "got request");
-
-    if (respondCallback != NULL) return;
 
     if (!working) {
       Utils::Log::debug("veml6070-service", "sensor not working, sending null response");
@@ -74,13 +67,18 @@ namespace Veml6070 {
     }
 
     respondCallback = respond;
+
+    if(taskHandle != NULL) {
+      return;
+    }
+
     xTaskCreatePinnedToCore(
       responseTask,
       "veml6070_handling",
       2048,
       NULL,
       1,
-      NULL,
+      &taskHandle,
       CONFIG_ARDUINO_RUNNING_CORE
     );
   }

@@ -7,36 +7,35 @@ namespace Services {
 
 namespace Async {
   Utils::UDP::RespondCallback respondCallback = NULL;
+  TaskHandle_t taskHandle = NULL;
 
   void responseTask(void *parameter) {
-    if (respondCallback == NULL) {
-      vTaskDelete(NULL);
-      return;
-    }
-
     vTaskDelay(ASYNC_RESPONSE_DELAY / portTICK_PERIOD_MS);
 
     Utils::Log::debug("async-service", "sending delayed response");
 
     respondCallback({ 0x0a, 0x0b, 0x0c });
-    respondCallback = NULL;
 
+    taskHandle = NULL;
     vTaskDelete(NULL);
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
     Utils::Log::debug("async-service", "got request");
 
-    if (respondCallback != NULL) return;
-
     respondCallback = respond;
+
+    if(taskHandle != NULL) {
+      return;
+    }
+
     xTaskCreatePinnedToCore(
       responseTask,
       "async_handling",
       2048,
       NULL,
       1,
-      NULL,
+      &taskHandle,
       CONFIG_ARDUINO_RUNNING_CORE
     );
   }

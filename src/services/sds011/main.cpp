@@ -7,6 +7,7 @@ namespace Services {
 
 namespace Sds011 {
   Utils::UDP::RespondCallback respondCallback = NULL;
+  TaskHandle_t taskHandle = NULL;
 
   auto sensor = SdsDustSensor(Serial1);
 
@@ -22,11 +23,6 @@ namespace Sds011 {
   }
 
   void responseTask(void *parameter) {
-    if (respondCallback == NULL) {
-      vTaskDelete(NULL);
-      return;
-    }
-
     sensor.wakeup();
     vTaskDelay(30000 / portTICK_PERIOD_MS);
 
@@ -39,8 +35,8 @@ namespace Sds011 {
       Utils::Log::debug("sds011-service", "measurement not successful, sending null response");
 
       respondCallback({});
-      respondCallback = NULL;
 
+      taskHandle = NULL;
       vTaskDelete(NULL);
       return;
     }
@@ -68,24 +64,27 @@ namespace Sds011 {
     Utils::Log::debug("sds011-service", "sending response");
 
     respondCallback(response);
-    respondCallback = NULL;
 
+    taskHandle = NULL;
     vTaskDelete(NULL);
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
     Utils::Log::debug("sds011-service", "got request");
 
-    if (respondCallback != NULL) return;
-
     respondCallback = respond;
+
+    if(taskHandle != NULL) {
+      return;
+    }
+
     xTaskCreatePinnedToCore(
       responseTask,
       "sds011_handling",
       2048,
       NULL,
       1,
-      NULL,
+      &taskHandle,
       CONFIG_ARDUINO_RUNNING_CORE
     );
   }
