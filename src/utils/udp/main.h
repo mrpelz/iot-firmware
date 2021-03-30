@@ -59,6 +59,7 @@ namespace UDP {
     AsyncUDP udp;
     uint16_t port;
     Peer eventPeer;
+    Peer fallbackPeer;
     uint8_t eventPeerPriority = 0;
     std::vector<Service *> services;
     Log::Callback debugCallback = [](String key, String value) {};

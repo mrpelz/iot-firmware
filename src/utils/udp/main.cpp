@@ -78,6 +78,12 @@ namespace UDP {
       packet->remotePort()
     };
 
+    auto validPeer = peer.port && (peer.ip[0] + peer.ip[1] + peer.ip[2] + peer.ip[3]);
+
+    if (validPeer) {
+      state.fallbackPeer = peer;
+    }
+
     auto payload = packet->data();
     auto messageId = ((uint8_t *)payload)[0];
     auto serviceId = ((uint8_t *)payload)[1];
@@ -115,7 +121,7 @@ namespace UDP {
             peerAckOutgoing.insert(peerAckOutgoing.end(), 0x00);
 
             state.debugCallback("udp.request.set-event-peer", "clear");
-          } else {
+          } else if (validPeer) {
             state.eventPeer = peer;
             state.eventPeerPriority = setPeerPriority;
 
@@ -144,6 +150,16 @@ namespace UDP {
       return;
     }
 
+    auto responsePeer = validPeer ? peer : state.fallbackPeer;
+    if (!responsePeer.port) {
+      state.debugCallback("event", "udp.request.no-usable-peer");
+      return;
+    }
+
+    if (!validPeer) {
+      state.debugCallback("event", "udp.request.use-fallback-peer");
+    }
+
     bool match = false;
     std::for_each(
       std::begin(state.services),
@@ -154,7 +170,7 @@ namespace UDP {
 
         service->handler(
           &message,
-          [this, peer, messageId, serviceId](Payload response) {
+          [this, messageId, serviceId, responsePeer](Payload response) {
             Payload outgoing = {
               messageId
             };
@@ -164,8 +180,8 @@ namespace UDP {
             outgoing.insert(outgoing.end(), responseStart, responseEnd);
 
             state.debugCallback("udp.response.length", String(outgoing.size()));
-            state.debugCallback("udp.response.remote-ip", peer.ip.toString());
-            state.debugCallback("udp.response.remote-port", String(peer.port));
+            state.debugCallback("udp.response.remote-ip", responsePeer.ip.toString());
+            state.debugCallback("udp.response.remote-port", String(responsePeer.port));
             state.debugCallback("udp.response.message-id", String(messageId, HEX));
             state.debugCallback("udp.response.service-id", String(serviceId, HEX));
             state.debugCallback("udp.response.message-length", String(response.size()));
@@ -173,8 +189,8 @@ namespace UDP {
             state.udp.writeTo(
               outgoing.data(),
               outgoing.size(),
-              peer.ip,
-              peer.port
+              responsePeer.ip,
+              responsePeer.port
             );
           }
         );
