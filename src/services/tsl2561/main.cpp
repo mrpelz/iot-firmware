@@ -24,33 +24,49 @@ namespace Tsl2561 {
 
     sensor.enableAutoRange(true);
     sensor.setIntegrationTime(TSL2561_INTEGRATIONTIME_402MS);
+
+    xTaskCreatePinnedToCore(
+      responseTask,
+      "tsl2561_handling",
+      2048,
+      NULL,
+      1,
+      &taskHandle,
+      CONFIG_ARDUINO_RUNNING_CORE
+    );
   }
 
   void responseTask(void *parameter) {
-    uint16_t broadband;
-    uint16_t infrared;
+    for(;;) {
+      vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
+      if (respondCallback == NULL) {
+        vTaskSuspend(NULL);
+        continue;
+      }
 
-    Utils::I2C::claim();
+      uint16_t broadband;
+      uint16_t infrared;
 
-    sensor.getLuminosity(&broadband, &infrared);
-    auto reading = sensor.calculateLux(broadband, infrared);
+      Utils::I2C::claim();
 
-    Utils::I2C::unclaim();
+      sensor.getLuminosity(&broadband, &infrared);
+      auto reading = sensor.calculateLux(broadband, infrared);
 
-    Utils::Log::debug("tsl2561-service.reading", String(reading));
+      Utils::I2C::unclaim();
 
-    auto result = reinterpret_cast<uint8_t*>(&reading);
+      Utils::Log::debug("tsl2561-service.reading", String(reading));
 
-    Utils::UDP::Payload response;
+      auto result = reinterpret_cast<uint8_t*>(&reading);
 
-    response.insert(response.end(), result, result + sizeof(reading));
+      Utils::UDP::Payload response;
 
-    Utils::Log::debug("tsl2561-service", "sending response");
+      response.insert(response.end(), result, result + sizeof(reading));
 
-    respondCallback(response);
+      Utils::Log::debug("tsl2561-service", "sending response");
 
-    taskHandle = NULL;
-    vTaskDelete(NULL);
+      respondCallback(response);
+      respondCallback = NULL;
+    }
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
@@ -64,20 +80,7 @@ namespace Tsl2561 {
     }
 
     respondCallback = respond;
-
-    if(taskHandle != NULL) {
-      return;
-    }
-
-    xTaskCreatePinnedToCore(
-      responseTask,
-      "tsl2561_handling",
-      2048,
-      NULL,
-      1,
-      &taskHandle,
-      CONFIG_ARDUINO_RUNNING_CORE
-    );
+    if (taskHandle != NULL) vTaskResume(taskHandle);
   }
 }
 

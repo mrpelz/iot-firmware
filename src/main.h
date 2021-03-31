@@ -27,8 +27,6 @@
 #include "./utils/relais/setup.h"
 #include "./utils/udp/setup.h"
 
-#define WATCHDOG_DELAY 10
-
 namespace IotNode {} // project namespace
 
 #endif

@@ -9,6 +9,9 @@ namespace Ccs811 {
   Utils::UDP::RespondCallback respondCallback = NULL;
   TaskHandle_t taskHandle = NULL;
 
+  float calibrationTemperature;
+  float calibrationHumidity;
+
   bool working = false;
   auto sensor = Sensor();
 
@@ -19,82 +22,79 @@ namespace Ccs811 {
     if (!working) {
       Utils::Log::debug("ccs811-service", "sensor initialization failed");
     }
+
+    xTaskCreatePinnedToCore(
+      responseTask,
+      "ccs811_handling",
+      2048,
+      NULL,
+      1,
+      &taskHandle,
+      CONFIG_ARDUINO_RUNNING_CORE
+    );
   }
 
   void responseTask(void *parameter) {
-    auto request = (Utils::UDP::Payload *)parameter;
+    for(;;) {
+      vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
+      if (respondCallback == NULL) {
+        vTaskSuspend(NULL);
+        continue;
+      }
 
-    if (request->size() < (sizeof(float) * 2)) {
-      Utils::Log::debug("ccs811-service", "request does not contain temperature and humidity");
+      Utils::I2C::claim();
 
-      respondCallback({});
+      sensor.setEnvironmentalData(calibrationHumidity, calibrationTemperature);
 
-      taskHandle = NULL;
-      vTaskDelete(NULL);
-      return;
-    }
-    auto calibrationTemperature = ((float *)request->data())[0];
-    auto calibrationHumidity = ((float *)request->data())[1];
+      if (sensor.available() && !sensor.readData()) {
+        Utils::Log::debug("ccs811-service", "measurement not successful, sending null response");
 
-    Utils::Log::debug("ccs811-service.calibration-temperature", String(calibrationTemperature));
-    Utils::Log::debug("ccs811-service.calibration-humidity", String(calibrationHumidity));
+        Utils::I2C::unclaim();
 
-    Utils::I2C::claim();
+        respondCallback({});
+        respondCallback = NULL;
+        continue;
+      }
 
-    sensor.setEnvironmentalData(calibrationHumidity, calibrationTemperature);
-
-    if (sensor.available() && !sensor.readData()) {
-      Utils::Log::debug("ccs811-service", "measurement not successful, sending null response");
+      auto temperatureReading = sensor.calculateTemperature();
+      auto tvocReading = sensor.getTVOC();
+      auto eco2Reading = sensor.geteCO2();
 
       Utils::I2C::unclaim();
 
-      respondCallback({});
+      Utils::Log::debug("ccs811-service.temperature", String(temperatureReading));
+      Utils::Log::debug("ccs811-service.tvoc", String(tvocReading));
+      Utils::Log::debug("ccs811-service.eco2", String(eco2Reading));
 
-      taskHandle = NULL;
-      vTaskDelete(NULL);
-      return;
+      auto temperatureResult = reinterpret_cast<uint8_t*>(&temperatureReading);
+      auto tvocResult = reinterpret_cast<uint8_t*>(&tvocReading);
+      auto eco2Result = reinterpret_cast<uint8_t*>(&eco2Reading);
+
+      Utils::UDP::Payload response;
+
+      response.insert(
+        response.end(),
+        temperatureResult,
+        temperatureResult + sizeof(temperatureReading)
+      );
+
+      response.insert(
+        response.end(),
+        tvocResult,
+        tvocResult + sizeof(tvocReading)
+      );
+
+      response.insert(
+        response.end(),
+        eco2Result,
+        eco2Result + sizeof(eco2Reading)
+      );
+
+      Utils::Log::debug("ccs811-service", "sending response");
+
+      respondCallback(response);
+      respondCallback = NULL;
     }
-
-    auto temperatureReading = sensor.calculateTemperature();
-    auto tvocReading = sensor.getTVOC();
-    auto eco2Reading = sensor.geteCO2();
-
-    Utils::I2C::unclaim();
-
-    Utils::Log::debug("ccs811-service.temperature", String(temperatureReading));
-    Utils::Log::debug("ccs811-service.tvoc", String(tvocReading));
-    Utils::Log::debug("ccs811-service.eco2", String(eco2Reading));
-
-    auto temperatureResult = reinterpret_cast<uint8_t*>(&temperatureReading);
-    auto tvocResult = reinterpret_cast<uint8_t*>(&tvocReading);
-    auto eco2Result = reinterpret_cast<uint8_t*>(&eco2Reading);
-
-    Utils::UDP::Payload response;
-
-    response.insert(
-      response.end(),
-      temperatureResult,
-      temperatureResult + sizeof(temperatureReading)
-    );
-
-    response.insert(
-      response.end(),
-      tvocResult,
-      tvocResult + sizeof(tvocReading)
-    );
-
-    response.insert(
-      response.end(),
-      eco2Result,
-      eco2Result + sizeof(eco2Reading)
-    );
-
-    Utils::Log::debug("ccs811-service", "sending response");
-
-    respondCallback(response);
-
-    taskHandle = NULL;
-    vTaskDelete(NULL);
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
@@ -107,21 +107,21 @@ namespace Ccs811 {
       return;
     }
 
-    respondCallback = respond;
+    if (request->size() < (sizeof(float) * 2)) {
+      Utils::Log::debug("ccs811-service", "request does not contain temperature and humidity");
 
-    if(taskHandle != NULL) {
+      respond({});
       return;
     }
+    calibrationTemperature = ((float *)request->data())[0];
+    calibrationHumidity = ((float *)request->data())[1];
 
-    xTaskCreatePinnedToCore(
-      responseTask,
-      "ccs811_handling",
-      2048,
-      NULL,
-      1,
-      &taskHandle,
-      CONFIG_ARDUINO_RUNNING_CORE
-    );
+    Utils::Log::debug("ccs811-service.calibration-temperature", String(calibrationTemperature));
+    Utils::Log::debug("ccs811-service.calibration-humidity", String(calibrationHumidity));
+
+    respondCallback = respond;
+    if (taskHandle != NULL) vTaskResume(taskHandle);
+
   }
 }
 

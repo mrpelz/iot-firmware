@@ -22,38 +22,54 @@ namespace Veml6070 {
     }
 
     sensor.sleep(true);
+
+    xTaskCreatePinnedToCore(
+      responseTask,
+      "veml6070_handling",
+      2048,
+      NULL,
+      1,
+      &taskHandle,
+      CONFIG_ARDUINO_RUNNING_CORE
+    );
   }
 
   void responseTask(void *parameter) {
-    Utils::I2C::claim();
+    for(;;) {
+      vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
+      if (respondCallback == NULL) {
+        vTaskSuspend(NULL);
+        continue;
+      }
 
-    sensor.sleep(false);
-    sensor.waitForNext();
+      Utils::I2C::claim();
 
-    auto reading = sensor.readUV();
+      sensor.sleep(false);
+      sensor.waitForNext();
 
-    sensor.sleep(true);
+      auto reading = sensor.readUV();
 
-    Utils::I2C::unclaim();
+      sensor.sleep(true);
 
-    Utils::Log::debug("veml6070-service.reading", String(reading));
+      Utils::I2C::unclaim();
 
-    auto result = reinterpret_cast<uint8_t*>(&reading);
+      Utils::Log::debug("veml6070-service.reading", String(reading));
 
-    Utils::UDP::Payload response;
+      auto result = reinterpret_cast<uint8_t*>(&reading);
 
-    response.insert(
-      response.end(),
-      result,
-      result + sizeof(reading)
-    );
+      Utils::UDP::Payload response;
 
-    Utils::Log::debug("veml6070-service", "sending response");
+      response.insert(
+        response.end(),
+        result,
+        result + sizeof(reading)
+      );
 
-    respondCallback(response);
+      Utils::Log::debug("veml6070-service", "sending response");
 
-    taskHandle = NULL;
-    vTaskDelete(NULL);
+      respondCallback(response);
+      respondCallback = NULL;
+    }
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
@@ -67,20 +83,7 @@ namespace Veml6070 {
     }
 
     respondCallback = respond;
-
-    if(taskHandle != NULL) {
-      return;
-    }
-
-    xTaskCreatePinnedToCore(
-      responseTask,
-      "veml6070_handling",
-      2048,
-      NULL,
-      1,
-      &taskHandle,
-      CONFIG_ARDUINO_RUNNING_CORE
-    );
+    if (taskHandle != NULL) vTaskResume(taskHandle);
   }
 }
 

@@ -9,6 +9,9 @@ namespace Sgp30 {
   Utils::UDP::RespondCallback respondCallback = NULL;
   TaskHandle_t taskHandle = NULL;
 
+  float calibrationTemperature;
+  float calibrationHumidity;
+
   bool working = false;
   auto sensor = Adafruit_SGP30();
 
@@ -26,104 +29,99 @@ namespace Sgp30 {
     if (!working) {
       Utils::Log::debug("sgp30-service", "sensor initialization failed");
     }
+
+    xTaskCreatePinnedToCore(
+      responseTask,
+      "sgp30_handling",
+      2048,
+      NULL,
+      1,
+      &taskHandle,
+      CONFIG_ARDUINO_RUNNING_CORE
+    );
   }
 
   void responseTask(void *parameter) {
-    auto request = (Utils::UDP::Payload *)parameter;
+    for(;;) {
+      vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
+      if (respondCallback == NULL) {
+        vTaskSuspend(NULL);
+        continue;
+      }
 
-    if (request->size() < (sizeof(float) * 2)) {
-      Utils::Log::debug("sgp30-service", "request does not contain temperature and humidity");
+      Utils::I2C::claim();
 
-      respondCallback({});
+      auto calibrationSuccess = sensor.setHumidity(getAbsoluteHumidity(calibrationTemperature, calibrationHumidity));
+      if (!calibrationSuccess) {
+        Utils::Log::debug("sgp30-service", "calibration not successful, sending null response");
 
-      taskHandle = NULL;
-      vTaskDelete(NULL);
-      return;
-    }
-    auto calibrationTemperature = ((float *)request->data())[0];
-    auto calibrationHumidity = ((float *)request->data())[1];
+        Utils::I2C::unclaim();
 
-    Utils::Log::debug("sgp30-service.calibration-temperature", String(calibrationTemperature));
-    Utils::Log::debug("sgp30-service.calibration-humidity", String(calibrationHumidity));
+        respondCallback({});
+        respondCallback = NULL;
+        continue;
+      }
 
-    Utils::I2C::claim();
-
-    auto calibrationSuccess = sensor.setHumidity(getAbsoluteHumidity(calibrationTemperature, calibrationHumidity));
-    if (!calibrationSuccess) {
-      Utils::Log::debug("sgp30-service", "calibration not successful, sending null response");
+      auto measurementRawSuccess = sensor.IAQmeasureRaw();
+      auto measurementSuccess = sensor.IAQmeasure();
 
       Utils::I2C::unclaim();
 
-      respondCallback({});
+      if (!measurementRawSuccess || !measurementSuccess
+      ) {
+        Utils::Log::debug("sgp30-service", "measurement not successful, sending null response");
 
-      taskHandle = NULL;
-      vTaskDelete(NULL);
-      return;
+        respondCallback({});
+        respondCallback = NULL;
+        continue;
+      }
+
+      auto h2Reading = sensor.rawH2;
+      auto ethanolReading = sensor.rawEthanol;
+      auto tvocReading = sensor.TVOC;
+      auto eco2Reading = sensor.eCO2;
+
+      Utils::Log::debug("sgp30-service.h2", String(h2Reading));
+      Utils::Log::debug("sgp30-service.ethanol", String(ethanolReading));
+      Utils::Log::debug("sgp30-service.tvoc", String(tvocReading));
+      Utils::Log::debug("sgp30-service.eco2", String(eco2Reading));
+
+      auto h2Result = reinterpret_cast<uint8_t*>(&h2Reading);
+      auto ethanolResult = reinterpret_cast<uint8_t*>(&ethanolReading);
+      auto tvocResult = reinterpret_cast<uint8_t*>(&tvocReading);
+      auto eco2Result = reinterpret_cast<uint8_t*>(&eco2Reading);
+
+      Utils::UDP::Payload response;
+
+      response.insert(
+        response.end(),
+        h2Result,
+        h2Result + sizeof(h2Reading)
+      );
+
+      response.insert(
+        response.end(),
+        ethanolResult,
+        ethanolResult + sizeof(ethanolReading)
+      );
+
+      response.insert(
+        response.end(),
+        tvocResult,
+        tvocResult + sizeof(tvocReading)
+      );
+
+      response.insert(
+        response.end(),
+        eco2Result,
+        eco2Result + sizeof(eco2Reading)
+      );
+
+      Utils::Log::debug("sgp30-service", "sending response");
+
+      respondCallback(response);
+      respondCallback = NULL;
     }
-
-    auto measurementRawSuccess = sensor.IAQmeasureRaw();
-    auto measurementSuccess = sensor.IAQmeasure();
-
-    Utils::I2C::unclaim();
-
-    if (!measurementRawSuccess || !measurementSuccess
-    ) {
-      Utils::Log::debug("sgp30-service", "measurement not successful, sending null response");
-
-      respondCallback({});
-
-      taskHandle = NULL;
-      vTaskDelete(NULL);
-      return;
-    }
-
-    auto h2Reading = sensor.rawH2;
-    auto ethanolReading = sensor.rawEthanol;
-    auto tvocReading = sensor.TVOC;
-    auto eco2Reading = sensor.eCO2;
-
-    Utils::Log::debug("sgp30-service.h2", String(h2Reading));
-    Utils::Log::debug("sgp30-service.ethanol", String(ethanolReading));
-    Utils::Log::debug("sgp30-service.tvoc", String(tvocReading));
-    Utils::Log::debug("sgp30-service.eco2", String(eco2Reading));
-
-    auto h2Result = reinterpret_cast<uint8_t*>(&h2Reading);
-    auto ethanolResult = reinterpret_cast<uint8_t*>(&ethanolReading);
-    auto tvocResult = reinterpret_cast<uint8_t*>(&tvocReading);
-    auto eco2Result = reinterpret_cast<uint8_t*>(&eco2Reading);
-
-    Utils::UDP::Payload response;
-
-    response.insert(
-      response.end(),
-      h2Result,
-      h2Result + sizeof(h2Reading)
-    );
-
-    response.insert(
-      response.end(),
-      ethanolResult,
-      ethanolResult + sizeof(ethanolReading)
-    );
-
-    response.insert(
-      response.end(),
-      tvocResult,
-      tvocResult + sizeof(tvocReading)
-    );
-
-    response.insert(
-      response.end(),
-      eco2Result,
-      eco2Result + sizeof(eco2Reading)
-    );
-
-    Utils::Log::debug("sgp30-service", "sending response");
-
-    respondCallback(response);
-
-    taskHandle = NULL;
-    vTaskDelete(NULL);
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
@@ -136,21 +134,21 @@ namespace Sgp30 {
       return;
     }
 
-    respondCallback = respond;
+    if (request->size() < (sizeof(float) * 2)) {
+      Utils::Log::debug("sgp30-service", "request does not contain temperature and humidity");
 
-    if(taskHandle != NULL) {
+      respond({});
       return;
     }
+    calibrationTemperature = ((float *)request->data())[0];
+    calibrationHumidity = ((float *)request->data())[1];
 
-    xTaskCreatePinnedToCore(
-      responseTask,
-      "sgp30_handling",
-      2048,
-      NULL,
-      1,
-      &taskHandle,
-      CONFIG_ARDUINO_RUNNING_CORE
-    );
+    Utils::Log::debug("sgp30-service.calibration-temperature", String(calibrationTemperature));
+    Utils::Log::debug("sgp30-service.calibration-humidity", String(calibrationHumidity));
+
+    respondCallback = respond;
+    if (taskHandle != NULL) vTaskResume(taskHandle);
+
   }
 }
 

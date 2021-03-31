@@ -74,13 +74,13 @@ void setup() {
 
 void loop() {
   #ifdef ARDUINO_ARCH_ESP8266
-    delay(WATCHDOG_DELAY);
+    delay(IOT_NODE_MUTLITASKING_DELAY);
     IotNode::Utils::Indicator::update();
     IotNode::Utils::Button::update();
     IotNode::Services::Keepalive::update();
     IotNode::Utils::Link::update();
   #endif
   #ifdef ARDUINO_ARCH_ESP32
-    vTaskDelay(WATCHDOG_DELAY / portTICK_PERIOD_MS);
+    vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
   #endif
 }

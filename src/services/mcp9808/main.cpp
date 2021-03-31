@@ -23,37 +23,53 @@ namespace Mcp9808 {
 
     sensor.setResolution(3);
     sensor.shutdown();
+
+    xTaskCreatePinnedToCore(
+      responseTask,
+      "mcp9808_handling",
+      2048,
+      NULL,
+      1,
+      &taskHandle,
+      CONFIG_ARDUINO_RUNNING_CORE
+    );
   }
 
   void responseTask(void *parameter) {
-    Utils::I2C::claim();
+    for(;;) {
+      vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
+      if (respondCallback == NULL) {
+        vTaskSuspend(NULL);
+        continue;
+      }
 
-    sensor.wake();
+      Utils::I2C::claim();
 
-    auto reading = sensor.readTempC();
+      sensor.wake();
 
-    sensor.shutdown();
+      auto reading = sensor.readTempC();
 
-    Utils::I2C::unclaim();
+      sensor.shutdown();
 
-    Utils::Log::debug("mcp9808-service.reading", String(reading));
+      Utils::I2C::unclaim();
 
-    auto result = reinterpret_cast<uint8_t*>(&reading);
+      Utils::Log::debug("mcp9808-service.reading", String(reading));
 
-    Utils::UDP::Payload response;
+      auto result = reinterpret_cast<uint8_t*>(&reading);
 
-    response.insert(
-      response.end(),
-      result,
-      result + sizeof(reading)
-    );
+      Utils::UDP::Payload response;
 
-    Utils::Log::debug("mcp9808-service", "sending response");
+      response.insert(
+        response.end(),
+        result,
+        result + sizeof(reading)
+      );
 
-    respondCallback(response);
+      Utils::Log::debug("mcp9808-service", "sending response");
 
-    taskHandle = NULL;
-    vTaskDelete(NULL);
+      respondCallback(response);
+      respondCallback = NULL;
+    }
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
@@ -67,20 +83,7 @@ namespace Mcp9808 {
     }
 
     respondCallback = respond;
-
-    if(taskHandle != NULL) {
-      return;
-    }
-
-    xTaskCreatePinnedToCore(
-      responseTask,
-      "mcp9808_handling",
-      2048,
-      NULL,
-      1,
-      &taskHandle,
-      CONFIG_ARDUINO_RUNNING_CORE
-    );
+    if (taskHandle != NULL) vTaskResume(taskHandle);
   }
 }
 

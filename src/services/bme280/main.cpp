@@ -28,64 +28,78 @@ namespace Bme280 {
       Adafruit_BME280::SAMPLING_X1, // humidity
       Adafruit_BME280::FILTER_OFF
     );
+
+    xTaskCreatePinnedToCore(
+      responseTask,
+      "bme280_handling",
+      2048,
+      NULL,
+      1,
+      &taskHandle,
+      CONFIG_ARDUINO_RUNNING_CORE
+    );
   }
 
   void responseTask(void *parameter) {
-    Utils::I2C::claim();
+    for(;;) {
+      vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
+      if (respondCallback == NULL) {
+        vTaskSuspend(NULL);
+        continue;
+      }
 
-    auto measurementSuccess = sensor.takeForcedMeasurement();
-    if (!measurementSuccess) {
-      Utils::Log::debug("bme280-service", "measurement not successful, sending null response");
+      Utils::I2C::claim();
+
+      auto measurementSuccess = sensor.takeForcedMeasurement();
+      if (!measurementSuccess) {
+        Utils::Log::debug("bme280-service", "measurement not successful, sending null response");
+
+        Utils::I2C::unclaim();
+
+        respondCallback({});
+        respondCallback = NULL;
+        continue;
+      }
+
+      auto temperatureReading = sensor.readTemperature();
+      auto humidityReading = sensor.readHumidity();
+      auto pressureReading = sensor.readPressure();
 
       Utils::I2C::unclaim();
 
-      respondCallback({});
+      Utils::Log::debug("bme280-service.temperature", String(temperatureReading));
+      Utils::Log::debug("bme280-service.humidity", String(humidityReading));
+      Utils::Log::debug("bme280-service.pressure", String(pressureReading));
 
-      taskHandle = NULL;
-      vTaskDelete(NULL);
-      return;
+      auto temperatureResult = reinterpret_cast<uint8_t*>(&temperatureReading);
+      auto humidityResult = reinterpret_cast<uint8_t*>(&humidityReading);
+      auto pressureResult = reinterpret_cast<uint8_t*>(&pressureReading);
+
+      Utils::UDP::Payload response;
+
+      response.insert(
+        response.end(),
+        temperatureResult,
+        temperatureResult + sizeof(temperatureReading)
+      );
+
+      response.insert(
+        response.end(),
+        humidityResult,
+        humidityResult + sizeof(humidityReading)
+      );
+
+      response.insert(
+        response.end(),
+        pressureResult,
+        pressureResult + sizeof(pressureReading)
+      );
+
+      Utils::Log::debug("bme280-service", "sending response");
+
+      respondCallback(response);      
+      respondCallback = NULL;
     }
-
-    auto temperatureReading = sensor.readTemperature();
-    auto humidityReading = sensor.readHumidity();
-    auto pressureReading = sensor.readPressure();
-
-    Utils::I2C::unclaim();
-
-    Utils::Log::debug("bme280-service.temperature", String(temperatureReading));
-    Utils::Log::debug("bme280-service.humidity", String(humidityReading));
-    Utils::Log::debug("bme280-service.pressure", String(pressureReading));
-
-    auto temperatureResult = reinterpret_cast<uint8_t*>(&temperatureReading);
-    auto humidityResult = reinterpret_cast<uint8_t*>(&humidityReading);
-    auto pressureResult = reinterpret_cast<uint8_t*>(&pressureReading);
-
-    Utils::UDP::Payload response;
-
-    response.insert(
-      response.end(),
-      temperatureResult,
-      temperatureResult + sizeof(temperatureReading)
-    );
-
-    response.insert(
-      response.end(),
-      humidityResult,
-      humidityResult + sizeof(humidityReading)
-    );
-
-    response.insert(
-      response.end(),
-      pressureResult,
-      pressureResult + sizeof(pressureReading)
-    );
-
-    Utils::Log::debug("bme280-service", "sending response");
-
-    respondCallback(response);
-
-    taskHandle = NULL;
-    vTaskDelete(NULL);
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
@@ -99,20 +113,7 @@ namespace Bme280 {
     }
 
     respondCallback = respond;
-
-    if(taskHandle != NULL) {
-      return;
-    }
-
-    xTaskCreatePinnedToCore(
-      responseTask,
-      "bme280_handling",
-      2048,
-      NULL,
-      1,
-      &taskHandle,
-      CONFIG_ARDUINO_RUNNING_CORE
-    );
+    if (taskHandle != NULL) vTaskResume(taskHandle);
   }
 }
 

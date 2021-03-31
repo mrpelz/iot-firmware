@@ -13,6 +13,8 @@ namespace Async {
 
   void setup() {
     Utils::UDP::instance.addService(&service);
+
+    initializer();
   }
 }
 

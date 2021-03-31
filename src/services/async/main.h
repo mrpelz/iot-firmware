@@ -14,6 +14,8 @@ namespace IotNode {
 namespace Services {
 
 namespace Async {
+  void initializer();
+
   void responseTask(void *parameter);
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond);
