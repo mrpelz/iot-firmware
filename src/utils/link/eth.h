@@ -1,7 +1,7 @@
 #ifndef _UTILS_LINK_ETH
 #define _UTILS_LINK_ETH
 
-#if defined(IOT_NODE_LINK_ETH) && defined(ARDUINO_ARCH_ESP32)
+#if defined(IOT_NODE_LINK_ETH) && defined(IOT_NODE_ESP32)
 
 #include <Arduino.h>
 #include <ETH.h>
@@ -12,7 +12,7 @@ namespace Utils {
 
 namespace Link {
   struct Config {
-    #ifndef IOT_NODE_DHCP
+    #ifdef IOT_NODE_IP_STATIC
       InterfaceConfig interfaceConfig;
     #endif
 
@@ -28,7 +28,7 @@ namespace Link {
     unsigned long disconnectionTime = 0;
     unsigned long maintenanceTime = 0;
 
-    #ifndef IOT_NODE_DHCP
+    #ifdef IOT_NODE_IP_STATIC
       InterfaceConfig interfaceConfig;
     #endif
 

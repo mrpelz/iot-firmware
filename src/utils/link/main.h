@@ -3,10 +3,10 @@
 
 #include <Arduino.h>
 
-#ifdef ARDUINO_ARCH_ESP8266
+#ifdef IOT_NODE_ESP8266
   #include <ESP8266WiFi.h>
 #endif
-#ifdef ARDUINO_ARCH_ESP32
+#ifdef IOT_NODE_ESP32
   #include <WiFi.h>
 #endif
 
@@ -18,18 +18,18 @@ namespace IotNode {
 namespace Utils {
 
 namespace Link {
-  #ifdef ARDUINO_ARCH_ESP8266
+  #ifdef IOT_NODE_ESP8266
     typedef WiFiEventHandler EventHandler_t;
     typedef WiFiDisconnectReason DisconnectReason_t;
   #endif
-  #ifdef ARDUINO_ARCH_ESP32
+  #ifdef IOT_NODE_ESP32
     typedef wifi_event_id_t EventHandler_t;
     typedef uint8_t DisconnectReason_t;
   #endif
 
   String printMacAddress(uint8_t input[6]);
 
-  #ifndef IOT_NODE_DHCP
+  #ifdef IOT_NODE_IP_STATIC
     struct InterfaceConfig {
       IPAddress ip;
       IPAddress gateway;

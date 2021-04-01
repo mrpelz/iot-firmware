@@ -1,6 +1,6 @@
 #include "./wifi.h"
 
-#ifndef IOT_NODE_LINK_ETH
+#ifdef IOT_NODE_LINK_WIFI
 
 namespace IotNode {
 namespace Utils {
@@ -10,14 +10,14 @@ namespace Link {
     state.phyMode = config.phyMode;
     state.outputPower = config.outputPower;
 
-    #ifndef IOT_NODE_DHCP
+    #ifdef IOT_NODE_IP_STATIC
       state.interfaceConfig = config.interfaceConfig;
     #endif
 
     state.credentials = config.credentials;
     state.timings = config.timings;
 
-    #ifdef ARDUINO_ARCH_ESP8266
+    #ifdef IOT_NODE_ESP8266
       state.eventListeners.onConnected = WiFi.onStationModeConnected(
         [&](WiFiEventStationModeConnected event) {
           handleConnected(event.ssid, event.bssid, event.channel);
@@ -42,7 +42,7 @@ namespace Link {
         }
       );
     #endif
-    #ifdef ARDUINO_ARCH_ESP32
+    #ifdef IOT_NODE_ESP32
       state.eventListeners.onConnected = WiFi.onEvent(
         [&](system_event_id_t event, system_event_info_t info) {
           handleConnected(
@@ -91,16 +91,16 @@ namespace Link {
 
     WiFi.mode(WIFI_STA);
 
-    #ifdef ARDUINO_ARCH_ESP8266
+    #ifdef IOT_NODE_ESP8266
       WiFi.setPhyMode(state.phyMode);
       WiFi.setSleepMode(WIFI_NONE_SLEEP);
     #endif
 
     if (state.outputPower != 0) {
-      #ifdef ARDUINO_ARCH_ESP8266
+      #ifdef IOT_NODE_ESP8266
         WiFi.setOutputPower(state.outputPower);
       #endif
-      #ifdef ARDUINO_ARCH_ESP32
+      #ifdef IOT_NODE_ESP32
         WiFi.setTxPower(state.outputPower);
       #endif
     }
@@ -116,7 +116,7 @@ namespace Link {
       state.callbacks.debug("config.wifi.channel", String(state.credentials.channel));
     #endif
 
-    #ifdef IOT_NODE_DHCP
+    #ifdef IOT_NODE_IP_DHCP
       state.callbacks.debug("config.wifi.network-config.dhcp", "1");
     #else
       state.callbacks.debug("config.wifi.network-config.dhcp", "0");
@@ -301,15 +301,15 @@ namespace Link {
   void Class::wifiConnect() {
     WiFi.disconnect();
 
-    #ifdef ARDUINO_ARCH_ESP8266
+    #ifdef IOT_NODE_ESP8266
       WiFi.forceSleepBegin();
       WiFi.forceSleepWake();
     #endif
 
-    #ifdef ARDUINO_ARCH_ESP8266
+    #ifdef IOT_NODE_ESP8266
       delay(LINK_DELAY);
     #endif
-    #ifdef ARDUINO_ARCH_ESP32
+    #ifdef IOT_NODE_ESP32
       vTaskDelay(LINK_DELAY / portTICK_PERIOD_MS);
     #endif
 
@@ -324,7 +324,7 @@ namespace Link {
       WiFi.begin(state.credentials.ssid.c_str(), state.credentials.password.c_str());
     #endif
 
-    #ifndef IOT_NODE_DHCP
+    #ifdef IOT_NODE_IP_STATIC
       WiFi.config(
         state.interfaceConfig.ip,
         state.interfaceConfig.gateway,
@@ -336,7 +336,7 @@ namespace Link {
 
   void Class::debug(bool deep) {
     if (deep) {
-      #ifdef ARDUINO_ARCH_ESP8266
+      #ifdef IOT_NODE_ESP8266
         state.callbacks.debug("info.wifi.phy-mode", String(WiFi.getPhyMode()));
       #endif
 
@@ -355,7 +355,7 @@ namespace Link {
 
     state.callbacks.debug("info.wifi.rssi", String(WiFi.RSSI()));
 
-    #ifdef IOT_NODE_DHCP
+    #ifdef IOT_NODE_IP_DHCP
       IPAddress ip = WiFi.localIP();
       IPAddress gateway = WiFi.gatewayIP();
       IPAddress netmask = WiFi.subnetMask();

@@ -1,18 +1,14 @@
 #ifndef _UTILS_LINK_WIFI
 #define _UTILS_LINK_WIFI
 
-#ifndef IOT_NODE_LINK_ETH
-
-#if defined(IOT_NODE_AP_ALGORE) || defined(IOT_NODE_AP_ELZAR) || defined(IOT_NODE_AP_RICHARDNIXON) || defined(IOT_NODE_AP_SPIROAGNEW)
-  #define IOT_NODE_ADVANCED_WIFI_CONFIG
-#endif
+#ifdef IOT_NODE_LINK_WIFI
 
 #include <Arduino.h>
 
-#ifdef ARDUINO_ARCH_ESP8266
+#ifdef IOT_NODE_ESP8266
   #include <ESP8266WiFi.h>
 #endif
-#ifdef ARDUINO_ARCH_ESP32
+#ifdef IOT_NODE_ESP32
   #include <WiFi.h>
 #endif
 
@@ -22,11 +18,11 @@ namespace IotNode {
 namespace Utils {
 
 namespace Link {
-  #ifdef ARDUINO_ARCH_ESP8266
+  #ifdef IOT_NODE_ESP8266
     typedef float OutputPower_t;
     typedef WiFiPhyMode_t PhyMode_t;
   #endif
-  #ifdef ARDUINO_ARCH_ESP32
+  #ifdef IOT_NODE_ESP32
     typedef wifi_phy_rate_t PhyMode_t;
     typedef wifi_power_t OutputPower_t;
   #endif
@@ -45,7 +41,7 @@ namespace Link {
     PhyMode_t phyMode;
     OutputPower_t outputPower;
 
-    #ifndef IOT_NODE_DHCP
+    #ifdef IOT_NODE_IP_STATIC
       InterfaceConfig interfaceConfig;
     #endif
 
@@ -64,7 +60,7 @@ namespace Link {
     PhyMode_t phyMode;
     OutputPower_t outputPower;
 
-    #ifndef IOT_NODE_DHCP
+    #ifdef IOT_NODE_IP_STATIC
       InterfaceConfig interfaceConfig;
     #endif
 

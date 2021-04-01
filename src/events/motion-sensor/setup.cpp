@@ -12,7 +12,7 @@ namespace MotionSensor {
     // motionSensor1.update();
   }
 
-  #ifdef ARDUINO_ARCH_ESP32
+  #ifdef IOT_NODE_ESP32
     void task(void *parameter) {
       for(;;) {
         update();
@@ -33,7 +33,7 @@ namespace MotionSensor {
     // motionSensor0.start();
     // motionSensor1.start();
 
-    #ifdef ARDUINO_ARCH_ESP32
+    #ifdef IOT_NODE_ESP32
       xTaskCreatePinnedToCore(
         task,
         "motionSensor_maintenance",

@@ -5,17 +5,17 @@ namespace Utils {
 
 namespace Log {
   void setup() {
-    #ifdef ARDUINO_ARCH_ESP8266
+    #ifdef IOT_NODE_ESP8266
       Serial.begin(74880);
     #endif
-    #ifdef ARDUINO_ARCH_ESP32
+    #ifdef IOT_NODE_ESP32
       Serial.begin(115200);
     #endif
 
-    #ifdef ARDUINO_ARCH_ESP8266
+    #ifdef IOT_NODE_ESP8266
       delay(LOG_DELAY);
     #endif
-    #ifdef ARDUINO_ARCH_ESP32
+    #ifdef IOT_NODE_ESP32
       vTaskDelay(LOG_DELAY / portTICK_PERIOD_MS);
     #endif
     
@@ -39,16 +39,13 @@ namespace Log {
 
     Serial.println();
 
-    #ifdef IOT_NODE_BUILD_TIME
-      debug("info.build.time", STR(IOT_NODE_BUILD_TIME));
-    #endif
-
+    debug("info.name", IOT_NODE_NAME);
     debug("info.build.git-rev", STR(IOT_NODE_BUILD_GIT_REV));
     debug("info.build.pio.env", STR(IOT_NODE_PIO_ENV));
     debug("info.build.pio.platform", STR(IOT_NODE_PIO_PLATFORM));
     debug("info.build.pio.framework", STR(IOT_NODE_PIO_FRAMEWORK));
 
-    #ifdef ARDUINO_ARCH_ESP8266
+    #ifdef IOT_NODE_ESP8266
       debug("info.system.chip-id", String(ESP.getChipId(), HEX));
       debug("info.system.flash-id", String(ESP.getFlashChipId(), HEX));
     #endif

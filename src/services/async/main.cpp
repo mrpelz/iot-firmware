@@ -1,4 +1,4 @@
-#ifdef ARDUINO_ARCH_ESP32
+#ifdef IOT_NODE_ESP32
 
 #include "./main.h"
 

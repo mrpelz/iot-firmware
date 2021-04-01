@@ -3,10 +3,10 @@
 
 #include <Arduino.h>
 
-#ifdef ARDUINO_ARCH_ESP8266
+#ifdef IOT_NODE_ESP8266
   #include <ESPAsyncUDP.h>  
 #endif
-#ifdef ARDUINO_ARCH_ESP32
+#ifdef IOT_NODE_ESP32
   #include <AsyncUDP.h>
 #endif
 

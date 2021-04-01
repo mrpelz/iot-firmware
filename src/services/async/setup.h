@@ -1,7 +1,7 @@
 #ifndef _SERVICES_ASYNC_SETUP
 #define _SERVICES_ASYNC_SETUP
 
-#ifdef ARDUINO_ARCH_ESP32
+#ifdef IOT_NODE_ESP32
 
 #include <Arduino.h>
 

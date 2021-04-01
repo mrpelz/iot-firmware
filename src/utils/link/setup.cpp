@@ -4,19 +4,13 @@ namespace IotNode {
 namespace Utils {
 
 namespace Link {
-  #ifdef IOT_NODE_LINK_ETH
-    #ifdef ARDUINO_ARCH_ESP32
-      Class link(config);
-    #endif
-  #else
-    Class link(config);
-  #endif
+  Class link(config);
 
   void update() {
     link.update();
   }
 
-  #ifdef ARDUINO_ARCH_ESP32
+  #ifdef IOT_NODE_ESP32
     void task(void *parameter) {
       for(;;) {
         update();
@@ -41,11 +35,11 @@ namespace Link {
 
     link.connect();
 
-    #ifdef ARDUINO_ARCH_ESP32
+    #ifdef IOT_NODE_ESP32
       xTaskCreatePinnedToCore(
         task,
         "link_maintenance",
-        2048,
+        4096,
         NULL,
         2,
         NULL,

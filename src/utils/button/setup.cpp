@@ -10,7 +10,7 @@ namespace Button {
     // button0.update();
   }
 
-  #ifdef ARDUINO_ARCH_ESP32
+  #ifdef IOT_NODE_ESP32
     void task(void *parameter) {
       for(;;) {
         update();
@@ -23,7 +23,7 @@ namespace Button {
     // button0.setDebug(Log::debug);
     // button0.start();
 
-    #ifdef ARDUINO_ARCH_ESP32
+    #ifdef IOT_NODE_ESP32
       xTaskCreatePinnedToCore(
         task,
         "button_maintenance",

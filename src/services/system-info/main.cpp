@@ -9,7 +9,7 @@ namespace SystemInfo {
 
     Utils::UDP::Payload response;
 
-    #ifdef ARDUINO_ARCH_ESP8266
+    #ifdef IOT_NODE_ESP8266
       auto chipId = ESP.getChipId();
       response.insert(response.end(), &chipId, &chipId + sizeof(chipId));
 
@@ -22,7 +22,7 @@ namespace SystemInfo {
     response.insert(response.end(), macAddress, macAddress + 6);
     delete macAddress;
 
-    #ifndef IOT_NODE_LINK_ETH
+    #ifdef IOT_NODE_LINK_WIFI
       auto bssid = WiFi.BSSID();
       response.insert(response.end(), bssid, bssid + 6);
 

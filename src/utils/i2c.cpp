@@ -4,11 +4,11 @@ namespace IotNode {
 namespace Utils {
 
 namespace I2C {
-  #ifdef ARDUINO_ARCH_ESP8266
-    TwoWire bus = TwoWire();
+  #ifdef IOT_NODE_ESP8266
+    TwoWire bus();
   #endif
-  #ifdef ARDUINO_ARCH_ESP32
-    TwoWire bus = TwoWire(0);
+  #ifdef IOT_NODE_ESP32
+    TwoWire bus(0);
   #endif
 
   volatile bool lock = false;

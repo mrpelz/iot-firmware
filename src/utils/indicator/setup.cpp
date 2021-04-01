@@ -23,7 +23,7 @@ namespace Indicator {
     txdLed.update();
   }
 
-  #ifdef ARDUINO_ARCH_ESP32
+  #ifdef IOT_NODE_ESP32
     void task(void *parameter) {
       for(;;) {
         update();
@@ -36,7 +36,7 @@ namespace Indicator {
     rxdLed.init();
     txdLed.init();
 
-    #ifdef ARDUINO_ARCH_ESP32
+    #ifdef IOT_NODE_ESP32
       xTaskCreatePinnedToCore(
         task,
         "indicator_maintenance",

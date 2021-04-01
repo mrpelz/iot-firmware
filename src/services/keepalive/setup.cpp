@@ -15,7 +15,7 @@ namespace Keepalive {
     restartOnTimeout.update();
   }
 
-  #ifdef ARDUINO_ARCH_ESP32
+  #ifdef IOT_NODE_ESP32
     void task(void *parameter) {
       for(;;) {
         update();
@@ -27,7 +27,7 @@ namespace Keepalive {
   void setup() {
     Utils::UDP::instance.addService(&service);
 
-    #ifdef ARDUINO_ARCH_ESP32
+    #ifdef IOT_NODE_ESP32
       xTaskCreatePinnedToCore(
         task,
         "keepalive_maintenance",

@@ -17,24 +17,25 @@ namespace Hello {
     Utils::UDP::Payload response;
 
     addLineToRespone(&response, "HELLO");
+    addLineToRespone(&response, IOT_NODE_NAME);
     addLineToRespone(&response, STR(IOT_NODE_BUILD_GIT_REV));
     addLineToRespone(&response, STR(IOT_NODE_PIO_ENV));
     addLineToRespone(&response, STR(IOT_NODE_PIO_PLATFORM));
     addLineToRespone(&response, STR(IOT_NODE_PIO_FRAMEWORK));
 
-    #ifdef ARDUINO_ARCH_ESP8266
+    #ifdef IOT_NODE_ESP8266
       addLineToRespone(&response, String(ESP.getChipId(), HEX));
       addLineToRespone(&response, String(ESP.getFlashChipId(), HEX));
     #endif
 
     addLineToRespone(&response, WiFi.macAddress());
 
-    #ifndef IOT_NODE_LINK_ETH
-      addLineToRespone(&response, Link::printMacAddress(WiFi.BSSID()));
+    #ifdef IOT_NODE_LINK_WIFI
+      addLineToRespone(&response, Utils::Link::printMacAddress(WiFi.BSSID()));
       addLineToRespone(&response, String(WiFi.channel()));
       addLineToRespone(&response, String(WiFi.RSSI()));
 
-      #ifdef ARDUINO_ARCH_ESP8266
+      #ifdef IOT_NODE_ESP8266
         addLineToRespone(&response, String(WiFi.getPhyMode()));
       #endif
 

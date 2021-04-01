@@ -14,7 +14,7 @@ namespace Indicator {
 
   void update();
 
-  #ifdef ARDUINO_ARCH_ESP32
+  #ifdef IOT_NODE_ESP32
     void task(void *parameter);
   #endif
 

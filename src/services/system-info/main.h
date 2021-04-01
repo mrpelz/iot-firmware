@@ -6,10 +6,10 @@
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"
 
-#ifdef ARDUINO_ARCH_ESP8266
+#ifdef IOT_NODE_ESP8266
   #include <ESP8266WiFi.h>
 #endif
-#ifdef ARDUINO_ARCH_ESP32
+#ifdef IOT_NODE_ESP32
   #include <WiFi.h>
 #endif
 

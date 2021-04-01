@@ -1,13 +1,13 @@
 #include "./eth.h"
 
-#if defined(IOT_NODE_LINK_ETH) && defined(ARDUINO_ARCH_ESP32)
+#if defined(IOT_NODE_LINK_ETH) && defined(IOT_NODE_ESP32)
 
 namespace IotNode {
 namespace Utils {
 
 namespace Link {
   Class::Class(Config config) {
-    #ifndef IOT_NODE_DHCP
+    #ifdef IOT_NODE_IP_STATIC
       state.interfaceConfig = config.interfaceConfig;
     #endif
 
@@ -47,7 +47,7 @@ namespace Link {
   }
 
   void Class::configDebug() {
-    #ifdef IOT_NODE_DHCP
+    #ifdef IOT_NODE_IP_DHCP
       state.callbacks.debug("config.network-config.dhcp", "1");
     #else
       state.callbacks.debug("config.network-config.dhcp", "0");
@@ -78,7 +78,7 @@ namespace Link {
       ETH.begin();
     #endif
 
-    #ifndef IOT_NODE_DHCP
+    #ifdef IOT_NODE_IP_STATIC
       ETH.config(
         state.interfaceConfig.ip,
         state.interfaceConfig.gateway,
@@ -250,7 +250,7 @@ namespace Link {
   void Class::debug(bool deep) {
     state.callbacks.debug("info.eth.link-speed", String(ETH.linkSpeed()));
 
-    #ifdef IOT_NODE_DHCP
+    #ifdef IOT_NODE_IP_DHCP
       IPAddress ip = ETH.localIP();
       IPAddress gateway = ETH.gatewayIP();
       IPAddress netmask = ETH.subnetMask();

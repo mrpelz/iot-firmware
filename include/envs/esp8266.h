@@ -1,0 +1,1 @@
+#define IOT_NODE_ESP8266
