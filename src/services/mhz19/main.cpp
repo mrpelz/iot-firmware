@@ -33,7 +33,6 @@ namespace Mhz19 {
 
   void responseTask(void *parameter) {
     for(;;) {
-      vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
       if (respondCallback == NULL) {
         vTaskSuspend(NULL);
         continue;

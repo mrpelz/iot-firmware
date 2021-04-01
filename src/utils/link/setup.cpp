@@ -20,7 +20,7 @@ namespace Link {
     void task(void *parameter) {
       for(;;) {
         update();
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+        vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
       }
     }
   #endif
