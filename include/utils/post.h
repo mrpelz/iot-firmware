@@ -8,6 +8,10 @@
   #define IOT_NODE_LINK_ETH
 #endif
 
+#if defined(IOT_NODE_LINK_ETH) && !defined(IOT_NODE_ESP32)
+  #error cannot use ethernet without ESP32
+#endif
+
 #if defined(IOT_NODE_IP) && defined(IOT_NODE_GATEWAY) && defined(IOT_NODE_NETMASK)
   #define IOT_NODE_IP_STATIC
 #else
