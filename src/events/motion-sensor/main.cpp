@@ -1,5 +1,7 @@
 #include "./main.h"
 
+#ifdef IOT_NODE_MOTION_SENSOR
+
 namespace IotNode {
 namespace Events {
 
@@ -59,3 +61,5 @@ namespace MotionSensor {
 
 } // section namespace
 } // project namespace
+
+#endif

@@ -1,6 +1,8 @@
 #ifndef _EVENTS_BUTTON_SETUP
 #define _EVENTS_BUTTON_SETUP
 
+#ifdef IOT_NODE_BUTTONS
+
 #include <Arduino.h>
 
 #include "../../utils/button/setup.h"
@@ -18,5 +20,7 @@ namespace Button {
 
 } // section namespace
 } // project namespace
+
+#endif
 
 #endif

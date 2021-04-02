@@ -1,0 +1,17 @@
+#include "../envs/wt32.h"
+
+#define IOT_NODE_BOARD_ROOM_SENSOR
+#define IOT_NODE_BOARD_NAME "room-sensor"
+#define IOT_NODE_HARDWARE_NAME "WT32-ETH01"
+
+#define IOT_NODE_BME280
+#define IOT_NODE_MCP9808
+#define IOT_NODE_MHZ19
+#define IOT_NODE_TSL2561
+
+#define IOT_NODE_MOTION_SENSOR
+
+#define IOT_NODE_MHZ19_SERIAL Serial1
+
+#define RX1 35
+#define TX1 4

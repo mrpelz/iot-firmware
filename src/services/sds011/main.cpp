@@ -9,7 +9,7 @@ namespace Sds011 {
   Utils::UDP::RespondCallback respondCallback = NULL;
   TaskHandle_t taskHandle = NULL;
 
-  auto sensor = SdsDustSensor(Serial1);
+  auto sensor = SdsDustSensor(IOT_NODE_SDS011_SERIAL);
 
   void initializer() {
     Utils::Log::debug("sds011-service", "initializing sensor");

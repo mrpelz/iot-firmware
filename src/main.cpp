@@ -6,9 +6,13 @@ void setup() {
   IotNode::Utils::Indicator::setup();
   IotNode::Utils::Indicator::rxdLed.setOn(true);
 
-  IotNode::Utils::Relais::setup();
+  #ifdef IOT_NODE_RELAIS
+    IotNode::Utils::Relais::setup();
+  #endif
 
-  IotNode::Utils::Button::setup();
+  #ifdef IOT_NODE_BUTTONS
+    IotNode::Utils::Button::setup();
+  #endif
 
   IotNode::Utils::UDP::setup();
   IotNode::Utils::Link::setup();
@@ -22,10 +26,18 @@ void setup() {
   IotNode::Services::SystemInfo::setup();
 
   IotNode::Services::Indicator::setup();
-  IotNode::Services::Relais::setup();
 
-  IotNode::Events::Button::setup();
-  IotNode::Events::MotionSensor::setup();
+  #ifdef IOT_NODE_RELAIS
+    IotNode::Services::Relais::setup();
+  #endif
+
+  #ifdef IOT_NODE_BUTTONS
+    IotNode::Events::Button::setup();
+  #endif
+
+  #ifdef IOT_NODE_MOTION_SENSOR
+    IotNode::Events::MotionSensor::setup();
+  #endif
 
   #ifdef IOT_NODE_I2C
     IotNode::Utils::I2C::setup();
@@ -75,7 +87,15 @@ void loop() {
   #ifdef IOT_NODE_ESP8266
     delay(IOT_NODE_MUTLITASKING_DELAY);
     IotNode::Utils::Indicator::update();
-    IotNode::Utils::Button::update();
+
+    #ifdef IOT_NODE_BUTTONS
+      IotNode::Utils::Button::update();
+    #endif
+
+    #ifdef IOT_NODE_MOTION_SENSOR
+      IotNode::Events::MotionSensor::update();
+    #endif
+
     IotNode::Services::Keepalive::update();
     IotNode::Utils::Link::update();
   #endif

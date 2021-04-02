@@ -1,5 +1,7 @@
 #include "./main.h"
 
+#ifdef IOT_NODE_RELAIS
+
 namespace IotNode {
 namespace Utils {
 
@@ -49,3 +51,5 @@ namespace Relais {
 
 } // section namespace
 } // project namespace
+
+#endif

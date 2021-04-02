@@ -1,6 +1,8 @@
 #ifndef _EVENTS_MOTION_SENSOR_MAIN
 #define _EVENTS_MOTION_SENSOR_MAIN
 
+#ifdef IOT_NODE_MOTION_SENSOR
+
 #include <Arduino.h>
 
 #include "../../utils/log.h"
@@ -38,5 +40,7 @@ namespace MotionSensor {
 
 } // section namespace
 } // project namespace
+
+#endif
 
 #endif

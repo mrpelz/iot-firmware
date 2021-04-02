@@ -1,8 +1,0 @@
-#define IOT_NODE_BME280
-// #define IOT_NODE_CCS811
-#define IOT_NODE_MCP9808
-#define IOT_NODE_MHZ19
-#define IOT_NODE_SDS011
-// #define IOT_NODE_SGP30
-#define IOT_NODE_TSL2561
-#define IOT_NODE_VEML6070

@@ -18,10 +18,19 @@ namespace Hello {
 
     addLineToRespone(&response, "HELLO");
     addLineToRespone(&response, IOT_NODE_NAME);
-    addLineToRespone(&response, STR(IOT_NODE_BUILD_GIT_REV));
-    addLineToRespone(&response, STR(IOT_NODE_PIO_ENV));
-    addLineToRespone(&response, STR(IOT_NODE_PIO_PLATFORM));
-    addLineToRespone(&response, STR(IOT_NODE_PIO_FRAMEWORK));
+
+    #ifdef IOT_NODE_BOARD_NAME
+      addLineToRespone(&response, IOT_NODE_BOARD_NAME);
+    #endif
+
+    #ifdef IOT_NODE_HARDWARE_NAME
+      addLineToRespone(&response, IOT_NODE_HARDWARE_NAME);
+    #endif
+
+    addLineToRespone(&response, IOT_NODE_STR(IOT_NODE_BUILD_GIT_REV));
+    addLineToRespone(&response, IOT_NODE_STR(IOT_NODE_PIO_ENV));
+    addLineToRespone(&response, IOT_NODE_STR(IOT_NODE_PIO_PLATFORM));
+    addLineToRespone(&response, IOT_NODE_STR(IOT_NODE_PIO_FRAMEWORK));
 
     #ifdef IOT_NODE_ESP8266
       addLineToRespone(&response, String(ESP.getChipId(), HEX));

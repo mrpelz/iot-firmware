@@ -1,5 +1,7 @@
 #include "./main.h"
 
+#ifdef IOT_NODE_BUTTONS
+
 namespace IotNode {
 namespace Events {
 
@@ -36,3 +38,5 @@ namespace Button {
 
 } // section namespace
 } // project namespace
+
+#endif

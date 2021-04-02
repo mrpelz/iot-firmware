@@ -5,10 +5,10 @@ namespace Utils {
 
 namespace I2C {
   #ifdef IOT_NODE_ESP8266
-    TwoWire bus();
+    TwoWire bus = TwoWire();
   #endif
   #ifdef IOT_NODE_ESP32
-    TwoWire bus(0);
+    TwoWire bus = TwoWire(0);
   #endif
 
   volatile bool lock = false;
@@ -43,23 +43,25 @@ namespace I2C {
     bus.begin(32, 33);
   }
 
-  void claim() {
-    if (!lock) {
+  #ifdef IOT_NODE_ESP32
+    void claim() {
+      if (!lock) {
+        lock = true;
+
+        return;
+      }
+
+      while (lock) {
+        vTaskDelay(I2C_LOCK_DELAY / portTICK_PERIOD_MS);
+      }
+
       lock = true;
-
-      return;
     }
 
-    while (lock) {
-      vTaskDelay(I2C_LOCK_DELAY / portTICK_PERIOD_MS);
+    void unclaim() {
+      lock = false;
     }
-
-    lock = true;
-  }
-
-  void unclaim() {
-    lock = false;
-  }
+  #endif
 }
 
 } // section namespace

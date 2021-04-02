@@ -1,13 +1,19 @@
 #include "./setup.h"
 
+#ifdef IOT_NODE_BUTTONS
+
 namespace IotNode {
 namespace Utils {
 
 namespace Button {
-  // Class button0(button0Config);
+  #ifdef IOT_NODE_BOARD_SHELLY1
+    Class button0(button0Config);
+  #endif
 
   void update() {
-    // button0.update();
+    #ifdef IOT_NODE_BOARD_SHELLY1
+      button0.update();
+    #endif
   }
 
   #ifdef IOT_NODE_ESP32
@@ -20,8 +26,10 @@ namespace Button {
   #endif
 
   void setup() {
-    // button0.setDebug(Log::debug);
-    // button0.start();
+    #ifdef IOT_NODE_BOARD_SHELLY1
+      button0.setDebug(Log::debug);
+      button0.start();
+    #endif
 
     #ifdef IOT_NODE_ESP32
       xTaskCreatePinnedToCore(
@@ -39,3 +47,5 @@ namespace Button {
 
 } // section namespace
 } // project namespace
+
+#endif

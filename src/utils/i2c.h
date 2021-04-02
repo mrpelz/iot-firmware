@@ -20,9 +20,11 @@ namespace I2C {
 
   void setup();
 
-  void claim();
+  #ifdef IOT_NODE_ESP32
+    void claim();
 
-  void unclaim();
+    void unclaim();
+  #endif
 }
 
 } // section namespace

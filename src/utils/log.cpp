@@ -40,10 +40,19 @@ namespace Log {
     Serial.println();
 
     debug("info.name", IOT_NODE_NAME);
-    debug("info.build.git-rev", STR(IOT_NODE_BUILD_GIT_REV));
-    debug("info.build.pio.env", STR(IOT_NODE_PIO_ENV));
-    debug("info.build.pio.platform", STR(IOT_NODE_PIO_PLATFORM));
-    debug("info.build.pio.framework", STR(IOT_NODE_PIO_FRAMEWORK));
+
+    #ifdef IOT_NODE_BOARD_NAME
+      debug("info.board-name", IOT_NODE_BOARD_NAME);
+    #endif
+
+    #ifdef IOT_NODE_HARDWARE_NAME
+      debug("info.hardware-name", IOT_NODE_HARDWARE_NAME);
+    #endif
+
+    debug("info.build.git-rev", IOT_NODE_STR(IOT_NODE_BUILD_GIT_REV));
+    debug("info.build.pio.env", IOT_NODE_STR(IOT_NODE_PIO_ENV));
+    debug("info.build.pio.platform", IOT_NODE_STR(IOT_NODE_PIO_PLATFORM));
+    debug("info.build.pio.framework", IOT_NODE_STR(IOT_NODE_PIO_FRAMEWORK));
 
     #ifdef IOT_NODE_ESP8266
       debug("info.system.chip-id", String(ESP.getChipId(), HEX));

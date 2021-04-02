@@ -1,6 +1,8 @@
 #ifndef _SERVICES_RELAIS_MAIN
 #define _SERVICES_RELAIS_MAIN
 
+#ifdef IOT_NODE_RELAIS
+
 #include "../../utils/relais/main.h"
 #include "../../utils/udp/main.h"
 #include "../service-ids.h"
@@ -14,5 +16,7 @@ namespace Relais {
 
 } // section namespace
 } // project namespace
+
+#endif
 
 #endif

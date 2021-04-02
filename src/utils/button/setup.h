@@ -1,6 +1,8 @@
 #ifndef _UTILS_BUTTON_SETUP
 #define _UTILS_BUTTON_SETUP
 
+#ifdef IOT_NODE_BUTTONS
+
 #include <Arduino.h>
 
 #include "./main.h"
@@ -9,16 +11,18 @@ namespace IotNode {
 namespace Utils {
 
 namespace Button {
-  // static const Config button0Config = {
-  //   .pin = 2,
-  //   .invert = false,
-  //   .pullupEnable = true,
-  //   .debounceTime = 50,
-  //   .repeatTime = 3000,
-  //   .longpressTime = 125, // (step duration)
-  // };
+  #ifdef IOT_NODE_BOARD_SHELLY1
+    static const Config button0Config = {
+      .pin = 5,
+      .invert = true,
+      .pullupEnable = false,
+      .debounceTime = 50,
+      .repeatTime = 3000,
+      .longpressTime = 125, // (step duration)
+    };
 
-  // extern Class button0;
+    extern Class button0;
+  #endif
 
   void update();
 
@@ -31,5 +35,7 @@ namespace Button {
 
 } // section namespace
 } // project namespace
+
+#endif
 
 #endif

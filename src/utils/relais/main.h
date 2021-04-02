@@ -1,6 +1,8 @@
 #ifndef _UTILS_RELAIS_MAIN
 #define _UTILS_RELAIS_MAIN
 
+#ifdef IOT_NODE_RELAIS
+
 #include <Arduino.h>
 #include "../log.h"
 
@@ -35,5 +37,7 @@ namespace Relais {
 
 } // section namespace
 } // project namespace
+
+#endif
 
 #endif

@@ -1,17 +1,23 @@
 #include "./setup.h"
 
+#ifdef IOT_NODE_RELAIS
+
 namespace IotNode {
 namespace Utils {
 
 namespace Relais {
-  // Class relais0({ 4, true });
-  // Class relais1({ 32, true });
+  #ifdef IOT_NODE_BOARD_SHELLY1
+    Class relais0({ 4, false });
+  #endif
 
   void setup() {
-    // relais0.init();
-    // relais1.init();
+    #ifdef IOT_NODE_BOARD_SHELLY1
+      relais0.init();
+    #endif
   }
 }
 
 } // section namespace
 } // project namespace
+
+#endif
