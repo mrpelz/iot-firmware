@@ -5,12 +5,7 @@ namespace Utils {
 
 namespace Log {
   void setup() {
-    #ifdef IOT_NODE_ESP8266
-      Serial.begin(74880);
-    #endif
-    #ifdef IOT_NODE_ESP32
-      Serial.begin(115200);
-    #endif
+    Serial.begin(IOT_NODE_SERIAL0_BAUD_RATE);
 
     #ifdef IOT_NODE_ESP8266
       delay(LOG_DELAY);
