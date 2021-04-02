@@ -98,7 +98,10 @@ void setup() {
 void loop() {
   #ifdef IOT_NODE_ESP8266
     delay(IOT_NODE_MUTLITASKING_DELAY);
-    IotNode::Utils::Indicator::update();
+
+    #ifdef IOT_NODE_INDICATORS
+      IotNode::Utils::Indicator::update();
+    #endif
 
     #ifdef IOT_NODE_BUTTONS
       IotNode::Utils::Button::update();

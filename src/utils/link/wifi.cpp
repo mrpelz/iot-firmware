@@ -93,13 +93,11 @@ namespace Link {
 
     #ifdef IOT_NODE_ESP32
       WiFi.setSleep(false);
-      WiFi.setHostname(IOT_NODE_NAME);
     #endif
 
     #ifdef IOT_NODE_ESP8266
       WiFi.setPhyMode(state.phyMode);
       WiFi.setSleepMode(WIFI_NONE_SLEEP);
-      wifi_station_set_hostname(IOT_NODE_NAME);
     #endif
 
     if (state.outputPower != 0) {
@@ -337,6 +335,14 @@ namespace Link {
         state.interfaceConfig.netmask,
         state.interfaceConfig.gateway
       );
+    #endif
+
+    #ifdef IOT_NODE_ESP32
+      WiFi.setHostname(IOT_NODE_NAME);
+    #endif
+
+    #ifdef IOT_NODE_ESP8266
+      wifi_station_set_hostname(IOT_NODE_NAME);
     #endif
   }
 

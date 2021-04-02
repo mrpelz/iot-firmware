@@ -44,8 +44,6 @@ namespace Link {
       },
       SYSTEM_EVENT_ETH_GOT_IP
     );
-
-    ETH.setHostname(IOT_NODE_NAME);
   }
 
   void Class::configDebug() {
@@ -88,6 +86,8 @@ namespace Link {
         state.interfaceConfig.gateway
       );
     #endif
+
+    ETH.setHostname(IOT_NODE_NAME);
   }
 
   void Class::handleConnected() {
