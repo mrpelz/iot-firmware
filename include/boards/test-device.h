@@ -4,6 +4,8 @@
 #define IOT_NODE_BOARD_NAME "test-device"
 #define IOT_NODE_HARDWARE_NAME "WT32-ETH01"
 
+#define IOT_NODE_INDICATORS
+
 #define IOT_NODE_BME280
 #define IOT_NODE_MCP9808
 #define IOT_NODE_MHZ19

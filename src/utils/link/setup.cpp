@@ -24,13 +24,18 @@ namespace Link {
 
     link.onGotIP([]() {
       UDP::instance.begin();
-      Indicator::rxdLed.setOn(false);
-      Indicator::txdLed.blink(3);
+
+      #if defined(IOT_NODE_INDICATORS) && (defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE))
+        Indicator::indicator0.setOn(false);
+      #endif
     });
 
     link.onDisconnected([]() {
       UDP::instance.close();
-      Indicator::rxdLed.blink();
+
+      #if defined(IOT_NODE_INDICATORS) && (defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE))
+        Indicator::indicator0.blink();
+      #endif
     });
 
     link.connect();

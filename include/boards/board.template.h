@@ -4,6 +4,11 @@
 // #define IOT_NODE_BOARD_NAME "<board-name>"
 #define IOT_NODE_HARDWARE_NAME "<hardware-name>"
 
+// #define IOT_NODE_BUTTONS
+// #define IOT_NODE_INDICATORS
+// #define IOT_NODE_MOTION_SENSOR
+// #define IOT_NODE_RELAIS
+
 // #define IOT_NODE_BME280
 // #define IOT_NODE_CCS811
 // #define IOT_NODE_MCP9808

@@ -1,5 +1,7 @@
 #include "./main.h"
 
+#ifdef IOT_NODE_INDICATORS
+
 namespace IotNode {
 namespace Services {
 
@@ -50,3 +52,5 @@ namespace Indicator {
 
 } // section namespace
 } // project namespace
+
+#endif

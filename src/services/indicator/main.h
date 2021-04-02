@@ -1,6 +1,8 @@
 #ifndef _SERVICES_INDICATOR_MAIN
 #define _SERVICES_INDICATOR_MAIN
 
+#ifdef IOT_NODE_INDICATORS
+
 #include <Arduino.h>
 
 #include "../../utils/indicator/setup.h"
@@ -20,5 +22,7 @@ namespace Indicator {
 
 } // section namespace
 } // project namespace
+
+#endif
 
 #endif

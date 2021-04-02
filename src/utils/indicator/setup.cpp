@@ -1,26 +1,24 @@
 #include "./setup.h"
 
+#ifdef IOT_NODE_INDICATORS
+
 namespace IotNode {
 namespace Utils {
 
 namespace Indicator {
-  Class rxdLed({
-    WT32_ETH01_RXD_LED,
-    true,
-    INDICATOR_BLINK_PERIOD_ON,
-    INDICATOR_BLINK_PERIOD_OFF
-  });
-
-  Class txdLed({
-    WT32_ETH01_TXD_LED,
-    true,
-    INDICATOR_BLINK_PERIOD_ON,
-    INDICATOR_BLINK_PERIOD_OFF
-  });
+  #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
+    Class indicator0({
+      IOT_NODE_WT32_ETH01_TXD_LED,
+      true,
+      INDICATOR_BLINK_PERIOD_ON,
+      INDICATOR_BLINK_PERIOD_OFF
+    });
+  #endif
 
   void update() {
-    rxdLed.update();
-    txdLed.update();
+    #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
+      indicator0.update();
+    #endif
   }
 
   #ifdef IOT_NODE_ESP32
@@ -33,8 +31,9 @@ namespace Indicator {
   #endif
 
   void setup() {
-    rxdLed.init();
-    txdLed.init();
+    #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
+      indicator0.init();
+    #endif
 
     #ifdef IOT_NODE_ESP32
       xTaskCreatePinnedToCore(
@@ -52,3 +51,5 @@ namespace Indicator {
 
 } // section namespace
 } // project namespace
+
+#endif

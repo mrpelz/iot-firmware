@@ -1,6 +1,8 @@
 #ifndef _SERVICES_INDICATOR_SETUP
 #define _SERVICES_INDICATOR_SETUP
 
+#ifdef IOT_NODE_INDICATORS
+
 #include <Arduino.h>
 
 #include "../../utils/udp/setup.h"
@@ -15,5 +17,7 @@ namespace Indicator {
 
 } // section namespace
 } // project namespace
+
+#endif
 
 #endif

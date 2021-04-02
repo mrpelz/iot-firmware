@@ -1,17 +1,23 @@
 #include "./setup.h"
 
+#ifdef IOT_NODE_INDICATORS
+
 namespace IotNode {
 namespace Services {
 
 namespace Indicator {
-  auto service0 = makeService(&Utils::Indicator::rxdLed, 0);
-  auto service1 = makeService(&Utils::Indicator::txdLed, 1);
+  #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
+    auto service0 = makeService(&Utils::Indicator::indicator0, 0);
+  #endif
 
   void setup() {
-    Utils::UDP::instance.addService(&service0);
-    Utils::UDP::instance.addService(&service1);
+    #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
+      Utils::UDP::instance.addService(&service0);
+    #endif
   }
 }
 
 } // section namespace
 } // project namespace
+
+#endif

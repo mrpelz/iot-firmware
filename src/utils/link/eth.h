@@ -1,7 +1,7 @@
 #ifndef _UTILS_LINK_ETH
 #define _UTILS_LINK_ETH
 
-#if defined(IOT_NODE_LINK_ETH) && defined(IOT_NODE_ESP32)
+#ifdef IOT_NODE_LINK_ETH
 
 #include <Arduino.h>
 #include <ETH.h>

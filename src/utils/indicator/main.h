@@ -1,11 +1,10 @@
 #ifndef _UTILS_INDICATOR_MAIN
 #define _UTILS_INDICATOR_MAIN
 
+#ifdef IOT_NODE_INDICATORS
+
 #include <Arduino.h>
 #include "../../utils/log.h"
-
-#define WT32_ETH01_RXD_LED 5
-#define WT32_ETH01_TXD_LED 17
 
 #define INDICATOR_BLINK_PERIOD_ON 64
 #define INDICATOR_BLINK_PERIOD_OFF 128
@@ -50,5 +49,7 @@ namespace Indicator {
 
 } // section namespace
 } // project namespace
+
+#endif
 
 #endif

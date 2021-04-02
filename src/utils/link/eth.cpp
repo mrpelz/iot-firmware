@@ -1,6 +1,6 @@
 #include "./eth.h"
 
-#if defined(IOT_NODE_LINK_ETH) && defined(IOT_NODE_ESP32)
+#ifdef IOT_NODE_LINK_ETH
 
 namespace IotNode {
 namespace Utils {

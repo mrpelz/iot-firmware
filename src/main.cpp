@@ -3,8 +3,13 @@
 void setup() {
   IotNode::Utils::Log::setup();
 
+  #ifdef IOT_NODE_INDICATORS
   IotNode::Utils::Indicator::setup();
-  IotNode::Utils::Indicator::rxdLed.setOn(true);
+
+    #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
+      IotNode::Utils::Indicator::indicator0.setOn(true);
+    #endif
+  #endif
 
   #ifdef IOT_NODE_RELAIS
     IotNode::Utils::Relais::setup();
@@ -25,7 +30,9 @@ void setup() {
   IotNode::Services::Keepalive::setup();
   IotNode::Services::SystemInfo::setup();
 
-  IotNode::Services::Indicator::setup();
+  #ifdef IOT_NODE_INDICATORS
+    IotNode::Services::Indicator::setup();
+  #endif
 
   #ifdef IOT_NODE_RELAIS
     IotNode::Services::Relais::setup();
@@ -79,8 +86,13 @@ void setup() {
     IotNode::Services::Veml6070::setup();
   #endif
 
-  if (IotNode::Utils::Link::link.isConnected()) return;
-  IotNode::Utils::Indicator::rxdLed.blink();
+  #ifdef IOT_NODE_INDICATORS
+    if (IotNode::Utils::Link::link.isConnected()) return;
+
+    #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
+      IotNode::Utils::Indicator::indicator0.blink();
+    #endif
+  #endif
 }
 
 void loop() {
