@@ -11,7 +11,8 @@ namespace IotNode {
 namespace Services {
 
 namespace Relais {
-  Utils::UDP::Service makeService(Utils::Relais::Class *relais, uint8_t index);
+  Utils::UDP::Service makeService(Utils::Relais::Regular *relais, uint8_t index);
+  Utils::UDP::Service makeService(Utils::Relais::Pulse *relais, uint8_t index);
 }
 
 } // section namespace

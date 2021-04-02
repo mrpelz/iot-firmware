@@ -4,11 +4,8 @@ void setup() {
   IotNode::Utils::Log::setup();
 
   #ifdef IOT_NODE_INDICATORS
-  IotNode::Utils::Indicator::setup();
-
-    #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
-      IotNode::Utils::Indicator::indicator0.setOn(true);
-    #endif
+    IotNode::Utils::Indicator::setup();
+    IotNode::Utils::Indicator::indicator0.setOn(true);
   #endif
 
   #ifdef IOT_NODE_RELAIS
@@ -89,9 +86,7 @@ void setup() {
   #ifdef IOT_NODE_INDICATORS
     if (IotNode::Utils::Link::link.isConnected()) return;
 
-    #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
-      IotNode::Utils::Indicator::indicator0.blink();
-    #endif
+    IotNode::Utils::Indicator::indicator0.blink();
   #endif
 }
 

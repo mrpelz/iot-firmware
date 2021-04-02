@@ -11,9 +11,7 @@ namespace IotNode {
 namespace Utils {
 
 namespace Indicator {
-  #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
-    extern Class indicator0;
-  #endif
+  extern Class indicator0;
 
   void update();
 

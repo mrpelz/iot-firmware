@@ -20,9 +20,18 @@ namespace Button {
       .repeatTime = 3000,
       .longpressTime = 125, // (step duration)
     };
-
-    extern Class button0;
+  #elif defined(IOT_NODE_BOARD_OBI_JACK)
+    static const Config button0Config = {
+      .pin = 14,
+      .invert = false,
+      .pullupEnable = true,
+      .debounceTime = 50,
+      .repeatTime = 3000,
+      .longpressTime = 125, // (step duration)
+    };
   #endif
+
+  extern Class button0;
 
   void update();
 

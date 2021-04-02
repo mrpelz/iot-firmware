@@ -7,13 +7,13 @@ namespace Utils {
 
 namespace Relais {
   #ifdef IOT_NODE_BOARD_SHELLY1
-    Class relais0({ 4, false });
+    Regular relais0({ 4, false });
+  #elif defined(IOT_NODE_BOARD_OBI_JACK)
+    Pulse relais0({ 12, 5, true });
   #endif
 
   void setup() {
-    #ifdef IOT_NODE_BOARD_SHELLY1
-      relais0.init();
-    #endif
+    relais0.init();
   }
 }
 

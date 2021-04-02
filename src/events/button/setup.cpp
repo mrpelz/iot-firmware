@@ -7,7 +7,7 @@ namespace Events {
 
 namespace Button {
   void setup() {
-    #ifdef IOT_NODE_BOARD_SHELLY1
+    #ifdef IOT_NODE_RELAIS
       auto event0 = makeEvent(&Utils::UDP::instance, 0);
       Utils::Button::button0.setChangeCallback(event0);
 

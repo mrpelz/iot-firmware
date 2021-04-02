@@ -12,7 +12,9 @@ namespace Utils {
 
 namespace Relais {
   #ifdef IOT_NODE_BOARD_SHELLY1
-    extern Class relais0;
+    extern Regular relais0;
+  #elif defined(IOT_NODE_BOARD_OBI_JACK)
+    extern Pulse relais0;
   #endif
 
   void setup();

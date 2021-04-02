@@ -6,14 +6,10 @@ namespace IotNode {
 namespace Utils {
 
 namespace Button {
-  #ifdef IOT_NODE_BOARD_SHELLY1
-    Class button0(button0Config);
-  #endif
+  Class button0(button0Config);
 
   void update() {
-    #ifdef IOT_NODE_BOARD_SHELLY1
-      button0.update();
-    #endif
+    button0.update();
   }
 
   #ifdef IOT_NODE_ESP32
@@ -26,10 +22,8 @@ namespace Button {
   #endif
 
   void setup() {
-    #ifdef IOT_NODE_BOARD_SHELLY1
-      button0.setDebug(Log::debug);
-      button0.start();
-    #endif
+    button0.setDebug(Log::debug);
+    button0.start();
 
     #ifdef IOT_NODE_ESP32
       xTaskCreatePinnedToCore(

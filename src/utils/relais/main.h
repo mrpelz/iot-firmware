@@ -6,12 +6,20 @@
 #include <Arduino.h>
 #include "../log.h"
 
+#define PULSE_RELAY_PULSE_LENGTH 50
+
 namespace IotNode {
 namespace Utils {
 
 namespace Relais {
-  struct Config {
+  struct RegularConfig {
     uint8_t pin;
+    bool invert;
+  };
+
+  struct PulseConfig {
+    uint8_t onPin;
+    uint8_t offPin;
     bool invert;
   };
 
@@ -20,14 +28,28 @@ namespace Relais {
     bool wasInitialized = false;
   };
 
-  class Class {
+  class Regular {
     private:
-      Config config;
+      RegularConfig config;
       State state;
       void commit();
 
     public:
-      Class(Config _config);
+      Regular(RegularConfig _config);
+      bool isOn();
+      void init();
+      void setOn(bool on);
+      void toggle();
+  };
+
+  class Pulse {
+    private:
+      PulseConfig config;
+      State state;
+      void commit();
+
+    public:
+      Pulse(PulseConfig _config);
       bool isOn();
       void init();
       void setOn(bool on);

@@ -6,14 +6,10 @@ namespace IotNode {
 namespace Services {
 
 namespace Relais {
-  #ifdef IOT_NODE_BOARD_SHELLY1
-    auto service0 = makeService(&Utils::Relais::relais0, 0);
-  #endif
+  auto service0 = makeService(&Utils::Relais::relais0, 0);
 
   void setup() {
-    #ifdef IOT_NODE_BOARD_SHELLY1
-      Utils::UDP::instance.addService(&service0);
-    #endif
+    Utils::UDP::instance.addService(&service0);
   }
 }
 

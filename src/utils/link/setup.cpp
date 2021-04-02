@@ -25,7 +25,7 @@ namespace Link {
     link.onGotIP([]() {
       UDP::instance.begin();
 
-      #if defined(IOT_NODE_INDICATORS) && (defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE))
+      #ifdef IOT_NODE_INDICATORS
         Indicator::indicator0.setOn(false);
       #endif
     });
@@ -33,7 +33,7 @@ namespace Link {
     link.onDisconnected([]() {
       UDP::instance.close();
 
-      #if defined(IOT_NODE_INDICATORS) && (defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE))
+      #ifdef IOT_NODE_INDICATORS
         Indicator::indicator0.blink();
       #endif
     });
