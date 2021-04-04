@@ -6,12 +6,12 @@ namespace IotNode {
 namespace Events {
 
 namespace MotionSensor {
-  #ifdef IOT_NODE_BOARD_ROOM_SENSOR
-    Class motionSensor0(36);
+  #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
+    Class motionSensor0(39);
   #endif
 
   void update() {
-    #ifdef IOT_NODE_BOARD_ROOM_SENSOR
+    #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
       motionSensor0.update();
     #endif
   }
@@ -26,7 +26,7 @@ namespace MotionSensor {
   #endif
 
   void setup() {
-    #ifdef IOT_NODE_BOARD_ROOM_SENSOR
+    #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
       motionSensor0.setDebug(Utils::Log::debug);
 
       auto event0 = makeEvent(&Utils::UDP::instance, 0);
