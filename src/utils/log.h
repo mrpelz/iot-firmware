@@ -10,7 +10,9 @@
   #include <WiFi.h>
 #endif
 
-#define LOG_DELAY 100
+#ifndef IOT_NODE_LOG_DELAY
+  #define IOT_NODE_LOG_DELAY 100
+#endif
 
 namespace IotNode {
 namespace Utils {

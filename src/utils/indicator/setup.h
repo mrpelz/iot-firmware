@@ -13,6 +13,10 @@ namespace Utils {
 namespace Indicator {
   extern Class indicator0;
 
+  #ifdef IOT_NODE_BOARD_H801
+    extern Class indicator1;
+  #endif
+
   void update();
 
   #ifdef IOT_NODE_ESP32

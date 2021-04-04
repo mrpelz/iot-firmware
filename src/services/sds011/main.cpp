@@ -15,7 +15,7 @@ namespace Sds011 {
     Utils::Log::debug("sds011-service", "initializing sensor");
 
     sensor.begin();
-    vTaskDelay(LOG_DELAY / portTICK_PERIOD_MS);
+    vTaskDelay(IOT_NODE_LOG_DELAY / portTICK_PERIOD_MS);
     
     Utils::Log::debug("sds011-service.sensor-firmware-version", sensor.queryFirmwareVersion().toString());
     Utils::Log::debug("sds011-service.sensor-reporting-mode", sensor.setQueryReportingMode().toString());

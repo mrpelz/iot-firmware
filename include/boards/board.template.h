@@ -6,6 +6,7 @@
 
 // #define IOT_NODE_BUTTONS
 // #define IOT_NODE_INDICATORS
+// #define IOT_NODE_LED
 // #define IOT_NODE_MOTION_SENSOR
 // #define IOT_NODE_RELAIS
 

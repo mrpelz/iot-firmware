@@ -8,18 +8,34 @@ namespace Utils {
 namespace Indicator {
   Class indicator0({
     #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
-      IOT_NODE_WT32_ETH01_TXD_LED,
+      17,
       true,
     #elif defined(IOT_NODE_BOARD_OBI_JACK)
-      IOT_NODE_OBI_JACK_STATUS_LED,
+      4,
       false,
+    #elif defined(IOT_NODE_BOARD_H801)
+      5,
+      true,
     #endif
     INDICATOR_BLINK_PERIOD_ON,
     INDICATOR_BLINK_PERIOD_OFF
   });
 
+  #ifdef IOT_NODE_BOARD_H801
+    Class indicator1({
+      1,
+      true,
+      INDICATOR_BLINK_PERIOD_ON,
+      INDICATOR_BLINK_PERIOD_OFF
+    });
+  #endif
+
   void update() {
     indicator0.update();
+
+    #ifdef IOT_NODE_BOARD_H801
+      indicator1.update();
+    #endif
   }
 
   #ifdef IOT_NODE_ESP32
@@ -33,6 +49,10 @@ namespace Indicator {
 
   void setup() {
     indicator0.init();
+
+    #ifdef IOT_NODE_BOARD_H801
+      indicator1.init();
+    #endif
 
     #ifdef IOT_NODE_ESP32
       xTaskCreatePinnedToCore(

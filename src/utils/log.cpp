@@ -8,10 +8,10 @@ namespace Log {
     Serial.begin(IOT_NODE_SERIAL0_BAUD_RATE);
 
     #ifdef IOT_NODE_ESP8266
-      delay(LOG_DELAY);
+      delay(IOT_NODE_LOG_DELAY);
     #endif
     #ifdef IOT_NODE_ESP32
-      vTaskDelay(LOG_DELAY / portTICK_PERIOD_MS);
+      vTaskDelay(IOT_NODE_LOG_DELAY / portTICK_PERIOD_MS);
     #endif
     
     info();

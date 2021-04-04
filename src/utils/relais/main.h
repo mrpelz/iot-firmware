@@ -6,8 +6,6 @@
 #include <Arduino.h>
 #include "../log.h"
 
-#define PULSE_RELAY_PULSE_LENGTH 50
-
 namespace IotNode {
 namespace Utils {
 

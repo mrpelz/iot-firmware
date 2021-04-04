@@ -8,6 +8,10 @@ void setup() {
     IotNode::Utils::Indicator::indicator0.setOn(true);
   #endif
 
+  #ifdef IOT_NODE_LED
+    IotNode::Utils::Led::setup();
+  #endif
+
   #ifdef IOT_NODE_RELAIS
     IotNode::Utils::Relais::setup();
   #endif
@@ -29,6 +33,10 @@ void setup() {
 
   #ifdef IOT_NODE_INDICATORS
     IotNode::Services::Indicator::setup();
+  #endif
+
+  #ifdef IOT_NODE_LED
+    IotNode::Services::Led::setup();
   #endif
 
   #ifdef IOT_NODE_RELAIS

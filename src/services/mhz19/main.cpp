@@ -15,7 +15,7 @@ namespace Mhz19 {
     Utils::Log::debug("mhz19-service", "initializing sensor");
 
     IOT_NODE_MHZ19_SERIAL.begin(9600);
-    vTaskDelay(LOG_DELAY / portTICK_PERIOD_MS);
+    vTaskDelay(IOT_NODE_LOG_DELAY / portTICK_PERIOD_MS);
 
     sensor.begin(IOT_NODE_MHZ19_SERIAL);
     sensor.autoCalibration();

@@ -12,6 +12,10 @@
   #error cannot use ethernet without ESP32
 #endif
 
+#if defined(IOT_NODE_LED) && !defined(IOT_NODE_ESP8266)
+  #error for now, led is only working on ESP8266
+#endif
+
 #if defined(IOT_NODE_IP) && defined(IOT_NODE_GATEWAY) && defined(IOT_NODE_NETMASK)
   #define IOT_NODE_IP_STATIC
 #else
