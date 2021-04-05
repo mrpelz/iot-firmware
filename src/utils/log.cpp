@@ -7,6 +7,10 @@ namespace Log {
   void setup() {
     Serial.begin(IOT_NODE_SERIAL0_BAUD_RATE);
 
+    #if defined(IOT_NODE_BOARD_OBI_JACK) || defined(IOT_NODE_BOARD_H801)
+      Serial.set_tx(2);
+    #endif
+
     #ifdef IOT_NODE_ESP8266
       delay(IOT_NODE_LOG_DELAY);
     #endif
