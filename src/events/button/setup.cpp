@@ -7,10 +7,9 @@ namespace Events {
 
 namespace Button {
   void setup() {
-    #ifdef IOT_NODE_RELAIS
-      auto event0 = makeEvent(&Utils::UDP::instance, 0);
-      Utils::Button::button0.setChangeCallback(event0);
+    auto event0 = makeEvent(&Utils::UDP::instance, 0);
 
+    #ifdef IOT_NODE_RELAIS
       Utils::Button::button0.setChangeCallback([event0](Utils::Button::Update update) {
         if (Utils::UDP::instance.isListening() && Utils::UDP::instance.hasEventPeer()) {
           event0(update);
@@ -23,6 +22,16 @@ namespace Button {
           Utils::Relais::relais0.toggle();
         }
       });
+    #else
+      Utils::Button::button0.setChangeCallback(event0);
+    #endif
+
+    #ifdef IOT_NODE_BOARD_SHELLYI3
+      auto event1 = makeEvent(&Utils::UDP::instance, 1);
+      Utils::Button::button1.setChangeCallback(event1);
+
+      auto event2 = makeEvent(&Utils::UDP::instance, 2);
+      Utils::Button::button2.setChangeCallback(event2);
     #endif
   }
 }

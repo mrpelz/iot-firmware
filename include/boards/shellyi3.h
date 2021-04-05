@@ -1,0 +1,4 @@
+#define IOT_NODE_BOARD_SHELLYI3
+#define IOT_NODE_HARDWARE_NAME "Shellyi3"
+
+#define IOT_NODE_BUTTONS
