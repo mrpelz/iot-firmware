@@ -106,6 +106,10 @@ void loop() {
       IotNode::Utils::Indicator::update();
     #endif
 
+    #ifdef IOT_NODE_LED
+      IotNode::Utils::Led::update();
+    #endif
+
     #ifdef IOT_NODE_BUTTONS
       IotNode::Utils::Button::update();
     #endif

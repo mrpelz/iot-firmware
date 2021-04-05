@@ -6,7 +6,7 @@ namespace IotNode {
 namespace Services {
 
 namespace Led {
-  Utils::UDP::Service makeService(Utils::Led::Class *led, uint8_t index) {
+  Utils::UDP::Service makeService(FadeLed *led, uint8_t index) {
     uint8_t serviceId = ids::led + index;
 
     auto handler = [led, index](
@@ -16,11 +16,11 @@ namespace Led {
       Utils::Log::debug("led-service", "got request");
       Utils::Log::debug("led-service.index", String(index));
 
-      auto duty = request->size() >= 2 ? ((uint16_t *)request->data())[0] : (uint16_t)0;
+      auto duty = request->size() >= 1 ? request->at(0) : (uint8_t)0;
 
       Utils::Log::debug("led-service.duty", String(duty));
 
-      led->setDutyCycle(duty);
+      led->set(duty);
 
       Utils::Log::debug("led-service", "sending response");
 

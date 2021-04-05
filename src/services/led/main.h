@@ -3,7 +3,8 @@
 
 #ifdef IOT_NODE_LED
 
-#include "../../utils/led/main.h"
+#include <FadeLed.h>
+
 #include "../../utils/udp/main.h"
 #include "../service-ids.h"
 
@@ -11,7 +12,7 @@ namespace IotNode {
 namespace Services {
 
 namespace Led {
-  Utils::UDP::Service makeService(Utils::Led::Class *led, uint8_t index);
+  Utils::UDP::Service makeService(FadeLed *led, uint8_t index);
 }
 
 } // section namespace
