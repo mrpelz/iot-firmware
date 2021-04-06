@@ -27,6 +27,7 @@ namespace Button {
     unsigned long debounceTime;
     unsigned long repeatTime;
     unsigned long longpressTime;
+    unsigned long noiseGateTime;
   };
 
   struct State {
@@ -36,6 +37,7 @@ namespace Button {
     uint8_t repeat;
     uint8_t longpress;
     unsigned long longpressTime;
+    unsigned long noiseGateTime;
     ChangeCallback changeCallback = [](Update update) {};
     Utils::Log::Callback debugCallback = [](String key, String value) {};
   };

@@ -19,6 +19,7 @@ namespace Button {
       .debounceTime = 50,
       .repeatTime = 3000,
       .longpressTime = 125, // (step duration)
+      .noiseGateTime = 0,
     };
   #elif defined(IOT_NODE_BOARD_OBI_JACK)
     static const Config button0Config = {
@@ -28,31 +29,35 @@ namespace Button {
       .debounceTime = 50,
       .repeatTime = 3000,
       .longpressTime = 125, // (step duration)
+      .noiseGateTime = 0,
     };
   #elif defined(IOT_NODE_BOARD_SHELLYI3)
     static const Config button0Config = {
       .pin = 14,
-      .invert = false,
+      .invert = true,
       .pullupEnable = false,
       .debounceTime = 50,
       .repeatTime = 3000,
       .longpressTime = 125, // (step duration)
+      .noiseGateTime = 50,
     };
     static const Config button1Config = {
       .pin = 12,
-      .invert = false,
+      .invert = true,
       .pullupEnable = false,
       .debounceTime = 50,
       .repeatTime = 3000,
       .longpressTime = 125, // (step duration)
+      .noiseGateTime = 50,
     };
     static const Config button2Config = {
       .pin = 13,
-      .invert = false,
+      .invert = true,
       .pullupEnable = false,
       .debounceTime = 50,
       .repeatTime = 3000,
       .longpressTime = 125, // (step duration)
+      .noiseGateTime = 50,
     };
   #endif
 

@@ -42,14 +42,33 @@ namespace Button {
     auto now = millis();
 
     bool rawDown = digitalRead(config.pin);
+    auto down = config.invert ? rawDown : !rawDown;
 
-    bool down = config.invert ? rawDown : !rawDown;
+    if (config.noiseGateTime) {
+      if (!state.noiseGateTime && down) {
+        state.noiseGateTime = now;
+        return;
+      }
+
+      auto timeSinceNoiseGateBegin = now - state.noiseGateTime;
+      if (timeSinceNoiseGateBegin < config.noiseGateTime && down) {
+        return;
+      }
+
+      if (state.noiseGateTime && !down) {
+        state.noiseGateTime = 0;
+        return;
+      }
+
+      state.noiseGateTime = 0;
+    }
+
     bool downChanged = down != state.down;
 
     auto timeSinceLastChange = now - state.changeTime;
     if (timeSinceLastChange < config.debounceTime) return;
 
-    bool longpressChanged = false;
+    auto longpressChanged = false;
 
     if (!down || (down && downChanged)) {
       state.longpress = 0;
