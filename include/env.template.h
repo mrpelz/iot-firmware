@@ -1,5 +1,5 @@
 // NAME
-#define IOT_NODE_NAME "test-device"
+// #define IOT_NODE_NAME "test-device"
 
 // IP
 // #define IOT_NODE_IP 0, 0, 0, 0

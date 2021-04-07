@@ -1,3 +1,7 @@
+#ifndef IOT_NODE_NAME
+  #define IOT_NODE_NAME IOT_NODE_HARDWARE_NAME
+#endif
+
 #if !defined(IOT_NODE_ESP32) && !defined(IOT_NODE_ESP8266)
   #error no valid platform specified
 #endif
