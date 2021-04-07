@@ -91,6 +91,8 @@ void setup() {
     IotNode::Services::Veml6070::setup();
   #endif
 
+  IotNode::Utils::OTA::setup();
+
   #ifdef IOT_NODE_INDICATORS
     if (IotNode::Utils::Link::link.isConnected()) return;
 
@@ -120,6 +122,7 @@ void loop() {
 
     IotNode::Services::Keepalive::update();
     IotNode::Utils::Link::update();
+    IotNode::Utils::OTA::update();
   #endif
   #ifdef IOT_NODE_ESP32
     vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);

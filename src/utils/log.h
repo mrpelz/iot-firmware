@@ -1,5 +1,5 @@
-#ifndef _UTILS_LOGGING
-#define _UTILS_LOGGING
+#ifndef _UTILS_LOG
+#define _UTILS_LOG
 
 #include <Arduino.h>
 

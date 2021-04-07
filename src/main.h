@@ -26,6 +26,7 @@
 #include "./utils/led/setup.h"
 #include "./utils/link/setup.h"
 #include "./utils/log.h"
+#include "./utils/ota.h"
 #include "./utils/relais/setup.h"
 #include "./utils/udp/setup.h"
 

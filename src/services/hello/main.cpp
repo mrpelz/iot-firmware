@@ -27,10 +27,10 @@ namespace Hello {
       addLineToRespone(&response, IOT_NODE_HARDWARE_NAME);
     #endif
 
-    addLineToRespone(&response, IOT_NODE_STR(IOT_NODE_BUILD_GIT_REV));
-    addLineToRespone(&response, IOT_NODE_STR(IOT_NODE_PIO_ENV));
-    addLineToRespone(&response, IOT_NODE_STR(IOT_NODE_PIO_PLATFORM));
-    addLineToRespone(&response, IOT_NODE_STR(IOT_NODE_PIO_FRAMEWORK));
+    addLineToRespone(&response, IOT_NODE_BUILD_GIT_REV);
+    addLineToRespone(&response, IOT_NODE_PIO_ENV);
+    addLineToRespone(&response, IOT_NODE_PIO_PLATFORM);
+    addLineToRespone(&response, IOT_NODE_PIO_FRAMEWORK);
 
     #ifdef IOT_NODE_ESP8266
       addLineToRespone(&response, String(ESP.getChipId(), HEX));

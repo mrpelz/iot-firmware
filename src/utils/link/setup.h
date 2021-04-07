@@ -3,6 +3,8 @@
 
 #include <Arduino.h>
 
+#include <ArduinoOTA.h>
+
 #include "../udp/setup.h"
 #include "./main.h"
 #include "./utils/indicator/setup.h"

@@ -24,6 +24,7 @@ namespace Link {
 
     link.onGotIP([]() {
       UDP::instance.begin();
+      ArduinoOTA.begin();
 
       #ifdef IOT_NODE_INDICATORS
         Indicator::indicator0.setOn(false);
@@ -32,6 +33,10 @@ namespace Link {
 
     link.onDisconnected([]() {
       UDP::instance.close();
+
+      #ifdef IOT_NODE_ESP32
+        ArduinoOTA.end();
+      #endif
 
       #ifdef IOT_NODE_INDICATORS
         Indicator::indicator0.blink();

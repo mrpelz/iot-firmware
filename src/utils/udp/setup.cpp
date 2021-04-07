@@ -4,7 +4,7 @@ namespace IotNode {
 namespace Utils {
 
 namespace UDP {
-  Class instance(8266);
+  Class instance(1337);
 
   void setup() {
     instance.setDebug(Log::debug);
