@@ -11,7 +11,7 @@ namespace Hello {
     response->insert(response->end(), delimiter.begin(), delimiter.end());
   }
 
-  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer) {
     Utils::Log::debug("hello-service", "got request");
 
     Utils::UDP::Payload response;

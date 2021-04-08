@@ -32,6 +32,8 @@ namespace UDP {
     state.debugCallback("event", "udp.listening");
     state.debugCallback("udp.listening", "close");
 
+    removeEventPeer();
+
     state.isListening = false;
     state.udp.close();
   }
@@ -79,9 +81,14 @@ namespace UDP {
     };
 
     auto validPeer = peer.port && (peer.ip[0] + peer.ip[1] + peer.ip[2] + peer.ip[3]);
-
     if (validPeer) {
       state.fallbackPeer = peer;
+    } else if (!state.fallbackPeer.port) {
+      state.debugCallback("event", "udp.request.no-usable-peer");
+      return;
+    } else {
+      peer = state.fallbackPeer;
+      state.debugCallback("event", "udp.request.use-fallback-peer");
     }
 
     auto payload = packet->data();
@@ -102,64 +109,6 @@ namespace UDP {
     state.debugCallback("udp.request.service-id", String(serviceId, HEX));
     state.debugCallback("udp.request.message-length", String(message.size()));
 
-    if (serviceId == Services::ids::_reserved_event) {
-      Payload peerAckOutgoing = {
-        messageId
-      };
-
-      if (message.size() < PEER_SET_MIN_LENGTH) {
-        state.debugCallback("udp.request.set-event-peer", "missing parameters");
-      } else {
-        auto setPeer = message.at(0);
-        auto setPeerPriority = message.at(1);
-
-        if (setPeerPriority > 0 && setPeerPriority >= state.eventPeerPriority) {
-          if (setPeer == 0) {
-            state.eventPeer.port = 0;
-            state.eventPeerPriority = 0;
-
-            peerAckOutgoing.insert(peerAckOutgoing.end(), 0x00);
-
-            state.debugCallback("udp.request.set-event-peer", "clear");
-          } else if (validPeer) {
-            state.eventPeer = peer;
-            state.eventPeerPriority = setPeerPriority;
-
-            peerAckOutgoing.insert(peerAckOutgoing.end(), 0x01);
-
-            state.debugCallback("udp.request.set-event-peer", "set");
-            state.debugCallback("udp.request.set-event-peer.ip", peer.ip.toString());
-            state.debugCallback("udp.request.set-event-peer.port", String(peer.port));
-            state.debugCallback("udp.request.set-event-peer.priority", String(setPeerPriority));
-          }
-        } else {
-          peerAckOutgoing.insert(peerAckOutgoing.end(), 0x03);
-
-          state.debugCallback("udp.request.set-event-peer", "rejected");
-        }
-      }
-
-
-      state.udp.writeTo(
-        peerAckOutgoing.data(),
-        peerAckOutgoing.size(),
-        peer.ip,
-        peer.port
-      );
-
-      return;
-    }
-
-    auto responsePeer = validPeer ? peer : state.fallbackPeer;
-    if (!responsePeer.port) {
-      state.debugCallback("event", "udp.request.no-usable-peer");
-      return;
-    }
-
-    if (!validPeer) {
-      state.debugCallback("event", "udp.request.use-fallback-peer");
-    }
-
     bool match = false;
     std::for_each(
       std::begin(state.services),
@@ -170,7 +119,7 @@ namespace UDP {
 
         service->handler(
           &message,
-          [this, messageId, serviceId, responsePeer](Payload response) {
+          [this, messageId, serviceId, peer](Payload response) {
             Payload outgoing = {
               messageId
             };
@@ -180,8 +129,8 @@ namespace UDP {
             outgoing.insert(outgoing.end(), responseStart, responseEnd);
 
             state.debugCallback("udp.response.length", String(outgoing.size()));
-            state.debugCallback("udp.response.remote-ip", responsePeer.ip.toString());
-            state.debugCallback("udp.response.remote-port", String(responsePeer.port));
+            state.debugCallback("udp.response.remote-ip", peer.ip.toString());
+            state.debugCallback("udp.response.remote-port", String(peer.port));
             state.debugCallback("udp.response.message-id", String(messageId, HEX));
             state.debugCallback("udp.response.service-id", String(serviceId, HEX));
             state.debugCallback("udp.response.message-length", String(response.size()));
@@ -189,10 +138,11 @@ namespace UDP {
             state.udp.writeTo(
               outgoing.data(),
               outgoing.size(),
-              responsePeer.ip,
-              responsePeer.port
+              peer.ip,
+              peer.port
             );
-          }
+          },
+          peer
         );
       }
     );
@@ -210,8 +160,16 @@ namespace UDP {
     return !!state.isListening;
   }
 
+  void Class::removeEventPeer() {
+    state.eventPeer.port = 0;
+  }
+
   void Class::setDebug(Log::Callback callback) {
     state.debugCallback = callback;
+  }
+
+  void Class::setEventPeer(Peer peer) {
+    state.eventPeer = peer;
   }
 }
 

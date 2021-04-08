@@ -96,7 +96,7 @@ namespace Ccs811 {
     }
   }
 
-  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer) {
     Utils::Log::debug("ccs811-service", "got request");
 
     if (!working) {

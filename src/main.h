@@ -24,6 +24,7 @@
 #include "./utils/i2c.h"
 #include "./utils/indicator/setup.h"
 #include "./utils/led/setup.h"
+#include "./utils/keepalive/setup.h"
 #include "./utils/link/setup.h"
 #include "./utils/log.h"
 #include "./utils/ota.h"

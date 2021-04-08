@@ -20,8 +20,6 @@
 #define SERVICE_ID_LENGTH 1
 #define EVENT_ID_LENGTH 1
 
-#define PEER_SET_MIN_LENGTH 2
-
 #define REQUEST_MIN_LENGTH MESSAGE_ID_LENGTH + SERVICE_ID_LENGTH
 #define REQUEST_MAX_LENGTH UDP_MAX_LENGTH - REQUEST_MIN_LENGTH
 
@@ -39,19 +37,20 @@ namespace UDP {
     Payload response
   )> RespondCallback;
 
+  struct Peer {
+    IPAddress ip;
+    uint16_t port;
+  };
+
   typedef std::function<void (
     Payload *request,
-    RespondCallback respond
+    RespondCallback respond,
+    Peer peer
   )> RequestHandler;
 
   struct Service {
     uint8_t serviceId;
     RequestHandler handler;
-  };
-
-  struct Peer {
-    IPAddress ip;
-    uint16_t port;
   };
 
   struct State {
@@ -60,7 +59,6 @@ namespace UDP {
     uint16_t port;
     Peer eventPeer;
     Peer fallbackPeer;
-    uint8_t eventPeerPriority = 0;
     std::vector<Service *> services;
     Log::Callback debugCallback = [](String key, String value) {};
   };
@@ -69,7 +67,7 @@ namespace UDP {
     private:
       State state;
       void handleRequest(AsyncUDPPacket *packet);
-      
+
     public:
       Class(uint16_t port);
       void addService(Service *service);
@@ -78,7 +76,9 @@ namespace UDP {
       void event(uint8_t eventId, Payload event);
       bool hasEventPeer();
       bool isListening();
+      void removeEventPeer();
       void setDebug(Log::Callback callback);
+      void setEventPeer(Peer peer);
   };
 }
 

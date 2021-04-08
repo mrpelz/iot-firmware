@@ -3,34 +3,17 @@
 
 #include <Arduino.h>
 
+#include "../../utils/keepalive/setup.h"
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"
+#include "../../utils/udp/setup.h"
+#include "./setup.h"
 
 namespace IotNode {
 namespace Services {
 
 namespace Keepalive {
-  struct State {
-    bool ticked = false;
-    bool running = false;
-    bool forceRestart = false;
-    unsigned long timeout = 0;
-    unsigned long lastTick = 0;
-  };
-
-  class Class {
-    private:
-      State state;
-
-    public:
-      Class(unsigned long timeout);
-      void start();
-      void stop();
-      void tick(bool forceRestart);
-      void update();
-  };
-
-  Utils::UDP::RequestHandler makeHandler(Class *restartOnTimeout);
+  Utils::UDP::RequestHandler makeHandler();
 }
 
 } // section namespace

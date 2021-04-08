@@ -11,7 +11,8 @@ namespace Led {
 
     auto handler = [led, index](
       Utils::UDP::Payload *request,
-      Utils::UDP::RespondCallback respond
+      Utils::UDP::RespondCallback respond,
+      Utils::UDP::Peer peer
     ) {
       Utils::Log::debug("led-service", "got request");
       Utils::Log::debug("led-service.index", String(index));

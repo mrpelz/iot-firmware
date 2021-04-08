@@ -68,7 +68,7 @@ namespace Tsl2561 {
     }
   }
 
-  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer) {
     Utils::Log::debug("tsl2561-service", "got request");
 
     if (!working) {

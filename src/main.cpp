@@ -1,6 +1,8 @@
 #include "./main.h"
 
 void setup() {
+  IotNode::Utils::Keepalive::setup();
+
   IotNode::Utils::Log::setup();
 
   #ifdef IOT_NODE_INDICATORS
@@ -120,7 +122,7 @@ void loop() {
       IotNode::Events::MotionSensor::update();
     #endif
 
-    IotNode::Services::Keepalive::update();
+    IotNode::Utils::Keepalive::update();
     IotNode::Utils::Link::update();
     IotNode::Utils::OTA::update();
   #endif

@@ -71,7 +71,7 @@ namespace Mcp9808 {
     }
   }
 
-  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer) {
     Utils::Log::debug("mcp9808-service", "got request");
 
     if (!working) {

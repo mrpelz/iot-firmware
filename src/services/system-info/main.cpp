@@ -4,7 +4,7 @@ namespace IotNode {
 namespace Services {
 
 namespace SystemInfo {
-  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond) {
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer) {
     Utils::Log::debug("system-info-service", "got request");
 
     Utils::UDP::Payload response;

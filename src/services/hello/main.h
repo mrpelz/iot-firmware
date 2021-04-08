@@ -20,7 +20,7 @@ namespace Services {
 namespace Hello {
   void addLineToRespone(Utils::UDP::Payload response, String line);
 
-  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond);
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
 }
 
 } // section namespace

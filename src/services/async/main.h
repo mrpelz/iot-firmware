@@ -18,7 +18,7 @@ namespace Async {
 
   void responseTask(void *parameter);
 
-  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond);
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
 }
 
 } // section namespace

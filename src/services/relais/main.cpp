@@ -11,7 +11,8 @@ namespace Relais {
 
     auto handler = [relais, index](
       Utils::UDP::Payload *request,
-      Utils::UDP::RespondCallback respond
+      Utils::UDP::RespondCallback respond,
+      Utils::UDP::Peer peer
     ) {
       Utils::Log::debug("relais-service", "got request");
       Utils::Log::debug("relais-service.index", String(index));
@@ -37,7 +38,8 @@ namespace Relais {
 
     auto handler = [relais, index](
       Utils::UDP::Payload *request,
-      Utils::UDP::RespondCallback respond
+      Utils::UDP::RespondCallback respond,
+      Utils::UDP::Peer peer
     ) {
       Utils::Log::debug("relais-service", "got request");
       Utils::Log::debug("relais-service.index", String(index));

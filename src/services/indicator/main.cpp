@@ -11,7 +11,8 @@ namespace Indicator {
 
     auto handler = [indicator, index](
       Utils::UDP::Payload *request,
-      Utils::UDP::RespondCallback respond
+      Utils::UDP::RespondCallback respond,
+      Utils::UDP::Peer peer
     ) {
       Utils::Log::debug("indicator-service", "got request");
       
