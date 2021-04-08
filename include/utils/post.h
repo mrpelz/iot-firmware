@@ -6,10 +6,8 @@
   #error no valid platform specified
 #endif
 
-#if defined(IOT_NODE_WIFI_SSID) && defined(IOT_NODE_WIFI_PSK)
-  #define IOT_NODE_LINK_WIFI
-#else
-  #define IOT_NODE_LINK_ETH
+#if !defined(IOT_NODE_LINK_ETH) && !defined(IOT_NODE_LINK_WIFI)
+  #error either eth or wifi must be specified
 #endif
 
 #if defined(IOT_NODE_LINK_ETH) && !defined(IOT_NODE_ESP32)
