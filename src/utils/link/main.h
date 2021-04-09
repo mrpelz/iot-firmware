@@ -2,6 +2,7 @@
 #define _UTILS_LINK_MAIN
 
 #include <Arduino.h>
+#include <functional>
 
 #ifdef IOT_NODE_ESP8266
   #include <ESP8266WiFi.h>
@@ -51,8 +52,6 @@ namespace Link {
   };
 
   struct Callbacks {
-    Log::Callback debug = [](String key, String value) {};
-
     std::function<void ()> beforeRestart = []() {};
     std::function<void ()> reconnect = []() {};
 

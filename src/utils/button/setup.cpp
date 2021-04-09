@@ -32,14 +32,10 @@ namespace Button {
   #endif
 
   void setup() {
-    button0.setDebug(Log::debug);
     button0.start();
 
     #ifdef IOT_NODE_BOARD_SHELLYI3
-      button1.setDebug(Log::debug);
       button1.start();
-
-      button2.setDebug(Log::debug);
       button2.start();
     #endif
 

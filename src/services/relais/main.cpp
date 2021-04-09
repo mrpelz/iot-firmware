@@ -14,16 +14,23 @@ namespace Relais {
       Utils::UDP::RespondCallback respond,
       Utils::UDP::Peer peer
     ) {
-      Utils::Log::debug("relais-service", "got request");
-      Utils::Log::debug("relais-service.index", String(index));
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("relais-service", "got request");
+        Utils::Log::debug("relais-service.index", String(index));
+      #endif
 
       bool on = request->size() >= 1 && request->at(0) != 0;
 
-      Utils::Log::debug("relais-service.on", String(on));
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("relais-service.on", String(on));
+      #endif
 
       relais->setOn(on);
 
-      Utils::Log::debug("relais-service", "sending response");
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("relais-service", "sending response");
+      #endif
+
       respond({});
     };
 
@@ -41,16 +48,23 @@ namespace Relais {
       Utils::UDP::RespondCallback respond,
       Utils::UDP::Peer peer
     ) {
-      Utils::Log::debug("relais-service", "got request");
-      Utils::Log::debug("relais-service.index", String(index));
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("relais-service", "got request");
+        Utils::Log::debug("relais-service.index", String(index));
+      #endif
 
       bool on = request->size() >= 1 && request->at(0) != 0;
 
-      Utils::Log::debug("relais-service.on", String(on));
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("relais-service.on", String(on));
+      #endif
 
       relais->setOn(on);
 
-      Utils::Log::debug("relais-service", "sending response");
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("relais-service", "sending response");
+      #endif
+
       respond({});
     };
 

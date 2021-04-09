@@ -10,7 +10,9 @@ namespace Button {
     uint8_t serviceId = ids::button + index;
 
     auto handler = [udp, serviceId](Utils::Button::Update update) {
-      Utils::Log::debug("button-event", "triggered");
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("button-event", "triggered");
+      #endif
 
       std::vector<uint8_t> response = {
         (uint8_t)(update.down ? 0x01 : 0x00),
@@ -27,7 +29,9 @@ namespace Button {
         prevDuration + sizeof(update.prevDuration)
       );
 
-      Utils::Log::debug("button-event", "sending event");
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("button-event", "sending event");
+      #endif
 
       udp->event(serviceId, response);
     };

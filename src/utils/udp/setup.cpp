@@ -7,7 +7,6 @@ namespace UDP {
   Class instance(1337);
 
   void setup() {
-    instance.setDebug(Log::debug);
   }
 }
 

@@ -1,7 +1,10 @@
 #ifndef _UTILS_LOG
 #define _UTILS_LOG
 
+#ifdef IOT_NODE_LOGGING
+
 #include <Arduino.h>
+#include <functional>
 
 #ifdef IOT_NODE_ESP8266
   #include <ESP8266WiFi.h>
@@ -10,15 +13,11 @@
   #include <WiFi.h>
 #endif
 
-#ifndef IOT_NODE_LOG_DELAY
-  #define IOT_NODE_LOG_DELAY 100
-#endif
-
 namespace IotNode {
 namespace Utils {
 
 namespace Log {
-  typedef std::function<void (String key, String value)> Callback;
+  typedef std::function<void (String key, String value)> LogCallback;
 
   void setup();
 
@@ -29,5 +28,7 @@ namespace Log {
 
 } // section namespace
 } // project namespace
+
+#endif
 
 #endif

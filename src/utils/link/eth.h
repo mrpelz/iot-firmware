@@ -5,6 +5,7 @@
 
 #include <Arduino.h>
 #include <ETH.h>
+
 #include "./main.h"
 
 namespace IotNode {
@@ -40,7 +41,6 @@ namespace Link {
   class Class {
     private:
       State state;
-      void configDebug();
       void ethConnect();
       void handleConnected();
       void handleDhcpTimeout();
@@ -49,6 +49,7 @@ namespace Link {
 
     public:
       Class(Config config);
+      void configDebug();
       void connect();
       void disconnect();
       bool isConnected();
@@ -58,7 +59,6 @@ namespace Link {
       void onDisconnected(std::function<void ()> callback);
       void onGotIP(std::function<void ()> callback);
       void onReconnect(std::function<void ()> callback);
-      void setDebug(Log::Callback callback);
       void update();
       void debug(bool deep);
   };

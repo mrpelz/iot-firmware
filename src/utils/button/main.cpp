@@ -14,10 +14,6 @@ namespace Button {
     state.changeCallback = callback;
   }
 
-  void Class::setDebug(Utils::Log::Callback callback) {
-    state.debugCallback = callback;
-  }
-
   void Class::start() {
     state.running = true;
 
@@ -98,12 +94,14 @@ namespace Button {
 
     if (!(downChanged || longpressChanged)) return;
 
-    state.debugCallback("event", "button");
-    state.debugCallback("button.down", String(state.down));
-    state.debugCallback("button.down.changed", String(downChanged));
-    state.debugCallback("button.down.change-period", String(timeSinceLastChange));
-    state.debugCallback("button.repeat", String(state.repeat));
-    state.debugCallback("button.longpress", String(state.longpress));
+    #ifdef IOT_NODE_LOGGING
+      state.debugCallback("event", "button");
+      state.debugCallback("button.down", String(state.down));
+      state.debugCallback("button.down.changed", String(downChanged));
+      state.debugCallback("button.down.change-period", String(timeSinceLastChange));
+      state.debugCallback("button.repeat", String(state.repeat));
+      state.debugCallback("button.longpress", String(state.longpress));
+    #endif
 
     state.changeCallback({
       state.down,

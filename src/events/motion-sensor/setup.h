@@ -5,7 +5,6 @@
 
 #include <Arduino.h>
 
-#include "../../utils/log.h"
 #include "../../utils/udp/setup.h"
 #include "./main.h"
 

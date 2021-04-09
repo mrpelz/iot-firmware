@@ -10,11 +10,16 @@ namespace Keepalive {
       Utils::UDP::RespondCallback respond,
       Utils::UDP::Peer peer
     ) {
-      Utils::Log::debug("keepalive-service", "got request");
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("keepalive-service", "got request");
+      #endif
 
       auto restart = request->size() >= 1 && request->at(0) != 0;
       if (restart) {
-        Utils::Log::debug("keepalive-service", "force restart");
+        #ifdef IOT_NODE_LOGGING
+          Utils::Log::debug("keepalive-service", "force restart");
+        #endif
+
         ESP.restart();
       }
 
@@ -23,7 +28,9 @@ namespace Keepalive {
 
       Utils::UDP::instance.setEventPeer(peer);
 
-      Utils::Log::debug("keepalive-service", "sending response");
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("keepalive-service", "sending response");
+      #endif
 
       respond({});
     };

@@ -3,7 +3,16 @@
 void setup() {
   IotNode::Utils::Keepalive::setup();
 
-  IotNode::Utils::Log::setup();
+  #ifdef IOT_NODE_LOGGING
+    IotNode::Utils::Log::setup();
+  #endif
+
+  #ifdef IOT_NODE_ESP8266
+    delay(IOT_NODE_LOG_DELAY);
+  #endif
+  #ifdef IOT_NODE_ESP32
+    vTaskDelay(IOT_NODE_LOG_DELAY / portTICK_PERIOD_MS);
+  #endif
 
   #ifdef IOT_NODE_INDICATORS
     IotNode::Utils::Indicator::setup();

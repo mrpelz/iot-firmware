@@ -111,22 +111,24 @@ namespace Link {
   }
 
   void Class::configDebug() {
-    state.callbacks.debug("config.wifi.phy-mode", String(state.phyMode));
-    state.callbacks.debug("config.wifi.output-power", String(state.outputPower));
-    state.callbacks.debug("config.wifi.ssid", state.credentials.ssid);
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("config.wifi.phy-mode", String(state.phyMode));
+      Log::debug("config.wifi.output-power", String(state.outputPower));
+      Log::debug("config.wifi.ssid", state.credentials.ssid);
 
-    #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
-      state.callbacks.debug("config.wifi.bssid", printMacAddress(state.credentials.bssid));
-      state.callbacks.debug("config.wifi.channel", String(state.credentials.channel));
-    #endif
+      #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
+        Log::debug("config.wifi.bssid", printMacAddress(state.credentials.bssid));
+        Log::debug("config.wifi.channel", String(state.credentials.channel));
+      #endif
 
-    #ifdef IOT_NODE_IP_DHCP
-      state.callbacks.debug("config.wifi.network-config.dhcp", "1");
-    #else
-      state.callbacks.debug("config.wifi.network-config.dhcp", "0");
-      state.callbacks.debug("config.wifi.network-config.ip", state.interfaceConfig.ip.toString());
-      state.callbacks.debug("config.wifi.network-config.gateway", state.interfaceConfig.gateway.toString());
-      state.callbacks.debug("config.wifi.network-config.netmask", state.interfaceConfig.netmask.toString());
+      #ifdef IOT_NODE_IP_DHCP
+        Log::debug("config.wifi.network-config.dhcp", "1");
+      #else
+        Log::debug("config.wifi.network-config.dhcp", "0");
+        Log::debug("config.wifi.network-config.ip", state.interfaceConfig.ip.toString());
+        Log::debug("config.wifi.network-config.gateway", state.interfaceConfig.gateway.toString());
+        Log::debug("config.wifi.network-config.netmask", state.interfaceConfig.netmask.toString());
+      #endif
     #endif
   }
 
@@ -141,16 +143,20 @@ namespace Link {
   void Class::handleConnected(String ssid, uint8_t *bssid, uint8_t channel) {
     state.isConnected = true;
 
-    state.callbacks.debug("event", "wifi.connect");
-    state.callbacks.debug("event.wifi.connect.ssid", ssid);
-    state.callbacks.debug("event.wifi.connect.bssid", printMacAddress(bssid));
-    state.callbacks.debug("event.wifi.connect.channel", String(channel));
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("event", "wifi.connect");
+      Log::debug("event.wifi.connect.ssid", ssid);
+      Log::debug("event.wifi.connect.bssid", printMacAddress(bssid));
+      Log::debug("event.wifi.connect.channel", String(channel));
+    #endif
 
     state.callbacks.connected();
   }
 
   void Class::handleDhcpTimeout() {
-    state.callbacks.debug("event", "wifi.network-config.dhcp-timeout");
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("event", "wifi.network-config.dhcp-timeout");
+    #endif
 
     state.callbacks.dhcpTimeout();
   }
@@ -158,10 +164,12 @@ namespace Link {
   void Class::handleDisconnected(String ssid, uint8_t *bssid, DisconnectReason_t reason) {
     state.isConnected = false;
 
-    state.callbacks.debug("event", "wifi.disconnect");
-    state.callbacks.debug("event.wifi.disconnect.ssid", ssid);
-    state.callbacks.debug("event.wifi.disconnect.bssid", printMacAddress(bssid));
-    state.callbacks.debug("event.wifi.disconnect.reason", String(reason));
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("event", "wifi.disconnect");
+      Log::debug("event.wifi.disconnect.ssid", ssid);
+      Log::debug("event.wifi.disconnect.bssid", printMacAddress(bssid));
+      Log::debug("event.wifi.disconnect.reason", String(reason));
+    #endif
 
     state.callbacks.disconnected();
   }
@@ -169,10 +177,12 @@ namespace Link {
   void Class::handleGotIP(IPAddress ip, IPAddress gateway, IPAddress netmask) {
     state.isConnected = true;
 
-    state.callbacks.debug("event", "wifi.network-config");
-    state.callbacks.debug("event.wifi.network-config.ip", ip.toString());
-    state.callbacks.debug("event.wifi.network-config.gateway", gateway.toString());
-    state.callbacks.debug("event.wifi.network-config.netmask", netmask.toString());
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("event", "wifi.network-config");
+      Log::debug("event.wifi.network-config.ip", ip.toString());
+      Log::debug("event.wifi.network-config.gateway", gateway.toString());
+      Log::debug("event.wifi.network-config.netmask", netmask.toString());
+    #endif
 
     state.callbacks.gotIP();
   }
@@ -205,12 +215,6 @@ namespace Link {
     state.callbacks.reconnect = callback;
   }
 
-  void Class::setDebug(Log::Callback callback) {
-    state.callbacks.debug = callback;
-
-    configDebug();
-  }
-
   void Class::update() {
     unsigned long now = millis();
 
@@ -224,7 +228,10 @@ namespace Link {
       if (!state.firstConnectionSucceeded) {
         state.firstConnectionSucceeded = true;
 
-        state.callbacks.debug("info.wifi.first-connect", "succeeded");
+        #ifdef IOT_NODE_LOGGING
+          Log::debug("info.wifi.first-connect", "succeeded");
+        #endif
+
         debug(true);
       }
 
@@ -239,7 +246,10 @@ namespace Link {
       ) {
         state.maintenanceTime = now;
 
-        state.callbacks.debug("info.wifi.maintenance", String(timeSinceWifiMaintenance));
+        #ifdef IOT_NODE_LOGGING
+          Log::debug("info.wifi.maintenance", String(timeSinceWifiMaintenance));
+        #endif
+
         debug(false);
       }
 
@@ -252,7 +262,9 @@ namespace Link {
       state.firstConnectionAttempted = true;
 
       if (!state.isReconnecting) {
-        state.callbacks.debug("info.wifi.first-connect", "attempting");
+        #ifdef IOT_NODE_LOGGING
+          Log::debug("info.wifi.first-connect", "attempting");
+        #endif
 
         state.isReconnecting = true;
         wifiConnect();
@@ -269,7 +281,9 @@ namespace Link {
     ) {
       state.disconnectionTime = now;
 
-      state.callbacks.debug("info.timing.disconnection", String(now));
+      #ifdef IOT_NODE_LOGGING
+        Log::debug("info.timing.disconnection", String(now));
+      #endif
 
       return;
     }
@@ -282,7 +296,9 @@ namespace Link {
     ) {
       state.isReconnecting = true;
 
-      state.callbacks.debug("info.wifi.attempt-reconnect", String(timeSinceWifiDisconnect));
+      #ifdef IOT_NODE_LOGGING
+        Log::debug("info.wifi.attempt-reconnect", String(timeSinceWifiDisconnect));
+      #endif
 
       wifiConnect();
 
@@ -290,7 +306,9 @@ namespace Link {
     }
 
     if (timeSinceWifiDisconnect > state.timings.restartAfter) {
-      state.callbacks.debug("info.wifi.attempt-restart", String(timeSinceWifiDisconnect));
+      #ifdef IOT_NODE_LOGGING
+        Log::debug("info.wifi.attempt-restart", String(timeSinceWifiDisconnect));
+      #endif
 
       state.callbacks.beforeRestart();
 
@@ -347,34 +365,36 @@ namespace Link {
   }
 
   void Class::debug(bool deep) {
-    if (deep) {
-      #ifdef IOT_NODE_ESP8266
-        state.callbacks.debug("info.wifi.phy-mode", String(WiFi.getPhyMode()));
+    #ifdef IOT_NODE_LOGGING
+      if (deep) {
+        #ifdef IOT_NODE_ESP8266
+          Log::debug("info.wifi.phy-mode", String(WiFi.getPhyMode()));
+        #endif
+
+        Log::debug("info.wifi.ssid", WiFi.SSID());
+
+        #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
+          Log::debug("info.wifi.bssid", printMacAddress(WiFi.BSSID()));
+          Log::debug("info.wifi.channel", String(WiFi.channel()));
+        #endif
+      }
+
+      #ifndef IOT_NODE_ADVANCED_WIFI_CONFIG
+        Log::debug("info.wifi.bssid", printMacAddress(WiFi.BSSID()));
+        Log::debug("info.wifi.channel", String(WiFi.channel()));
       #endif
 
-      state.callbacks.debug("info.wifi.ssid", WiFi.SSID());
+      Log::debug("info.wifi.rssi", String(WiFi.RSSI()));
 
-      #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
-        state.callbacks.debug("info.wifi.bssid", printMacAddress(WiFi.BSSID()));
-        state.callbacks.debug("info.wifi.channel", String(WiFi.channel()));
+      #ifdef IOT_NODE_IP_DHCP
+        IPAddress ip = WiFi.localIP();
+        IPAddress gateway = WiFi.gatewayIP();
+        IPAddress netmask = WiFi.subnetMask();
+
+        Log::debug("info.wifi.network-config.ip", ip.toString());
+        Log::debug("info.wifi.network-config.gateway", gateway.toString());
+        Log::debug("info.wifi.network-config.netmask", netmask.toString());
       #endif
-    }
-
-    #ifndef IOT_NODE_ADVANCED_WIFI_CONFIG
-      state.callbacks.debug("info.wifi.bssid", printMacAddress(WiFi.BSSID()));
-      state.callbacks.debug("info.wifi.channel", String(WiFi.channel()));
-    #endif
-
-    state.callbacks.debug("info.wifi.rssi", String(WiFi.RSSI()));
-
-    #ifdef IOT_NODE_IP_DHCP
-      IPAddress ip = WiFi.localIP();
-      IPAddress gateway = WiFi.gatewayIP();
-      IPAddress netmask = WiFi.subnetMask();
-
-      state.callbacks.debug("info.wifi.network-config.ip", ip.toString());
-      state.callbacks.debug("info.wifi.network-config.gateway", gateway.toString());
-      state.callbacks.debug("info.wifi.network-config.netmask", netmask.toString());
     #endif
   }
 }

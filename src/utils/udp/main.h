@@ -2,6 +2,7 @@
 #define _UTILS_UDP_MAIN
 
 #include <Arduino.h>
+#include <functional>
 
 #ifdef IOT_NODE_ESP8266
   #include <ESPAsyncUDP.h>  
@@ -60,7 +61,6 @@ namespace UDP {
     Peer eventPeer;
     Peer fallbackPeer;
     std::vector<Service *> services;
-    Log::Callback debugCallback = [](String key, String value) {};
   };
 
   class Class {
@@ -77,7 +77,6 @@ namespace UDP {
       bool hasEventPeer();
       bool isListening();
       void removeEventPeer();
-      void setDebug(Log::Callback callback);
       void setEventPeer(Peer peer);
   };
 }

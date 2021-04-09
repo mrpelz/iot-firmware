@@ -14,10 +14,6 @@ namespace MotionSensor {
     state.changeCallback = callback;
   }
 
-  void Class::setDebug(Utils::Log::Callback callback) {
-    state.debugCallback = callback;
-  }
-
   void Class::start() {
     state.running = true;
 
@@ -40,8 +36,10 @@ namespace MotionSensor {
 
     if (!downChanged) return;
 
-    state.debugCallback("event", "motion");
-    state.debugCallback("motion.down", String(state.down));
+    #ifdef IOT_NODE_LOGGING
+      Utils::Log::debug("event", "motion");
+      Utils::Log::debug("motion.down", String(state.down));
+    #endif
 
     state.changeCallback(state.down);
   }

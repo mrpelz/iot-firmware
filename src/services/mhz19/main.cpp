@@ -12,7 +12,9 @@ namespace Mhz19 {
   auto sensor = MHZ19();
 
   void initializer() {
-    Utils::Log::debug("mhz19-service", "initializing sensor");
+    #ifdef IOT_NODE_LOGGING
+      Utils::Log::debug("mhz19-service", "initializing sensor");
+    #endif
 
     IOT_NODE_MHZ19_SERIAL.begin(9600);
     vTaskDelay(IOT_NODE_LOG_DELAY / portTICK_PERIOD_MS);
@@ -44,11 +46,13 @@ namespace Mhz19 {
       auto temperatureReading = sensor.getTemperature();
       auto transmittanceReading = sensor.getTransmittance();
 
-      Utils::Log::debug("mhz19-service.accuracy", String(accuracyReading));
-      Utils::Log::debug("mhz19-service.abc", String(abcReading));
-      Utils::Log::debug("mhz19-service.co2", String(co2Reading));
-      Utils::Log::debug("mhz19-service.temperature", String(temperatureReading));
-      Utils::Log::debug("mhz19-service.transmittance", String(transmittanceReading));
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("mhz19-service.accuracy", String(accuracyReading));
+        Utils::Log::debug("mhz19-service.abc", String(abcReading));
+        Utils::Log::debug("mhz19-service.co2", String(co2Reading));
+        Utils::Log::debug("mhz19-service.temperature", String(temperatureReading));
+        Utils::Log::debug("mhz19-service.transmittance", String(transmittanceReading));
+      #endif
 
       auto accuracy = reinterpret_cast<uint8_t*>(&accuracyReading);
       auto abc = reinterpret_cast<uint8_t*>(&abcReading);
@@ -88,8 +92,9 @@ namespace Mhz19 {
         transmittance + sizeof(transmittanceReading)
       );
 
-
-      Utils::Log::debug("mhz19-service", "sending response");
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("mhz19-service", "sending response");
+      #endif
 
       respondCallback(response);
       respondCallback = NULL;
@@ -97,7 +102,9 @@ namespace Mhz19 {
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer) {
-    Utils::Log::debug("mhz19-service", "got request");
+    #ifdef IOT_NODE_LOGGING
+      Utils::Log::debug("mhz19-service", "got request");
+    #endif
 
     respondCallback = respond;
     if (taskHandle != NULL) vTaskResume(taskHandle);

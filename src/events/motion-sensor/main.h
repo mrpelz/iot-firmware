@@ -4,6 +4,7 @@
 #ifdef IOT_NODE_MOTION_SENSOR
 
 #include <Arduino.h>
+#include <functional>
 
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"
@@ -19,7 +20,6 @@ namespace MotionSensor {
     bool running = false;
     bool down;
     ChangeCallback changeCallback = [](bool down) {};
-    Utils::Log::Callback debugCallback = [](String key, String value) {};
   };
 
   class Class {
@@ -30,7 +30,6 @@ namespace MotionSensor {
     public:
       Class(uint8_t _pin);
       void setChangeCallback(ChangeCallback callback);
-      void setDebug(Utils::Log::Callback callback);
       void start();
       void update();
   };

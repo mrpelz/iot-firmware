@@ -23,11 +23,17 @@ namespace Sgp30 {
   }
 
   void initializer(TwoWire *i2c) {
-    Utils::Log::debug("sgp30-service", "initializing sensor");
+    #ifdef IOT_NODE_LOGGING
+      Utils::Log::debug("sgp30-service", "initializing sensor");
+    #endif
 
     working = sensor.begin(i2c);
     if (!working) {
-      Utils::Log::debug("sgp30-service", "sensor initialization failed");
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("sgp30-service", "sensor initialization failed");
+      #endif
+
+      return;
     }
 
     xTaskCreatePinnedToCore(
@@ -52,7 +58,9 @@ namespace Sgp30 {
 
       auto calibrationSuccess = sensor.setHumidity(getAbsoluteHumidity(calibrationTemperature, calibrationHumidity));
       if (!calibrationSuccess) {
-        Utils::Log::debug("sgp30-service", "calibration not successful, sending null response");
+        #ifdef IOT_NODE_LOGGING
+          Utils::Log::debug("sgp30-service", "calibration not successful, sending null response");
+        #endif
 
         Utils::I2C::unclaim();
 
@@ -68,7 +76,9 @@ namespace Sgp30 {
 
       if (!measurementRawSuccess || !measurementSuccess
       ) {
-        Utils::Log::debug("sgp30-service", "measurement not successful, sending null response");
+        #ifdef IOT_NODE_LOGGING
+          Utils::Log::debug("sgp30-service", "measurement not successful, sending null response");
+        #endif
 
         respondCallback({});
         respondCallback = NULL;
@@ -80,10 +90,12 @@ namespace Sgp30 {
       auto tvocReading = sensor.TVOC;
       auto eco2Reading = sensor.eCO2;
 
-      Utils::Log::debug("sgp30-service.h2", String(h2Reading));
-      Utils::Log::debug("sgp30-service.ethanol", String(ethanolReading));
-      Utils::Log::debug("sgp30-service.tvoc", String(tvocReading));
-      Utils::Log::debug("sgp30-service.eco2", String(eco2Reading));
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("sgp30-service.h2", String(h2Reading));
+        Utils::Log::debug("sgp30-service.ethanol", String(ethanolReading));
+        Utils::Log::debug("sgp30-service.tvoc", String(tvocReading));
+        Utils::Log::debug("sgp30-service.eco2", String(eco2Reading));
+      #endif
 
       auto h2Result = reinterpret_cast<uint8_t*>(&h2Reading);
       auto ethanolResult = reinterpret_cast<uint8_t*>(&ethanolReading);
@@ -116,7 +128,9 @@ namespace Sgp30 {
         eco2Result + sizeof(eco2Reading)
       );
 
-      Utils::Log::debug("sgp30-service", "sending response");
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("sgp30-service", "sending response");
+      #endif
 
       respondCallback(response);
       respondCallback = NULL;
@@ -124,17 +138,23 @@ namespace Sgp30 {
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer) {
-    Utils::Log::debug("sgp30-service", "got request");
+    #ifdef IOT_NODE_LOGGING
+      Utils::Log::debug("sgp30-service", "got request");
+    #endif
 
     if (!working) {
-      Utils::Log::debug("sgp30-service", "sensor not working, sending null response");
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("sgp30-service", "sensor not working, sending null response");
+      #endif
 
       respond({});
       return;
     }
 
     if (request->size() < (sizeof(float) * 2)) {
-      Utils::Log::debug("sgp30-service", "request does not contain temperature and humidity");
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("sgp30-service", "request does not contain temperature and humidity");
+      #endif
 
       respond({});
       return;
@@ -142,8 +162,10 @@ namespace Sgp30 {
     calibrationTemperature = ((float *)request->data())[0];
     calibrationHumidity = ((float *)request->data())[1];
 
-    Utils::Log::debug("sgp30-service.calibration-temperature", String(calibrationTemperature));
-    Utils::Log::debug("sgp30-service.calibration-humidity", String(calibrationHumidity));
+    #ifdef IOT_NODE_LOGGING
+      Utils::Log::debug("sgp30-service.calibration-temperature", String(calibrationTemperature));
+      Utils::Log::debug("sgp30-service.calibration-humidity", String(calibrationHumidity)); 
+    #endif
 
     respondCallback = respond;
     if (taskHandle != NULL) vTaskResume(taskHandle);

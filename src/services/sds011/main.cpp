@@ -12,13 +12,18 @@ namespace Sds011 {
   auto sensor = SdsDustSensor(IOT_NODE_SDS011_SERIAL);
 
   void initializer() {
-    Utils::Log::debug("sds011-service", "initializing sensor");
+    #ifdef IOT_NODE_LOGGING
+      Utils::Log::debug("sds011-service", "initializing sensor");
+    #endif
 
     sensor.begin();
     vTaskDelay(IOT_NODE_LOG_DELAY / portTICK_PERIOD_MS);
     
-    Utils::Log::debug("sds011-service.sensor-firmware-version", sensor.queryFirmwareVersion().toString());
-    Utils::Log::debug("sds011-service.sensor-reporting-mode", sensor.setQueryReportingMode().toString());
+    #ifdef IOT_NODE_LOGGING
+      Utils::Log::debug("sds011-service.sensor-firmware-version", sensor.queryFirmwareVersion().toString());
+      Utils::Log::debug("sds011-service.sensor-reporting-mode", sensor.setQueryReportingMode().toString());
+    #endif
+
     sensor.sleep();
 
     xTaskCreatePinnedToCore(
@@ -45,18 +50,24 @@ namespace Sds011 {
       auto reading = sensor.queryPm();
       sensor.sleep();
 
-      Utils::Log::debug("sds011-service.status", reading.statusToString());
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("sds011-service.status", reading.statusToString());
+      #endif
 
       if (!reading.isOk()) {
-        Utils::Log::debug("sds011-service", "measurement not successful, sending null response");
+        #ifdef IOT_NODE_LOGGING
+          Utils::Log::debug("sds011-service", "measurement not successful, sending null response");
+        #endif
 
         respondCallback({});
         respondCallback = NULL;
         continue;
       }
 
-      Utils::Log::debug("sds011-service.pm025", String(reading.pm25));
-      Utils::Log::debug("sds011-service.pm10", String(reading.pm10));
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("sds011-service.pm025", String(reading.pm25));
+        Utils::Log::debug("sds011-service.pm10", String(reading.pm10));
+      #endif
 
       auto pm025 = reinterpret_cast<uint8_t*>(&reading.pm25);
       auto pm10 = reinterpret_cast<uint8_t*>(&reading.pm10);
@@ -75,7 +86,9 @@ namespace Sds011 {
         pm10 + sizeof(reading.pm10)
       );
 
-      Utils::Log::debug("sds011-service", "sending response");
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("sds011-service", "sending response");
+      #endif
 
       respondCallback(response);
       respondCallback = NULL;
@@ -83,7 +96,9 @@ namespace Sds011 {
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer) {
-    Utils::Log::debug("sds011-service", "got request");
+    #ifdef IOT_NODE_LOGGING
+      Utils::Log::debug("sds011-service", "got request");
+    #endif
 
     respondCallback = respond;
     if (taskHandle != NULL) vTaskResume(taskHandle);

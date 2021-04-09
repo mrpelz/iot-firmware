@@ -47,3 +47,7 @@
 #if defined(IOT_NODE_I2C_SENSOR) || defined(IOT_NODE_I2C_SCAN)
   #define IOT_NODE_I2C
 #endif
+
+#ifndef IOT_NODE_LOG_DELAY
+  #define IOT_NODE_LOG_DELAY 250
+#endif

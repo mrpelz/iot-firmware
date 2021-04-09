@@ -47,13 +47,15 @@ namespace Link {
   }
 
   void Class::configDebug() {
-    #ifdef IOT_NODE_IP_DHCP
-      state.callbacks.debug("config.network-config.dhcp", "1");
-    #else
-      state.callbacks.debug("config.network-config.dhcp", "0");
-      state.callbacks.debug("config.network-config.ip", state.interfaceConfig.ip.toString());
-      state.callbacks.debug("config.network-config.gateway", state.interfaceConfig.gateway.toString());
-      state.callbacks.debug("config.network-config.netmask", state.interfaceConfig.netmask.toString());
+    #ifdef IOT_NODE_LOGGING
+      #ifdef IOT_NODE_IP_DHCP
+        Log::debug("config.network-config.dhcp", "1");
+      #else
+        Log::debug("config.network-config.dhcp", "0");
+        Log::debug("config.network-config.ip", state.interfaceConfig.ip.toString());
+        Log::debug("config.network-config.gateway", state.interfaceConfig.gateway.toString());
+        Log::debug("config.network-config.netmask", state.interfaceConfig.netmask.toString());
+      #endif
     #endif
   }
 
@@ -93,13 +95,17 @@ namespace Link {
   void Class::handleConnected() {
     state.isConnected = true;
 
-    state.callbacks.debug("event", "connect");
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("event", "connect");
+    #endif
 
     state.callbacks.connected();
   }
 
   void Class::handleDhcpTimeout() {
-    state.callbacks.debug("event", "network-config.dhcp-timeout");
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("event", "network-config.dhcp-timeout");
+    #endif
 
     state.callbacks.dhcpTimeout();
   }
@@ -107,8 +113,10 @@ namespace Link {
   void Class::handleDisconnected(uint8_t reason) {
     state.isConnected = false;
 
-    state.callbacks.debug("event", "disconnect");
-    state.callbacks.debug("event.disconnect.reason", String(reason));
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("event", "disconnect");
+      Log::debug("event.disconnect.reason", String(reason));
+    #endif
 
     state.callbacks.disconnected();
   }
@@ -116,10 +124,12 @@ namespace Link {
   void Class::handleGotIP(IPAddress ip, IPAddress gateway, IPAddress netmask) {
     state.isConnected = true;
 
-    state.callbacks.debug("event", "network-config");
-    state.callbacks.debug("event.network-config.ip", ip.toString());
-    state.callbacks.debug("event.network-config.gateway", gateway.toString());
-    state.callbacks.debug("event.network-config.netmask", netmask.toString());
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("event", "network-config");
+      Log::debug("event.network-config.ip", ip.toString());
+      Log::debug("event.network-config.gateway", gateway.toString());
+      Log::debug("event.network-config.netmask", netmask.toString());
+    #endif
 
     state.callbacks.gotIP();
   }
@@ -152,12 +162,6 @@ namespace Link {
     state.callbacks.reconnect = callback;
   }
 
-  void Class::setDebug(Log::Callback callback) {
-    state.callbacks.debug = callback;
-
-    configDebug();
-  }
-
   void Class::update() {
     unsigned long now = millis();
 
@@ -171,7 +175,10 @@ namespace Link {
       if (!state.firstConnectionSucceeded) {
         state.firstConnectionSucceeded = true;
 
-        state.callbacks.debug("info.first-connect", "succeeded");
+        #ifdef IOT_NODE_LOGGING
+          Log::debug("info.first-connect", "succeeded");
+        #endif
+
         debug(true);
       }
 
@@ -185,8 +192,11 @@ namespace Link {
         && timeSinceEthMaintenance > state.timings.runDebugEvery
       ) {
         state.maintenanceTime = now;
+        
+        #ifdef IOT_NODE_LOGGING
+          Log::debug("info.maintenance", String(timeSinceEthMaintenance));
+        #endif
 
-        state.callbacks.debug("info.maintenance", String(timeSinceEthMaintenance));
         debug(false);
       }
 
@@ -199,7 +209,9 @@ namespace Link {
       state.firstConnectionAttempted = true;
 
       if (!state.isReconnecting) {
-        state.callbacks.debug("info.first-connect", "attempting");
+        #ifdef IOT_NODE_LOGGING
+          Log::debug("info.first-connect", "attempting");
+        #endif
 
         state.isReconnecting = true;
         ethConnect();
@@ -216,7 +228,9 @@ namespace Link {
     ) {
       state.disconnectionTime = now;
 
-      state.callbacks.debug("info.timing.disconnection", String(now));
+      #ifdef IOT_NODE_LOGGING
+        Log::debug("info.timing.disconnection", String(now));
+      #endif
 
       return;
     }
@@ -229,7 +243,9 @@ namespace Link {
     ) {
       state.isReconnecting = true;
 
-      state.callbacks.debug("info.attempt-reconnect", String(timeSinceEthDisconnect));
+      #ifdef IOT_NODE_LOGGING
+        Log::debug("info.attempt-reconnect", String(timeSinceEthDisconnect));
+      #endif
 
       ethConnect();
 
@@ -237,7 +253,9 @@ namespace Link {
     }
 
     if (timeSinceEthDisconnect > state.timings.restartAfter) {
-      state.callbacks.debug("info.attempt-restart", String(timeSinceEthDisconnect));
+      #ifdef IOT_NODE_LOGGING
+        Log::debug("info.attempt-restart", String(timeSinceEthDisconnect));
+      #endif
 
       state.callbacks.beforeRestart();
 
@@ -250,16 +268,18 @@ namespace Link {
   }
 
   void Class::debug(bool deep) {
-    state.callbacks.debug("info.eth.link-speed", String(ETH.linkSpeed()));
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("info.eth.link-speed", String(ETH.linkSpeed()));
 
-    #ifdef IOT_NODE_IP_DHCP
-      IPAddress ip = ETH.localIP();
-      IPAddress gateway = ETH.gatewayIP();
-      IPAddress netmask = ETH.subnetMask();
+      #ifdef IOT_NODE_IP_DHCP
+        IPAddress ip = ETH.localIP();
+        IPAddress gateway = ETH.gatewayIP();
+        IPAddress netmask = ETH.subnetMask();
 
-      state.callbacks.debug("info.network-config.ip", ip.toString());
-      state.callbacks.debug("info.network-config.gateway", gateway.toString());
-      state.callbacks.debug("info.network-config.netmask", netmask.toString());
+        Log::debug("info.network-config.ip", ip.toString());
+        Log::debug("info.network-config.gateway", gateway.toString());
+        Log::debug("info.network-config.netmask", netmask.toString());
+      #endif
     #endif
   }
 }

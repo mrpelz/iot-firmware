@@ -5,7 +5,9 @@ namespace Services {
 
 namespace SystemInfo {
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer) {
-    Utils::Log::debug("system-info-service", "got request");
+    #ifdef IOT_NODE_LOGGING
+      Utils::Log::debug("system-info-service", "got request");
+    #endif
 
     Utils::UDP::Payload response;
 
@@ -33,7 +35,9 @@ namespace SystemInfo {
       response.insert(response.end(), &rssi, &rssi + sizeof(rssi));
     #endif
 
-    Utils::Log::debug("system-info-service", "sending response");
+    #ifdef IOT_NODE_LOGGING
+      Utils::Log::debug("system-info-service", "sending response");
+    #endif
 
     respond(response);
   }

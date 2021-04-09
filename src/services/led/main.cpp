@@ -14,16 +14,22 @@ namespace Led {
       Utils::UDP::RespondCallback respond,
       Utils::UDP::Peer peer
     ) {
-      Utils::Log::debug("led-service", "got request");
-      Utils::Log::debug("led-service.index", String(index));
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("led-service", "got request");
+        Utils::Log::debug("led-service.index", String(index));
+      #endif
 
       auto duty = request->size() >= 1 ? request->at(0) : (uint8_t)0;
 
-      Utils::Log::debug("led-service.duty", String(duty));
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("led-service.duty", String(duty));
+      #endif
 
       led->set(duty);
 
-      Utils::Log::debug("led-service", "sending response");
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("led-service", "sending response");
+      #endif
 
       respond({});
     };

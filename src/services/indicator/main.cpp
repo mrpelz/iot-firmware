@@ -14,10 +14,16 @@ namespace Indicator {
       Utils::UDP::RespondCallback respond,
       Utils::UDP::Peer peer
     ) {
-      Utils::Log::debug("indicator-service", "got request");
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("indicator-service", "got request");
+      #endif
       
       if (request->size() < 1) {
-        Utils::Log::debug("indicator-service", "missing parameters");
+        #ifdef IOT_NODE_LOGGING
+          Utils::Log::debug("indicator-service", "missing parameters");
+        #endif
+
+        return;
       }
 
       auto cmd = request->at(0);
@@ -39,7 +45,9 @@ namespace Indicator {
         }
       }
 
-      Utils::Log::debug("indicator-service", "sending response");
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("indicator-service", "sending response");
+      #endif
 
       respond({});
     };

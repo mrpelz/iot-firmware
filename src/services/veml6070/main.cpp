@@ -13,11 +13,16 @@ namespace Veml6070 {
   auto sensor = Sensor();
 
   void initializer(TwoWire *i2c) {
-    Utils::Log::debug("veml6070-service", "initializing sensor");
+    #ifdef IOT_NODE_LOGGING
+      Utils::Log::debug("veml6070-service", "initializing sensor");
+    #endif
 
     working = sensor.begin(i2c);
     if (!working) {
-      Utils::Log::debug("veml6070-service", "sensor initialization failed");
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("veml6070-service", "sensor initialization failed");
+      #endif
+
       return;
     }
 
@@ -52,7 +57,9 @@ namespace Veml6070 {
 
       Utils::I2C::unclaim();
 
-      Utils::Log::debug("veml6070-service.reading", String(reading));
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("veml6070-service.reading", String(reading));
+      #endif
 
       auto result = reinterpret_cast<uint8_t*>(&reading);
 
@@ -64,7 +71,9 @@ namespace Veml6070 {
         result + sizeof(reading)
       );
 
-      Utils::Log::debug("veml6070-service", "sending response");
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("veml6070-service", "sending response");
+      #endif
 
       respondCallback(response);
       respondCallback = NULL;
@@ -72,10 +81,14 @@ namespace Veml6070 {
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer) {
-    Utils::Log::debug("veml6070-service", "got request");
+    #ifdef IOT_NODE_LOGGING
+      Utils::Log::debug("veml6070-service", "got request");
+    #endif
 
     if (!working) {
-      Utils::Log::debug("veml6070-service", "sensor not working, sending null response");
+      #ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("veml6070-service", "sensor not working, sending null response");
+      #endif
 
       respond({});
       return;

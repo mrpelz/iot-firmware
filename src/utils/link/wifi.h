@@ -73,7 +73,6 @@ namespace Link {
   class Class {
     private:
       State state;
-      void configDebug();
       void wifiConnect();
       void handleConnected(String ssid, uint8_t *bssid, uint8_t channel);
       void handleDhcpTimeout();
@@ -82,6 +81,7 @@ namespace Link {
 
     public:
       Class(Config config);
+      void configDebug();
       void connect();
       void disconnect();
       bool isConnected();
@@ -91,7 +91,6 @@ namespace Link {
       void onDisconnected(std::function<void ()> callback);
       void onGotIP(std::function<void ()> callback);
       void onReconnect(std::function<void ()> callback);
-      void setDebug(Log::Callback callback);
       void update();
       void debug(bool deep);
   };

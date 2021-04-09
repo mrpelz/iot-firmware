@@ -2,6 +2,7 @@
 #define _UTILS_KEEPALIVE_MAIN
 
 #include <Arduino.h>
+#include <functional>
 
 #include "../../utils/log.h"
 
@@ -9,12 +10,12 @@ namespace IotNode {
 namespace Utils {
 
 namespace Keepalive {
-  typedef std::function<void ()> Callback;
+  typedef std::function<void ()> KeepaliveCallback;
 
   struct State {
     bool running = false;
     bool ticked = false;
-    Callback callback;
+    KeepaliveCallback callback;
     unsigned long lastTick = 0;
     unsigned long timeout = 0;
   };
@@ -24,7 +25,7 @@ namespace Keepalive {
       State state;
 
     public:
-      Class(unsigned long timeout, Callback callback);
+      Class(unsigned long timeout, KeepaliveCallback callback);
       void start();
       void stop();
       void tick();

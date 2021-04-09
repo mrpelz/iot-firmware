@@ -16,9 +16,15 @@ namespace Button {
           return;
         }
 
-        Utils::Log::debug("info.buttons.change-callback", "udp event not usable");
+        #ifdef IOT_NODE_LOGGING
+          Utils::Log::debug("info.buttons.change-callback", "udp event not usable");
+        #endif
+
         if (update.downChanged && !update.down) {
-          Utils::Log::debug("info.buttons.change-callback", "triggering override");
+          #ifdef IOT_NODE_LOGGING
+            Utils::Log::debug("info.buttons.change-callback", "triggering override");
+          #endif
+
           Utils::Relais::relais0.toggle();
         }
       });

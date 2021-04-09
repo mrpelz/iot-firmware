@@ -1,5 +1,7 @@
 #include "./log.h"
 
+#ifdef IOT_NODE_LOGGING
+
 namespace IotNode {
 namespace Utils {
 
@@ -64,3 +66,5 @@ namespace Log {
 
 } // section namespace
 } // project namespace
+
+#endif

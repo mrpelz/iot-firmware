@@ -4,6 +4,8 @@
 #ifdef IOT_NODE_BUTTONS
 
 #include <Arduino.h>
+#include <functional>
+
 #include "../../utils/log.h"
 
 namespace IotNode {
@@ -39,7 +41,6 @@ namespace Button {
     unsigned long longpressTime;
     unsigned long noiseGateTime;
     ChangeCallback changeCallback = [](Update update) {};
-    Utils::Log::Callback debugCallback = [](String key, String value) {};
   };
 
   class Class {
@@ -50,7 +51,6 @@ namespace Button {
     public:
       Class(Config _config);
       void setChangeCallback(ChangeCallback callback);
-      void setDebug(Utils::Log::Callback callback);
       void start();
       void stop();
       void update();

@@ -20,7 +20,7 @@ namespace Link {
   #endif
 
   void setup() {
-    link.setDebug(Log::debug);
+    link.configDebug();
 
     link.onGotIP([]() {
       UDP::instance.begin();

@@ -13,7 +13,9 @@ namespace Relais {
   void Regular::commit() {
     if (!state.wasInitialized) return;
 
-    Log::debug("relais", "commit");
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("relais", "commit");
+    #endif
 
     digitalWrite(config.pin, (config.invert ? !state.on : state.on));
   }
@@ -23,8 +25,10 @@ namespace Relais {
   }
 
   void Regular::init() {
-    Log::debug("relais", "init");
-    Log::debug("relais.pin", String(config.pin));
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("relais", "init");
+      Log::debug("relais.pin", String(config.pin));
+    #endif
 
     pinMode(config.pin, OUTPUT);
     state.wasInitialized = true;
@@ -33,16 +37,20 @@ namespace Relais {
   }
 
   void Regular::setOn(bool on) {
-    Log::debug("relais.set-on", on ? "on" : "off");
-    Log::debug("relais.pin", String(config.pin));
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("relais.set-on", on ? "on" : "off");
+      Log::debug("relais.pin", String(config.pin));
+    #endif
 
     state.on = on;
     commit();
   }
 
   void Regular::toggle() {
-    Log::debug("relais.toggle", state.on ? "on2off" : "off2on");
-    Log::debug("relais.pin", String(config.pin));
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("relais.toggle", state.on ? "on2off" : "off2on");
+      Log::debug("relais.pin", String(config.pin));
+    #endif
 
     state.on = !state.on;
     commit();
@@ -55,7 +63,9 @@ namespace Relais {
   void Pulse::commit() {
     if (!state.wasInitialized) return;
 
-    Log::debug("relais", "commit");
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("relais", "commit");
+    #endif
 
     auto unactionablePin = state.on ? config.offPin : config.onPin;
     auto actionablePin = state.on ? config.onPin : config.offPin;
@@ -69,9 +79,11 @@ namespace Relais {
   }
 
   void Pulse::init() {
-    Log::debug("relais", "init");
-    Log::debug("relais.on-pin", String(config.onPin));
-    Log::debug("relais.off-pin", String(config.offPin));
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("relais", "init");
+      Log::debug("relais.on-pin", String(config.onPin));
+      Log::debug("relais.off-pin", String(config.offPin));
+    #endif
 
     pinMode(config.onPin, OUTPUT);
     pinMode(config.offPin, OUTPUT);
@@ -81,18 +93,22 @@ namespace Relais {
   }
 
   void Pulse::setOn(bool on) {
-    Log::debug("relais.set-on", on ? "on" : "off");
-    Log::debug("relais.on-pin", String(config.onPin));
-    Log::debug("relais.off-pin", String(config.offPin));
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("relais.set-on", on ? "on" : "off");
+      Log::debug("relais.on-pin", String(config.onPin));
+      Log::debug("relais.off-pin", String(config.offPin));
+    #endif
 
     state.on = on;
     commit();
   }
 
   void Pulse::toggle() {
-    Log::debug("relais.toggle", state.on ? "on2off" : "off2on");
-    Log::debug("relais.on-pin", String(config.onPin));
-    Log::debug("relais.off-pin", String(config.offPin));
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("relais.toggle", state.on ? "on2off" : "off2on");
+      Log::debug("relais.on-pin", String(config.onPin));
+      Log::debug("relais.off-pin", String(config.offPin));
+    #endif
 
     state.on = !state.on;
     commit();

@@ -12,7 +12,9 @@ namespace Hello {
   }
 
   void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer) {
-    Utils::Log::debug("hello-service", "got request");
+    #ifdef IOT_NODE_LOGGING
+      Utils::Log::debug("hello-service", "got request");
+    #endif
 
     Utils::UDP::Payload response;
 
@@ -53,7 +55,9 @@ namespace Hello {
 
     addLineToRespone(&response, "BYE");
 
-    Utils::Log::debug("hello-service", "sending response");
+    #ifdef IOT_NODE_LOGGING
+      Utils::Log::debug("hello-service", "sending response");
+    #endif
 
     respond(response);
   }

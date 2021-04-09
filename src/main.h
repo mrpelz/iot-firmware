@@ -2,6 +2,7 @@
 #define _MAIN
 
 #include <Arduino.h>
+#include <functional>
 
 #include "./events/button/setup.h"
 #include "./events/motion-sensor/setup.h"

@@ -1,6 +1,8 @@
 #ifndef _UTILS_I2C
 #define _UTILS_I2C
 
+#ifdef IOT_NODE_I2C
+
 #include <Arduino.h>
 #include <Wire.h>
 
@@ -29,5 +31,7 @@ namespace I2C {
 
 } // section namespace
 } // project namespace
+
+#endif
 
 #endif

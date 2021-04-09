@@ -22,23 +22,31 @@ namespace OTA {
     ArduinoOTA.setPassword(IOT_NODE_OTA_PASSWORD);
 
     ArduinoOTA.onStart([]() {
-      Log::debug("ota", "start");
+      #ifdef IOT_NODE_LOGGING
+        Log::debug("ota", "start");
+      #endif
     });
 
     ArduinoOTA.onEnd([]() {
-      Log::debug("ota", "end");
+      #ifdef IOT_NODE_LOGGING
+        Log::debug("ota", "end");
+      #endif
     });
 
     ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
-      Log::debug("ota.progress", String(progress / (total / 100)));
+      #ifdef IOT_NODE_LOGGING
+        Log::debug("ota.progress", String(progress / (total / 100)));
+      #endif
     });
 
     ArduinoOTA.onError([](ota_error_t error) {
-      if (error == OTA_AUTH_ERROR) Log::debug("ota.error", "auth");
-      else if (error == OTA_BEGIN_ERROR) Log::debug("ota.error", "begin");
-      else if (error == OTA_CONNECT_ERROR) Log::debug("ota.error", "connect");
-      else if (error == OTA_RECEIVE_ERROR) Log::debug("ota.error", "receive");
-      else if (error == OTA_END_ERROR) Log::debug("ota.error", "end");
+      #ifdef IOT_NODE_LOGGING
+        if (error == OTA_AUTH_ERROR) Log::debug("ota.error", "auth");
+        else if (error == OTA_BEGIN_ERROR) Log::debug("ota.error", "begin");
+        else if (error == OTA_CONNECT_ERROR) Log::debug("ota.error", "connect");
+        else if (error == OTA_RECEIVE_ERROR) Log::debug("ota.error", "receive");
+        else if (error == OTA_END_ERROR) Log::debug("ota.error", "end");
+      #endif
     });
 
     #ifdef IOT_NODE_ESP32

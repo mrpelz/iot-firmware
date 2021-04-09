@@ -27,8 +27,6 @@ namespace MotionSensor {
 
   void setup() {
     #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
-      motionSensor0.setDebug(Utils::Log::debug);
-
       auto event0 = makeEvent(&Utils::UDP::instance, 0);
       motionSensor0.setChangeCallback(event0);
 
