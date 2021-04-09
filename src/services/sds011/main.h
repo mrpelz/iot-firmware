@@ -14,6 +14,8 @@ namespace IotNode {
 namespace Services {
 
 namespace Sds011 {
+  void sleepSensor();
+
   void initializer();
 
   void responseTask(void *parameter);

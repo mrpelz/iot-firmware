@@ -11,6 +11,14 @@ namespace Sds011 {
 
   auto sensor = SdsDustSensor(IOT_NODE_SDS011_SERIAL);
 
+  void sleepSensor() {
+    for (size_t i = 0; i < 10; i++) {
+      auto result = sensor.sleep();
+
+      if (!result.isWorking()) break;
+    }
+  }
+
   void initializer() {
     #ifdef IOT_NODE_LOGGING
       Utils::Log::debug("sds011-service", "initializing sensor");
@@ -24,7 +32,7 @@ namespace Sds011 {
       Utils::Log::debug("sds011-service.sensor-reporting-mode", sensor.setQueryReportingMode().toString());
     #endif
 
-    sensor.sleep();
+    sleepSensor();
 
     xTaskCreatePinnedToCore(
       responseTask,
@@ -48,7 +56,7 @@ namespace Sds011 {
       vTaskDelay(30000 / portTICK_PERIOD_MS);
 
       auto reading = sensor.queryPm();
-      sensor.sleep();
+      sleepSensor();
 
       #ifdef IOT_NODE_LOGGING
         Utils::Log::debug("sds011-service.status", reading.statusToString());
