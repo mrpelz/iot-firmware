@@ -44,6 +44,9 @@ namespace Link {
       },
       SYSTEM_EVENT_ETH_GOT_IP
     );
+
+    WiFi.mode(WIFI_OFF);
+    btStop();
   }
 
   void Class::configDebug() {
