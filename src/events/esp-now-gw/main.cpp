@@ -5,9 +5,9 @@
 namespace IotNode {
 namespace Events {
 
-namespace EspNow {
+namespace EspNowGw {
   void event(std::vector<uint8_t> payload) {
-    Utils::UDP::instance.event(ids::espNow, payload);
+    Utils::UDP::instance.event(ids::espNowGw, payload);
   }
 
   void onDataReceived(const uint8_t *mac, const uint8_t *incomingData, int length) {

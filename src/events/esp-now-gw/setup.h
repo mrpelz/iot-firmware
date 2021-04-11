@@ -14,7 +14,7 @@
 namespace IotNode {
 namespace Events {
 
-namespace EspNow {
+namespace EspNowGw {
   void setup();
 }
 
