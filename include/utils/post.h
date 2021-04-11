@@ -52,6 +52,10 @@
   #error ESP-NOW gateway only available when link is ethernet
 #endif
 
+#if !defined(IOT_NODE_ESP_NOW_GW_MAC) && (defined(IOT_NODE_ESP_NOW_NODE))
+  #error Cannot use ESP-NOW node without GW MAC defined
+#endif
+
 #if defined(IOT_NODE_I2C_SENSOR) || defined(IOT_NODE_I2C_SCAN)
   #define IOT_NODE_I2C
 #endif

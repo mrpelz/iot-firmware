@@ -1,6 +1,13 @@
 #include "./main.h"
 
 void setup() {
+  #ifdef IOT_NODE_ESP_NOW_NODE
+    IotNode::Utils::EspNowNode::setup();
+    IotNode::Utils::EspNowNode::send({ 0xfa, 0xce, 0xb0, 0x0c });
+
+    // ESP.deepSleep(0);
+  #endif
+
   IotNode::Utils::Keepalive::setup();
 
   #ifdef IOT_NODE_LOGGING
