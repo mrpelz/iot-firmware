@@ -79,6 +79,8 @@ namespace Link {
 
     #ifdef IOT_NODE_WT32_ETH01
       ETH.begin(1, 16, 23, 18, ETH_PHY_LAN8720, ETH_CLOCK_GPIO0_IN);
+    #elif defined(IOT_NODE_BOARD_OLIMEX_ESP32_POE)
+      ETH.begin(0, 12, 23, 18, ETH_PHY_LAN8720, ETH_CLOCK_GPIO17_OUT);
     #else
       ETH.begin();
     #endif

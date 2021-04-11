@@ -1,8 +1,7 @@
 #include "../envs/wt32.h"
 
 #define IOT_NODE_BOARD_TEST_DEVICE
-#define IOT_NODE_BOARD_NAME "test-device"
-#define IOT_NODE_HARDWARE_NAME "WT32-ETH01"
+#define IOT_NODE_BOARD_NAME "Test-Device"
 
 #define IOT_NODE_INDICATORS
 #define IOT_NODE_MOTION_SENSOR
