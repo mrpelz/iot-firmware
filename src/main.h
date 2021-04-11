@@ -5,6 +5,7 @@
 #include <functional>
 
 #include "./events/button/setup.h"
+#include "./events/esp-now/setup.h"
 #include "./events/motion-sensor/setup.h"
 #include "./services/async/setup.h"
 #include "./services/bme280/setup.h"

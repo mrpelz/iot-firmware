@@ -58,6 +58,10 @@ void setup() {
     IotNode::Events::Button::setup();
   #endif
 
+  #ifdef IOT_NODE_ESP_NOW_GW
+    IotNode::Events::EspNow::setup();
+  #endif
+
   #ifdef IOT_NODE_MOTION_SENSOR
     IotNode::Events::MotionSensor::setup();
   #endif

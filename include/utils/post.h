@@ -44,6 +44,14 @@
   #error cannot use async sensors without ESP32
 #endif
 
+#if !defined(IOT_NODE_ESP32) && (defined(IOT_NODE_ESP_NOW_GW))
+  #error ESP-NOW gateway only available on ESP32
+#endif
+
+#if !defined(IOT_NODE_LINK_ETH) && (defined(IOT_NODE_ESP_NOW_GW))
+  #error ESP-NOW gateway only available when link is ethernet
+#endif
+
 #if defined(IOT_NODE_I2C_SENSOR) || defined(IOT_NODE_I2C_SCAN)
   #define IOT_NODE_I2C
 #endif
