@@ -10,17 +10,20 @@
   #include <espnow.h>
 #endif
 #ifdef IOT_NODE_ESP32
-  #include <WiFi.h>
   #include <esp_now.h>
+  #include <esp_wifi.h>
+  #include <WiFi.h>
 #endif
 
 #include "./utils/log.h"
+
+#define ESP_NOW_BOOT_PIN 3
 
 namespace IotNode {
 namespace Utils {
 
 namespace EspNowNode {
-  void setup();
+  bool setup();
 
   void send(std::vector<uint8_t> payload);
 }

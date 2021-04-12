@@ -2,10 +2,14 @@
 
 void setup() {
   #ifdef IOT_NODE_ESP_NOW_NODE
-    IotNode::Utils::EspNowNode::setup();
-    IotNode::Utils::EspNowNode::send({ 0xfa, 0xce, 0xb0, 0x0c });
+    auto sleep = IotNode::Utils::EspNowNode::setup();
 
-    // ESP.deepSleep(0);
+    if (sleep) {
+      IotNode::Utils::EspNowNode::send({ 0xfa, 0xce, 0xb0, 0x0c });
+
+      ESP.deepSleep(0);
+      return;
+    }
   #endif
 
   IotNode::Utils::Keepalive::setup();
