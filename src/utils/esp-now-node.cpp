@@ -10,6 +10,12 @@ namespace EspNowNode {
 
   uint8_t gw_mac[] = IOT_NODE_ESP_NOW_GW_MAC;
 
+  void onDataSent(uint8_t *mac_addr, uint8_t status) {
+    if (workingMode == WORKING_MODE::SLEEP) {
+      ESP.deepSleep(0);
+    }
+  }
+
   void setup() {
     WiFi.persistent(false);
 
@@ -34,6 +40,7 @@ namespace EspNowNode {
 
     esp_now_set_self_role(ESP_NOW_ROLE_CONTROLLER);
     esp_now_add_peer(gw_mac, ESP_NOW_ROLE_SLAVE, 1, NULL, 0);
+    esp_now_register_send_cb(onDataSent);
 
     pinMode(ESP_NOW_BOOT_PIN, INPUT_PULLUP);
     workingMode = digitalRead(ESP_NOW_BOOT_PIN) ? WORKING_MODE::SLEEP : WORKING_MODE::WAKE;
@@ -47,9 +54,6 @@ namespace EspNowNode {
   void update() {
     if (workingMode == WORKING_MODE::SLEEP) {
       send({ 0xfa, 0xce, 0xb0, 0x0c });
-
-      ESP.deepSleep(0);
-      return;
     }
   }
 }

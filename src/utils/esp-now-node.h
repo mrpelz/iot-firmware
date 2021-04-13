@@ -32,6 +32,8 @@ namespace EspNowNode {
 
   void setup();
 
+  void onDataSent(uint8_t *mac_addr, uint8_t status);
+
   void send(std::vector<uint8_t> payload);
 
   void update();
