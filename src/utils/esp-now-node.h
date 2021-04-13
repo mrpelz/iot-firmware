@@ -15,7 +15,8 @@
   #include <WiFi.h>
 #endif
 
-#include "./utils/log.h"
+#include "./keepalive/main.h"
+#include "./log.h"
 
 #define ESP_NOW_BOOT_PIN 3
 
@@ -30,9 +31,11 @@ namespace EspNowNode {
 
   extern WORKING_MODE workingMode;
 
-  void setup();
+  void sleep();
 
   void onDataSent(uint8_t *mac_addr, uint8_t status);
+
+  void setup();
 
   void send(std::vector<uint8_t> payload);
 

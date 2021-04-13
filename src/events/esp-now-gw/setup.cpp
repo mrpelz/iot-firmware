@@ -13,7 +13,7 @@ namespace EspNowGw {
     WiFi.setAutoReconnect(false);
 
     WiFi.mode(WIFI_STA);
-    esp_wifi_set_channel(1, WIFI_SECOND_CHAN_NONE);
+    esp_wifi_set_channel(IOT_NODE_ESP_NOW_WIFI_CHANNEL, WIFI_SECOND_CHAN_NONE);
 
     if (esp_now_init() != 0) {
       #ifdef IOT_NODE_LOGGING
