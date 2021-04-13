@@ -6,9 +6,11 @@ namespace IotNode {
 namespace Utils {
 
 namespace EspNowNode {
+  WORKING_MODE workingMode = WORKING_MODE::WAKE;
+
   uint8_t gw_mac[] = IOT_NODE_ESP_NOW_GW_MAC;
 
-  bool setup() {
+  void setup() {
     WiFi.persistent(false);
 
     WiFi.setAutoConnect(false);
@@ -27,21 +29,28 @@ namespace EspNowNode {
         Utils::Log::debug("error", "esp-now setup failed");
       #endif
 
-      return false;
+      return;
     }
 
     esp_now_set_self_role(ESP_NOW_ROLE_CONTROLLER);
     esp_now_add_peer(gw_mac, ESP_NOW_ROLE_SLAVE, 1, NULL, 0);
 
     pinMode(ESP_NOW_BOOT_PIN, INPUT_PULLUP);
-    auto result = !!digitalRead(ESP_NOW_BOOT_PIN);
+    workingMode = digitalRead(ESP_NOW_BOOT_PIN) ? WORKING_MODE::SLEEP : WORKING_MODE::WAKE;
     pinMode(ESP_NOW_BOOT_PIN, INPUT);
-    
-    return result;
   }
 
   void send(std::vector<uint8_t> payload) {
     esp_now_send(NULL, payload.data(), payload.size());
+  }
+
+  void update() {
+    if (workingMode == WORKING_MODE::SLEEP) {
+      send({ 0xfa, 0xce, 0xb0, 0x0c });
+
+      ESP.deepSleep(0);
+      return;
+    }
   }
 }
 

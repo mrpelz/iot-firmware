@@ -2,12 +2,9 @@
 
 void setup() {
   #ifdef IOT_NODE_ESP_NOW_NODE
-    auto sleep = IotNode::Utils::EspNowNode::setup();
+    IotNode::Utils::EspNowNode::setup();
 
-    if (sleep) {
-      IotNode::Utils::EspNowNode::send({ 0xfa, 0xce, 0xb0, 0x0c });
-
-      ESP.deepSleep(0);
+    if (IotNode::Utils::EspNowNode::workingMode == IotNode::Utils::EspNowNode::WORKING_MODE::SLEEP) {
       return;
     }
   #endif
@@ -144,6 +141,10 @@ void loop() {
 
     #ifdef IOT_NODE_MOTION_SENSOR
       IotNode::Events::MotionSensor::update();
+    #endif
+
+    #ifdef IOT_NODE_ESP_NOW_NODE
+      IotNode::Utils::EspNowNode::update();
     #endif
 
     IotNode::Utils::Keepalive::update();

@@ -23,9 +23,18 @@ namespace IotNode {
 namespace Utils {
 
 namespace EspNowNode {
-  bool setup();
+  enum WORKING_MODE {
+    SLEEP,
+    WAKE
+  };
+
+  extern WORKING_MODE workingMode;
+
+  void setup();
 
   void send(std::vector<uint8_t> payload);
+
+  void update();
 }
 
 } // section namespace
