@@ -59,6 +59,16 @@ namespace Button {
       .longpressTime = 125, // (step duration)
       .noiseGateTime = 50,
     };
+  #elif defined(IOT_NODE_BOARD_ESP_NOW_TEST_NODE)
+    static const Config button0Config = {
+      .pin = 4,
+      .invert = false,
+      .pullupEnable = true,
+      .debounceTime = 50,
+      .repeatTime = 3000,
+      .longpressTime = 125, // (step duration)
+      .noiseGateTime = 0,
+    };
   #endif
 
   extern Class button0;

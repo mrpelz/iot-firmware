@@ -40,6 +40,14 @@ namespace Button {
       Utils::Button::button2.setChangeCallback(event2);
     #endif
   }
+
+  #ifdef IOT_NODE_ESP_NOW_NODE
+    void setupEspNow() {
+      auto event0 = makeEspNowEvent(0);
+
+      Utils::Button::button0.setChangeCallback(event0);
+    }
+  #endif
 }
 
 } // section namespace

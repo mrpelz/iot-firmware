@@ -2,9 +2,16 @@
 
 void setup() {
   #ifdef IOT_NODE_ESP_NOW_NODE
-    IotNode::Utils::EspNowNode::setup();
+    IotNode::Utils::EspNowNode::getWorkingMode();
 
     if (IotNode::Utils::EspNowNode::workingMode == IotNode::Utils::EspNowNode::WORKING_MODE::SLEEP) {
+      #ifdef IOT_NODE_BUTTONS
+        IotNode::Utils::Button::setup();
+      #endif
+
+      IotNode::Utils::EspNowNode::setup();
+      IotNode::Events::Button::setupEspNow();
+
       return;
     }
   #endif
@@ -144,12 +151,20 @@ void loop() {
     #endif
 
     #ifdef IOT_NODE_ESP_NOW_NODE
-      IotNode::Utils::EspNowNode::update();
-    #endif
+      if (IotNode::Utils::EspNowNode::workingMode == IotNode::Utils::EspNowNode::WORKING_MODE::SLEEP) {
+        IotNode::Utils::EspNowNode::update();
+      }
 
-    IotNode::Utils::Keepalive::update();
-    IotNode::Utils::Link::update();
-    IotNode::Utils::OTA::update();
+      if (IotNode::Utils::EspNowNode::workingMode == IotNode::Utils::EspNowNode::WORKING_MODE::WAKE) {
+        IotNode::Utils::Keepalive::update();
+        IotNode::Utils::Link::update();
+        IotNode::Utils::OTA::update();
+      }
+    #else
+      IotNode::Utils::Keepalive::update();
+      IotNode::Utils::Link::update();
+      IotNode::Utils::OTA::update();
+    #endif
   #endif
   #ifdef IOT_NODE_ESP32
     vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);

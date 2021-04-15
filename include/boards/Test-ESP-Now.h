@@ -1,4 +1,0 @@
-#define IOT_NODE_BOARD_TEST_ESP_NOW
-#define IOT_NODE_BOARD_NAME "Test-ESP-Now"
-
-#define IOT_NODE_ESP_NOW_NODE

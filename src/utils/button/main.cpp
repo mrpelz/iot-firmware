@@ -95,12 +95,12 @@ namespace Button {
     if (!(downChanged || longpressChanged)) return;
 
     #ifdef IOT_NODE_LOGGING
-      state.debugCallback("event", "button");
-      state.debugCallback("button.down", String(state.down));
-      state.debugCallback("button.down.changed", String(downChanged));
-      state.debugCallback("button.down.change-period", String(timeSinceLastChange));
-      state.debugCallback("button.repeat", String(state.repeat));
-      state.debugCallback("button.longpress", String(state.longpress));
+      Log::debug("event", "button");
+      Log::debug("button.down", String(state.down));
+      Log::debug("button.down.changed", String(downChanged));
+      Log::debug("button.down.change-period", String(timeSinceLastChange));
+      Log::debug("button.repeat", String(state.repeat));
+      Log::debug("button.longpress", String(state.longpress));
     #endif
 
     state.changeCallback({

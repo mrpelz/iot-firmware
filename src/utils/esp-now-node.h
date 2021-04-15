@@ -15,6 +15,7 @@
   #include <WiFi.h>
 #endif
 
+#include "./button/setup.h"
 #include "./keepalive/main.h"
 #include "./log.h"
 
@@ -30,6 +31,8 @@ namespace EspNowNode {
   };
 
   extern WORKING_MODE workingMode;
+
+  void getWorkingMode();
 
   void sleep();
 
