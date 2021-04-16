@@ -19,7 +19,7 @@
 #include "./keepalive/main.h"
 #include "./log.h"
 
-#define ESP_NOW_BOOT_PIN 3
+#define ESP_NOW_BOOT_PIN 14
 
 namespace IotNode {
 namespace Utils {
