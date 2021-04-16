@@ -45,6 +45,15 @@ namespace Button {
     void setupEspNow() {
       auto event0 = makeEspNowEvent(0);
 
+      static const Utils::Button::Update initialUpdate = {
+        .down = false,
+        .downChanged = true,
+        .prevDuration = 0,
+        .repeat = 0,
+        .longpress = 0
+      };
+      event0(initialUpdate);
+
       Utils::Button::button0.setChangeCallback(event0);
     }
   #endif
