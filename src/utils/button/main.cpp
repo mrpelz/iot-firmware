@@ -33,6 +33,9 @@ namespace Button {
   }
 
   void Class::update() {
+    update(false);
+  }
+  void Class::update(bool force) {
     if (!state.running) return;
 
     auto now = millis();
@@ -59,7 +62,7 @@ namespace Button {
       state.noiseGateTime = 0;
     }
 
-    bool downChanged = down != state.down;
+    bool downChanged = force || (down != state.down);
 
     auto timeSinceLastChange = now - state.changeTime;
     if (timeSinceLastChange < config.debounceTime) return;
@@ -83,7 +86,7 @@ namespace Button {
       state.changeTime = now;
       state.down = down;
 
-      if (down) {
+      if (!force && down) {
         if (timeSinceLastChange < config.repeatTime) {
           state.repeat = state.repeat + 1;
         } else {
