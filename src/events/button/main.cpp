@@ -29,6 +29,12 @@ namespace Button {
         prevDuration + sizeof(update.prevDuration)
       );
 
+      response.insert(
+        response.end(),
+        update.pressedMap.begin(),
+        update.pressedMap.end()
+      );
+
       #ifdef IOT_NODE_LOGGING
         Utils::Log::debug("button-event", "sending event");
       #endif
@@ -62,6 +68,12 @@ namespace Button {
           response.end(),
           prevDuration,
           prevDuration + sizeof(update.prevDuration)
+        );
+
+        response.insert(
+          response.end(),
+          update.pressedMap.begin(),
+          update.pressedMap.end()
         );
 
         #ifdef IOT_NODE_LOGGING

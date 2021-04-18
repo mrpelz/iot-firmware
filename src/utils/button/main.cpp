@@ -6,8 +6,14 @@ namespace IotNode {
 namespace Utils {
 
 namespace Button {
+  std::vector<Class *> buttons;
+
   Class::Class(Config _config) {
     config = _config;
+  }
+
+  bool Class::isDown() {
+    return state.down;
   }
 
   void Class::setChangeCallback(ChangeCallback callback) {
@@ -15,6 +21,8 @@ namespace Button {
   }
 
   void Class::start() {
+    buttons.insert(buttons.end(), this);
+
     state.running = true;
 
     pinMode(
@@ -97,6 +105,15 @@ namespace Button {
 
     if (!(downChanged || longpressChanged)) return;
 
+    std::vector<bool> pressedMap;
+    std::for_each(
+      std::begin(buttons),
+      std::end(buttons),
+      [&pressedMap](Class *button) {
+        pressedMap.insert(pressedMap.end(), button->isDown());
+      }
+    );
+
     #ifdef IOT_NODE_LOGGING
       Log::debug("event", "button");
       Log::debug("button.down", String(state.down));
@@ -111,7 +128,8 @@ namespace Button {
       downChanged,
       timeSinceLastChange,
       state.repeat,
-      state.longpress
+      state.longpress,
+      pressedMap
     });
   }
 }
