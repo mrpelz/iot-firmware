@@ -53,10 +53,14 @@ namespace Button {
       #endif
 
       Utils::Button::button0.setChangeCallback(event0);
-      Utils::Button::button0.update();
 
       #ifdef IOT_NODE_BOARD_ESP_NOW_TEST_NODE
         Utils::Button::button1.setChangeCallback(event1);
+      #endif
+
+      Utils::Button::button0.update();
+
+      #ifdef IOT_NODE_BOARD_ESP_NOW_TEST_NODE
         Utils::Button::button1.update();
       #endif
     }
