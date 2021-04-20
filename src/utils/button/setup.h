@@ -69,12 +69,24 @@ namespace Button {
       .longpressTime = 125, // (step duration)
       .noiseGateTime = 0,
     };
+    static const Config button1Config = {
+      .pin = 14,
+      .invert = false,
+      .pullupEnable = true,
+      .debounceTime = 50,
+      .repeatTime = 3000,
+      .longpressTime = 125, // (step duration)
+      .noiseGateTime = 0,
+    };
   #endif
 
   extern Class button0;
 
-  #ifdef IOT_NODE_BOARD_SHELLYI3
+  #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_NODE)
     extern Class button1;
+  #endif
+
+  #ifdef IOT_NODE_BOARD_SHELLYI3
     extern Class button2;
   #endif
 

@@ -20,14 +20,17 @@ namespace EspNowNode {
   );
 
   void getWorkingMode() {
-    pinMode(ESP_NOW_BOOT_PIN, INPUT_PULLUP);
-    workingMode = digitalRead(ESP_NOW_BOOT_PIN) ? WORKING_MODE::SLEEP : WORKING_MODE::WAKE;
-    pinMode(ESP_NOW_BOOT_PIN, INPUT);
+    pinMode(4, INPUT_PULLUP);
+    pinMode(14, INPUT_PULLUP);
+    // only enter wake mode if both buttons are pressed down (pulled to GND)
+    workingMode = digitalRead(4) || digitalRead(14) ? WORKING_MODE::SLEEP : WORKING_MODE::WAKE;
+    pinMode(4, INPUT);
+    pinMode(14, INPUT);
   }
 
   void sleep() {
     if (workingMode == WORKING_MODE::SLEEP) {
-      ESP.deepSleep(0);
+      ESP.deepSleep(0, RF_NO_CAL);
     }
   }
 

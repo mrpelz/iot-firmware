@@ -32,9 +32,12 @@ namespace Button {
       Utils::Button::button0.setChangeCallback(event0);
     #endif
 
-    #ifdef IOT_NODE_BOARD_SHELLYI3
+    #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_NODE)
       auto event1 = makeEvent(&Utils::UDP::instance, 1);
       Utils::Button::button1.setChangeCallback(event1);
+    #endif
+
+    #ifdef IOT_NODE_BOARD_SHELLYI3
 
       auto event2 = makeEvent(&Utils::UDP::instance, 2);
       Utils::Button::button2.setChangeCallback(event2);
@@ -45,8 +48,17 @@ namespace Button {
     void setupEspNow() {
       auto event0 = makeEspNowEvent(0);
 
+      #ifdef IOT_NODE_BOARD_ESP_NOW_TEST_NODE
+        auto event1 = makeEspNowEvent(1);
+      #endif
+
       Utils::Button::button0.setChangeCallback(event0);
-      Utils::Button::button0.update(true);
+      Utils::Button::button0.update();
+
+      #ifdef IOT_NODE_BOARD_ESP_NOW_TEST_NODE
+        Utils::Button::button1.setChangeCallback(event1);
+        Utils::Button::button1.update();
+      #endif
     }
   #endif
 }

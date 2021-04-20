@@ -8,16 +8,22 @@ namespace Utils {
 namespace Button {
   Class button0(button0Config);
 
-  #ifdef IOT_NODE_BOARD_SHELLYI3
+  #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_NODE)
     Class button1(button1Config);
+  #endif
+
+  #ifdef IOT_NODE_BOARD_SHELLYI3
     Class button2(button2Config);
   #endif
 
   void update() {
     button0.update();
 
-    #ifdef IOT_NODE_BOARD_SHELLYI3
+    #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_NODE)
       button1.update();
+    #endif
+
+    #ifdef IOT_NODE_BOARD_SHELLYI3
       button2.update();
     #endif
   }
@@ -34,8 +40,11 @@ namespace Button {
   void setup() {
     button0.start();
 
-    #ifdef IOT_NODE_BOARD_SHELLYI3
+    #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_NODE)
       button1.start();
+    #endif
+
+    #ifdef IOT_NODE_BOARD_SHELLYI3
       button2.start();
     #endif
 
