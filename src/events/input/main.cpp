@@ -1,11 +1,11 @@
 #include "./main.h"
 
-#ifdef IOT_NODE_MOTION_SENSOR
+#ifdef IOT_NODE_INPUT
 
 namespace IotNode {
 namespace Events {
 
-namespace MotionSensor {
+namespace Input {
   Class::Class(uint8_t _pin) {
     pin = _pin;
   }
@@ -37,15 +37,15 @@ namespace MotionSensor {
     if (!downChanged) return;
 
     #ifdef IOT_NODE_LOGGING
-      Utils::Log::debug("event", "motion");
-      Utils::Log::debug("motion.down", String(state.down));
+      Utils::Log::debug("event", "input");
+      Utils::Log::debug("input.down", String(state.down));
     #endif
 
     state.changeCallback(state.down);
   }
 
   ChangeCallback makeEvent(Utils::UDP::Class *udp, uint8_t index) {
-    uint8_t serviceId = ids::motionSensor + index;
+    uint8_t serviceId = ids::input + index;
 
     auto handler = [udp, serviceId](bool down) {
       udp->event(serviceId, {

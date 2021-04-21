@@ -1,7 +1,7 @@
 #ifndef _EVENTS_MOTION_SENSOR_MAIN
 #define _EVENTS_MOTION_SENSOR_MAIN
 
-#ifdef IOT_NODE_MOTION_SENSOR
+#ifdef IOT_NODE_INPUT
 
 #include <Arduino.h>
 #include <functional>
@@ -13,7 +13,7 @@
 namespace IotNode {
 namespace Events {
 
-namespace MotionSensor {
+namespace Input {
   typedef std::function<void (bool down)> ChangeCallback;
 
   struct State {

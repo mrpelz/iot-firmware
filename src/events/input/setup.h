@@ -1,7 +1,7 @@
 #ifndef _EVENTS_MOTION_SENSOR_SETUP
 #define _EVENTS_MOTION_SENSOR_SETUP
 
-#ifdef IOT_NODE_MOTION_SENSOR
+#ifdef IOT_NODE_INPUT
 
 #include <Arduino.h>
 
@@ -11,7 +11,7 @@
 namespace IotNode {
 namespace Events {
 
-namespace MotionSensor {
+namespace Input {
   void update();
 
   #ifdef IOT_NODE_ESP32

@@ -6,7 +6,7 @@ namespace Events {
 
 enum ids {
   button = 0, // button0 (start id)
-  motionSensor = 0xa0, // motionSensor0 (start id)
+  input = 0xa0, // input0 (start id)
   espNowGw = 0xfe
 };
 

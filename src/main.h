@@ -6,7 +6,7 @@
 
 #include "./events/button/setup.h"
 #include "./events/esp-now-gw/setup.h"
-#include "./events/motion-sensor/setup.h"
+#include "./events/input/setup.h"
 #include "./services/async/setup.h"
 #include "./services/bme280/setup.h"
 #include "./services/ccs811/setup.h"

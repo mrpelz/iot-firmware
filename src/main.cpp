@@ -77,8 +77,8 @@ void setup() {
     IotNode::Events::EspNowGw::setup();
   #endif
 
-  #ifdef IOT_NODE_MOTION_SENSOR
-    IotNode::Events::MotionSensor::setup();
+  #ifdef IOT_NODE_INPUT
+    IotNode::Events::Input::setup();
   #endif
 
   #ifdef IOT_NODE_I2C
@@ -146,8 +146,8 @@ void loop() {
       IotNode::Utils::Button::update();
     #endif
 
-    #ifdef IOT_NODE_MOTION_SENSOR
-      IotNode::Events::MotionSensor::update();
+    #ifdef IOT_NODE_INPUT
+      IotNode::Events::Input::update();
     #endif
 
     #ifdef IOT_NODE_ESP_NOW_NODE

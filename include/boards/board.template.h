@@ -8,7 +8,7 @@
 // #define IOT_NODE_ESP_NOW_NODE
 // #define IOT_NODE_INDICATORS
 // #define IOT_NODE_LED
-// #define IOT_NODE_MOTION_SENSOR
+// #define IOT_NODE_INPUT
 // #define IOT_NODE_RELAIS
 
 // #define IOT_NODE_BME280
