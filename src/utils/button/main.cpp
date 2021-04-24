@@ -91,10 +91,12 @@ namespace Button {
     }
 
     if (downChanged) {
+      auto lastChangeTime = state.changeTime;
+
       state.changeTime = now;
       state.down = down;
 
-      if (!force && down) {
+      if (!force && down && lastChangeTime) {
         if (timeSinceLastChange < config.repeatTime) {
           state.repeat = state.repeat + 1;
         } else {
