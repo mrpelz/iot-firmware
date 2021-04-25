@@ -10,7 +10,14 @@ void setup() {
       #endif
 
       IotNode::Utils::EspNowNode::setup();
-      IotNode::Events::Button::setupEspNow();
+
+      #ifdef IOT_NODE_BUTTONS
+        IotNode::Events::Button::setupEspNow();
+      #endif
+
+      #ifdef IOT_NODE_INPUT
+        IotNode::Events::Input::setupEspNow();
+      #endif
 
       return;
     }

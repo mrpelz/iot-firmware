@@ -20,12 +20,18 @@ namespace EspNowNode {
   );
 
   void getWorkingMode() {
-    pinMode(4, INPUT_PULLUP);
-    pinMode(14, INPUT_PULLUP);
-    // only enter wake mode if both buttons are pressed down (pulled to GND)
-    workingMode = digitalRead(4) || digitalRead(14) ? WORKING_MODE::SLEEP : WORKING_MODE::WAKE;
-    pinMode(4, INPUT);
-    pinMode(14, INPUT);
+    #ifdef IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON
+      pinMode(4, INPUT_PULLUP);
+      pinMode(14, INPUT_PULLUP);
+      // only enter wake mode if both buttons are pressed down (pulled to GND)
+      workingMode = digitalRead(4) || digitalRead(14) ? WORKING_MODE::SLEEP : WORKING_MODE::WAKE;
+      pinMode(4, INPUT);
+      pinMode(14, INPUT);
+    #elif defined(IOT_NODE_BOARD_ESP_NOW_TEST_WINDOW_SENSOR)
+      pinMode(16, INPUT_PULLUP);
+      workingMode = digitalRead(16) ? WORKING_MODE::SLEEP : WORKING_MODE::WAKE;
+      pinMode(16, INPUT);
+    #endif
   }
 
   void sleep() {

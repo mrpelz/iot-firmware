@@ -19,6 +19,10 @@ namespace Input {
   #endif
 
   void setup();
+
+  #ifdef IOT_NODE_ESP_NOW_NODE
+    void setupEspNow();
+  #endif
 }
 
 } // section namespace

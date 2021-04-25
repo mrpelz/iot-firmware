@@ -6,10 +6,22 @@ namespace IotNode {
 namespace Events {
 
 namespace Input {
-  Class input0(39);
+  #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
+    Class input0(39);
+  #elif defined (IOT_NODE_BOARD_ESP_NOW_TEST_WINDOW_SENSOR)
+    Class input0(12, true, 50);
+    Class input1(13, true, 50);
+    Class input2(14, true, 50);
+  #endif
 
   void update() {
-    input0.update();
+    #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
+      input0.update();
+    #elif defined (IOT_NODE_BOARD_ESP_NOW_TEST_WINDOW_SENSOR)
+      input0.update();
+      input1.update();
+      input2.update();
+    #endif
   }
 
   #ifdef IOT_NODE_ESP32
@@ -22,10 +34,23 @@ namespace Input {
   #endif
 
   void setup() {
-    auto event0 = makeEvent(&Utils::UDP::instance, 0);
-    input0.setChangeCallback(event0);
+    #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
+      auto event0 = makeEvent(&Utils::UDP::instance, 0);
+      input0.setChangeCallback(event0);
+      input0.start();
+    #elif defined (IOT_NODE_BOARD_ESP_NOW_TEST_WINDOW_SENSOR)
+      auto event0 = makeEvent(&Utils::UDP::instance, 0);
+      input0.setChangeCallback(event0);
+      input0.start();
 
-    input0.start();
+      auto event1 = makeEvent(&Utils::UDP::instance, 1);
+      input1.setChangeCallback(event1);
+      input1.start();
+
+      auto event2 = makeEvent(&Utils::UDP::instance, 2);
+      input2.setChangeCallback(event2);
+      input2.start();
+    #endif
 
     #ifdef IOT_NODE_ESP32
       xTaskCreatePinnedToCore(
@@ -39,6 +64,43 @@ namespace Input {
       );
     #endif
   }
+
+  #ifdef IOT_NODE_ESP_NOW_NODE
+    void setupEspNow() {
+      #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
+        auto event0 = makeEspNowEvent(0);
+        input0.setChangeCallback(event0);
+        input0.start();
+      #elif defined (IOT_NODE_BOARD_ESP_NOW_TEST_WINDOW_SENSOR)
+        auto event0 = makeEspNowEvent(0);
+        input0.setChangeCallback(event0);
+        input0.start();
+        input0.update();
+
+        auto event1 = makeEspNowEvent(1);
+        input1.setChangeCallback(event1);
+        input1.start();
+        input1.update();
+
+        auto event2 = makeEspNowEvent(2);
+        input2.setChangeCallback(event2);
+        input2.start();
+        input2.update();
+      #endif
+
+      #ifdef IOT_NODE_ESP32
+        xTaskCreatePinnedToCore(
+          task,
+          "input_maintenance",
+          2048,
+          NULL,
+          3,
+          NULL,
+          CONFIG_ARDUINO_RUNNING_CORE
+        );
+      #endif
+    }
+  #endif
 }
 
 } // section namespace
