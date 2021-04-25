@@ -8,7 +8,7 @@ namespace Utils {
 namespace Button {
   Class button0(button0Config);
 
-  #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_NODE)
+  #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON)
     Class button1(button1Config);
   #endif
 
@@ -19,7 +19,7 @@ namespace Button {
   void update() {
     button0.update();
 
-    #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_NODE)
+    #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON)
       button1.update();
     #endif
 
@@ -40,7 +40,7 @@ namespace Button {
   void setup() {
     button0.start();
 
-    #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_NODE)
+    #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON)
       button1.start();
     #endif
 

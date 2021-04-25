@@ -59,7 +59,7 @@ namespace Button {
       .longpressTime = 125, // (step duration)
       .noiseGateTime = 50,
     };
-  #elif defined(IOT_NODE_BOARD_ESP_NOW_TEST_NODE)
+  #elif defined(IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON)
     static const Config button0Config = {
       .pin = 4,
       .invert = false,
@@ -82,7 +82,7 @@ namespace Button {
 
   extern Class button0;
 
-  #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_NODE)
+  #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON)
     extern Class button1;
   #endif
 
