@@ -35,15 +35,18 @@ namespace Input {
   }
 
   void Class::update() {
+    update(false);
+  }
+  void Class::update(bool force) {
     if (!state.running) return;
 
     auto now = millis();
     auto timeSinceDownChange = now - state.changeTime;
-    if (timeSinceDownChange < debounceTime) return;
+    if (!force && timeSinceDownChange < debounceTime) return;
     state.changeTime = now;
 
     bool down = digitalRead(pin);
-    bool downChanged = down != state.down;
+    bool downChanged = force || down != state.down;
 
     if (downChanged) {
       state.down = down;

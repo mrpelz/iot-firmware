@@ -73,7 +73,7 @@ namespace Button {
     bool downChanged = force || (down != state.down);
 
     auto timeSinceLastChange = now - state.changeTime;
-    if (timeSinceLastChange < config.debounceTime) return;
+    if (!force && timeSinceLastChange < config.debounceTime) return;
 
     auto longpressChanged = false;
 

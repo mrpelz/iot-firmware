@@ -73,19 +73,20 @@ namespace Input {
         input0.start();
       #elif defined (IOT_NODE_BOARD_ESP_NOW_TEST_WINDOW_SENSOR)
         auto event0 = makeEspNowEvent(0);
-        input0.setChangeCallback(event0);
-        input0.start();
-        input0.update();
-
         auto event1 = makeEspNowEvent(1);
-        input1.setChangeCallback(event1);
-        input1.start();
-        input1.update();
-
         auto event2 = makeEspNowEvent(2);
+
+        input0.setChangeCallback(event0);
+        input1.setChangeCallback(event1);
         input2.setChangeCallback(event2);
+
+        input0.start();
+        input1.start();
         input2.start();
-        input2.update();
+
+        input0.update(true);
+        input1.update(true);
+        input2.update(true);
       #endif
 
       #ifdef IOT_NODE_ESP32

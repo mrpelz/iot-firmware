@@ -39,6 +39,7 @@ namespace Input {
       void setChangeCallback(ChangeCallback callback);
       void start();
       void update();
+      void update(bool force);
   };
 
   ChangeCallback makeEvent(Utils::UDP::Class *udp, uint8_t index);
