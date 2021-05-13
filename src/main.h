@@ -7,6 +7,7 @@
 #include "./events/button/setup.h"
 #include "./events/esp-now-gw/setup.h"
 #include "./events/input/setup.h"
+#include "./events/vcc/setup.h"
 #include "./services/async/setup.h"
 #include "./services/bme280/setup.h"
 #include "./services/ccs811/setup.h"
@@ -33,6 +34,7 @@
 #include "./utils/ota.h"
 #include "./utils/relais/setup.h"
 #include "./utils/udp/setup.h"
+#include "./utils/vcc.h"
 
 namespace IotNode {} // project namespace
 

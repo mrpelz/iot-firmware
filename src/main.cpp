@@ -19,6 +19,10 @@ void setup() {
         IotNode::Events::Input::setupEspNow();
       #endif
 
+      #ifdef IOT_NODE_VCC
+        IotNode::Events::VCC::setupEspNow();
+      #endif
+
       return;
     }
   #endif
@@ -155,6 +159,11 @@ void loop() {
 
     #ifdef IOT_NODE_INPUT
       IotNode::Events::Input::update();
+    #endif
+
+    #ifdef IOT_NODE_VCC
+      IotNode::Utils::VCC::update();
+      IotNode::Events::VCC::update();
     #endif
 
     #ifdef IOT_NODE_ESP_NOW_NODE

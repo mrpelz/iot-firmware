@@ -3,3 +3,4 @@
 
 #define IOT_NODE_INPUT
 #define IOT_NODE_ESP_NOW_NODE
+#define IOT_NODE_VCC
