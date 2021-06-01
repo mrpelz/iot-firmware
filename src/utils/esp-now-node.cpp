@@ -36,7 +36,7 @@ namespace EspNowNode {
 
   void sleep() {
     if (workingMode == WORKING_MODE::SLEEP) {
-      ESP.deepSleep(0, RF_NO_CAL);
+      ESP.deepSleep(0);
     }
   }
 
