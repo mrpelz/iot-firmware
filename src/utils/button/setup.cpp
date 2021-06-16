@@ -8,7 +8,7 @@ namespace Utils {
 namespace Button {
   Class button0(button0Config);
 
-  #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON)
+  #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON_II)
     Class button1(button1Config);
   #endif
 
@@ -17,14 +17,18 @@ namespace Button {
   #endif
 
   void update() {
-    button0.update();
+    #ifdef IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON_II
+      // implement i2c io-expander readout and button value injection here
+    #else
+      button0.update();
 
-    #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON)
-      button1.update();
-    #endif
+      #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON)
+        button1.update();
+      #endif
 
-    #ifdef IOT_NODE_BOARD_SHELLYI3
-      button2.update();
+      #ifdef IOT_NODE_BOARD_SHELLYI3
+        button2.update();
+      #endif
     #endif
   }
 
@@ -38,9 +42,13 @@ namespace Button {
   #endif
 
   void setup() {
+    #ifdef IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON_II
+      // implement i2c io-expander setup here
+    #endif
+
     button0.start();
 
-    #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON)
+    #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON)  || defined(IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON_II)
       button1.start();
     #endif
 

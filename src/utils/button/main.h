@@ -56,7 +56,7 @@ namespace Button {
       void start();
       void stop();
       void update();
-      void update(bool force);
+      void update(bool insert);
   };
 }
 

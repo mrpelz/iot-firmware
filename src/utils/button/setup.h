@@ -5,6 +5,7 @@
 
 #include <Arduino.h>
 
+#include "../i2c.h"
 #include "./main.h"
 
 namespace IotNode {
@@ -78,11 +79,30 @@ namespace Button {
       .longpressTime = 125, // (step duration)
       .noiseGateTime = 0,
     };
+  #elif defined(IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON_II)
+    static const Config button0Config = {
+      .pin = 0, // insert value on update
+      .invert = true,
+      .pullupEnable = false,
+      .debounceTime = 50,
+      .repeatTime = 3000,
+      .longpressTime = 125, // (step duration)
+      .noiseGateTime = 0,
+    };
+    static const Config button1Config = {
+      .pin = 0, // insert value on update
+      .invert = true,
+      .pullupEnable = false,
+      .debounceTime = 50,
+      .repeatTime = 3000,
+      .longpressTime = 125, // (step duration)
+      .noiseGateTime = 0,
+    };
   #endif
 
   extern Class button0;
 
-  #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON)
+  #if defined(IOT_NODE_BOARD_SHELLYI3) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON) || defined(IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON_II)
     extern Class button1;
   #endif
 

@@ -25,6 +25,8 @@ namespace Button {
 
     state.running = true;
 
+    if (config.pin == 0) return;
+
     pinMode(
       config.pin,
       config.pullupEnable ? INPUT_PULLUP : INPUT
@@ -34,6 +36,8 @@ namespace Button {
   void Class::stop() {
     state.running = false;
 
+    if (config.pin == 0) return;
+
     pinMode(
       config.pin,
       INPUT
@@ -41,14 +45,14 @@ namespace Button {
   }
 
   void Class::update() {
-    update(false);
+    update(true);
   }
-  void Class::update(bool force) {
+  void Class::update(bool insert) {
     if (!state.running) return;
 
     auto now = millis();
 
-    bool rawDown = digitalRead(config.pin);
+    bool rawDown = config.pin == 0 ? insert : digitalRead(config.pin);
     auto down = config.invert ? rawDown : !rawDown;
 
     if (config.noiseGateTime) {
@@ -70,10 +74,10 @@ namespace Button {
       state.noiseGateTime = 0;
     }
 
-    bool downChanged = force || (down != state.down);
+    bool downChanged = down != state.down;
 
     auto timeSinceLastChange = now - state.changeTime;
-    if (!force && timeSinceLastChange < config.debounceTime) return;
+    if (timeSinceLastChange < config.debounceTime) return;
 
     auto longpressChanged = false;
 
@@ -96,7 +100,7 @@ namespace Button {
       state.changeTime = now;
       state.down = down;
 
-      if (!force && down && lastChangeTime) {
+      if (down && lastChangeTime) {
         if (timeSinceLastChange < config.repeatTime) {
           state.repeat = state.repeat + 1;
         } else {

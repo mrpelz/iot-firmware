@@ -52,7 +52,11 @@ namespace I2C {
   #endif
 
   void setup() {
-    bus.begin(32, 33);
+    #ifdef IOT_NODE_ESP32
+      bus.begin(32, 33);
+    #else
+      bus.begin();
+    #endif
   }
 
   #ifdef IOT_NODE_ESP32
