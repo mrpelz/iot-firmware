@@ -1,12 +1,12 @@
 #include "./setup.h"
 
-#ifdef IOT_NODE_RELAIS
+#ifdef IOT_NODE_OUTPUT
 
 namespace IotNode {
 namespace Services {
 
-namespace Relais {
-  auto service0 = makeService(&Utils::Relais::relais0, 0);
+namespace Output {
+  auto service0 = makeService(&Utils::Output::output0, 0);
 
   void setup() {
     Utils::UDP::instance.addService(&service0);

@@ -49,8 +49,8 @@ void setup() {
     IotNode::Utils::Led::setup();
   #endif
 
-  #ifdef IOT_NODE_RELAIS
-    IotNode::Utils::Relais::setup();
+  #ifdef IOT_NODE_OUTPUT
+    IotNode::Utils::Output::setup();
   #endif
 
   #ifdef IOT_NODE_BUTTONS
@@ -76,8 +76,8 @@ void setup() {
     IotNode::Services::Led::setup();
   #endif
 
-  #ifdef IOT_NODE_RELAIS
-    IotNode::Services::Relais::setup();
+  #ifdef IOT_NODE_OUTPUT
+    IotNode::Services::Output::setup();
   #endif
 
   #ifdef IOT_NODE_BUTTONS

@@ -17,7 +17,7 @@ namespace IotNode {
 namespace Services {
 
 namespace Indicator {
-  Utils::UDP::Service makeService(Utils::Indicator::Class *relais, uint8_t index);
+  Utils::UDP::Service makeService(Utils::Indicator::Class *output, uint8_t index);
 }
 
 } // section namespace

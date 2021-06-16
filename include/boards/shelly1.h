@@ -2,4 +2,4 @@
 #define IOT_NODE_HARDWARE_NAME "Shelly1"
 
 #define IOT_NODE_BUTTONS
-#define IOT_NODE_RELAIS
+#define IOT_NODE_OUTPUT

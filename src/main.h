@@ -17,7 +17,7 @@
 #include "./services/led/setup.h"
 #include "./services/mcp9808/setup.h"
 #include "./services/mhz19/setup.h"
-#include "./services/relais/setup.h"
+#include "./services/output/setup.h"
 #include "./services/sds011/setup.h"
 #include "./services/sgp30/setup.h"
 #include "./services/system-info/setup.h"
@@ -32,7 +32,7 @@
 #include "./utils/link/setup.h"
 #include "./utils/log.h"
 #include "./utils/ota.h"
-#include "./utils/relais/setup.h"
+#include "./utils/output/setup.h"
 #include "./utils/udp/setup.h"
 #include "./utils/vcc.h"
 

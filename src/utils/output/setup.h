@@ -1,7 +1,7 @@
-#ifndef _UTILS_RELAIS_SETUP
-#define _UTILS_RELAIS_SETUP
+#ifndef _UTILS_OUTPUT_SETUP
+#define _UTILS_OUTPUT_SETUP
 
-#ifdef IOT_NODE_RELAIS
+#ifdef IOT_NODE_OUTPUT
 
 #include <Arduino.h>
 
@@ -10,11 +10,11 @@
 namespace IotNode {
 namespace Utils {
 
-namespace Relais {
+namespace Output {
   #ifdef IOT_NODE_BOARD_SHELLY1
-    extern Regular relais0;
+    extern Regular output0;
   #elif defined(IOT_NODE_BOARD_OBI_JACK)
-    extern Pulse relais0;
+    extern Pulse output0;
   #endif
 
   void setup();

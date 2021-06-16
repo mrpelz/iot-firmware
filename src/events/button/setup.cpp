@@ -9,7 +9,7 @@ namespace Button {
   void setup() {
     auto event0 = makeEvent(&Utils::UDP::instance, 0);
 
-    #ifdef IOT_NODE_RELAIS
+    #ifdef IOT_NODE_OUTPUT
       Utils::Button::button0.setChangeCallback([event0](Utils::Button::Update update) {
         if (Utils::UDP::instance.isListening() && Utils::UDP::instance.hasEventPeer()) {
           event0(update);
@@ -25,7 +25,7 @@ namespace Button {
             Utils::Log::debug("info.buttons.change-callback", "triggering override");
           #endif
 
-          Utils::Relais::relais0.toggle();
+          Utils::Output::output0.toggle();
         }
       });
     #else

@@ -3,4 +3,4 @@
 
 #define IOT_NODE_BUTTONS
 #define IOT_NODE_INDICATORS
-#define IOT_NODE_RELAIS
+#define IOT_NODE_OUTPUT

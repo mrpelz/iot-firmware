@@ -1,18 +1,18 @@
-#ifndef _SERVICES_RELAIS_SETUP
-#define _SERVICES_RELAIS_SETUP
+#ifndef _SERVICES_OUTPUT_SETUP
+#define _SERVICES_OUTPUT_SETUP
 
-#ifdef IOT_NODE_RELAIS
+#ifdef IOT_NODE_OUTPUT
 
 #include <Arduino.h>
 
-#include "../../utils/relais/setup.h"
+#include "../../utils/output/setup.h"
 #include "../../utils/udp/setup.h"
 #include "./main.h"
 
 namespace IotNode {
 namespace Services {
 
-namespace Relais {
+namespace Output {
   void setup();
 }
 

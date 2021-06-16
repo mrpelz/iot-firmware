@@ -10,7 +10,7 @@
 // #define IOT_NODE_INDICATORS
 // #define IOT_NODE_INPUT
 // #define IOT_NODE_LED
-// #define IOT_NODE_RELAIS
+// #define IOT_NODE_OUTPUT
 
 // #define IOT_NODE_BME280
 // #define IOT_NODE_CCS811

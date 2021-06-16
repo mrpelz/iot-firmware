@@ -1,7 +1,7 @@
-#ifndef _UTILS_RELAIS_MAIN
-#define _UTILS_RELAIS_MAIN
+#ifndef _UTILS_OUTPUT_MAIN
+#define _UTILS_OUTPUT_MAIN
 
-#ifdef IOT_NODE_RELAIS
+#ifdef IOT_NODE_OUTPUT
 
 #include <Arduino.h>
 #include "../log.h"
@@ -9,7 +9,7 @@
 namespace IotNode {
 namespace Utils {
 
-namespace Relais {
+namespace Output {
   struct RegularConfig {
     uint8_t pin;
     bool invert;
