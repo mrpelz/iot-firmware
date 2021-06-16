@@ -7,7 +7,7 @@ namespace Events {
 
 namespace Input {
   #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
-    Class input0(39);
+    Class input0(39, true, 50);
   #elif defined (IOT_NODE_BOARD_ESP_NOW_TEST_WINDOW_SENSOR)
     Class input0(12, true, 50);
     Class input1(13, true, 50);

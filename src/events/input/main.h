@@ -32,9 +32,6 @@ namespace Input {
       State state;
 
     public:
-      Class(uint8_t _pin);
-      Class(uint8_t _pin, bool _pullup);
-      Class(uint8_t _pin, unsigned long _debounceTime);
       Class(uint8_t _pin, bool _pullup, unsigned long _debounceTime);
       void setChangeCallback(ChangeCallback callback);
       void start();

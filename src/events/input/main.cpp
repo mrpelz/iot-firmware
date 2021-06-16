@@ -6,15 +6,6 @@ namespace IotNode {
 namespace Events {
 
 namespace Input {
-  Class::Class(uint8_t _pin) {
-    Class(_pin, false);
-  }
-  Class::Class(uint8_t _pin, bool _pullup) {
-    Class(_pin, _pullup, 0);
-  }
-  Class::Class(uint8_t _pin, unsigned long _debounceTime) {
-    Class(_pin, false, _debounceTime);
-  }
   Class::Class(uint8_t _pin, bool _pullup, unsigned long _debounceTime) {
     pin = _pin;
     pullup = _pullup;
