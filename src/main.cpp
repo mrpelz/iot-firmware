@@ -92,6 +92,10 @@ void setup() {
     IotNode::Events::Input::setup();
   #endif
 
+  #ifdef IOT_NODE_RF_433
+    IotNode::Events::Rf433::setup();
+  #endif
+
   #ifdef IOT_NODE_I2C
     IotNode::Utils::I2C::setup();
   #endif

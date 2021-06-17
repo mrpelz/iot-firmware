@@ -4,3 +4,4 @@
 #define IOT_NODE_HARDWARE_NAME "Olimex_ESP32-Gateway"
 
 #define IOT_NODE_ESP_NOW_GW
+#define IOT_NODE_RF_433

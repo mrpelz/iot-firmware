@@ -7,6 +7,7 @@
 #include "./events/button/setup.h"
 #include "./events/esp-now-gw/setup.h"
 #include "./events/input/setup.h"
+#include "./events/rf-433/setup.h"
 #include "./events/vcc/setup.h"
 #include "./services/async/setup.h"
 #include "./services/bme280/setup.h"

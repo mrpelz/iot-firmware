@@ -5,12 +5,14 @@
 #define IOT_NODE_HARDWARE_NAME "<hardware-name>"
 
 // #define IOT_NODE_BUTTONS
+// #define IOT_NODE_ESP_NOW_GW
 // #define IOT_NODE_ESP_NOW_NODE
 // #define IOT_NODE_I2C_BUTTONS
 // #define IOT_NODE_INDICATORS
 // #define IOT_NODE_INPUT
 // #define IOT_NODE_LED
 // #define IOT_NODE_OUTPUT
+// #define IOT_NODE_RF_433
 
 // #define IOT_NODE_BME280
 // #define IOT_NODE_CCS811
