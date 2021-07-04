@@ -1,0 +1,4 @@
+#define IOT_NODE_BOARD_LILYGO_E_PAPER
+#define IOT_NODE_HARDWARE_NAME "LilyGo-E-Paper"
+
+#define IOT_NODE_E_PAPER

@@ -136,6 +136,11 @@ void setup() {
     IotNode::Services::Veml6070::setup();
   #endif
 
+  #ifdef IOT_NODE_E_PAPER
+    IotNode::Utils::EPaper::setup();
+    IotNode::Services::EPaper::setup();
+  #endif
+
   IotNode::Utils::OTA::setup();
 
   #ifdef IOT_NODE_INDICATORS
