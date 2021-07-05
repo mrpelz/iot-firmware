@@ -29,10 +29,6 @@ namespace Link {
       #ifdef IOT_NODE_INDICATORS
         Indicator::indicator0.setOn(false);
       #endif
-
-      #ifdef IOT_NODE_E_PAPER
-        EPaper::websocketStart();
-      #endif
     });
 
     link.onDisconnected([]() {

@@ -24,6 +24,7 @@ namespace EPaper {
   uint8_t update = 0;
 
   struct TouchState {
+    bool interrupted = false;
     bool down = false;
     bool moved = false;
     uint16_t x = 0;
@@ -33,7 +34,9 @@ namespace EPaper {
   void epdClear() {
     epd_poweron();
 
-    epd_clear_area_cycles(epd_full_screen(), 50, 25);
+    epd_clear_area_cycles(epd_full_screen(), 25, 10);
+    epd_clear_area_cycles(epd_full_screen(), 25, 25);
+    epd_clear_area_cycles(epd_full_screen(), 25, 10);
 
     epd_poweroff();
   }
@@ -45,6 +48,9 @@ namespace EPaper {
   }
 
   bool touchSetup() {
+    pinMode(E_PAPER_TOUCH_INTERRUPT_PIN, INPUT_PULLUP);
+    touchState.interrupted = digitalRead(E_PAPER_TOUCH_INTERRUPT_PIN);
+
     I2C::claim();
     bool touchInit = touch.begin(I2C::bus);
     I2C::unclaim();
@@ -131,6 +137,8 @@ namespace EPaper {
 
       memset(rxBuffer, 0xff, WS_RX_BUFFER_SIZE);
     }
+
+    vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
   }
 
   void websocketEventHandler(
@@ -189,25 +197,90 @@ namespace EPaper {
     }
   }
 
+  void websocketSend(uint32_t type) {
+    if (type >= 3) {
+      auto _type = reinterpret_cast<uint8_t*>(&type);
+
+      std::vector<char> payload;
+
+      payload.insert(
+        payload.end(),
+        _type,
+        _type + sizeof(type)
+      );
+
+      esp_websocket_client_send_bin(
+        websocketClient,
+        payload.data(),
+        payload.size(),
+        IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS
+      );
+
+      return;
+    }
+
+    uint32_t x = touchState.x;
+    uint32_t y = touchState.y;
+
+    auto _type = reinterpret_cast<uint8_t*>(&type);
+    auto _x = reinterpret_cast<uint8_t*>(&x);
+    auto _y = reinterpret_cast<uint8_t*>(&y);
+
+    std::vector<char> payload;
+
+    payload.insert(
+      payload.end(),
+      _type,
+      _type + sizeof(type)
+    );
+    payload.insert(
+      payload.end(),
+      _x,
+      _x + sizeof(x)
+    );
+    payload.insert(
+      payload.end(),
+      _y,
+      _y + sizeof(y)
+    );
+
+    esp_websocket_client_send_bin(
+      websocketClient,
+      payload.data(),
+      payload.size(),
+      IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS
+    );
+  }
+
   void websocketTouch() {
+    auto previouslyInterrupted = touchState.interrupted;
+    touchState.interrupted = digitalRead(E_PAPER_TOUCH_INTERRUPT_PIN);
+    if (previouslyInterrupted == touchState.interrupted) return;
+
     auto previouslyDown = touchState.down;
 
     I2C::claim();
 
-    if (!touch.scanPoint()) {
-      touchState.down = false;
-      touchState.moved = false;
-    } else {
+    if (touch.scanPoint()) {
       uint16_t x;
       uint16_t y;
 
       touch.getPoint(x, y, 0);
       y = EPD_HEIGHT - y;
 
-      touchState.moved = touchState.down && touchState.x != x && touchState.y != y;
       touchState.down = true;
+
+      touchState.moved =
+        previouslyDown &&
+        touchState.down &&
+        touchState.x != x &&
+        touchState.y != y;
+
       touchState.x = x;
       touchState.y = y;
+    } else {
+      touchState.down = false;
+      touchState.moved = false;
     }
 
     I2C::unclaim();
@@ -223,42 +296,14 @@ namespace EPaper {
 
     if (!isConnected) return;
 
-    uint32_t _type;
-    if (!touchState.down) _type = 0;
-    else if (touchState.moved) _type = 2;
-    else _type = 1;
+    uint32_t type;
+    if (!touchState.down) type = 0;
+    else if (touchState.moved) type = 2;
+    else type = 1;
 
-    uint32_t _x = touchState.x;
-    uint32_t _y = touchState.y;
-
-    auto __type = reinterpret_cast<uint8_t*>(&_type);
-    auto __x = reinterpret_cast<uint8_t*>(&_x);
-    auto __y = reinterpret_cast<uint8_t*>(&_y);
-
-    std::vector<char> payload;
-
-    payload.insert(
-      payload.end(),
-      __type,
-      __type + sizeof(_type)
-    );
-    payload.insert(
-      payload.end(),
-      __x,
-      __x + sizeof(_x)
-    );
-    payload.insert(
-      payload.end(),
-      __y,
-      __y + sizeof(_y)
-    );
-
-    esp_websocket_client_send_bin(
-      websocketClient,
-      payload.data(),
-      payload.size(),
-      IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS
-    );
+    if (type == 1) websocketSend(3);
+    websocketSend(type);
+    if (type == 0) websocketSend(4);
   }
 
   bool websocketStart() {

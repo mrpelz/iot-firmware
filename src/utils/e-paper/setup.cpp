@@ -8,6 +8,8 @@ namespace Utils {
 namespace EPaper {
   #ifdef IOT_NODE_ESP32
     void task(void *parameter) {
+      websocketStart();
+
       for(;;) {
         websocketTouch();
 

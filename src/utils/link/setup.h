@@ -7,7 +7,6 @@
 
 #include "../udp/setup.h"
 #include "./main.h"
-#include "./utils/e-paper/setup.h"
 #include "./utils/indicator/setup.h"
 
 #ifdef IOT_NODE_LINK_ETH
