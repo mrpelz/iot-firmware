@@ -1,5 +1,4 @@
-#ifndef _UTILS_LINK_WIFI
-#define _UTILS_LINK_WIFI
+#pragma once
 
 #ifdef IOT_NODE_LINK_WIFI
 
@@ -98,7 +97,5 @@ namespace Link {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

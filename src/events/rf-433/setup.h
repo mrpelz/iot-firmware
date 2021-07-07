@@ -1,5 +1,4 @@
-#ifndef _EVENTS_RF_433_SETUP
-#define _EVENTS_RF_433_SETUP
+#pragma once
 
 #ifdef IOT_NODE_RF_433
 
@@ -23,7 +22,5 @@ namespace Rf433 {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

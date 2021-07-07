@@ -1,5 +1,4 @@
-#ifndef _UTILS_E_PAPER_SETUP
-#define _UTILS_E_PAPER_SETUP
+#pragma once
 
 #ifdef IOT_NODE_E_PAPER
 
@@ -23,7 +22,5 @@ namespace EPaper {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

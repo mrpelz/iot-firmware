@@ -1,5 +1,4 @@
-#ifndef _UTILS_LINK_MAIN
-#define _UTILS_LINK_MAIN
+#pragma once
 
 #include <Arduino.h>
 #include <functional>
@@ -64,5 +63,3 @@ namespace Link {
 
 } // section namespace
 } // project namespace
-
-#endif

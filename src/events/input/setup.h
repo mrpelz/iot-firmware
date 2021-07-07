@@ -1,5 +1,4 @@
-#ifndef _EVENTS_MOTION_SENSOR_SETUP
-#define _EVENTS_MOTION_SENSOR_SETUP
+#pragma once
 
 #ifdef IOT_NODE_INPUT
 
@@ -27,7 +26,5 @@ namespace Input {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

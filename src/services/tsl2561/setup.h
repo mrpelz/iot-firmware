@@ -1,5 +1,4 @@
-#ifndef _SERVICES_TSL2561_SETUP
-#define _SERVICES_TSL2561_SETUP
+#pragma once
 
 #ifdef IOT_NODE_TSL2561
 
@@ -19,7 +18,5 @@ namespace Tsl2561 {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

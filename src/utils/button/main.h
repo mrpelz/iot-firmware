@@ -1,5 +1,4 @@
-#ifndef _UTILS_BUTTON_MAIN
-#define _UTILS_BUTTON_MAIN
+#pragma once
 
 #ifdef IOT_NODE_BUTTONS
 
@@ -62,7 +61,5 @@ namespace Button {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

@@ -1,5 +1,4 @@
-#ifndef _SERVICES_SGP30_MAIN
-#define _SERVICES_SGP30_MAIN
+#pragma once
 
 #ifdef IOT_NODE_SGP30
 
@@ -27,7 +26,5 @@ namespace Sgp30 {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

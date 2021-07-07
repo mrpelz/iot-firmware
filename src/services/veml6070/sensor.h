@@ -1,5 +1,4 @@
-#ifndef _SERVICES_VEML6070_SENSOR
-#define _SERVICES_VEML6070_SENSOR
+#pragma once
 
 #ifdef IOT_NODE_VEML6070
 
@@ -24,7 +23,5 @@ namespace Veml6070 {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

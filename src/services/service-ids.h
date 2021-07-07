@@ -1,5 +1,4 @@
-#ifndef _SERVICES_SERVICE_IDS
-#define _SERVICES_SERVICE_IDS
+#pragma once
 
 namespace IotNode {
 namespace Services {
@@ -26,5 +25,3 @@ enum ids {
 
 } // section namespace
 } // project namespace
-
-#endif

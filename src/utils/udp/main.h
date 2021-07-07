@@ -1,5 +1,4 @@
-#ifndef _UTILS_UDP_MAIN
-#define _UTILS_UDP_MAIN
+#pragma once
 
 #include <Arduino.h>
 #include <functional>
@@ -83,5 +82,3 @@ namespace UDP {
 
 } // section namespace
 } // project namespace
-
-#endif

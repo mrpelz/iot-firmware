@@ -1,5 +1,4 @@
-#ifndef _SERVICES_HELLO_MAIN
-#define _SERVICES_HELLO_MAIN
+#pragma once
 
 #include <Arduino.h>
 
@@ -25,5 +24,3 @@ namespace Hello {
 
 } // section namespace
 } // project namespace
-
-#endif

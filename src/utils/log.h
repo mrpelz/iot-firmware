@@ -1,5 +1,4 @@
-#ifndef _UTILS_LOG
-#define _UTILS_LOG
+#pragma once
 
 #ifdef IOT_NODE_LOGGING
 
@@ -28,7 +27,5 @@ namespace Log {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

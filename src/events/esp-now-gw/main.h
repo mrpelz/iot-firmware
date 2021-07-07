@@ -1,5 +1,4 @@
-#ifndef _EVENTS_ESP_NOW_MAIN
-#define _EVENTS_ESP_NOW_MAIN
+#pragma once
 
 #ifdef IOT_NODE_ESP_NOW_GW
 
@@ -21,7 +20,5 @@ namespace EspNowGw {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

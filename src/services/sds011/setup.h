@@ -1,5 +1,4 @@
-#ifndef _SERVICES_SDS011_SETUP
-#define _SERVICES_SDS011_SETUP
+#pragma once
 
 #ifdef IOT_NODE_SDS011
 
@@ -18,7 +17,5 @@ namespace Sds011 {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

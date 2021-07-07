@@ -1,5 +1,4 @@
-#ifndef _UTILS_ESP_NOW_NODE
-#define _UTILS_ESP_NOW_NODE
+#pragma once
 
 #ifdef IOT_NODE_ESP_NOW_NODE
 
@@ -45,7 +44,5 @@ namespace EspNowNode {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

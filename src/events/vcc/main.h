@@ -1,5 +1,4 @@
-#ifndef _EVENTS_VCC_MAIN
-#define _EVENTS_VCC_MAIN
+#pragma once
 
 #ifdef IOT_NODE_VCC
 
@@ -23,7 +22,5 @@ namespace VCC {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

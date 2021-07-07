@@ -1,5 +1,4 @@
-#ifndef _UTILS_I2C
-#define _UTILS_I2C
+#pragma once
 
 #ifdef IOT_NODE_I2C
 
@@ -31,7 +30,5 @@ namespace I2C {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

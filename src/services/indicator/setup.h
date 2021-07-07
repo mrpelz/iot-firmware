@@ -1,5 +1,4 @@
-#ifndef _SERVICES_INDICATOR_SETUP
-#define _SERVICES_INDICATOR_SETUP
+#pragma once
 
 #ifdef IOT_NODE_INDICATORS
 
@@ -17,7 +16,5 @@ namespace Indicator {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

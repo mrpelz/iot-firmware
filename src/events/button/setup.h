@@ -1,5 +1,4 @@
-#ifndef _EVENTS_BUTTON_SETUP
-#define _EVENTS_BUTTON_SETUP
+#pragma once
 
 #ifdef IOT_NODE_BUTTONS
 
@@ -24,7 +23,5 @@ namespace Button {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

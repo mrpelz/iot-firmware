@@ -1,5 +1,4 @@
-#ifndef _UTILS_LINK_ETH
-#define _UTILS_LINK_ETH
+#pragma once
 
 #ifdef IOT_NODE_LINK_ETH
 
@@ -66,7 +65,5 @@ namespace Link {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

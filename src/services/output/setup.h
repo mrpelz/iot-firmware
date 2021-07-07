@@ -1,5 +1,4 @@
-#ifndef _SERVICES_OUTPUT_SETUP
-#define _SERVICES_OUTPUT_SETUP
+#pragma once
 
 #ifdef IOT_NODE_OUTPUT
 
@@ -18,7 +17,5 @@ namespace Output {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

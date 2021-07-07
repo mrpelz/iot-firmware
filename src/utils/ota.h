@@ -1,5 +1,4 @@
-#ifndef _UTILS_OTA
-#define _UTILS_OTA
+#pragma once
 
 #include <Arduino.h>
 
@@ -22,5 +21,3 @@ namespace OTA {
 
 } // section namespace
 } // project namespace
-
-#endif

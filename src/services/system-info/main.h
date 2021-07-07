@@ -1,5 +1,4 @@
-#ifndef _SERVICES_SYSTEM_INFO_MAIN
-#define _SERVICES_SYSTEM_INFO_MAIN
+#pragma once
 
 #include <Arduino.h>
 
@@ -22,5 +21,3 @@ namespace SystemInfo {
 
 } // section namespace
 } // project namespace
-
-#endif

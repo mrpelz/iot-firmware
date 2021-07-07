@@ -1,5 +1,4 @@
-#ifndef _SERVICES_ASYNC_SETUP
-#define _SERVICES_ASYNC_SETUP
+#pragma once
 
 #ifdef IOT_NODE_ESP32
 
@@ -18,7 +17,5 @@ namespace Async {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

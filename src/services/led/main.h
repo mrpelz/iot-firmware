@@ -1,5 +1,4 @@
-#ifndef _SERVICES_LED_MAIN
-#define _SERVICES_LED_MAIN
+#pragma once
 
 #ifdef IOT_NODE_LED
 
@@ -17,7 +16,5 @@ namespace Led {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

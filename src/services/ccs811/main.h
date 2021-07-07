@@ -1,5 +1,4 @@
-#ifndef _SERVICES_CCS811_MAIN
-#define _SERVICES_CCS811_MAIN
+#pragma once
 
 #ifdef IOT_NODE_CCS811
 
@@ -24,7 +23,5 @@ namespace Ccs811 {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

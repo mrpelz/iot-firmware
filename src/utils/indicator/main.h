@@ -1,5 +1,4 @@
-#ifndef _UTILS_INDICATOR_MAIN
-#define _UTILS_INDICATOR_MAIN
+#pragma once
 
 #ifdef IOT_NODE_INDICATORS
 
@@ -49,7 +48,5 @@ namespace Indicator {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

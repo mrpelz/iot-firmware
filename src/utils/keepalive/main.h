@@ -1,5 +1,4 @@
-#ifndef _UTILS_KEEPALIVE_MAIN
-#define _UTILS_KEEPALIVE_MAIN
+#pragma once
 
 #include <Arduino.h>
 #include <functional>
@@ -35,5 +34,3 @@ namespace Keepalive {
 
 } // section namespace
 } // project namespace
-
-#endif

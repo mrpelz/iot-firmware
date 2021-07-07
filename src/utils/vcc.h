@@ -1,5 +1,4 @@
-#ifndef _UTILS_VCC
-#define _UTILS_VCC
+#pragma once
 
 #ifdef IOT_NODE_VCC
 
@@ -18,7 +17,5 @@ namespace VCC {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

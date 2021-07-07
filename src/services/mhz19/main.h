@@ -1,5 +1,4 @@
-#ifndef _SERVICES_MHZ19_MAIN
-#define _SERVICES_MHZ19_MAIN
+#pragma once
 
 #ifdef IOT_NODE_MHZ19
 
@@ -23,7 +22,5 @@ namespace Mhz19 {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

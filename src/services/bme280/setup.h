@@ -1,5 +1,4 @@
-#ifndef _SERVICES_BME280_SETUP
-#define _SERVICES_BME280_SETUP
+#pragma once
 
 #ifdef IOT_NODE_BME280
 
@@ -19,7 +18,5 @@ namespace Bme280 {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

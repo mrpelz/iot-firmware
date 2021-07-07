@@ -1,5 +1,4 @@
-#ifndef _SERVICES_E_PAPER_MAIN
-#define _SERVICES_E_PAPER_MAIN
+#pragma once
 
 #ifdef IOT_NODE_E_PAPER
 
@@ -15,7 +14,5 @@ namespace EPaper {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

@@ -1,5 +1,4 @@
-#ifndef _MAIN
-#define _MAIN
+#pragma once
 
 #include <Arduino.h>
 #include <functional>
@@ -40,5 +39,3 @@
 #include "./utils/vcc.h"
 
 namespace IotNode {} // project namespace
-
-#endif

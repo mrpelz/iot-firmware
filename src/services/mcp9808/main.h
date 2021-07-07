@@ -1,5 +1,4 @@
-#ifndef _SERVICES_MCP9808_MAIN
-#define _SERVICES_MCP9808_MAIN
+#pragma once
 
 #ifdef IOT_NODE_MCP9808
 
@@ -25,7 +24,5 @@ namespace Mcp9808 {
 
 } // section namespace
 } // project namespace
-
-#endif
 
 #endif

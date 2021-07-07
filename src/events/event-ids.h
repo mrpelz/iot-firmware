@@ -1,5 +1,4 @@
-#ifndef _EVENTS_EVENT_IDS
-#define _EVENTS_EVENT_IDS
+#pragma once
 
 namespace IotNode {
 namespace Events {
@@ -14,5 +13,3 @@ enum ids {
 
 } // section namespace
 } // project namespace
-
-#endif
