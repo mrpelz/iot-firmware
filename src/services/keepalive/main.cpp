@@ -26,6 +26,10 @@ namespace Keepalive {
       Utils::Keepalive::keepalive.tick();
       Utils::Keepalive::eventPeer.tick();
 
+      #ifdef IOT_NODE_OUTPUT
+        Utils::Keepalive::powerCycleProtection.stop();
+      #endif
+
       Utils::UDP::instance.setEventPeer(peer);
 
       #ifdef IOT_NODE_LOGGING

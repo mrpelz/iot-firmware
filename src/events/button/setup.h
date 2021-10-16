@@ -5,6 +5,7 @@
 #include <Arduino.h>
 
 #include "../../utils/button/setup.h"
+#include "../../utils/keepalive/setup.h"
 #include "../../utils/log.h"
 #include "../../utils/output/setup.h"
 #include "../../utils/udp/setup.h"

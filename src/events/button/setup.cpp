@@ -25,6 +25,7 @@ namespace Button {
             Utils::Log::debug("info.buttons.change-callback", "triggering override");
           #endif
 
+          Utils::Keepalive::powerCycleProtection.stop();
           Utils::Output::output0.toggle();
         }
       });

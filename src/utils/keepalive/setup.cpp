@@ -18,9 +18,22 @@ namespace Keepalive {
     }
   );
 
+  #ifdef IOT_NODE_OUTPUT
+    Class powerCycleProtection(
+      20000,
+      []() {
+        Output::output0.setOn(true);
+      }
+    );
+  #endif
+
   void update() {
     keepalive.update();
     eventPeer.update();
+
+    #ifdef IOT_NODE_OUTPUT
+      powerCycleProtection.update();
+    #endif
   }
 
   #ifdef IOT_NODE_ESP32
@@ -43,6 +56,10 @@ namespace Keepalive {
         NULL,
         CONFIG_ARDUINO_RUNNING_CORE
       );
+    #endif
+
+    #ifdef IOT_NODE_OUTPUT
+      powerCycleProtection.tick();
     #endif
   }
 }

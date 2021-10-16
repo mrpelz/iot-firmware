@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 
+#include "../output/setup.h"
 #include "../udp/setup.h"
 #include "./main.h"
 
@@ -11,6 +12,10 @@ namespace Utils {
 namespace Keepalive {
   extern Class keepalive;
   extern Class eventPeer;
+
+  #ifdef IOT_NODE_OUTPUT
+    extern Class powerCycleProtection;
+  #endif
 
   void update();
 
