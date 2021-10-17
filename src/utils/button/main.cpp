@@ -25,7 +25,7 @@ namespace Button {
 
     state.running = true;
 
-    if (config.pin == 0) return;
+    if (config.pin == 0xff) return;
 
     pinMode(
       config.pin,
@@ -36,7 +36,7 @@ namespace Button {
   void Class::stop() {
     state.running = false;
 
-    if (config.pin == 0) return;
+    if (config.pin == 0xff) return;
 
     pinMode(
       config.pin,
@@ -52,7 +52,7 @@ namespace Button {
 
     auto now = millis();
 
-    bool rawDown = config.pin == 0 ? insert : digitalRead(config.pin);
+    bool rawDown = config.pin == 0xff ? insert : digitalRead(config.pin);
     auto down = config.invert ? rawDown : !rawDown;
 
     if (config.noiseGateTime) {

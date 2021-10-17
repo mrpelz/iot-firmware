@@ -16,6 +16,9 @@ namespace Indicator {
     #elif defined(IOT_NODE_BOARD_H801)
       5,
       true,
+    #elif defined(IOT_NODE_BOARD_SONOFF_BASIC)
+      13,
+      true,
     #endif
     INDICATOR_BLINK_PERIOD_ON,
     INDICATOR_BLINK_PERIOD_OFF

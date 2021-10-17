@@ -10,7 +10,7 @@ namespace IotNode {
 namespace Utils {
 
 namespace Output {
-  #ifdef IOT_NODE_BOARD_SHELLY1
+  #if defined(IOT_NODE_BOARD_SHELLY1) || defined(IOT_NODE_BOARD_SONOFF_BASIC)
     extern Regular output0;
   #elif defined(IOT_NODE_BOARD_OBI_JACK)
     extern Pulse output0;
