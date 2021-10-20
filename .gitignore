@@ -5,4 +5,4 @@
 .vscode/launch.json
 include/env.h
 include/secret.h
-tmp.ini
+secret.ini
