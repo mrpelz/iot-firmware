@@ -16,7 +16,7 @@ namespace Indicator {
     #elif defined(IOT_NODE_BOARD_H801)
       5,
       true,
-    #elif defined(IOT_NODE_BOARD_SONOFF_BASIC)
+    #elif defined(IOT_NODE_BOARD_SONOFF_BASIC_R2V13) || defined(IOT_NODE_BOARD_SONOFF_BASIC_R2V1)
       13,
       true,
     #endif

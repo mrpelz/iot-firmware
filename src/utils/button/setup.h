@@ -78,7 +78,7 @@ namespace Button {
       .longpressTime = 125, // (step duration)
       .noiseGateTime = 0,
     };
-  #elif defined(IOT_NODE_BOARD_SONOFF_BASIC)
+  #elif defined(IOT_NODE_BOARD_SONOFF_BASIC_R2V13) || defined(IOT_NODE_BOARD_SONOFF_BASIC_R2V1)
     static const Config button0Config = {
       .pin = 0,
       .invert = false,
