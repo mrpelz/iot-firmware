@@ -7,9 +7,9 @@ namespace Utils {
 
 namespace Led {
   #ifdef IOT_NODE_BOARD_H801
-    FadeLed led0(12);
-    FadeLed led1(15);
-    FadeLed led2(13);
+    FadeLed led0(15);
+    FadeLed led1(13);
+    FadeLed led2(12);
     FadeLed led3(14);
     FadeLed led4(4);
   #endif
