@@ -13,7 +13,7 @@ namespace Keepalive {
   extern Class keepalive;
   extern Class eventPeer;
 
-  #ifdef IOT_NODE_OUTPUT
+  #ifdef IOT_NODE_POWER_CYCLE_PROTECTION
     extern Class powerCycleProtection;
   #endif
 

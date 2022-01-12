@@ -71,3 +71,7 @@
 #ifndef IOT_NODE_LOG_DELAY
   #define IOT_NODE_LOG_DELAY 250
 #endif
+
+#if defined(IOT_NODE_POWER_CYCLE_PROTECTION) && !defined(IOT_NODE_OUTPUT)
+  #error cannot use power cycle protection without output
+#endif

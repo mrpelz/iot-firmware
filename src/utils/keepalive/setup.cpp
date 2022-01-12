@@ -5,7 +5,7 @@ namespace Utils {
 
 namespace Keepalive {
   Class keepalive(
-    20000,
+    60000,
     []() {
       ESP.restart();
     }
@@ -18,7 +18,7 @@ namespace Keepalive {
     }
   );
 
-  #ifdef IOT_NODE_OUTPUT
+  #ifdef IOT_NODE_POWER_CYCLE_PROTECTION
     Class powerCycleProtection(
       20000,
       []() {
@@ -31,7 +31,7 @@ namespace Keepalive {
     keepalive.update();
     eventPeer.update();
 
-    #ifdef IOT_NODE_OUTPUT
+    #ifdef IOT_NODE_POWER_CYCLE_PROTECTION
       powerCycleProtection.update();
     #endif
   }
@@ -58,7 +58,7 @@ namespace Keepalive {
       );
     #endif
 
-    #ifdef IOT_NODE_OUTPUT
+    #ifdef IOT_NODE_POWER_CYCLE_PROTECTION
       powerCycleProtection.tick();
     #endif
   }

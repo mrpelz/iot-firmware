@@ -26,7 +26,7 @@ namespace Keepalive {
       Utils::Keepalive::keepalive.tick();
       Utils::Keepalive::eventPeer.tick();
 
-      #ifdef IOT_NODE_OUTPUT
+      #ifdef IOT_NODE_POWER_CYCLE_PROTECTION
         Utils::Keepalive::powerCycleProtection.stop();
       #endif
 

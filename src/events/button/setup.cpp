@@ -25,7 +25,9 @@ namespace Button {
             Utils::Log::debug("info.buttons.change-callback", "triggering override");
           #endif
 
-          Utils::Keepalive::powerCycleProtection.stop();
+          #ifdef IOT_NODE_POWER_CYCLE_PROTECTION
+            Utils::Keepalive::powerCycleProtection.stop();
+          #endif
           Utils::Output::output0.toggle();
         }
       });
