@@ -39,7 +39,7 @@ namespace Button {
       .debounceTime = 50,
       .repeatTime = 3000,
       .longpressTime = 125, // (step duration)
-      .noiseGateTime = 75,
+      .noiseGateTime = 50,
     };
     static const Config button1Config = {
       .pin = 12,
@@ -48,7 +48,7 @@ namespace Button {
       .debounceTime = 50,
       .repeatTime = 3000,
       .longpressTime = 125, // (step duration)
-      .noiseGateTime = 75,
+      .noiseGateTime = 50,
     };
     static const Config button2Config = {
       .pin = 13,
@@ -57,7 +57,7 @@ namespace Button {
       .debounceTime = 50,
       .repeatTime = 3000,
       .longpressTime = 125, // (step duration)
-      .noiseGateTime = 75,
+      .noiseGateTime = 50,
     };
   #elif defined(IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON)
     static const Config button0Config = {

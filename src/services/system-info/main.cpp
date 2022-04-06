@@ -26,7 +26,7 @@ namespace SystemInfo {
 
     #ifdef IOT_NODE_LINK_ETH
       auto ethMacAddress = new uint8_t[6];
-      ETH.macAddress(ethMacAddress);
+      esp_eth_get_mac(ethMacAddress);
       response.insert(response.end(), ethMacAddress, ethMacAddress + 6);
       delete ethMacAddress;
     #endif
