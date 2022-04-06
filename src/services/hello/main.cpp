@@ -39,6 +39,10 @@ namespace Hello {
       addLineToRespone(&response, String(ESP.getFlashChipId(), HEX));
     #endif
 
+    #ifdef IOT_NODE_LINK_ETH
+      addLineToRespone(&response, ETH.macAddress());
+    #endif
+
     addLineToRespone(&response, WiFi.macAddress());
 
     #ifdef IOT_NODE_LINK_WIFI

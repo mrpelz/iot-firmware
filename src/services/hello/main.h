@@ -11,6 +11,7 @@
 #endif
 #ifdef IOT_NODE_ESP32
   #include <WiFi.h>
+  #include <ETH.h>
 #endif
 
 namespace IotNode {

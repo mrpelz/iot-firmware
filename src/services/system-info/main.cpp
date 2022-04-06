@@ -24,6 +24,13 @@ namespace SystemInfo {
     response.insert(response.end(), macAddress, macAddress + 6);
     delete macAddress;
 
+    #ifdef IOT_NODE_LINK_ETH
+      auto ethMacAddress = new uint8_t[6];
+      ETH.macAddress(ethMacAddress);
+      response.insert(response.end(), ethMacAddress, ethMacAddress + 6);
+      delete ethMacAddress;
+    #endif
+
     #ifdef IOT_NODE_LINK_WIFI
       auto bssid = WiFi.BSSID();
       response.insert(response.end(), bssid, bssid + 6);

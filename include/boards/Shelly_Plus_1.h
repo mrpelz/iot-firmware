@@ -1,0 +1,5 @@
+#define IOT_NODE_BOARD_SHELLY_PLUS_1
+#define IOT_NODE_HARDWARE_NAME "Shelly_Plus_1"
+
+#define IOT_NODE_BUTTONS
+#define IOT_NODE_OUTPUT
