@@ -3,6 +3,7 @@
 #ifdef IOT_NODE_ESP_NOW_NODE
 
 #include <Arduino.h>
+#include <vector>
 
 #ifdef IOT_NODE_ESP8266
   #include <ESP8266WiFi.h>

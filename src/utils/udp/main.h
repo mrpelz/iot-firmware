@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 #include <functional>
+#include <vector>
 
 #ifdef IOT_NODE_ESP8266
   #include <ESPAsyncUDP.h>  

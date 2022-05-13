@@ -3,6 +3,7 @@
 #ifdef IOT_NODE_ESP_NOW_GW
 
 #include <Arduino.h>
+#include <vector>
 
 #include "../../utils/link/main.h"
 #include "../../utils/log.h"

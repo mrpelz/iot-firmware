@@ -1,5 +1,6 @@
 {
   "files.associations": {
+    "*.scad": "scad",
     "functional": "cpp",
     "*.tcc": "cpp",
     "array": "cpp",
@@ -43,7 +44,13 @@
     "iomanip": "cpp",
     "memory": "cpp",
     "*.ccp": "cpp",
-    "string": "cpp"
+    "string": "cpp",
+    "iterator": "cpp",
+    "map": "cpp",
+    "memory_resource": "cpp",
+    "optional": "cpp",
+    "random": "cpp",
+    "string_view": "cpp"
   },
   "editor.formatOnSave": false
 }

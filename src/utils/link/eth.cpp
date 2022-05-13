@@ -14,35 +14,35 @@ namespace Link {
     state.timings = config.timings;
 
     state.eventListeners.onConnected = WiFi.onEvent(
-      [&](system_event_id_t event, system_event_info_t info) {
+      [&](arduino_event_id_t event, arduino_event_info_t info) {
         handleConnected();
       },
-      SYSTEM_EVENT_ETH_CONNECTED
+      ARDUINO_EVENT_ETH_CONNECTED
     );
 
     state.eventListeners.onDHCPTimeout = WiFi.onEvent(
-      [&](system_event_id_t event, system_event_info_t info) {
+      [&](arduino_event_id_t event, arduino_event_info_t info) {
         handleDhcpTimeout();
       },
-      SYSTEM_EVENT_STA_LOST_IP
+      ARDUINO_EVENT_WIFI_STA_LOST_IP
     );
 
     state.eventListeners.onDisconnected = WiFi.onEvent(
-      [&](system_event_id_t event, system_event_info_t info) {
-        handleDisconnected(info.disconnected.reason);
+      [&](arduino_event_id_t event, arduino_event_info_t info) {
+        handleDisconnected(info.prov_fail_reason);
       },
-      SYSTEM_EVENT_ETH_DISCONNECTED
+      ARDUINO_EVENT_ETH_DISCONNECTED
     );
 
     state.eventListeners.onGotIP = WiFi.onEvent(
-      [&](system_event_id_t event, system_event_info_t info) {
+      [&](arduino_event_id_t event, arduino_event_info_t info) {
         handleGotIP(
           IPAddress(info.got_ip.ip_info.ip.addr),
           IPAddress(info.got_ip.ip_info.gw.addr),
           IPAddress(info.got_ip.ip_info.netmask.addr)
         );
       },
-      SYSTEM_EVENT_ETH_GOT_IP
+      ARDUINO_EVENT_ETH_GOT_IP
     );
 
     WiFi.mode(WIFI_OFF);
