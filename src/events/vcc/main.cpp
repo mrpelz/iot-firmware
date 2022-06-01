@@ -10,7 +10,8 @@ namespace VCC {
     ChangeCallback makeEspNowEvent() {
       auto handler = [](uint16_t vcc) {
         std::vector<uint8_t> response = {
-          ids::vcc
+          ids::vcc,
+          0
         };
 
         auto value = reinterpret_cast<uint8_t*>(&(vcc));

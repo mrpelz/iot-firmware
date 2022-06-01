@@ -9,7 +9,6 @@
 #include "./events/rf-433/setup.h"
 #include "./events/vcc/setup.h"
 #include "./services/async/setup.h"
-#include "./services/e-paper/setup.h"
 #include "./services/bme280/setup.h"
 #include "./services/ccs811/setup.h"
 #include "./services/hello/setup.h"

@@ -8,6 +8,7 @@ namespace Services {
 namespace Tsl2561 {
   Utils::UDP::Service service = {
     .serviceId = ids::tsl2561,
+    .serviceIndex = 0,
     .handler = handler,
   };
 

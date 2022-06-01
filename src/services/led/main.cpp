@@ -7,8 +7,6 @@ namespace Services {
 
 namespace Led {
   Utils::UDP::Service makeService(FadeLed *led, uint8_t index) {
-    uint8_t serviceId = ids::led + index;
-
     auto handler = [led, index](
       Utils::UDP::Payload *request,
       Utils::UDP::RespondCallback respond,
@@ -35,7 +33,8 @@ namespace Led {
     };
 
     return {
-      serviceId,
+      ids::led,
+      index,
       handler
     };
   }

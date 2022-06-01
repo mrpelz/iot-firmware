@@ -7,8 +7,6 @@ namespace Services {
 
 namespace Indicator {
   Utils::UDP::Service makeService(Utils::Indicator::Class *indicator, uint8_t index) {
-    uint8_t serviceId = ids::indicator + index;
-
     auto handler = [indicator, index](
       Utils::UDP::Payload *request,
       Utils::UDP::RespondCallback respond,
@@ -53,7 +51,8 @@ namespace Indicator {
     };
 
     return {
-      serviceId,
+      ids::indicator,
+      index,
       handler
     };
   }

@@ -53,11 +53,7 @@ namespace I2C {
 
   void setup() {
     #ifdef IOT_NODE_ESP32
-      #ifdef IOT_NODE_BOARD_LILYGO_E_PAPER
-        bus.begin(15, 14);
-      #else
-        bus.begin(32, 33);
-      #endif
+      bus.begin(32, 33);
     #else
       bus.begin();
     #endif

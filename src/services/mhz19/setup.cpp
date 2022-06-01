@@ -8,6 +8,7 @@ namespace Services {
 namespace Mhz19 {
   Utils::UDP::Service service = {
     .serviceId = ids::mhz19,
+    .serviceIndex = 0,
     .handler = handler,
   };
 

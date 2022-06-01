@@ -1,5 +1,5 @@
 #define IOT_NODE_BOARD_ESP_NOW_TEST_BUTTON_II
-#define IOT_NODE_BOARD_NAME "ESP-Now_Test-Button-II"
+#define IOT_NODE_BOARD_NAME "ESP_Now_Test_Button_II"
 
 #define IOT_NODE_ESP_NOW_NODE
 #define IOT_NODE_I2C_BUTTONS

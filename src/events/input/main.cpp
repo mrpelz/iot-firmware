@@ -54,12 +54,14 @@ namespace Input {
   }
 
   ChangeCallback makeEvent(Utils::UDP::Class *udp, uint8_t index) {
-    uint8_t serviceId = ids::input + index;
-
-    auto handler = [udp, serviceId](bool down) {
-      udp->event(serviceId, {
-        (uint8_t)(down ? 0x01 : 0x00)
-      });
+    auto handler = [udp, index](bool down) {
+      udp->event(
+        ids::input,
+        index,
+        {
+          (uint8_t)(down ? 0x01 : 0x00)
+        }
+      );
     };
 
     return handler;
@@ -67,11 +69,10 @@ namespace Input {
 
   #ifdef IOT_NODE_ESP_NOW_NODE
     ChangeCallback makeEspNowEvent(uint8_t index) {
-      uint8_t serviceId = ids::input + index;
-
-      auto handler = [serviceId](bool down) {
+      auto handler = [index](bool down) {
         std::vector<uint8_t> response = {
-          serviceId,
+          ids::input,
+          index,
           (uint8_t)(down ? 0x01 : 0x00)
         };
 

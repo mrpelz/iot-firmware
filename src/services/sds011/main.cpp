@@ -14,6 +14,7 @@ namespace Sds011 {
   void sleepSensor() {
     for (size_t i = 0; i < 10; i++) {
       auto result = sensor.sleep();
+      vTaskDelay(IOT_NODE_LOG_DELAY / portTICK_PERIOD_MS);
 
       if (!result.isWorking()) break;
     }

@@ -7,8 +7,6 @@ namespace Services {
 
 namespace Output {
   Utils::UDP::Service makeService(Utils::Output::Regular *output, uint8_t index) {
-    uint8_t serviceId = ids::output + index;
-
     auto handler = [output, index](
       Utils::UDP::Payload *request,
       Utils::UDP::RespondCallback respond,
@@ -35,14 +33,13 @@ namespace Output {
     };
 
     return {
-      serviceId,
+      ids::output,
+      index,
       handler
     };
   }
 
   Utils::UDP::Service makeService(Utils::Output::Pulse *output, uint8_t index) {
-    uint8_t serviceId = ids::output + index;
-
     auto handler = [output, index](
       Utils::UDP::Payload *request,
       Utils::UDP::RespondCallback respond,
@@ -69,7 +66,8 @@ namespace Output {
     };
 
     return {
-      serviceId,
+      ids::output,
+      index,
       handler
     };
   }

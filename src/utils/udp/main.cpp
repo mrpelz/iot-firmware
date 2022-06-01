@@ -42,12 +42,13 @@ namespace UDP {
     state.udp.close();
   }
 
-  void Class::event(uint8_t eventId, Payload event) {
+  void Class::event(uint8_t eventId, uint8_t eventIndex, Payload event) {
     if (!state.eventPeer.port) return;
 
     Payload outgoing = {
       Services::ids::_reserved_event,
-      eventId
+      eventId,
+      eventIndex
     };
 
     uint8_t *eventStart = event.data();
@@ -59,6 +60,7 @@ namespace UDP {
       Log::debug("udp.event.remote-ip", state.eventPeer.ip.toString());
       Log::debug("udp.event.remote-port", String(state.eventPeer.port));
       Log::debug("udp.event.event-id", String(eventId, HEX));
+      Log::debug("udp.event.event-index", String(eventIndex, HEX));
       Log::debug("udp.event.message-length", String(event.size()));
     #endif
 
@@ -106,9 +108,13 @@ namespace UDP {
     }
 
     auto payload = packet->data();
+
     auto messageId = ((uint8_t *)payload)[0];
-    auto serviceId = ((uint8_t *)payload)[1];
-    uint8_t *messageStart = payload + MESSAGE_ID_LENGTH + SERVICE_ID_LENGTH;
+    auto messageVersion = ((uint8_t *)payload)[1];
+    auto serviceId = ((uint8_t *)payload)[2];
+    auto serviceIndex = ((uint8_t *)payload)[3];
+
+    uint8_t *messageStart = payload + MESSAGE_ID_LENGTH + MESSAGE_VERSION_LENGTH + SERVICE_ID_LENGTH + SERVICE_INDEX_LENGTH;
     uint8_t *messageEnd = payload + length;
     
     Payload message;
@@ -121,9 +127,19 @@ namespace UDP {
       Log::debug("udp.request.remote-ip", peer.ip.toString());
       Log::debug("udp.request.remote-port", String(peer.port));
       Log::debug("udp.request.message-id", String(messageId, HEX));
+      Log::debug("udp.request.message-version", String(messageVersion, HEX));
       Log::debug("udp.request.service-id", String(serviceId, HEX));
+      Log::debug("udp.request.service-index", String(serviceIndex, HEX));
       Log::debug("udp.request.message-length", String(message.size()));
     #endif
+
+    if (messageVersion != MESSAGE_VERSION) {
+      #ifdef IOT_NODE_LOGGING
+        Log::debug("event", "udp.request.no-matching-version");
+      #endif
+      
+      return;
+    }
 
     bool match = false;
     std::for_each(
@@ -131,6 +147,8 @@ namespace UDP {
       std::end(state.services),
       [&](Service *service) {
         if (service->serviceId != serviceId) return;
+        if (service->serviceIndex != serviceIndex) return;
+
         match = true;
 
         service->handler(

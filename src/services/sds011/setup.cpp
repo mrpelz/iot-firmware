@@ -8,6 +8,7 @@ namespace Services {
 namespace Sds011 {
   Utils::UDP::Service service = {
     .serviceId = ids::sds011,
+    .serviceIndex = 0,
     .handler = handler,
   };
 

@@ -8,6 +8,7 @@ namespace Services {
 namespace Async {
   Utils::UDP::Service service = {
     .serviceId = ids::async,
+    .serviceIndex = 0,
     .handler = handler,
   };
 

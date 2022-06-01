@@ -15,18 +15,23 @@
 #include "../../services/service-ids.h"
 #include "../log.h"
 
+#define MESSAGE_VERSION 2
+
 #define UDP_MAX_LENGTH 508
 
 #define MESSAGE_ID_LENGTH 1
+#define MESSAGE_VERSION_LENGTH 1
 #define SERVICE_ID_LENGTH 1
+#define SERVICE_INDEX_LENGTH 1
 #define EVENT_ID_LENGTH 1
+#define EVENT_INDEX_LENGTH 1
 
-#define REQUEST_MIN_LENGTH MESSAGE_ID_LENGTH + SERVICE_ID_LENGTH
+#define REQUEST_MIN_LENGTH MESSAGE_ID_LENGTH + MESSAGE_VERSION_LENGTH + SERVICE_ID_LENGTH + SERVICE_INDEX_LENGTH
 #define REQUEST_MAX_LENGTH UDP_MAX_LENGTH - REQUEST_MIN_LENGTH
 
 #define RESPONSE_MAX_LENGTH UDP_MAX_LENGTH - MESSAGE_ID_LENGTH
 
-#define EVENT_MAX_LENGTH UDP_MAX_LENGTH - MESSAGE_ID_LENGTH - EVENT_ID_LENGTH
+#define EVENT_MAX_LENGTH UDP_MAX_LENGTH - MESSAGE_ID_LENGTH - EVENT_ID_LENGTH + EVENT_INDEX_LENGTH
 
 namespace IotNode {
 namespace Utils {
@@ -51,6 +56,7 @@ namespace UDP {
 
   struct Service {
     uint8_t serviceId;
+    uint8_t serviceIndex;
     RequestHandler handler;
   };
 
@@ -73,7 +79,7 @@ namespace UDP {
       void addService(Service *service);
       void begin();
       void close();
-      void event(uint8_t eventId, Payload event);
+      void event(uint8_t eventId, uint8_t eventIndex, Payload event);
       bool hasEventPeer();
       bool isListening();
       void removeEventPeer();

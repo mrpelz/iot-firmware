@@ -6,6 +6,7 @@ namespace Services {
 namespace Hello {
   Utils::UDP::Service service = {
     .serviceId = ids::hello,
+    .serviceIndex = 0,
     .handler = handler,
   };
 

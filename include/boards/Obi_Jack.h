@@ -1,5 +1,5 @@
 #define IOT_NODE_BOARD_OBI_JACK
-#define IOT_NODE_HARDWARE_NAME "Obi-Jack"
+#define IOT_NODE_HARDWARE_NAME "Obi_Jack"
 
 #define IOT_NODE_BUTTONS
 #define IOT_NODE_INDICATORS

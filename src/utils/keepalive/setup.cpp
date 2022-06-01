@@ -5,7 +5,7 @@ namespace Utils {
 
 namespace Keepalive {
   Class keepalive(
-    60000,
+    3600000, // one hour
     []() {
       ESP.restart();
     }
@@ -20,7 +20,7 @@ namespace Keepalive {
 
   #ifdef IOT_NODE_POWER_CYCLE_PROTECTION
     Class powerCycleProtection(
-      20000,
+      30000,
       []() {
         Output::output0.setOn(true);
       }

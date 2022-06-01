@@ -56,7 +56,7 @@
   #error Cannot use ESP-NOW node without GW MAC defined
 #endif
 
-#if defined(IOT_NODE_I2C_SENSOR) || defined(IOT_NODE_I2C_SCAN) || defined(IOT_NODE_I2C_BUTTONS) || defined(IOT_NODE_E_PAPER)
+#if defined(IOT_NODE_I2C_SENSOR) || defined(IOT_NODE_I2C_SCAN) || defined(IOT_NODE_I2C_BUTTONS)
   #define IOT_NODE_I2C
 #endif
 

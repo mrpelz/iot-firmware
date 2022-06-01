@@ -16,7 +16,6 @@ enum ids {
   veml6070,
   sds011,
   mhz19,
-  ePaper,
   output = 0xa0, // output0 (start id)
   led = 0xb0, // led0 (start id)
   indicator = 0xc0, // indicator0 (start id)

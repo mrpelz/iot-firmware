@@ -1,7 +1,7 @@
 #include "../envs/wt32.h"
 
 #define IOT_NODE_BOARD_ROOM_SENSOR
-#define IOT_NODE_BOARD_NAME "Room-Sensor"
+#define IOT_NODE_BOARD_NAME "Room_Sensor"
 
 #define IOT_NODE_INDICATORS
 #define IOT_NODE_INPUT

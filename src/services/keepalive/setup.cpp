@@ -6,6 +6,7 @@ namespace Services {
 namespace Keepalive {
   Utils::UDP::Service service = {
     .serviceId = ids::keepalive,
+    .serviceIndex = 0,
     .handler = makeHandler(),
   };
 
