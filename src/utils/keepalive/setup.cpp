@@ -12,7 +12,7 @@ namespace Keepalive {
   );
 
   Class eventPeer(
-    5000,
+    10000,
     []() {
       Utils::UDP::instance.removeEventPeer();
     }

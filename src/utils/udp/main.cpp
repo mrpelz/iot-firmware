@@ -90,6 +90,11 @@ namespace UDP {
       packet->remotePort()
     };
 
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("udp.request.incoming-ip", peer.ip.toString());
+      Log::debug("udp.request.incoming-port", String(peer.port));
+    #endif
+
     auto validPeer = peer.port && (peer.ip[0] + peer.ip[1] + peer.ip[2] + peer.ip[3]);
     if (validPeer) {
       state.fallbackPeer = peer;
@@ -141,11 +146,24 @@ namespace UDP {
       return;
     }
 
+    auto now = millis();
+    auto timeSinceLastRequest = now - state.requestTimes[messageId];
+    if (timeSinceLastRequest < REPEAT_WINDOW) {
+      #ifdef IOT_NODE_LOGGING
+        Log::debug("event", "udp.request.ignoring-repeated-message");
+      #endif
+
+      return;
+    }
+
+    state.requestTimes[messageId] = now;
+
     bool match = false;
     std::for_each(
       std::begin(state.services),
       std::end(state.services),
       [&](Service *service) {
+        if (match) return;
         if (service->serviceId != serviceId) return;
         if (service->serviceIndex != serviceIndex) return;
 
@@ -171,12 +189,14 @@ namespace UDP {
               Log::debug("udp.response.message-length", String(response.size()));
             #endif
 
-            state.udp.writeTo(
-              outgoing.data(),
-              outgoing.size(),
-              peer.ip,
-              peer.port
-            );
+            for (size_t i = 0; i < REPEAT_COUNT; i++) {
+              state.udp.writeTo(
+                outgoing.data(),
+                outgoing.size(),
+                peer.ip,
+                peer.port
+              );
+            }
           },
           peer
         );

@@ -50,7 +50,8 @@
     "memory_resource": "cpp",
     "optional": "cpp",
     "random": "cpp",
-    "string_view": "cpp"
+    "string_view": "cpp",
+    "ranges": "cpp"
   },
   "editor.formatOnSave": false
 }

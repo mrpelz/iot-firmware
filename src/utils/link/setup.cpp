@@ -24,7 +24,15 @@ namespace Link {
 
     link.onGotIP([]() {
       UDP::instance.begin();
-      ArduinoOTA.begin();
+
+      #ifdef IOT_NODE_ESP32
+        ArduinoOTA.setMdnsEnabled(false);
+        ArduinoOTA.begin();
+      #endif
+
+      #ifdef IOT_NODE_ESP8266
+        ArduinoOTA.begin(false);
+      #endif
 
       #ifdef IOT_NODE_INDICATORS
         Indicator::indicator0.setOn(false);

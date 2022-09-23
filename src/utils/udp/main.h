@@ -33,6 +33,9 @@
 
 #define EVENT_MAX_LENGTH UDP_MAX_LENGTH - MESSAGE_ID_LENGTH - EVENT_ID_LENGTH + EVENT_INDEX_LENGTH
 
+#define REPEAT_COUNT 2
+#define REPEAT_WINDOW 200
+
 namespace IotNode {
 namespace Utils {
 
@@ -67,6 +70,7 @@ namespace UDP {
     Peer eventPeer;
     Peer fallbackPeer;
     std::vector<Service *> services;
+    unsigned long requestTimes[256];
   };
 
   class Class {
