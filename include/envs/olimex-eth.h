@@ -1,1 +1,0 @@
-#define IOT_NODE_OLIMEX_ETH

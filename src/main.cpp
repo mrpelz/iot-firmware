@@ -60,7 +60,7 @@ void setup() {
   IotNode::Utils::UDP::setup();
   IotNode::Utils::Link::setup();
 
-  #ifdef IOT_NODE_ESP32
+  #ifdef IOT_NODE_ASYNC
     IotNode::Services::Async::setup();
   #endif
 

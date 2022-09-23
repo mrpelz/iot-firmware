@@ -1,6 +1,0 @@
-#include "../envs/olimex-eth.h"
-
-#define IOT_NODE_BOARD_OLIMEX_ESP32_POE
-#define IOT_NODE_HARDWARE_NAME "Olimex_ESP32_PoE"
-
-#define IOT_NODE_RF_433
