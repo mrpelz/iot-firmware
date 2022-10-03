@@ -107,6 +107,25 @@ namespace Button {
       .longpressTime = 125, // (step duration)
       .noiseGateTime = 0,
     };
+  #elif defined(IOT_NODE_BOARD_SHELLYPLUS1)
+    static const Config button0Config = {
+      .pin = 4,
+      .invert = false,
+      .pullupEnable = false,
+      .debounceTime = 50,
+      .repeatTime = 3000,
+      .longpressTime = 125, // (step duration)
+      .noiseGateTime = 0,
+    };
+    static const Config button1Config = {
+      .pin = 25,
+      .invert = true,
+      .pullupEnable = false,
+      .debounceTime = 50,
+      .repeatTime = 3000,
+      .longpressTime = 125, // (step duration)
+      .noiseGateTime = 0,
+    };
   #endif
 
   extern Class button0;

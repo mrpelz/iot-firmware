@@ -44,43 +44,43 @@ namespace Link {
     #endif
     #ifdef IOT_NODE_ESP32
       state.eventListeners.onConnected = WiFi.onEvent(
-        [&](system_event_id_t event, system_event_info_t info) {
+        [&](arduino_event_id_t event, arduino_event_info_t info) {
           handleConnected(
-            String((char *)info.connected.ssid),
-            info.connected.bssid,
-            info.connected.channel
+            String((char *)info.wifi_sta_connected.ssid),
+            info.wifi_sta_connected.bssid,
+            info.wifi_sta_connected.channel
           );
         },
-        SYSTEM_EVENT_STA_CONNECTED
+        ARDUINO_EVENT_WIFI_STA_CONNECTED
       );
 
       state.eventListeners.onDHCPTimeout = WiFi.onEvent(
-        [&](system_event_id_t event, system_event_info_t info) {
+        [&](arduino_event_id_t event, arduino_event_info_t info) {
           handleDhcpTimeout();
         },
-        SYSTEM_EVENT_STA_LOST_IP
+        ARDUINO_EVENT_WIFI_STA_LOST_IP
       );
 
       state.eventListeners.onDisconnected = WiFi.onEvent(
-        [&](system_event_id_t event, system_event_info_t info) {
+        [&](arduino_event_id_t event, arduino_event_info_t info) {
           handleDisconnected(
-            String((char *)info.disconnected.ssid),
-            info.disconnected.bssid,
-            info.disconnected.reason
+            String((char *)info.wifi_sta_disconnected.ssid),
+            info.wifi_sta_disconnected.bssid,
+            info.wifi_sta_disconnected.reason
           );
         },
-        SYSTEM_EVENT_STA_DISCONNECTED
+        ARDUINO_EVENT_WIFI_STA_DISCONNECTED
       );
 
       state.eventListeners.onGotIP = WiFi.onEvent(
-        [&](system_event_id_t event, system_event_info_t info) {
+        [&](arduino_event_id_t event, arduino_event_info_t info) {
           handleGotIP(
             IPAddress(info.got_ip.ip_info.ip.addr),
             IPAddress(info.got_ip.ip_info.gw.addr),
             IPAddress(info.got_ip.ip_info.netmask.addr)
           );
         },
-        SYSTEM_EVENT_STA_GOT_IP
+        ARDUINO_EVENT_WIFI_STA_GOT_IP
       );
     #endif
 
