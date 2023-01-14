@@ -17,6 +17,8 @@ namespace I2C {
 
   #ifdef IOT_NODE_I2C_SCAN
     void scan() {
+      vTaskDelay(I2C_START_DELAY / portTICK_PERIOD_MS);
+
       uint8_t deviceCount = 0;
       uint8_t errorCount = 0;
 

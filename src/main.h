@@ -11,6 +11,10 @@
 #include "./utils/ota.h"
 #include "./utils/udp/setup.h"
 
+#ifdef IOT_NODE_SX1509
+  #include "./utils/sx1509/setup.h"
+#endif
+
 #ifdef IOT_NODE_BUTTONS
   #include "./events/button/setup.h"
 #endif

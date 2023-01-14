@@ -5,10 +5,11 @@
 #include <Arduino.h>
 #include <Wire.h>
 
+#include <Adafruit_CCS811.h>
+
 #include "../../utils/i2c.h"
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"
-#include "./sensor.h"
 
 namespace IotNode {
 namespace Services {

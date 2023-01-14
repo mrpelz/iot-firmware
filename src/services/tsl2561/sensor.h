@@ -5,13 +5,15 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#include <Adafruit_Sensor.h>
-
 #define private protected
 #include <Adafruit_TSL2561_U.h>
 #undef private
 
-#define TSL2561_CHOSEN_ADDRESS TSL2561_ADDR_FLOAT
+#ifdef IOT_NODE_BOARD_ROOM_SENSOR
+  #define TSL2561_CHOSEN_ADDRESS TSL2561_ADDR_LOW
+#else
+  #define TSL2561_CHOSEN_ADDRESS TSL2561_ADDR_FLOAT
+#endif
 
 namespace IotNode {
 namespace Services {

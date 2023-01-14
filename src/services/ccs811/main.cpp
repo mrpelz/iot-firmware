@@ -13,14 +13,14 @@ namespace Ccs811 {
   float calibrationHumidity;
 
   bool working = false;
-  auto sensor = Sensor();
+  auto sensor = Adafruit_CCS811();
 
   void initializer(TwoWire *i2c) {
     #ifdef IOT_NODE_LOGGING
       Utils::Log::debug("ccs811-service", "initializing sensor");
     #endif
 
-    working = sensor.begin(i2c);
+    working = sensor.begin(CCS811_ADDRESS, i2c);
     if (!working) {
       #ifdef IOT_NODE_LOGGING
         Utils::Log::debug("ccs811-service", "sensor initialization failed");

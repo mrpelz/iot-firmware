@@ -8,6 +8,7 @@
 #include "./utils/log.h"
 
 #define I2C_LOCK_DELAY 10
+#define I2C_START_DELAY 10000
 
 namespace IotNode {
 namespace Utils {

@@ -40,6 +40,14 @@ void setup() {
     vTaskDelay(IOT_NODE_LOG_DELAY / portTICK_PERIOD_MS);
   #endif
 
+  #ifdef IOT_NODE_I2C
+    IotNode::Utils::I2C::setup();
+  #endif
+
+  #ifdef IOT_NODE_SX1509
+    IotNode::Utils::Sx1509::setup();
+  #endif
+
   #ifdef IOT_NODE_INDICATORS
     IotNode::Utils::Indicator::setup();
     IotNode::Utils::Indicator::indicator0.setOn(true);
@@ -96,14 +104,6 @@ void setup() {
     IotNode::Events::Rf433::setup();
   #endif
 
-  #ifdef IOT_NODE_I2C
-    IotNode::Utils::I2C::setup();
-  #endif
-
-  #ifdef IOT_NODE_I2C_SCAN
-    IotNode::Utils::I2C::scan();
-  #endif
-
   #ifdef IOT_NODE_BME280
     IotNode::Services::Bme280::setup();
   #endif
@@ -142,6 +142,10 @@ void setup() {
   #endif
 
   IotNode::Utils::OTA::setup();
+
+  #ifdef IOT_NODE_I2C_SCAN
+    IotNode::Utils::I2C::scan();
+  #endif
 
   #ifdef IOT_NODE_INDICATORS
     if (IotNode::Utils::Link::link.isConnected()) return;
