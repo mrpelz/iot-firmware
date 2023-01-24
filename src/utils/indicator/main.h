@@ -3,7 +3,11 @@
 #ifdef IOT_NODE_INDICATORS
 
 #include <Arduino.h>
-#include "../../utils/log.h"
+#include "../log.h"
+
+#ifdef IOT_NODE_SX1509
+  #include "../sx1509/setup.h"
+#endif
 
 #define INDICATOR_BLINK_PERIOD_ON 64
 #define INDICATOR_BLINK_PERIOD_OFF 128
@@ -27,14 +31,32 @@ namespace Indicator {
     bool blinkInfinite = false;
   };
 
-  class Class {
+  class ClassPin {
     private:
       Config config;
       State state;
       void commit();
 
     public:
-      Class(Config _config);
+      ClassPin(Config _config);
+      bool isOn();
+      void blink(uint8_t count);
+      void blink(void);
+      void init();
+      void setBlinkFrequency(unsigned long blinkPeriodOn, unsigned long blinkPeriodOff);
+      void setOn(bool on);
+      void toggle();
+      void update();
+  };
+
+  class ClassExpander {
+    private:
+      Config config;
+      State state;
+      void commit();
+
+    public:
+      ClassExpander(Config _config);
       bool isOn();
       void blink(uint8_t count);
       void blink(void);

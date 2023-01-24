@@ -10,7 +10,13 @@ namespace IotNode {
 namespace Utils {
 
 namespace Indicator {
-  extern Class indicator0;
+  #if defined(IOT_NODE_BOARD_ROOM_SENSOR)
+    extern ClassExpander indicator0;
+    extern ClassExpander indicator1;
+    extern ClassExpander indicator2;
+  #else
+    extern ClassPin indicator0;
+  #endif
 
   #ifdef IOT_NODE_BOARD_H801
     extern Class indicator1;

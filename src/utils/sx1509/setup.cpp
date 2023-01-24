@@ -26,20 +26,6 @@ namespace Sx1509 {
 
       return;
     }
-
-    io.clock(INTERNAL_CLOCK_2MHZ, CLOCK_DIV);
-    
-    io.pinMode(ROOM_SENSOR_INDICATOR_LED_R, ANALOG_OUTPUT);
-    io.breathe(ROOM_SENSOR_INDICATOR_LED_R, 1000, 250, 250, 250);
-    
-    io.pinMode(ROOM_SENSOR_INDICATOR_LED_G, ANALOG_OUTPUT);
-    io.breathe(ROOM_SENSOR_INDICATOR_LED_G, 500, 250, 250, 250, 128);
-    
-    io.pinMode(ROOM_SENSOR_INDICATOR_LED_B, ANALOG_OUTPUT);
-    io.breathe(ROOM_SENSOR_INDICATOR_LED_B, 250, 250, 250, 250, 64);
-
-    // io.pinMode(ROOM_SENSOR_BUZZER, ANALOG_OUTPUT);
-    // io.blink(ROOM_SENSOR_BUZZER, 500, 500, 127);
   }
 }
 

@@ -6,21 +6,21 @@ namespace IotNode {
 namespace Utils {
 
 namespace Indicator {
-  Class::Class(Config _config) {
+  ClassPin::ClassPin(Config _config) {
     config = _config;
   }
 
-  void Class::commit() {
+  void ClassPin::commit() {
     if (!state.wasInitialized) return;
 
     digitalWrite(config.pin, (config.invert ? !state.on : state.on));
   }
 
-  bool Class::isOn() {
+  bool ClassPin::isOn() {
     return state.on;
   }
 
-  void Class::blink() {
+  void ClassPin::blink() {
     #ifdef IOT_NODE_LOGGING
       Log::debug("indicator.blink", "infinite");
       Log::debug("indicator.pin", String(config.pin));
@@ -33,7 +33,7 @@ namespace Indicator {
     state.blinkInfinite = true;
   }
 
-  void Class::blink(uint8_t count) {
+  void ClassPin::blink(uint8_t count) {
     #ifdef IOT_NODE_LOGGING
       Log::debug("indicator.blink", String(count));
       Log::debug("indicator.pin", String(config.pin));
@@ -46,7 +46,7 @@ namespace Indicator {
     state.blinkInfinite = false;
   }
 
-  void Class::init() {
+  void ClassPin::init() {
     #ifdef IOT_NODE_LOGGING
       Log::debug("indicator", "init");
       Log::debug("indicator.pin", String(config.pin));
@@ -58,12 +58,12 @@ namespace Indicator {
     commit();
   }
 
-  void Class::setBlinkFrequency(unsigned long blinkPeriodOn, unsigned long blinkPeriodOff) {
+  void ClassPin::setBlinkFrequency(unsigned long blinkPeriodOn, unsigned long blinkPeriodOff) {
     config.blinkPeriodOn = blinkPeriodOn;
     config.blinkPeriodOff = blinkPeriodOff;
   }
 
-  void Class::setOn(bool on) {
+  void ClassPin::setOn(bool on) {
     #ifdef IOT_NODE_LOGGING
       Log::debug("indicator.set-on", on ? "on" : "off");
       Log::debug("indicator.pin", String(config.pin));
@@ -78,7 +78,7 @@ namespace Indicator {
     commit();
   }
 
-  void Class::toggle() {
+  void ClassPin::toggle() {
     #ifdef IOT_NODE_LOGGING
       Log::debug("indicator.toggle", state.on ? "on2off" : "off2on");
       Log::debug("indicator.pin", String(config.pin));
@@ -93,7 +93,121 @@ namespace Indicator {
     commit();
   }
 
-  void Class::update() {
+  void ClassPin::update() {
+    if (!state.blinkCount && !state.blinkInfinite) return;
+
+    unsigned long now = millis();
+    unsigned long timeSinceLastBlink = now - state.blinkChange;
+    unsigned long relevantBlinkPeriod = state.on
+      ? config.blinkPeriodOn
+      : config.blinkPeriodOff;
+
+    if (timeSinceLastBlink < relevantBlinkPeriod) return;
+
+    state.blinkChange = now;
+    state.on = !state.on;
+
+    if (!state.blinkInfinite) {
+      state.blinkCount = state.blinkCount - 1;
+    }
+
+    commit();
+  }
+  
+  ClassExpander::ClassExpander(Config _config) {
+    config = _config;
+  }
+
+  void ClassExpander::commit() {
+    if (!state.wasInitialized) return;
+
+    auto effectiveOn = config.invert ? !state.on : state.on;
+
+    if (effectiveOn) {
+      Sx1509::io.pinMode(config.pin, INPUT);
+      return;
+    }
+
+    Sx1509::io.pinMode(config.pin, OUTPUT);
+  }
+
+  bool ClassExpander::isOn() {
+    return state.on;
+  }
+
+  void ClassExpander::blink() {
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("indicator.blink", "infinite");
+      Log::debug("indicator.pin", String(config.pin));
+    #endif
+
+    state.on = false;
+
+    state.blinkChange = millis();
+    state.blinkCount = 0;
+    state.blinkInfinite = true;
+  }
+
+  void ClassExpander::blink(uint8_t count) {
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("indicator.blink", String(count));
+      Log::debug("indicator.pin", String(config.pin));
+    #endif
+
+    state.on = false;
+
+    state.blinkChange = millis();
+    state.blinkCount = count * 2;
+    state.blinkInfinite = false;
+  }
+
+  void ClassExpander::init() {
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("indicator", "init");
+      Log::debug("indicator.pin", String(config.pin));
+    #endif
+
+    state.wasInitialized = true;
+
+    commit();
+  }
+
+  void ClassExpander::setBlinkFrequency(unsigned long blinkPeriodOn, unsigned long blinkPeriodOff) {
+    config.blinkPeriodOn = blinkPeriodOn;
+    config.blinkPeriodOff = blinkPeriodOff;
+  }
+
+  void ClassExpander::setOn(bool on) {
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("indicator.set-on", on ? "on" : "off");
+      Log::debug("indicator.pin", String(config.pin));
+    #endif
+
+    state.on = on;
+
+    // abort blink
+    state.blinkCount = 0;
+    state.blinkInfinite = false;
+
+    commit();
+  }
+
+  void ClassExpander::toggle() {
+    #ifdef IOT_NODE_LOGGING
+      Log::debug("indicator.toggle", state.on ? "on2off" : "off2on");
+      Log::debug("indicator.pin", String(config.pin));
+    #endif
+
+    state.on = !state.on;
+
+    // abort blink
+    state.blinkCount = 0;
+    state.blinkInfinite = false;
+
+    commit();
+  }
+
+  void ClassExpander::update() {
     if (!state.blinkCount && !state.blinkInfinite) return;
 
     unsigned long now = millis();
