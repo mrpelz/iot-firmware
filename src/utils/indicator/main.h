@@ -3,6 +3,7 @@
 #ifdef IOT_NODE_INDICATORS
 
 #include <Arduino.h>
+#include <vector>
 #include "../log.h"
 
 #ifdef IOT_NODE_SX1509
@@ -22,6 +23,16 @@ namespace Indicator {
     unsigned long blinkPeriodOn;
     unsigned long blinkPeriodOff;
   };
+
+  #pragma pack(push, 1)
+  struct SequenceItem {
+    uint8_t value;
+    unsigned long time;
+    unsigned long rampTime;
+  };
+  #pragma pack(pop)
+
+  typedef std::vector<SequenceItem> Sequence;
 
   struct State {
     bool on = false;

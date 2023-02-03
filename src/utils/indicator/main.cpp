@@ -6,6 +6,8 @@ namespace IotNode {
 namespace Utils {
 
 namespace Indicator {
+  size_t tmp = sizeof(SequenceItem);
+
   ClassPin::ClassPin(Config _config) {
     config = _config;
   }
@@ -114,6 +116,8 @@ namespace Indicator {
     commit();
   }
   
+  #ifdef IOT_NODE_SX1509
+
   ClassExpander::ClassExpander(Config _config) {
     config = _config;
   }
@@ -227,6 +231,8 @@ namespace Indicator {
 
     commit();
   }
+
+  #endif
 }
 
 } // section namespace
