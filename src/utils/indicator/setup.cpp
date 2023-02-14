@@ -43,10 +43,24 @@ namespace Indicator {
       ROOM_SENSOR_INDICATOR_LED_B,
       true
     });
+
+    ClassPin indicatorNotInUse0({
+      5,
+      true,
+      INDICATOR_BLINK_PERIOD_ON,
+      INDICATOR_BLINK_PERIOD_OFF
+    });
+
+    ClassPin indicatorNotInUse1({
+      17,
+      true,
+      INDICATOR_BLINK_PERIOD_ON,
+      INDICATOR_BLINK_PERIOD_OFF
+    });
   #endif
 
   #ifdef IOT_NODE_BOARD_H801
-    Class indicator1({
+    ClassPin indicator1({
       1,
       true,
       INDICATOR_BLINK_PERIOD_ON,
@@ -78,6 +92,14 @@ namespace Indicator {
 
   void setup() {
     indicator0.init();
+
+    #ifdef IOT_NODE_BOARD_ROOM_SENSOR
+      indicator1.init();
+      indicator2.init();
+
+      indicatorNotInUse0.init();
+      indicatorNotInUse1.init();
+    #endif
 
     #ifdef IOT_NODE_BOARD_H801
       indicator1.init();
