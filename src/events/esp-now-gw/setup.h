@@ -11,14 +11,17 @@
 #include "../../utils/log.h"
 #include "./main.h"
 
-namespace IotNode {
-namespace Events {
+namespace IotNode
+{
+  namespace Events
+  {
 
-namespace EspNowGw {
-  void setup();
-}
+    namespace EspNowGw
+    {
+      void setup();
+    }
 
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

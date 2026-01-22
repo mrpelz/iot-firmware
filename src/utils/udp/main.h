@@ -5,10 +5,10 @@
 #include <vector>
 
 #ifdef IOT_NODE_ESP8266
-  #include <ESPAsyncUDP.h>  
+#include <ESPAsyncUDP.h>
 #endif
 #ifdef IOT_NODE_ESP32
-  #include <AsyncUDP.h>
+#include <AsyncUDP.h>
 #endif
 
 #include "../../events/event-ids.h"
@@ -36,60 +36,67 @@
 #define REPEAT_COUNT 2
 #define REPEAT_WINDOW 200
 
-namespace IotNode {
-namespace Utils {
+namespace IotNode
+{
+  namespace Utils
+  {
 
-namespace UDP {
-  typedef std::vector<uint8_t> Payload;
+    namespace UDP
+    {
+      typedef std::vector<uint8_t> Payload;
 
-  typedef std::function<void (
-    Payload response
-  )> RespondCallback;
+      typedef std::function<void(
+          Payload response)>
+          RespondCallback;
 
-  struct Peer {
-    IPAddress ip;
-    uint16_t port;
-  };
+      struct Peer
+      {
+        IPAddress ip;
+        uint16_t port;
+      };
 
-  typedef std::function<void (
-    Payload *request,
-    RespondCallback respond,
-    Peer peer
-  )> RequestHandler;
+      typedef std::function<void(
+          Payload *request,
+          RespondCallback respond,
+          Peer peer)>
+          RequestHandler;
 
-  struct Service {
-    uint8_t serviceId;
-    uint8_t serviceIndex;
-    RequestHandler handler;
-  };
+      struct Service
+      {
+        uint8_t serviceId;
+        uint8_t serviceIndex;
+        RequestHandler handler;
+      };
 
-  struct State {
-    bool isListening = false;
-    AsyncUDP udp;
-    uint16_t port;
-    Peer eventPeer;
-    Peer fallbackPeer;
-    std::vector<Service *> services;
-    unsigned long requestTimes[256];
-  };
+      struct State
+      {
+        bool isListening = false;
+        AsyncUDP udp;
+        uint16_t port;
+        Peer eventPeer;
+        Peer fallbackPeer;
+        std::vector<Service *> services;
+        unsigned long requestTimes[256];
+      };
 
-  class Class {
-    private:
-      State state;
-      void handleRequest(AsyncUDPPacket *packet);
+      class Class
+      {
+      private:
+        State state;
+        void handleRequest(AsyncUDPPacket *packet);
 
-    public:
-      Class(uint16_t port);
-      void addService(Service *service);
-      void begin();
-      void close();
-      void event(uint8_t eventId, uint8_t eventIndex, Payload event);
-      bool hasEventPeer();
-      bool isListening();
-      void removeEventPeer();
-      void setEventPeer(Peer peer);
-  };
-}
+      public:
+        Class(uint16_t port);
+        void addService(Service *service);
+        void begin();
+        void close();
+        void event(uint8_t eventId, uint8_t eventIndex, Payload event);
+        bool hasEventPeer();
+        bool isListening();
+        void removeEventPeer();
+        void setEventPeer(Peer peer);
+      };
+    }
 
-} // section namespace
+  } // section namespace
 } // project namespace

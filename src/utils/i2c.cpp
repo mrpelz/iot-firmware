@@ -2,87 +2,100 @@
 
 #ifdef IOT_NODE_I2C
 
-namespace IotNode {
-namespace Utils {
+namespace IotNode
+{
+  namespace Utils
+  {
 
-namespace I2C {
-  #ifdef IOT_NODE_ESP8266
-    TwoWire bus = TwoWire();
-  #endif
-  #ifdef IOT_NODE_ESP32
-    TwoWire bus = TwoWire(0);
-  #endif
+    namespace I2C
+    {
+#ifdef IOT_NODE_ESP8266
+      TwoWire bus = TwoWire();
+#endif
+#ifdef IOT_NODE_ESP32
+      TwoWire bus = TwoWire(0);
+#endif
 
-  volatile bool lock = false;
+      volatile bool lock = false;
 
-  #ifdef IOT_NODE_I2C_SCAN
-    void scan() {
-      vTaskDelay(I2C_START_DELAY / portTICK_PERIOD_MS);
+#ifdef IOT_NODE_I2C_SCAN
+      void scan()
+      {
+        vTaskDelay(I2C_START_DELAY / portTICK_PERIOD_MS);
 
-      uint8_t deviceCount = 0;
-      uint8_t errorCount = 0;
+        uint8_t deviceCount = 0;
+        uint8_t errorCount = 0;
 
-      #ifdef IOT_NODE_LOGGING
+#ifdef IOT_NODE_LOGGING
         Log::debug("i2c.scan", "start");
-      #endif
+#endif
 
-      for(uint8_t address = 1; address < 127; address++) {
-        bus.beginTransmission(address);
-        auto error = bus.endTransmission();
-    
-        if (error == 0) {
-          deviceCount++;
+        for (uint8_t address = 1; address < 127; address++)
+        {
+          bus.beginTransmission(address);
+          auto error = bus.endTransmission();
 
-          #ifdef IOT_NODE_LOGGING
+          if (error == 0)
+          {
+            deviceCount++;
+
+#ifdef IOT_NODE_LOGGING
             Log::debug("i2c.scan.found.address", String(address, HEX));
-          #endif
-        } else if (error == 4) {
-          errorCount++;
+#endif
+          }
+          else if (error == 4)
+          {
+            errorCount++;
 
-          #ifdef IOT_NODE_LOGGING
+#ifdef IOT_NODE_LOGGING
             Log::debug("i2c.scan.unknown-error.address", String(address, HEX));
-          #endif
+#endif
+          }
         }
-      }
 
-      #ifdef IOT_NODE_LOGGING
+#ifdef IOT_NODE_LOGGING
         Log::debug("i2c.scan.found.count", String(deviceCount));
         Log::debug("i2c.scan.unknown-error.count", String(errorCount));
         Log::debug("i2c.scan", "done");
-      #endif
-    }
-  #endif
+#endif
+      }
+#endif
 
-  void setup() {
-    #ifdef IOT_NODE_ESP32
-      bus.begin(32, 33);
-    #else
-      bus.begin();
-    #endif
-  }
+      void setup()
+      {
+#ifdef IOT_NODE_ESP32
+        bus.begin(32, 33);
+#else
+        bus.begin();
+#endif
+      }
 
-  #ifdef IOT_NODE_ESP32
-    void claim() {
-      if (!lock) {
+#ifdef IOT_NODE_ESP32
+      void claim()
+      {
+        if (!lock)
+        {
+          lock = true;
+
+          return;
+        }
+
+        while (lock)
+        {
+          vTaskDelay(I2C_LOCK_DELAY / portTICK_PERIOD_MS);
+        }
+
         lock = true;
-
-        return;
       }
 
-      while (lock) {
-        vTaskDelay(I2C_LOCK_DELAY / portTICK_PERIOD_MS);
+      void unclaim()
+      {
+        lock = false;
       }
-
-      lock = true;
+#endif
     }
 
-    void unclaim() {
-      lock = false;
-    }
-  #endif
-}
-
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

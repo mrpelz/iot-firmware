@@ -9,18 +9,21 @@
 #include "../../utils/log.h"
 #include "../event-ids.h"
 
-namespace IotNode {
-namespace Events {
+namespace IotNode
+{
+  namespace Events
+  {
 
-namespace VCC {
-  typedef std::function<void (uint16_t vcc)> ChangeCallback;
+    namespace VCC
+    {
+      typedef std::function<void(uint16_t vcc)> ChangeCallback;
 
-  #ifdef IOT_NODE_ESP_NOW_NODE
-    ChangeCallback makeEspNowEvent();
-  #endif
-}
+#ifdef IOT_NODE_ESP_NOW_NODE
+      ChangeCallback makeEspNowEvent();
+#endif
+    }
 
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

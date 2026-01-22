@@ -2,145 +2,169 @@
 
 #ifdef IOT_NODE_BUTTONS
 
-namespace IotNode {
-namespace Utils {
+namespace IotNode
+{
+  namespace Utils
+  {
 
-namespace Button {
-  std::vector<Class *> buttons;
+    namespace Button
+    {
+      std::vector<Class *> buttons;
 
-  Class::Class(Config _config) {
-    config = _config;
-  }
-
-  bool Class::isDown() {
-    return state.down;
-  }
-
-  void Class::setChangeCallback(ChangeCallback callback) {
-    state.changeCallback = callback;
-  }
-
-  void Class::start() {
-    buttons.insert(buttons.end(), this);
-
-    state.running = true;
-
-    if (config.pin == 0xff) return;
-
-    pinMode(
-      config.pin,
-      config.pullupEnable ? INPUT_PULLUP : INPUT
-    );
-  }
-
-  void Class::stop() {
-    state.running = false;
-
-    if (config.pin == 0xff) return;
-
-    pinMode(
-      config.pin,
-      INPUT
-    );
-  }
-
-  void Class::update() {
-    update(true);
-  }
-  void Class::update(bool insert) {
-    if (!state.running) return;
-
-    auto now = millis();
-
-    bool rawDown = config.pin == 0xff ? insert : digitalRead(config.pin);
-    auto down = config.invert ? rawDown : !rawDown;
-
-    if (config.noiseGateTime) {
-      if (!state.noiseGateTime && down) {
-        state.noiseGateTime = now;
-        return;
+      Class::Class(Config _config)
+      {
+        config = _config;
       }
 
-      auto timeSinceNoiseGateBegin = now - state.noiseGateTime;
-      if (timeSinceNoiseGateBegin < config.noiseGateTime && down) {
-        return;
+      bool Class::isDown()
+      {
+        return state.down;
       }
 
-      if (state.noiseGateTime && !down) {
-        state.noiseGateTime = 0;
-        return;
+      void Class::setChangeCallback(ChangeCallback callback)
+      {
+        state.changeCallback = callback;
       }
 
-      state.noiseGateTime = 0;
-    }
+      void Class::start()
+      {
+        buttons.insert(buttons.end(), this);
 
-    bool downChanged = down != state.down;
+        state.running = true;
 
-    auto timeSinceLastChange = now - state.changeTime;
-    if (timeSinceLastChange < config.debounceTime) return;
+        if (config.pin == 0xff)
+          return;
 
-    auto longpressChanged = false;
-
-    if (!down || (down && downChanged)) {
-      state.longpress = 0;
-      state.longpressTime = now;
-    } else {
-      auto timeSinceLastLongpress = now - state.longpressTime;
-
-      if (timeSinceLastLongpress > config.longpressTime) {
-        longpressChanged = true;
-        state.longpress = state.longpress + 1;
-        state.longpressTime = now;
+        pinMode(
+            config.pin,
+            config.pullupEnable ? INPUT_PULLUP : INPUT);
       }
-    }
 
-    if (downChanged) {
-      auto lastChangeTime = state.changeTime;
+      void Class::stop()
+      {
+        state.running = false;
 
-      state.changeTime = now;
-      state.down = down;
+        if (config.pin == 0xff)
+          return;
 
-      if (down && lastChangeTime) {
-        if (timeSinceLastChange < config.repeatTime) {
-          state.repeat = state.repeat + 1;
-        } else {
-          state.repeat = 0;
+        pinMode(
+            config.pin,
+            INPUT);
+      }
+
+      void Class::update()
+      {
+        update(true);
+      }
+      void Class::update(bool insert)
+      {
+        if (!state.running)
+          return;
+
+        auto now = millis();
+
+        bool rawDown = config.pin == 0xff ? insert : digitalRead(config.pin);
+        auto down = config.invert ? rawDown : !rawDown;
+
+        if (config.noiseGateTime)
+        {
+          if (!state.noiseGateTime && down)
+          {
+            state.noiseGateTime = now;
+            return;
+          }
+
+          auto timeSinceNoiseGateBegin = now - state.noiseGateTime;
+          if (timeSinceNoiseGateBegin < config.noiseGateTime && down)
+          {
+            return;
+          }
+
+          if (state.noiseGateTime && !down)
+          {
+            state.noiseGateTime = 0;
+            return;
+          }
+
+          state.noiseGateTime = 0;
         }
+
+        bool downChanged = down != state.down;
+
+        auto timeSinceLastChange = now - state.changeTime;
+        if (timeSinceLastChange < config.debounceTime)
+          return;
+
+        auto longpressChanged = false;
+
+        if (!down || (down && downChanged))
+        {
+          state.longpress = 0;
+          state.longpressTime = now;
+        }
+        else
+        {
+          auto timeSinceLastLongpress = now - state.longpressTime;
+
+          if (timeSinceLastLongpress > config.longpressTime)
+          {
+            longpressChanged = true;
+            state.longpress = state.longpress + 1;
+            state.longpressTime = now;
+          }
+        }
+
+        if (downChanged)
+        {
+          auto lastChangeTime = state.changeTime;
+
+          state.changeTime = now;
+          state.down = down;
+
+          if (down && lastChangeTime)
+          {
+            if (timeSinceLastChange < config.repeatTime)
+            {
+              state.repeat = state.repeat + 1;
+            }
+            else
+            {
+              state.repeat = 0;
+            }
+          }
+        }
+
+        if (!(downChanged || longpressChanged))
+          return;
+
+        std::vector<bool> pressedMap;
+        std::for_each(
+            std::begin(buttons),
+            std::end(buttons),
+            [&pressedMap](Class *button)
+            {
+              pressedMap.insert(pressedMap.end(), button->isDown());
+            });
+
+#ifdef IOT_NODE_LOGGING
+        Log::debug("event", "button");
+        Log::debug("button.down", String(state.down));
+        Log::debug("button.down.changed", String(downChanged));
+        Log::debug("button.down.change-period", String(timeSinceLastChange));
+        Log::debug("button.repeat", String(state.repeat));
+        Log::debug("button.longpress", String(state.longpress));
+#endif
+
+        state.changeCallback({state.down,
+                              downChanged,
+                              timeSinceLastChange,
+                              state.repeat,
+                              state.longpress,
+                              pressedMap});
       }
     }
 
-    if (!(downChanged || longpressChanged)) return;
-
-    std::vector<bool> pressedMap;
-    std::for_each(
-      std::begin(buttons),
-      std::end(buttons),
-      [&pressedMap](Class *button) {
-        pressedMap.insert(pressedMap.end(), button->isDown());
-      }
-    );
-
-    #ifdef IOT_NODE_LOGGING
-      Log::debug("event", "button");
-      Log::debug("button.down", String(state.down));
-      Log::debug("button.down.changed", String(downChanged));
-      Log::debug("button.down.change-period", String(timeSinceLastChange));
-      Log::debug("button.repeat", String(state.repeat));
-      Log::debug("button.longpress", String(state.longpress));
-    #endif
-
-    state.changeCallback({
-      state.down,
-      downChanged,
-      timeSinceLastChange,
-      state.repeat,
-      state.longpress,
-      pressedMap
-    });
-  }
-}
-
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

@@ -10,18 +10,21 @@
 #include "../../utils/udp/main.h"
 #include "../event-ids.h"
 
-namespace IotNode {
-namespace Events {
+namespace IotNode
+{
+  namespace Events
+  {
 
-namespace Button {
-  Utils::Button::ChangeCallback makeEvent(Utils::UDP::Class *udp, uint8_t index);
+    namespace Button
+    {
+      Utils::Button::ChangeCallback makeEvent(Utils::UDP::Class *udp, uint8_t index);
 
-  #ifdef IOT_NODE_ESP_NOW_NODE
-    Utils::Button::ChangeCallback makeEspNowEvent(uint8_t index);
-  #endif
-}
+#ifdef IOT_NODE_ESP_NOW_NODE
+      Utils::Button::ChangeCallback makeEspNowEvent(uint8_t index);
+#endif
+    }
 
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

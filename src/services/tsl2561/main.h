@@ -10,18 +10,21 @@
 #include "../../utils/udp/main.h"
 #include "./sensor.h"
 
-namespace IotNode {
-namespace Services {
+namespace IotNode
+{
+  namespace Services
+  {
 
-namespace Tsl2561 {
-  void initializer(TwoWire *i2c);
+    namespace Tsl2561
+    {
+      void initializer(TwoWire *i2c);
 
-  void responseTask(void *parameter);
+      void responseTask(void *parameter);
 
-  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
-}
+      void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
+    }
 
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

@@ -2,90 +2,93 @@
 
 #ifdef IOT_NODE_BUTTONS
 
-namespace IotNode {
-namespace Events {
+namespace IotNode
+{
+  namespace Events
+  {
 
-namespace Button {
-  Utils::Button::ChangeCallback makeEvent(Utils::UDP::Class *udp, uint8_t index) {
-    auto handler = [udp, index](Utils::Button::Update update) {
-      #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("button-event", "triggered");
-      #endif
+    namespace Button
+    {
+      Utils::Button::ChangeCallback makeEvent(Utils::UDP::Class *udp, uint8_t index)
+      {
+        auto handler = [udp, index](Utils::Button::Update update)
+        {
+#ifdef IOT_NODE_LOGGING
+          Utils::Log::debug("button-event", "triggered");
+#endif
 
-      std::vector<uint8_t> response = {
-        (uint8_t)(update.down ? 0x01 : 0x00),
-        (uint8_t)(update.downChanged ? 0x01 : 0x00),
-        update.repeat,
-        update.longpress,
-      };
+          std::vector<uint8_t> response = {
+              (uint8_t)(update.down ? 0x01 : 0x00),
+              (uint8_t)(update.downChanged ? 0x01 : 0x00),
+              update.repeat,
+              update.longpress,
+          };
 
-      auto prevDuration = reinterpret_cast<uint8_t*>(&(update.prevDuration));
+          auto prevDuration = reinterpret_cast<uint8_t *>(&(update.prevDuration));
 
-      response.insert(
-        response.end(),
-        prevDuration,
-        prevDuration + sizeof(update.prevDuration)
-      );
+          response.insert(
+              response.end(),
+              prevDuration,
+              prevDuration + sizeof(update.prevDuration));
 
-      response.insert(
-        response.end(),
-        update.pressedMap.begin(),
-        update.pressedMap.end()
-      );
+          response.insert(
+              response.end(),
+              update.pressedMap.begin(),
+              update.pressedMap.end());
 
-      #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("button-event", "sending event");
-      #endif
+#ifdef IOT_NODE_LOGGING
+          Utils::Log::debug("button-event", "sending event");
+#endif
 
-      udp->event(ids::button, index, response);
-    };
-
-    return handler;
-  }
-
-  #ifdef IOT_NODE_ESP_NOW_NODE
-    Utils::Button::ChangeCallback makeEspNowEvent(uint8_t index) {
-      auto handler = [index](Utils::Button::Update update) {
-        #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("button-espNow-event", "triggered");
-        #endif
-
-        std::vector<uint8_t> response = {
-          ids::button,
-          index,
-          (uint8_t)(update.down ? 0x01 : 0x00),
-          (uint8_t)(update.downChanged ? 0x01 : 0x00),
-          update.repeat,
-          update.longpress,
+          udp->event(ids::button, index, response);
         };
 
-        auto prevDuration = reinterpret_cast<uint8_t*>(&(update.prevDuration));
+        return handler;
+      }
 
-        response.insert(
-          response.end(),
-          prevDuration,
-          prevDuration + sizeof(update.prevDuration)
-        );
+#ifdef IOT_NODE_ESP_NOW_NODE
+      Utils::Button::ChangeCallback makeEspNowEvent(uint8_t index)
+      {
+        auto handler = [index](Utils::Button::Update update)
+        {
+#ifdef IOT_NODE_LOGGING
+          Utils::Log::debug("button-espNow-event", "triggered");
+#endif
 
-        response.insert(
-          response.end(),
-          update.pressedMap.begin(),
-          update.pressedMap.end()
-        );
+          std::vector<uint8_t> response = {
+              ids::button,
+              index,
+              (uint8_t)(update.down ? 0x01 : 0x00),
+              (uint8_t)(update.downChanged ? 0x01 : 0x00),
+              update.repeat,
+              update.longpress,
+          };
 
-        #ifdef IOT_NODE_LOGGING
+          auto prevDuration = reinterpret_cast<uint8_t *>(&(update.prevDuration));
+
+          response.insert(
+              response.end(),
+              prevDuration,
+              prevDuration + sizeof(update.prevDuration));
+
+          response.insert(
+              response.end(),
+              update.pressedMap.begin(),
+              update.pressedMap.end());
+
+#ifdef IOT_NODE_LOGGING
           Utils::Log::debug("button-espNow-event", "sending event");
-        #endif
+#endif
 
-        Utils::EspNowNode::send(response);
-      };
+          Utils::EspNowNode::send(response);
+        };
 
-      return handler;
+        return handler;
+      }
+#endif
     }
-  #endif
-}
 
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

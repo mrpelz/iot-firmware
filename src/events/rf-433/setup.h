@@ -7,20 +7,23 @@
 #include "../../utils/log.h"
 #include "./main.h"
 
-namespace IotNode {
-namespace Events {
+namespace IotNode
+{
+  namespace Events
+  {
 
-namespace Rf433 {
-  void update();
+    namespace Rf433
+    {
+      void update();
 
-  #ifdef IOT_NODE_ESP32
-    void task(void *parameter);
-  #endif
+#ifdef IOT_NODE_ESP32
+      void task(void *parameter);
+#endif
 
-  void setup();
-}
+      void setup();
+    }
 
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

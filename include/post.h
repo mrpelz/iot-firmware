@@ -1,77 +1,73 @@
 #ifndef IOT_NODE_NAME
-  #define IOT_NODE_NAME IOT_NODE_HARDWARE_NAME
+#define IOT_NODE_NAME IOT_NODE_HARDWARE_NAME
 #endif
 
 #if !defined(IOT_NODE_ESP32) && !defined(IOT_NODE_ESP8266)
-  #error no valid platform specified
+#error no valid platform specified
 #endif
 
 #if !defined(IOT_NODE_LINK_ETH) && !defined(IOT_NODE_LINK_WIFI)
-  #error either eth or wifi must be specified
+#error either eth or wifi must be specified
 #endif
 
 #if defined(IOT_NODE_LINK_ETH) && !defined(IOT_NODE_ESP32)
-  #error cannot use ethernet without ESP32
+#error cannot use ethernet without ESP32
 #endif
 
 #if defined(IOT_NODE_IP) && defined(IOT_NODE_GATEWAY) && defined(IOT_NODE_NETMASK)
-  #define IOT_NODE_IP_STATIC
+#define IOT_NODE_IP_STATIC
 #else
-  #define IOT_NODE_IP_DHCP
+#define IOT_NODE_IP_DHCP
 #endif
 
 #if defined(IOT_NODE_LINK_ETH) && defined(IOT_NODE_LINK_WIFI)
-  #error cannot specify both ethernet and wifi as link type
+#error cannot specify both ethernet and wifi as link type
 #endif
 
 #ifndef IOT_NODE_LINK_ETH
-  #undef IOT_NODE_WT32_ETH01
+#undef IOT_NODE_WT32_ETH01
 #endif
 
 #if defined(IOT_NODE_LINK_WIFI) && (defined(IOT_NODE_AP_ALGORE) || defined(IOT_NODE_AP_ELZAR) || defined(IOT_NODE_AP_RICHARDNIXON) || defined(IOT_NODE_AP_SPIROAGNEW))
-  #define IOT_NODE_ADVANCED_WIFI_CONFIG
+#define IOT_NODE_ADVANCED_WIFI_CONFIG
 #endif
 
 #if defined(IOT_NODE_BME280) || defined(IOT_NODE_CCS811) || defined(IOT_NODE_MCP9808) || defined(IOT_NODE_SGP30) || defined(IOT_NODE_TSL2561) || defined(IOT_NODE_VEML6070)
-  #define IOT_NODE_I2C_SENSOR
+#define IOT_NODE_I2C_SENSOR
 #endif
 
 #if defined(IOT_NODE_MHZ19) || defined(IOT_NODE_SDS011)
-  #define IOT_NODE_UART_SENSOR
+#define IOT_NODE_UART_SENSOR
 #endif
 
 #if !defined(IOT_NODE_ESP32) && (defined(IOT_NODE_I2C_SENSOR) || defined(IOT_NODE_UART_SENSOR))
-  #error cannot use async sensors without ESP32
+#error cannot use async sensors without ESP32
 #endif
 
 #if !defined(IOT_NODE_ESP32) && (defined(IOT_NODE_ESP_NOW_GW))
-  #error ESP-NOW gateway only available on ESP32
+#error ESP-NOW gateway only available on ESP32
 #endif
 
 #if !defined(IOT_NODE_LINK_ETH) && (defined(IOT_NODE_ESP_NOW_GW))
-  #error ESP-NOW gateway only available when link is ethernet
+#error ESP-NOW gateway only available when link is ethernet
 #endif
 
 #if !defined(IOT_NODE_ESP_NOW_GW_MAC) && (defined(IOT_NODE_ESP_NOW_NODE))
-  #error Cannot use ESP-NOW node without GW MAC defined
+#error Cannot use ESP-NOW node without GW MAC defined
 #endif
 
 #if defined(IOT_NODE_I2C_SENSOR) || defined(IOT_NODE_I2C_SCAN) || defined(IOT_NODE_I2C_BUTTONS)
-  #define IOT_NODE_I2C
+#define IOT_NODE_I2C
 #endif
 
 #if defined(IOT_NODE_I2C_BUTTONS)
-  #define IOT_NODE_BUTTONS
+#define IOT_NODE_BUTTONS
 #endif
 
 #if defined(IOT_NODE_VCC) && !defined(IOT_NODE_ESP8266)
-  #error cannot only measure VCC on ESP8266
-#endif
-
-#ifndef IOT_NODE_LOG_DELAY
-  #define IOT_NODE_LOG_DELAY 250
+#error can only measure VCC on ESP8266
 #endif
 
 #if defined(IOT_NODE_POWER_CYCLE_PROTECTION) && !defined(IOT_NODE_OUTPUT)
-  #error cannot use power cycle protection without output
+#error cannot use power cycle protection without output
 #endif

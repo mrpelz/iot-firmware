@@ -4,32 +4,37 @@
 
 #define CLOCK_DIV 4
 
-namespace IotNode {
-namespace Utils {
+namespace IotNode
+{
+  namespace Utils
+  {
 
-namespace Sx1509 {
-  bool working = false;
+    namespace Sx1509
+    {
+      bool working = false;
 
-  SX1509 io;
+      SX1509 io;
 
-  void setup() {
-    #ifdef IOT_NODE_LOGGING
-      Utils::Log::debug("sx1509-service", "initializing io");
-    #endif
+      void setup()
+      {
+#ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("sx1509-service", "initializing io");
+#endif
 
-    working = io.begin(SX1509_ADDRESS, I2C::bus);
+        working = io.begin(SX1509_ADDRESS, I2C::bus);
 
-    if (!working) {
-      #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("sx1509-service", "io initialization failed");
-      #endif
+        if (!working)
+        {
+#ifdef IOT_NODE_LOGGING
+          Utils::Log::debug("sx1509-service", "io initialization failed");
+#endif
 
-      return;
+          return;
+        }
+      }
     }
-  }
-}
 
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

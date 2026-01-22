@@ -1,14 +1,18 @@
 #include "./setup.h"
 
-namespace IotNode {
-namespace Utils {
+namespace IotNode
+{
+  namespace Utils
+  {
 
-namespace UDP {
-  Class instance(1337);
+    namespace UDP
+    {
+      Class instance(1337);
 
-  void setup() {
-  }
-}
+      void setup()
+      {
+      }
+    }
 
-} // section namespace
+  } // section namespace
 } // project namespace

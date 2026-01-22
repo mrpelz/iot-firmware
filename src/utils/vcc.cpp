@@ -4,34 +4,41 @@
 
 ADC_MODE(ADC_VCC);
 
-namespace IotNode {
-namespace Utils {
+namespace IotNode
+{
+  namespace Utils
+  {
 
-namespace VCC {
-  bool read = false;
+    namespace VCC
+    {
+      bool read = false;
 
-  uint16_t vcc = 0;
+      uint16_t vcc = 0;
 
-  void update() {
-    if (read) return;
+      void update()
+      {
+        if (read)
+          return;
 
-    uint16_t measurement = ESP.getVcc();
+        uint16_t measurement = ESP.getVcc();
 
-    if (!vcc) {
-      vcc = measurement;
-      return;
+        if (!vcc)
+        {
+          vcc = measurement;
+          return;
+        }
+
+        vcc = (vcc + measurement) / 2;
+      }
+
+      uint16_t get()
+      {
+        read = true;
+        return vcc;
+      }
     }
 
-    vcc = (vcc + measurement) / 2;
-  }
-
-  uint16_t get() {
-    read = true;
-    return vcc;
-  }
-}
-
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

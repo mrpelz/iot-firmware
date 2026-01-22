@@ -6,44 +6,48 @@
 #include <vector>
 
 #ifdef IOT_NODE_ESP8266
-  #include <ESP8266WiFi.h>
-  #include <espnow.h>
+#include <ESP8266WiFi.h>
+#include <espnow.h>
 #endif
 #ifdef IOT_NODE_ESP32
-  #include <esp_now.h>
-  #include <esp_wifi.h>
-  #include <WiFi.h>
+#include <esp_now.h>
+#include <esp_wifi.h>
+#include <WiFi.h>
 #endif
 
 #include "./button/setup.h"
 #include "./keepalive/main.h"
 #include "./log.h"
 
-namespace IotNode {
-namespace Utils {
+namespace IotNode
+{
+  namespace Utils
+  {
 
-namespace EspNowNode {
-  enum WORKING_MODE {
-    SLEEP,
-    WAKE
-  };
+    namespace EspNowNode
+    {
+      enum WORKING_MODE
+      {
+        SLEEP,
+        WAKE
+      };
 
-  extern WORKING_MODE workingMode;
+      extern WORKING_MODE workingMode;
 
-  void getWorkingMode();
+      void getWorkingMode();
 
-  void sleep();
+      void sleep();
 
-  void onDataSent(uint8_t *mac_addr, uint8_t status);
+      void onDataSent(uint8_t *mac_addr, uint8_t status);
 
-  void setup();
+      void setup();
 
-  void send(std::vector<uint8_t> payload);
+      void send(std::vector<uint8_t> payload);
 
-  void update();
-}
+      void update();
+    }
 
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

@@ -12,15 +12,18 @@
 #define INDICATOR_CMD_ON 1
 #define INDICATOR_CMD_BLINK 2
 
-namespace IotNode {
-namespace Services {
+namespace IotNode
+{
+  namespace Services
+  {
 
-namespace Indicator {
-  Utils::UDP::Service makeService(Utils::Indicator::ClassPin *output, uint8_t index);
-  Utils::UDP::Service makeService(Utils::Indicator::ClassExpander *output, uint8_t index);
-}
+    namespace Indicator
+    {
+      Utils::UDP::Service makeService(Utils::Indicator::ClassPin *output, uint8_t index);
+      Utils::UDP::Service makeService(Utils::Indicator::ClassExpander *output, uint8_t index);
+    }
 
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

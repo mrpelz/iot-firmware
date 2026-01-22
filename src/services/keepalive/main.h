@@ -8,12 +8,15 @@
 #include "../../utils/udp/setup.h"
 #include "./setup.h"
 
-namespace IotNode {
-namespace Services {
+namespace IotNode
+{
+  namespace Services
+  {
 
-namespace Keepalive {
-  Utils::UDP::RequestHandler makeHandler();
-}
+    namespace Keepalive
+    {
+      Utils::UDP::RequestHandler makeHandler();
+    }
 
-} // section namespace
+  } // section namespace
 } // project namespace

@@ -8,95 +8,102 @@
 #include "./main.h"
 #include "./utils/indicator/setup.h"
 
-#ifdef IOT_NODE_LINK_ETH
-  #include "./eth.h"
-#else
-  #include "./wifi.h"
+#ifdef IOT_NODE_ESP8266
+#include <ESP8266mDNS.h>
+#endif
+#ifdef IOT_NODE_ESP32
+#include <ESPmDNS.h>
 #endif
 
-namespace IotNode {
-namespace Utils {
+#ifdef IOT_NODE_LINK_ETH
+#include "./eth.h"
+#else
+#include "./wifi.h"
+#endif
 
-namespace Link {
-  static const Timings timings = {
-    .runDebugEvery = 60000,
-    .tryReconnectAfter = 2000,
-    .restartAfter = 20000
-  };
+namespace IotNode
+{
+    namespace Utils
+    {
 
-  #ifdef IOT_NODE_LINK_WIFI
-    static const Credentials credentials = {
-      .ssid = IOT_NODE_WIFI_SSID,
-      .password = IOT_NODE_WIFI_PSK,
+        namespace Link
+        {
+            static const Timings timings = {
+                .runDebugEvery = 60000,
+                .tryReconnectAfter = 2000,
+                .restartAfter = 20000};
 
-      #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
-        .bssid = IOT_NODE_WIFI_BSSID,
-        .channel = IOT_NODE_WIFI_CHANNEL,
-      #endif
-    };
+#ifdef IOT_NODE_LINK_WIFI
+            static const Credentials credentials = {
+                .ssid = IOT_NODE_WIFI_SSID,
+                .password = IOT_NODE_WIFI_PSK,
 
-    #ifdef IOT_NODE_ESP8266
-      #include <ESP8266WiFi.h>
+#ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
+                .bssid = IOT_NODE_WIFI_BSSID,
+                .channel = IOT_NODE_WIFI_CHANNEL,
+#endif
+            };
 
-      static const PhyMode_t phyMode = WIFI_PHY_MODE_11N;
+#ifdef IOT_NODE_ESP8266
+#include <ESP8266WiFi.h>
 
-      static const OutputPower_t outputPower = 6;
-    #endif
+            static const PhyMode_t phyMode = WIFI_PHY_MODE_11N;
 
-    #ifdef IOT_NODE_ESP32
-      #include <WiFi.h>
+            static const OutputPower_t outputPower = 6;
+#endif
 
-      static const PhyMode_t phyMode = WIFI_PHY_RATE_54M;
+#ifdef IOT_NODE_ESP32
+#include <WiFi.h>
 
-      static const OutputPower_t outputPower = WIFI_POWER_7dBm;
-    #endif
-  #endif
+            static const PhyMode_t phyMode = WIFI_PHY_RATE_54M;
 
-  #ifdef IOT_NODE_IP_STATIC
-    static const InterfaceConfig interfaceConfig = {
-      .ip = IPAddress(IOT_NODE_IP),
-      .gateway = IPAddress(IOT_NODE_GATEWAY),
-      .netmask = IPAddress(IOT_NODE_NETMASK),
-    };
-  #endif
+            static const OutputPower_t outputPower = WIFI_POWER_7dBm;
+#endif
+#endif
 
-  #ifdef IOT_NODE_LINK_ETH
-    #ifdef IOT_NODE_ESP32
-      static const Config config = {
-        #ifdef IOT_NODE_IP_STATIC
-          .interfaceConfig = interfaceConfig,
-        #endif
+#ifdef IOT_NODE_IP_STATIC
+            static const InterfaceConfig interfaceConfig = {
+                .ip = IPAddress(IOT_NODE_IP),
+                .gateway = IPAddress(IOT_NODE_GATEWAY),
+                .netmask = IPAddress(IOT_NODE_NETMASK),
+            };
+#endif
 
-        .timings = timings
-      };
-    #endif
-  #else
-    static const Config config = {
-      .phyMode = phyMode,
-      .outputPower = outputPower,
+#ifdef IOT_NODE_LINK_ETH
+#ifdef IOT_NODE_ESP32
+            static const Config config = {
+#ifdef IOT_NODE_IP_STATIC
+                .interfaceConfig = interfaceConfig,
+#endif
 
-      #ifdef IOT_NODE_IP_STATIC
-        .interfaceConfig = interfaceConfig,
-      #endif
+                .timings = timings};
+#endif
+#else
+            static const Config config = {
+                .phyMode = phyMode,
+                .outputPower = outputPower,
 
-      #ifdef IOT_NODE_LINK_WIFI
-        .credentials = credentials,
-      #endif
+#ifdef IOT_NODE_IP_STATIC
+                .interfaceConfig = interfaceConfig,
+#endif
 
-      .timings = timings
-    };
-  #endif
+#ifdef IOT_NODE_LINK_WIFI
+                .credentials = credentials,
+#endif
 
-  extern Class link;
+                .timings = timings};
+#endif
 
-  void update();
+            extern Class link;
 
-  #ifdef IOT_NODE_ESP32
-    void task(void *parameter);
-  #endif
+            void update();
 
-  void setup();
-}
+#ifdef IOT_NODE_ESP32
+            void task(void *parameter);
+#endif
 
-} // section namespace
+            void setup();
+        }
+
+    } // section namespace
 } // project namespace

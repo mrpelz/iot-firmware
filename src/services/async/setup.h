@@ -8,14 +8,17 @@
 #include "../../utils/udp/setup.h"
 #include "./main.h"
 
-namespace IotNode {
-namespace Services {
+namespace IotNode
+{
+  namespace Services
+  {
 
-namespace Async {
-  void setup();
-}
+    namespace Async
+    {
+      void setup();
+    }
 
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

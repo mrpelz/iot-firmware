@@ -6,18 +6,21 @@
 
 #include "./log.h"
 
-namespace IotNode {
-namespace Utils {
+namespace IotNode
+{
+  namespace Utils
+  {
 
-namespace OTA {
-  void update();
+    namespace OTA
+    {
+      void update();
 
-  #ifdef IOT_NODE_ESP32
-    void task(void *parameter);
-  #endif
+#ifdef IOT_NODE_ESP32
+      void task(void *parameter);
+#endif
 
-  void setup();
-}
+      void setup();
+    }
 
-} // section namespace
+  } // section namespace
 } // project namespace

@@ -10,16 +10,19 @@
 #include "../../utils/udp/setup.h"
 #include "../event-ids.h"
 
-namespace IotNode {
-namespace Events {
+namespace IotNode
+{
+  namespace Events
+  {
 
-namespace EspNowGw {
-  void event(std::vector<uint8_t> payload);
+    namespace EspNowGw
+    {
+      void event(std::vector<uint8_t> payload);
 
-  void onDataReceived(const uint8_t *mac, const uint8_t *incomingData, int length);
-}
+      void onDataReceived(const uint8_t *mac, const uint8_t *incomingData, int length);
+    }
 
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

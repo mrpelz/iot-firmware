@@ -2,54 +2,62 @@
 
 #include "./main.h"
 
-namespace IotNode {
-namespace Services {
+namespace IotNode
+{
+  namespace Services
+  {
 
-namespace Async {
-  Utils::UDP::RespondCallback respondCallback = NULL;
-  TaskHandle_t taskHandle = NULL;
+    namespace Async
+    {
+      Utils::UDP::RespondCallback respondCallback = NULL;
+      TaskHandle_t taskHandle = NULL;
 
-  void initializer() {
-    xTaskCreatePinnedToCore(
-      responseTask,
-      "async_handling",
-      2048,
-      NULL,
-      1,
-      &taskHandle,
-      CONFIG_ARDUINO_RUNNING_CORE
-    );
-  }
-
-  void responseTask(void *parameter) {
-    for(;;) {
-      if (respondCallback == NULL) {
-        vTaskSuspend(NULL);
-        continue;
+      void initializer()
+      {
+        xTaskCreatePinnedToCore(
+            responseTask,
+            "async_handling",
+            2048,
+            NULL,
+            1,
+            &taskHandle,
+            CONFIG_ARDUINO_RUNNING_CORE);
       }
 
-      vTaskDelay(ASYNC_RESPONSE_DELAY / portTICK_PERIOD_MS);
+      void responseTask(void *parameter)
+      {
+        for (;;)
+        {
+          if (respondCallback == NULL)
+          {
+            vTaskSuspend(NULL);
+            continue;
+          }
 
-      #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("async-service", "sending delayed response");
-      #endif
+          vTaskDelay(ASYNC_RESPONSE_DELAY / portTICK_PERIOD_MS);
 
-      respondCallback({ 0x0a, 0x0b, 0x0c });
-      respondCallback = NULL;
+#ifdef IOT_NODE_LOGGING
+          Utils::Log::debug("async-service", "sending delayed response");
+#endif
+
+          respondCallback({0x0a, 0x0b, 0x0c});
+          respondCallback = NULL;
+        }
+      }
+
+      void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer)
+      {
+#ifdef IOT_NODE_LOGGING
+        Utils::Log::debug("async-service", "got request");
+#endif
+
+        respondCallback = respond;
+        if (taskHandle != NULL)
+          vTaskResume(taskHandle);
+      }
     }
-  }
 
-  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer) {
-    #ifdef IOT_NODE_LOGGING
-      Utils::Log::debug("async-service", "got request");
-    #endif
-
-    respondCallback = respond;
-    if (taskHandle != NULL) vTaskResume(taskHandle);
-  }
-}
-
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

@@ -4,14 +4,17 @@
 
 #include "./main.h"
 
-namespace IotNode {
-namespace Utils {
+namespace IotNode
+{
+  namespace Utils
+  {
 
-namespace UDP {
-  extern Class instance;
+    namespace UDP
+    {
+      extern Class instance;
 
-  void setup();
-}
+      void setup();
+    }
 
-} // section namespace
+  } // section namespace
 } // project namespace

@@ -9,18 +9,21 @@
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"
 
-namespace IotNode {
-namespace Services {
+namespace IotNode
+{
+  namespace Services
+  {
 
-namespace Mhz19 {
-  void initializer();
+    namespace Mhz19
+    {
+      void initializer();
 
-  void responseTask(void *parameter);
+      void responseTask(void *parameter);
 
-  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
-}
+      void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
+    }
 
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

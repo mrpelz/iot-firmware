@@ -7,24 +7,27 @@
 #include "../../utils/udp/setup.h"
 #include "./main.h"
 
-namespace IotNode {
-namespace Events {
+namespace IotNode
+{
+  namespace Events
+  {
 
-namespace Input {
-  void update();
+    namespace Input
+    {
+      void update();
 
-  #ifdef IOT_NODE_ESP32
-    void task(void *parameter);
-  #endif
+#ifdef IOT_NODE_ESP32
+      void task(void *parameter);
+#endif
 
-  void setup();
+      void setup();
 
-  #ifdef IOT_NODE_ESP_NOW_NODE
-    void setupEspNow();
-  #endif
-}
+#ifdef IOT_NODE_ESP_NOW_NODE
+      void setupEspNow();
+#endif
+    }
 
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

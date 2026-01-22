@@ -6,15 +6,18 @@
 #include "../../utils/udp/main.h"
 #include "../service-ids.h"
 
-namespace IotNode {
-namespace Services {
+namespace IotNode
+{
+  namespace Services
+  {
 
-namespace Output {
-  Utils::UDP::Service makeService(Utils::Output::Regular *output, uint8_t index);
-  Utils::UDP::Service makeService(Utils::Output::Pulse *output, uint8_t index);
-}
+    namespace Output
+    {
+      Utils::UDP::Service makeService(Utils::Output::Regular *output, uint8_t index);
+      Utils::UDP::Service makeService(Utils::Output::Pulse *output, uint8_t index);
+    }
 
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

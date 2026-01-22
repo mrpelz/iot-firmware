@@ -6,32 +6,35 @@
 
 #include "./main.h"
 
-namespace IotNode {
-namespace Utils {
+namespace IotNode
+{
+      namespace Utils
+      {
 
-namespace Indicator {
-  #if defined(IOT_NODE_BOARD_ROOM_SENSOR)
-    extern ClassExpander indicator0;
-    extern ClassExpander indicator1;
-    extern ClassExpander indicator2;
-  #else
-    extern ClassPin indicator0;
-  #endif
+            namespace Indicator
+            {
+#if defined(IOT_NODE_BOARD_ROOM_SENSOR)
+                  extern ClassExpander indicator0;
+                  extern ClassExpander indicator1;
+                  extern ClassExpander indicator2;
+#else
+                  extern ClassPin indicator0;
+#endif
 
-  #ifdef IOT_NODE_BOARD_H801
-    extern Class indicator1;
-  #endif
+#ifdef IOT_NODE_BOARD_H801
+                  extern Class indicator1;
+#endif
 
-  void update();
+                  void update();
 
-  #ifdef IOT_NODE_ESP32
-    void task(void *parameter);
-  #endif
+#ifdef IOT_NODE_ESP32
+                  void task(void *parameter);
+#endif
 
-  void setup();
-}
+                  void setup();
+            }
 
-} // section namespace
+      } // section namespace
 } // project namespace
 
 #endif

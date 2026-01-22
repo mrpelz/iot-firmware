@@ -18,18 +18,21 @@
 
 #define ROOM_SENSOR_BUZZER 7
 
-namespace IotNode {
-namespace Utils {
+namespace IotNode
+{
+  namespace Utils
+  {
 
-namespace Sx1509 {
-  extern bool working;
+    namespace Sx1509
+    {
+      extern bool working;
 
-  extern SX1509 io;
+      extern SX1509 io;
 
-  void setup();
-}
+      void setup();
+    }
 
-} // section namespace
+  } // section namespace
 } // project namespace
 
 #endif
