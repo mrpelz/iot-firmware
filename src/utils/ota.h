@@ -14,11 +14,6 @@ namespace IotNode
     namespace OTA
     {
       void update();
-
-#ifdef IOT_NODE_ESP32
-      void task(void *parameter);
-#endif
-
       void setup();
     }
 

@@ -198,9 +198,9 @@ void loop()
 #else
   IotNode::Utils::Keepalive::update();
   IotNode::Utils::Link::update();
+#endif
+#endif
   IotNode::Utils::OTA::update();
-#endif
-#endif
 #ifdef IOT_NODE_ESP32
   vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
 #endif

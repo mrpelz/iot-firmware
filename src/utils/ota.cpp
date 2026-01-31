@@ -12,17 +12,6 @@ namespace IotNode
         ArduinoOTA.handle();
       }
 
-#ifdef IOT_NODE_ESP32
-      void task(void *parameter)
-      {
-        for (;;)
-        {
-          update();
-          vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
-        }
-      }
-#endif
-
       void setup()
       {
         ArduinoOTA.setHostname(IOT_NODE_NAME);
@@ -64,17 +53,6 @@ namespace IotNode
                                Log::debug("ota.error", "end");
 #endif
                            });
-
-#ifdef IOT_NODE_ESP32
-        xTaskCreatePinnedToCore(
-            task,
-            "ota_maintenance",
-            2048,
-            NULL,
-            3,
-            NULL,
-            CONFIG_ARDUINO_RUNNING_CORE);
-#endif
       }
     }
 
