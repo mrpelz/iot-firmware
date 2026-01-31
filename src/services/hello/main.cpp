@@ -2,111 +2,111 @@
 
 namespace IotNode
 {
-        namespace Services
-        {
+  namespace Services
+  {
 
-                namespace Hello
-                {
-                        auto delimiter = String(",");
+    namespace Hello
+    {
+      auto delimiter = String(",");
 
-                        void addLineToRespone(Utils::UDP::Payload *response, String line)
-                        {
-                                response->insert(response->end(), line.begin(), line.end());
-                        }
+      void addLineToRespone(Utils::UDP::Payload *response, String line)
+      {
+        response->insert(response->end(), line.begin(), line.end());
+      }
 
-                        void addDelimiter(Utils::UDP::Payload *response)
-                        {
-                                response->insert(response->end(), delimiter.begin(), delimiter.end());
-                        }
+      void addDelimiter(Utils::UDP::Payload *response)
+      {
+        response->insert(response->end(), delimiter.begin(), delimiter.end());
+      }
 
-                        void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer)
-                        {
+      void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer)
+      {
 #ifdef IOT_NODE_LOGGING
-                                Utils::Log::debug("hello-service", "got request");
+        Utils::Log::debug("hello-service", "got request");
 #endif
 
-                                Utils::UDP::Payload response;
+        Utils::UDP::Payload response;
 
-                                addLineToRespone(&response, "HELLO");
-                                addDelimiter(&response);
+        addLineToRespone(&response, "HELLO");
+        addDelimiter(&response);
 
-                                addLineToRespone(&response, IOT_NODE_NAME);
-                                addDelimiter(&response);
+        addLineToRespone(&response, IOT_NODE_NAME);
+        addDelimiter(&response);
 
 #ifdef IOT_NODE_BOARD_NAME
-                                addLineToRespone(&response, IOT_NODE_BOARD_NAME);
+        addLineToRespone(&response, IOT_NODE_BOARD_NAME);
 #endif
-                                addDelimiter(&response);
+        addDelimiter(&response);
 
 #ifdef IOT_NODE_HARDWARE_NAME
-                                addLineToRespone(&response, IOT_NODE_HARDWARE_NAME);
+        addLineToRespone(&response, IOT_NODE_HARDWARE_NAME);
 #endif
-                                addDelimiter(&response);
+        addDelimiter(&response);
 
-                                addLineToRespone(&response, IOT_NODE_BUILD_GIT_REV);
-                                addDelimiter(&response);
+        addLineToRespone(&response, IOT_NODE_BUILD_GIT_REV);
+        addDelimiter(&response);
 
-                                addLineToRespone(&response, IOT_NODE_PIO_ENV);
-                                addDelimiter(&response);
+        addLineToRespone(&response, IOT_NODE_PIO_ENV);
+        addDelimiter(&response);
 
-                                addLineToRespone(&response, IOT_NODE_PIO_PLATFORM);
-                                addDelimiter(&response);
+        addLineToRespone(&response, IOT_NODE_PIO_PLATFORM);
+        addDelimiter(&response);
 
-                                addLineToRespone(&response, IOT_NODE_PIO_FRAMEWORK);
-                                addDelimiter(&response);
+        addLineToRespone(&response, IOT_NODE_PIO_FRAMEWORK);
+        addDelimiter(&response);
 
 #ifdef IOT_NODE_ESP8266
-                                addLineToRespone(&response, String(ESP.getChipId(), HEX));
+        addLineToRespone(&response, String(ESP.getChipId(), HEX));
 #endif
-                                addDelimiter(&response);
+        addDelimiter(&response);
 
 #ifdef IOT_NODE_ESP8266
-                                addLineToRespone(&response, String(ESP.getFlashChipId(), HEX));
+        addLineToRespone(&response, String(ESP.getFlashChipId(), HEX));
 #endif
-                                addDelimiter(&response);
+        addDelimiter(&response);
 
 #ifdef IOT_NODE_LINK_ETH
-                                addLineToRespone(&response, ETH.macAddress());
+        addLineToRespone(&response, ETH.macAddress());
 #endif
-                                addDelimiter(&response);
+        addDelimiter(&response);
 
-                                addLineToRespone(&response, WiFi.macAddress());
-                                addDelimiter(&response);
-
-#ifdef IOT_NODE_LINK_WIFI
-                                addLineToRespone(&response, Utils::Link::printMacAddress(WiFi.BSSID()));
-#endif
-                                addDelimiter(&response);
+        addLineToRespone(&response, WiFi.macAddress());
+        addDelimiter(&response);
 
 #ifdef IOT_NODE_LINK_WIFI
-                                addLineToRespone(&response, String(WiFi.channel()));
+        addLineToRespone(&response, Utils::Link::printMacAddress(WiFi.BSSID()));
 #endif
-                                addDelimiter(&response);
+        addDelimiter(&response);
 
 #ifdef IOT_NODE_LINK_WIFI
-                                addLineToRespone(&response, String(WiFi.RSSI()));
+        addLineToRespone(&response, String(WiFi.channel()));
 #endif
-                                addDelimiter(&response);
+        addDelimiter(&response);
+
+#ifdef IOT_NODE_LINK_WIFI
+        addLineToRespone(&response, String(WiFi.RSSI()));
+#endif
+        addDelimiter(&response);
 
 #if defined(IOT_NODE_LINK_WIFI) && defined(IOT_NODE_ESP8266)
-                                addLineToRespone(&response, String(WiFi.getPhyMode()));
+        addLineToRespone(&response, String(WiFi.getPhyMode()));
 #endif
-                                addDelimiter(&response);
+        addDelimiter(&response);
 
 #ifdef IOT_NODE_LINK_WIFI
-                                addLineToRespone(&response, WiFi.SSID());
+        addLineToRespone(&response, WiFi.SSID());
 #endif
-                                addDelimiter(&response);
+        addDelimiter(&response);
 
-                                addLineToRespone(&response, "BYE");
+        addLineToRespone(&response, "BYE");
 
 #ifdef IOT_NODE_LOGGING
-                                Utils::Log::debug("hello-service", "sending response");
+        Utils::Log::debug("hello-service", "sending response");
 #endif
 
-                                respond(response);
-                        }
-                }
+        respond(response);
+      }
+    }
 
-        } // section namespace
+  } // section namespace
 } // project namespace
