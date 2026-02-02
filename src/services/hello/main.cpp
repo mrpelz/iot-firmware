@@ -58,6 +58,9 @@ namespace IotNode
 #ifdef IOT_NODE_ESP8266
         addLineToRespone(&response, String(ESP.getChipId(), HEX));
 #endif
+#ifdef IOT_NODE_ESP32
+        addLineToRespone(&response, String(ESP.getEfuseMac(), HEX));
+#endif
         addDelimiter(&response);
 
 #ifdef IOT_NODE_ESP8266
@@ -95,6 +98,11 @@ namespace IotNode
 
 #ifdef IOT_NODE_LINK_WIFI
         addLineToRespone(&response, WiFi.SSID());
+#endif
+        addDelimiter(&response);
+
+#ifdef IOT_NODE_ESP32
+        addLineToRespone(&response, String(temperatureRead()));
 #endif
         addDelimiter(&response);
 
