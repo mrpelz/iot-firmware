@@ -2,32 +2,32 @@
 
 #include <Arduino.h>
 
-// #include "../output/setup.h"
+#include "../output/setup.h"
 #include "../udp/setup.h"
 #include "./main.h"
 
 namespace IotNode
 {
-      namespace Utils
-      {
+  namespace Utils
+  {
 
-            namespace Keepalive
-            {
-                  extern Class keepalive;
-                  extern Class eventPeer;
+    namespace Keepalive
+    {
+      extern Class keepalive;
+      extern Class eventPeer;
 
 #ifdef IOT_NODE_POWER_CYCLE_PROTECTION
-                  extern Class powerCycleProtection;
+      extern Class powerCycleProtection;
 #endif
 
-                  void update();
+      void update();
 
 #ifdef IOT_NODE_ESP32
-                  void task(void *parameter);
+      void task(void *parameter);
 #endif
 
-                  void setup();
-            }
+      void setup();
+    }
 
-      } // section namespace
+  } // section namespace
 } // project namespace
