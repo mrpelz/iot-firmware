@@ -17,11 +17,13 @@ namespace IotNode
       Class input2(14, true, 50);
 #elif defined(IOT_NODE_BOARD_MOTION_SENSOR)
       Class input0(1, true, 50);
+#elif defined(IOT_NODE_BOARD_SHELLY1)
+      Class input0(3, true, 50);
 #endif
 
       void update()
       {
-#if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE) || defined(IOT_NODE_BOARD_MOTION_SENSOR)
+#if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE) || defined(IOT_NODE_BOARD_MOTION_SENSOR) || defined(IOT_NODE_BOARD_SHELLY1)
         input0.update();
 #elif defined(IOT_NODE_BOARD_ESP_NOW_TEST_WINDOW_SENSOR)
         input0.update();
@@ -43,7 +45,7 @@ namespace IotNode
 
       void setup()
       {
-#if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE) || defined(IOT_NODE_BOARD_MOTION_SENSOR)
+#if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE) || defined(IOT_NODE_BOARD_MOTION_SENSOR) || defined(IOT_NODE_BOARD_SHELLY1)
         auto event0 = makeEvent(&Utils::UDP::instance, 0);
         input0.setChangeCallback(event0);
         input0.start();
@@ -76,7 +78,7 @@ namespace IotNode
 #ifdef IOT_NODE_ESP_NOW_NODE
       void setupEspNow()
       {
-#if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE) || defined(IOT_NODE_BOARD_MOTION_SENSOR)
+#if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE) || defined(IOT_NODE_BOARD_MOTION_SENSOR) || defined(IOT_NODE_BOARD_SHELLY1)
         auto event0 = makeEspNowEvent(0);
         input0.setChangeCallback(event0);
         input0.start();
