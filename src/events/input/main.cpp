@@ -9,11 +9,12 @@ namespace IotNode
 
     namespace Input
     {
-      Class::Class(uint8_t _pin, bool _pullup, unsigned long _debounceTime)
+      Class::Class(uint8_t _pin, bool _pullup, unsigned long _debounceTime, unsigned long _noiseGateTime)
       {
         pin = _pin;
         pullup = _pullup;
         debounceTime = _debounceTime;
+        noiseGateTime = _noiseGateTime;
       }
 
       void Class::setChangeCallback(ChangeCallback callback)
@@ -40,13 +41,37 @@ namespace IotNode
           return;
 
         auto now = millis();
-        auto timeSinceDownChange = now - state.changeTime;
-        if (!force && timeSinceDownChange < debounceTime)
-          return;
-        state.changeTime = now;
 
-        bool down = digitalRead(pin);
-        bool downChanged = force || down != state.down;
+        auto down = digitalRead(pin);
+
+        if (!force && noiseGateTime)
+        {
+          if (!state.noiseGateTime && down)
+          {
+            state.noiseGateTime = now;
+            return;
+          }
+
+          auto timeSinceNoiseGateBegin = now - state.noiseGateTime;
+          if (timeSinceNoiseGateBegin < noiseGateTime && down)
+          {
+            return;
+          }
+
+          if (state.noiseGateTime && !down)
+          {
+            state.noiseGateTime = 0;
+            return;
+          }
+
+          state.noiseGateTime = 0;
+        }
+
+        auto timeSinceLastChange = now - state.changeTime;
+        if (!force && timeSinceLastChange < debounceTime)
+          return;
+
+        bool downChanged = down != state.down;
 
         if (downChanged)
         {

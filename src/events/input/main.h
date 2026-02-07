@@ -24,6 +24,7 @@ namespace IotNode
         bool running = false;
         bool down = false;
         unsigned long changeTime = 0;
+        unsigned long noiseGateTime;
         ChangeCallback changeCallback = [](bool down) {};
       };
 
@@ -33,10 +34,11 @@ namespace IotNode
         uint8_t pin;
         bool pullup;
         unsigned long debounceTime;
+        unsigned long noiseGateTime;
         State state;
 
       public:
-        Class(uint8_t _pin, bool _pullup, unsigned long _debounceTime);
+        Class(uint8_t _pin, bool _pullup, unsigned long _debounceTime, unsigned long _noiseGateTime);
         void setChangeCallback(ChangeCallback callback);
         void start();
         void update();

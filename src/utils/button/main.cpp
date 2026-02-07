@@ -89,12 +89,11 @@ namespace IotNode
           state.noiseGateTime = 0;
         }
 
-        bool downChanged = down != state.down;
-
         auto timeSinceLastChange = now - state.changeTime;
         if (timeSinceLastChange < config.debounceTime)
           return;
 
+        bool downChanged = down != state.down;
         auto longpressChanged = false;
 
         if (!down || (down && downChanged))

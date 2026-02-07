@@ -10,15 +10,15 @@ namespace IotNode
     namespace Input
     {
 #if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_TEST_DEVICE)
-      Class input0(39, true, 50);
+      Class input0(39, true, 50, 0);
 #elif defined(IOT_NODE_BOARD_ESP_NOW_TEST_WINDOW_SENSOR)
-      Class input0(12, true, 50);
-      Class input1(13, true, 50);
-      Class input2(14, true, 50);
+      Class input0(12, true, 50, 0);
+      Class input1(13, true, 50, 0);
+      Class input2(14, true, 50, 0);
 #elif defined(IOT_NODE_BOARD_MOTION_SENSOR)
-      Class input0(1, true, 50);
+      Class input0(1, true, 50, 0);
 #elif defined(IOT_NODE_BOARD_SHELLY1)
-      Class input0(3, true, 50);
+      Class input0(3, true, 50, 100);
 #endif
 
       void update()
