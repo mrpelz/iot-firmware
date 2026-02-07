@@ -18,7 +18,7 @@ namespace IotNode
 #elif defined(IOT_NODE_BOARD_MOTION_SENSOR)
       Class input0(1, true, 50, 0);
 #elif defined(IOT_NODE_BOARD_SHELLY1) && defined(IOT_NODE_INPUT_NOISE_GATE)
-      Class input0(3, true, 50, 2100);
+      Class input0(3, true, 50, 3000);
 #elif defined(IOT_NODE_BOARD_SHELLY1)
       Class input0(3, true, 50, 0);
 #endif
