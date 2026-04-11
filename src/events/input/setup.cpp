@@ -15,13 +15,13 @@ namespace IotNode
       Class input0(12, true, 50, 0);
       Class input1(13, true, 50, 0);
       Class input2(14, true, 50, 0);
-#elif defined(IOT_NODE_BOARD_MOTION_SENSOR)
-      Class input0(7, false, 0, 0);
-      Class input1(8, false, 0, 0);
-      Class input2(9, false, 0, 0);
-      Class input3(10, false, 0, 0);
-      Class input4(11, false, 0, 0);
-      Class input5(12, false, 0, 0);
+#elif defined(IOT_NODE_BOARD_MOTION_SENSOR_SIMPLE)
+      Class input0(7, true, 0, 0);
+      Class input1(8, true, 0, 0);
+      Class input2(9, true, 0, 0);
+      Class input3(10, true, 0, 0);
+      Class input4(11, true, 0, 0);
+      Class input5(12, true, 0, 0);
 #elif defined(IOT_NODE_BOARD_SHELLY1) && defined(IOT_NODE_INPUT_NOISE_GATE)
       Class input0(3, true, 50, 3000);
 #elif defined(IOT_NODE_BOARD_SHELLY1)
@@ -36,7 +36,7 @@ namespace IotNode
         input0.update();
         input1.update();
         input2.update();
-#elif defined(IOT_NODE_BOARD_MOTION_SENSOR)
+#elif defined(IOT_NODE_BOARD_MOTION_SENSOR_SIMPLE)
         input0.update();
         input1.update();
         input2.update();
@@ -75,7 +75,7 @@ namespace IotNode
         auto event2 = makeEvent(&Utils::UDP::instance, 2);
         input2.setChangeCallback(event2);
         input2.start();
-#elif defined(IOT_NODE_BOARD_MOTION_SENSOR)
+#elif defined(IOT_NODE_BOARD_MOTION_SENSOR_SIMPLE)
         auto event0 = makeEvent(&Utils::UDP::instance, 0);
         input0.setChangeCallback(event0);
         input0.start();
@@ -136,7 +136,7 @@ namespace IotNode
         input0.update(true);
         input1.update(true);
         input2.update(true);
-#elif defined(IOT_NODE_BOARD_MOTION_SENSOR)
+#elif defined(IOT_NODE_BOARD_MOTION_SENSOR_SIMPLE)
         auto event0 = makeEspNowEvent(0);
         auto event1 = makeEspNowEvent(1);
         auto event2 = makeEspNowEvent(2);

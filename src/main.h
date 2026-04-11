@@ -27,6 +27,10 @@
 #include "./events/input/setup.h"
 #endif
 
+#ifdef IOT_NODE_HMMD_MOTION
+#include "./events/hmmd-motion/setup.h"
+#endif
+
 #ifdef IOT_NODE_RF_433
 #include "./events/rf-433/setup.h"
 #endif

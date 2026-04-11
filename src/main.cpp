@@ -102,6 +102,10 @@ void setup()
   IotNode::Events::Input::setup();
 #endif
 
+#ifdef IOT_NODE_HMMD_MOTION
+  IotNode::Events::HmmdMotion::setup();
+#endif
+
 #ifdef IOT_NODE_RF_433
   IotNode::Events::Rf433::setup();
 #endif
@@ -199,6 +203,10 @@ void loop()
   IotNode::Utils::Keepalive::update();
   IotNode::Utils::Link::update();
 #endif
+#endif
+
+#ifdef IOT_NODE_HMMD_MOTION
+  IotNode::Events::HmmdMotion::update();
 #endif
 
   IotNode::Utils::OTA::update();
