@@ -20,7 +20,7 @@ namespace IotNode
       Class input1(8, true, 0, 0);
       Class input2(9, true, 0, 0);
 #elif defined(IOT_NODE_BOARD_SHELLY1)
-      Class input0(3, true, 0, 0);
+      Class input0(3, true, 0, 300);
 #endif
 
       void update()
