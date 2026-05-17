@@ -8,33 +8,41 @@
 
 namespace IotNode
 {
-      namespace Utils
-      {
+  namespace Utils
+  {
 
-            namespace Indicator
-            {
+    namespace Indicator
+    {
+#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
+      extern ESP32_WS2812 ws2812Bus0;
+#endif
+
 #if defined(IOT_NODE_BOARD_ROOM_SENSOR)
-                  extern ClassExpander indicator0;
-                  extern ClassExpander indicator1;
-                  extern ClassExpander indicator2;
+      extern ClassExpander indicator0;
+      extern ClassExpander indicator1;
+      extern ClassExpander indicator2;
+#elif defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO)
+      extern ClassWS2812 indicator0;
+      extern ClassWS2812 indicator1;
+      extern ClassWS2812 indicator2;
 #else
-                  extern ClassPin indicator0;
+      extern ClassPin indicator0;
 #endif
 
 #ifdef IOT_NODE_BOARD_H801
-                  extern Class indicator1;
+      extern ClassPin indicator1;
 #endif
 
-                  void update();
+      void update();
 
 #ifdef IOT_NODE_ESP32
-                  void task(void *parameter);
+      void task(void *parameter);
 #endif
 
-                  void setup();
-            }
+      void setup();
+    }
 
-      } // section namespace
+  } // section namespace
 } // project namespace
 
 #endif

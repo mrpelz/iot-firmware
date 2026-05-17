@@ -48,6 +48,11 @@ namespace IotNode
 
 #ifdef IOT_NODE_INDICATORS
                        Indicator::indicator0.setOn(false);
+
+#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
+                       Indicator::indicator1.blink(3);
+#endif
+
 #endif
                      });
 

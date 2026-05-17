@@ -10,6 +10,10 @@
 #include "../sx1509/setup.h"
 #endif
 
+#ifdef IOT_NODE_WS2812
+#include <ESP32_WS2812_Lib.h>
+#endif
+
 #define INDICATOR_BLINK_PERIOD_ON 64
 #define INDICATOR_BLINK_PERIOD_OFF 128
 
@@ -67,6 +71,7 @@ namespace IotNode
         void update();
       };
 
+#ifdef IOT_NODE_SX1509
       class ClassExpander
       {
       private:
@@ -85,7 +90,32 @@ namespace IotNode
         void toggle();
         void update();
       };
+#endif
+
+#ifdef IOT_NODE_WS2812
+      class ClassWS2812
+      {
+      private:
+        Config config;
+        State state;
+        ESP32_WS2812 *bus;
+        int busIndex;
+        uint8_t busOffset;
+        void commit();
+
+      public:
+        ClassWS2812(Config _config, ESP32_WS2812 *_bus);
+        bool isOn();
+        void blink(uint8_t count);
+        void blink(void);
+        void init();
+        void setBlinkFrequency(unsigned long blinkPeriodOn, unsigned long blinkPeriodOff);
+        void setOn(bool on);
+        void toggle();
+        void update();
+      };
     }
+#endif
 
   } // section namespace
 } // project namespace

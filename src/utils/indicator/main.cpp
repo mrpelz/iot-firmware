@@ -265,6 +265,142 @@ namespace IotNode
       }
 
 #endif
+
+#ifdef IOT_NODE_WS2812
+
+      ClassWS2812::ClassWS2812(Config _config, ESP32_WS2812 *_bus)
+      {
+        config = _config;
+        bus = _bus;
+        busIndex = config.pin / 3;
+        busOffset = config.pin % 3;
+      }
+
+      void ClassWS2812::commit()
+      {
+        if (!state.wasInitialized)
+          return;
+
+        auto effectiveOn = config.invert ? !state.on : state.on;
+
+        auto oldValue = bus->getLedColorData(busIndex);
+        uint8_t r = busOffset == 0 ? effectiveOn : oldValue >> 16;
+        uint8_t g = busOffset == 1 ? effectiveOn : oldValue >> 8;
+        uint8_t b = busOffset == 2 ? effectiveOn : oldValue;
+
+        uint32_t newValue = r << 16 | g << 8 | b;
+        bus->setLedColor(busIndex, newValue);
+      }
+
+      bool ClassWS2812::isOn()
+      {
+        return state.on;
+      }
+
+      void ClassWS2812::blink()
+      {
+#ifdef IOT_NODE_LOGGING
+        Log::debug("indicator.blink", "infinite");
+        Log::debug("indicator.pin", String(config.pin));
+#endif
+
+        state.on = false;
+
+        state.blinkChange = millis();
+        state.blinkCount = 0;
+        state.blinkInfinite = true;
+      }
+
+      void ClassWS2812::blink(uint8_t count)
+      {
+#ifdef IOT_NODE_LOGGING
+        Log::debug("indicator.blink", String(count));
+        Log::debug("indicator.pin", String(config.pin));
+#endif
+
+        state.on = false;
+
+        state.blinkChange = millis();
+        state.blinkCount = count * 2;
+        state.blinkInfinite = false;
+      }
+
+      void ClassWS2812::init()
+      {
+#ifdef IOT_NODE_LOGGING
+        Log::debug("indicator", "init");
+        Log::debug("indicator.pin", String(config.pin));
+#endif
+
+        state.wasInitialized = true;
+
+        commit();
+      }
+
+      void ClassWS2812::setBlinkFrequency(unsigned long blinkPeriodOn, unsigned long blinkPeriodOff)
+      {
+        config.blinkPeriodOn = blinkPeriodOn;
+        config.blinkPeriodOff = blinkPeriodOff;
+      }
+
+      void ClassWS2812::setOn(bool on)
+      {
+#ifdef IOT_NODE_LOGGING
+        Log::debug("indicator.set-on", on ? "on" : "off");
+        Log::debug("indicator.pin", String(config.pin));
+#endif
+
+        state.on = on;
+
+        // abort blink
+        state.blinkCount = 0;
+        state.blinkInfinite = false;
+
+        commit();
+      }
+
+      void ClassWS2812::toggle()
+      {
+#ifdef IOT_NODE_LOGGING
+        Log::debug("indicator.toggle", state.on ? "on2off" : "off2on");
+        Log::debug("indicator.pin", String(config.pin));
+#endif
+
+        state.on = !state.on;
+
+        // abort blink
+        state.blinkCount = 0;
+        state.blinkInfinite = false;
+
+        commit();
+      }
+
+      void ClassWS2812::update()
+      {
+        if (!state.blinkCount && !state.blinkInfinite)
+          return;
+
+        unsigned long now = millis();
+        unsigned long timeSinceLastBlink = now - state.blinkChange;
+        unsigned long relevantBlinkPeriod = state.on
+                                                ? config.blinkPeriodOn
+                                                : config.blinkPeriodOff;
+
+        if (timeSinceLastBlink < relevantBlinkPeriod)
+          return;
+
+        state.blinkChange = now;
+        state.on = !state.on;
+
+        if (!state.blinkInfinite)
+        {
+          state.blinkCount = state.blinkCount - 1;
+        }
+
+        commit();
+      }
+
+#endif
     }
 
   } // section namespace
