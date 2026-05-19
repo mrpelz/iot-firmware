@@ -1,0 +1,192 @@
+#pragma once
+
+#ifdef IOT_NODE_INDICATORS
+
+#include <Arduino.h>
+#include <cmath>
+#include <vector>
+#include "../log.h"
+
+#ifdef IOT_NODE_SX1509
+#include "../sx1509/setup.h"
+#endif
+
+#ifdef IOT_NODE_WS2812
+#include <ESP32_WS2812_Lib.h>
+#endif
+
+#define OUTPUT_BLINK_PERIOD_ON 500
+#define OUTPUT_BLINK_PERIOD_OFF 500
+#define OUTPUT_ITERATE_INFINITE 0xffffffff
+#define OUTPUT_RAMP_THROTTLE 50
+#define OUTPUT_DIMMABLE_FREQUENCY 5000
+#define OUTPUT_DIMMABLE_RESOLUTION 12
+#define OUTPUT_DIMMABLE_GAMMA 2.2
+#define OUTPUT_DIMMABLE_RAMP_TIME 30000
+
+constexpr unsigned long outputDimmableFull = (1 << OUTPUT_DIMMABLE_RESOLUTION) - 1;
+
+namespace IotNode
+{
+  namespace Utils
+  {
+
+    namespace OutputNg
+    {
+      double gamma(double input, double gamma);
+
+      template <typename T>
+      struct SequenceItem
+      {
+        T value;
+        unsigned long holdTime;
+      };
+
+      template <typename T>
+      struct Request
+      {
+        unsigned long iterations;
+        std::vector<SequenceItem<T>> sequence;
+      };
+
+      template <typename T>
+      struct State
+      {
+        unsigned long iterations = 0;
+        bool isInitialized = false;
+        unsigned long nextSequenceStep = 0;
+        std::vector<SequenceItem<T>> sequence = {};
+        size_t sequencePointer = 0;
+      };
+
+      template <typename T>
+      class Base
+      {
+      private:
+        std::function<void(T value)> _onCommit;
+        std::function<void()> _onInit;
+
+      protected:
+        State<T> _state;
+        virtual void commit();
+        void reset();
+
+      public:
+        T value;
+        T previousValue;
+        Base(std::function<void()> onInit, std::function<void(T value)> onCommit, T initialValue);
+        void init();
+        void set(T value);
+        void setSequence(Request<T> request);
+        void update();
+      };
+
+      class Buzzer : public Base<unsigned long>
+      {
+      public:
+        Buzzer(char pin);
+      };
+
+      class Binary : public Base<bool>
+      {
+      public:
+        Binary(char pin, bool invert);
+        Binary(std::function<void()> onInit, std::function<void(bool value)> onCommit);
+        void blink(unsigned long count);
+        void blink(void);
+        void setOff();
+        void setOn();
+      };
+
+      class BinaryPulse : public Binary
+      {
+      public:
+        BinaryPulse(char pinOn, char pinOff, bool invert, char pulseTime);
+      };
+
+      class Ramp
+      {
+      private:
+        unsigned long _throttle;
+        unsigned long _duration = 0;
+        unsigned long _lastUpdate = 0;
+        unsigned long _startTime = 0;
+        std::function<void()> _onUpdate = NULL;
+
+      public:
+        double progress = 0;
+        Ramp(unsigned long throttle);
+        double getDelta(double startValue, double endValue);
+        void reset();
+        void set(unsigned long duration, std::function<void()> onUpdate);
+        void update();
+      };
+
+      struct DimmableValue
+      {
+        unsigned long rampTime;
+        double value;
+      };
+
+      class Dimmable : public Base<DimmableValue>
+      {
+      protected:
+        Ramp _ramp;
+
+      public:
+        Dimmable(char pin, bool invert);
+        Dimmable(std::function<void()> onInit, std::function<void(DimmableValue value)> onCommit);
+        void blink(unsigned long count);
+        void blink(void);
+        void setOff();
+        void setOn();
+        void update();
+      };
+
+      struct DimmableRGBValue
+      {
+        unsigned long rampTime;
+        double r;
+        double g;
+        double b;
+      };
+
+      class DimmableRGB : public Base<DimmableRGBValue>
+      {
+      protected:
+        Ramp _ramp;
+
+      public:
+        DimmableRGB(char pinR, char pinG, char pinB, bool invert);
+        DimmableRGB(std::function<void()> onInit, std::function<void(DimmableRGBValue value)> onCommit);
+        void blink(unsigned long count);
+        void blink(void);
+        void blinkR(unsigned long count);
+        void blinkR(void);
+        void blinkG(unsigned long count);
+        void blinkG(void);
+        void blinkB(unsigned long count);
+        void blinkB(void);
+        void blinkRGB(unsigned long count);
+        void blinkRGB(void);
+        void blinkRGBInclusive(unsigned long count);
+        void blinkRGBInclusive(void);
+        void setOff();
+        void setOn();
+        void setR();
+        void setG();
+        void setB();
+        void update();
+      };
+
+      class DimmableRGBWS2812 : public DimmableRGB
+      {
+      public:
+        DimmableRGBWS2812(char index, ESP32_WS2812 *bus);
+      };
+    }
+
+  } // section namespace
+} // project namespace
+
+#endif

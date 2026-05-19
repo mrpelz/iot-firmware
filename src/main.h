@@ -105,6 +105,7 @@
 
 #ifdef IOT_NODE_INDICATORS
 #include "./utils/indicator/setup.h"
+#include "./utils/output-ng/setup.h"
 #endif
 
 #ifdef IOT_NODE_LED

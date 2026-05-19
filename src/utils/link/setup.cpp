@@ -46,13 +46,10 @@ namespace IotNode
                        ArduinoOTA.begin(true);
 #endif
 
+#ifndef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
 #ifdef IOT_NODE_INDICATORS
                        Indicator::indicator0.setOn(false);
-
-#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
-                       Indicator::indicator1.blink(3);
 #endif
-
 #endif
                      });
 
@@ -64,8 +61,10 @@ namespace IotNode
                               ArduinoOTA.end();
 #endif
 
+#ifndef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
 #ifdef IOT_NODE_INDICATORS
                               Indicator::indicator0.blink();
+#endif
 #endif
                             });
 

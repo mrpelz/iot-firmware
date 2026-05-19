@@ -13,19 +13,11 @@ namespace IotNode
 
     namespace Indicator
     {
-#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
-      extern ESP32_WS2812 ws2812Bus0;
-#endif
-
 #if defined(IOT_NODE_BOARD_ROOM_SENSOR)
       extern ClassExpander indicator0;
       extern ClassExpander indicator1;
       extern ClassExpander indicator2;
-#elif defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO)
-      extern ClassWS2812 indicator0;
-      extern ClassWS2812 indicator1;
-      extern ClassWS2812 indicator2;
-#else
+#elif !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO)
       extern ClassPin indicator0;
 #endif
 

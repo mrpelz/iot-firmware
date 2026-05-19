@@ -52,7 +52,10 @@ void setup()
 
 #ifdef IOT_NODE_INDICATORS
   IotNode::Utils::Indicator::setup();
+  IotNode::Utils::OutputNg::setup();
+#ifndef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
   IotNode::Utils::Indicator::indicator0.setOn(true);
+#endif
 #endif
 
 #ifdef IOT_NODE_LED
@@ -157,7 +160,9 @@ void setup()
   if (IotNode::Utils::Link::link.isConnected())
     return;
 
+#ifndef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
   IotNode::Utils::Indicator::indicator0.blink();
+#endif
 #endif
 }
 
@@ -168,6 +173,7 @@ void loop()
 
 #ifdef IOT_NODE_INDICATORS
   IotNode::Utils::Indicator::update();
+  IotNode::Utils::OutputNg::update();
 #endif
 
 #ifdef IOT_NODE_LED

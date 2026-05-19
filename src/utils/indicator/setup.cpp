@@ -63,33 +63,13 @@ namespace IotNode
                            INDICATOR_BLINK_PERIOD_OFF});
 #endif
 
-#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
-      ESP32_WS2812 ws2812Bus0 = ESP32_WS2812(1, 21, 0, TYPE_RGB);
-
-      ClassWS2812 indicator0({0,
-                              false,
-                              INDICATOR_BLINK_PERIOD_ON,
-                              INDICATOR_BLINK_PERIOD_OFF},
-                             &ws2812Bus0);
-
-      ClassWS2812 indicator1({1,
-                              false,
-                              INDICATOR_BLINK_PERIOD_ON,
-                              INDICATOR_BLINK_PERIOD_OFF},
-                             &ws2812Bus0);
-
-      ClassWS2812 indicator2({2,
-                              false,
-                              INDICATOR_BLINK_PERIOD_ON,
-                              INDICATOR_BLINK_PERIOD_OFF},
-                             &ws2812Bus0);
-#endif
-
       void update()
       {
+#ifndef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
         indicator0.update();
+#endif
 
-#if defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO)
+#ifdef IOT_NODE_BOARD_ROOM_SENSOR
         indicator1.update();
         indicator2.update();
 #endif
@@ -112,15 +92,8 @@ namespace IotNode
 
       void setup()
       {
-#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
-        ws2812Bus0.begin();
-#endif
-
+#ifndef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
         indicator0.init();
-
-#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
-        indicator1.init();
-        indicator2.init();
 #endif
 
 #if defined(IOT_NODE_BOARD_ROOM_SENSOR)
