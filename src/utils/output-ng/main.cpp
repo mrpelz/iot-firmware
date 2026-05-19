@@ -118,14 +118,185 @@ namespace IotNode
         _state.sequencePointer = 0;
       }
 
-      template class Base<unsigned long>;
-      Buzzer::Buzzer(char pin) : Base<unsigned long>([pin]()
-                                                     { ledcAttach(pin, 1, 1); },
-                                                     [pin](unsigned long value)
-                                                     {
-                                                       ledcWriteTone(pin, value);
-                                                     },
-                                                     0) {}
+      Ramp::Ramp(unsigned long throttle = OUTPUT_RAMP_THROTTLE)
+      {
+        _throttle = throttle;
+      }
+
+      double Ramp::getDelta(double startValue, double endValue)
+      {
+        auto delta = endValue - startValue;
+        return startValue + (delta * progress);
+      }
+
+      unsigned long Ramp::getDelta(unsigned long startValue, unsigned long endValue)
+      {
+        signed long delta = endValue - startValue;
+        return startValue + (delta * progress);
+      }
+
+      void Ramp::reset()
+      {
+        _duration = 0;
+        _lastUpdate = 0;
+        _onUpdate = NULL;
+        _startTime = 0;
+        progress = 0;
+      }
+
+      void Ramp::set(unsigned long duration, std::function<void()> onUpdate)
+      {
+        _duration = duration;
+        _onUpdate = onUpdate;
+        _startTime = millis();
+      }
+
+      void Ramp::update()
+      {
+        if (!_startTime || !_duration || !_onUpdate)
+          return;
+
+        auto now = millis();
+
+        if (_throttle)
+        {
+          auto timeSinceLastUpdate = now - _lastUpdate;
+          if (timeSinceLastUpdate < _throttle)
+            return;
+        }
+
+        _lastUpdate = now;
+        auto timeSinceStart = now - _startTime;
+
+        progress = (double)timeSinceStart / (double)_duration;
+        if (progress >= 1)
+        {
+          progress = 1;
+        }
+
+        _onUpdate();
+
+        if (progress == 1)
+        {
+          reset();
+        }
+      }
+
+      template class Base<DimmableValue<unsigned long>>;
+      Buzzer::Buzzer(char pin) : Base<DimmableValue<unsigned long>>([pin]() {},
+                                                                    [this, pin](DimmableValue<unsigned long> value)
+                                                                    {
+                                                                      if (value.rampTime)
+                                                                      {
+                                                                        _ramp.set(value.rampTime, [this, pin, value]()
+                                                                                  {
+                                                                                    auto effectiveValue = _ramp.getDelta(
+                                                                                        previousValue.value,
+                                                                                        value.value);
+
+                                                                                    if (effectiveValue)
+                                                                                    {
+                                                                                      ledcAttachChannel(
+                                                                                        pin,
+                                                                                        OUTPUT_BUZZER_DEFAULT_FREQUENCY,
+                                                                                        OUTPUT_BUZZER_LEDC_RESOLUTION,
+                                                                                        OUTPUT_BUZZER_LEDC_CHANNEL
+                                                                                      );
+                                                                                      ledcWriteTone(pin,
+                                                                                                    effectiveValue);
+
+                                                                                      return;
+                                                                                    }
+                                                                                    
+                                                                                    ledcDetach(pin); });
+
+                                                                        return;
+                                                                      }
+
+                                                                      if (value.value)
+                                                                      {
+                                                                        ledcAttachChannel(
+                                                                            pin,
+                                                                            OUTPUT_BUZZER_DEFAULT_FREQUENCY,
+                                                                            OUTPUT_BUZZER_LEDC_RESOLUTION,
+                                                                            OUTPUT_BUZZER_LEDC_CHANNEL);
+                                                                        ledcWriteTone(pin, value.value);
+
+                                                                        return;
+                                                                      }
+
+                                                                      ledcDetach(pin);
+                                                                    },
+                                                                    {.rampTime = 0,
+                                                                     .value = 0})
+      {
+        _ramp = Ramp(0);
+      }
+
+      void Buzzer::beep()
+      {
+        beep(OUTPUT_ITERATE_INFINITE);
+      }
+
+      void Buzzer::beep(unsigned long count)
+      {
+        beep(count, OUTPUT_BUZZER_DEFAULT_FREQUENCY);
+      }
+
+      void Buzzer::beep(unsigned long count, unsigned long frequency)
+      {
+        reset();
+        setSequence({.iterations = count,
+                     .sequence = {
+                         {
+                             .value = {
+                                 .rampTime = 0,
+                                 .value = frequency,
+                             },
+                             .holdTime = 125,
+                         },
+                         {
+                             .value = {
+                                 .rampTime = 0,
+                                 .value = 0,
+                             },
+                             .holdTime = 875,
+                         },
+                         {
+                             .value = {
+                                 .rampTime = 0,
+                                 .value = 300,
+                             },
+                             .holdTime = 875,
+                         },
+                         {
+                             .value = {
+                                 .rampTime = 3000,
+                                 .value = 10000,
+                             },
+                             .holdTime = 3125,
+                         },
+                         {
+                             .value = {
+                                 .rampTime = 3000,
+                                 .value = 300,
+                             },
+                             .holdTime = 3000,
+                         },
+                         {
+                             .value = {
+                                 .rampTime = 0,
+                                 .value = 0,
+                             },
+                             .holdTime = 875,
+                         }}});
+      }
+
+      void Buzzer::update()
+      {
+        _ramp.update();
+        Base::update();
+      }
 
       template class Base<bool>;
       Binary::Binary(
@@ -190,69 +361,14 @@ namespace IotNode
                                           digitalWrite(value ? pinOn : pinOff, invert);
                                         }) {}
 
-      Ramp::Ramp(unsigned long throttle = OUTPUT_RAMP_THROTTLE)
-      {
-        _throttle = throttle;
-      }
-
-      double Ramp::getDelta(double startValue, double endValue)
-      {
-        auto delta = endValue - startValue;
-        return startValue + (delta * progress);
-      }
-
-      void Ramp::reset()
-      {
-        _duration = 0;
-        _lastUpdate = 0;
-        _onUpdate = NULL;
-        _startTime = 0;
-        progress = 0;
-      }
-
-      void Ramp::set(unsigned long duration, std::function<void()> onUpdate)
-      {
-        _duration = duration;
-        _onUpdate = onUpdate;
-        _startTime = millis();
-      }
-
-      void Ramp::update()
-      {
-        if (!_startTime || !_duration || !_onUpdate || !_throttle)
-          return;
-
-        auto now = millis();
-
-        auto timeSinceLastUpdate = now - _lastUpdate;
-        if (timeSinceLastUpdate < _throttle)
-          return;
-
-        _lastUpdate = now;
-        auto timeSinceStart = now - _startTime;
-
-        progress = (double)timeSinceStart / (double)_duration;
-        if (progress >= 1)
-        {
-          progress = 1;
-        }
-
-        _onUpdate();
-
-        if (progress == 1)
-        {
-          reset();
-        }
-      }
-
-      template class Base<DimmableValue>;
-      Dimmable::Dimmable(char pin, bool invert) : Base<DimmableValue>(
+      template class Base<DimmableValue<double>>;
+      Dimmable::Dimmable(char pin, bool invert) : Base<DimmableValue<double>>(
                                                       [pin, invert]()
                                                       {
                                                         ledcAttach(pin, OUTPUT_DIMMABLE_FREQUENCY, OUTPUT_DIMMABLE_RESOLUTION);
                                                         ledcOutputInvert(pin, invert);
                                                       },
-                                                      [this, pin, invert](DimmableValue value)
+                                                      [this, pin](DimmableValue<double> value)
                                                       {
                                                         if (value.rampTime)
                                                         {
@@ -271,9 +387,9 @@ namespace IotNode
       }
       Dimmable::Dimmable(
           std::function<void()> onInit,
-          std::function<void(DimmableValue value)> onCommit) : Base<DimmableValue>(onInit, onCommit,
-                                                                                   {.rampTime = 0,
-                                                                                    .value = 0})
+          std::function<void(DimmableValue<double> value)> onCommit) : Base<DimmableValue<double>>(onInit, onCommit,
+                                                                                                   {.rampTime = 0,
+                                                                                                    .value = 0})
       {
         _ramp = Ramp();
       }
@@ -334,7 +450,7 @@ namespace IotNode
                                                                                      ledcAttach(pinB, OUTPUT_DIMMABLE_FREQUENCY, OUTPUT_DIMMABLE_RESOLUTION);
                                                                                      ledcOutputInvert(pinB, invert);
                                                                                    },
-                                                                                   [this, pinR, pinG, pinB, invert](DimmableRGBValue value)
+                                                                                   [this, pinR, pinG, pinB](DimmableRGBValue value)
                                                                                    {
                                                                                      if (value.rampTime)
                                                                                      {

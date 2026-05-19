@@ -19,6 +19,9 @@
 #define OUTPUT_BLINK_PERIOD_OFF 500
 #define OUTPUT_ITERATE_INFINITE 0xffffffff
 #define OUTPUT_RAMP_THROTTLE 50
+#define OUTPUT_BUZZER_DEFAULT_FREQUENCY 3750
+#define OUTPUT_BUZZER_LEDC_RESOLUTION 8
+#define OUTPUT_BUZZER_LEDC_CHANNEL 7
 #define OUTPUT_DIMMABLE_FREQUENCY 5000
 #define OUTPUT_DIMMABLE_RESOLUTION 12
 #define OUTPUT_DIMMABLE_GAMMA 2.2
@@ -81,10 +84,43 @@ namespace IotNode
         void update();
       };
 
-      class Buzzer : public Base<unsigned long>
+      class Ramp
       {
+      private:
+        unsigned long _throttle;
+        unsigned long _duration = 0;
+        unsigned long _lastUpdate = 0;
+        unsigned long _startTime = 0;
+        std::function<void()> _onUpdate = NULL;
+
+      public:
+        double progress = 0;
+        Ramp(unsigned long throttle);
+        double getDelta(double startValue, double endValue);
+        unsigned long getDelta(unsigned long startValue, unsigned long endValue);
+        void reset();
+        void set(unsigned long duration, std::function<void()> onUpdate);
+        void update();
+      };
+
+      template <typename T>
+      struct DimmableValue
+      {
+        unsigned long rampTime;
+        T value;
+      };
+
+      class Buzzer : public Base<DimmableValue<unsigned long>>
+      {
+      private:
+        Ramp _ramp;
+
       public:
         Buzzer(char pin);
+        void beep(unsigned long count, unsigned long frequency);
+        void beep(unsigned long frequency);
+        void beep(void);
+        void update();
       };
 
       class Binary : public Base<bool>
@@ -104,38 +140,14 @@ namespace IotNode
         BinaryPulse(char pinOn, char pinOff, bool invert, char pulseTime);
       };
 
-      class Ramp
-      {
-      private:
-        unsigned long _throttle;
-        unsigned long _duration = 0;
-        unsigned long _lastUpdate = 0;
-        unsigned long _startTime = 0;
-        std::function<void()> _onUpdate = NULL;
-
-      public:
-        double progress = 0;
-        Ramp(unsigned long throttle);
-        double getDelta(double startValue, double endValue);
-        void reset();
-        void set(unsigned long duration, std::function<void()> onUpdate);
-        void update();
-      };
-
-      struct DimmableValue
-      {
-        unsigned long rampTime;
-        double value;
-      };
-
-      class Dimmable : public Base<DimmableValue>
+      class Dimmable : public Base<DimmableValue<double>>
       {
       protected:
         Ramp _ramp;
 
       public:
         Dimmable(char pin, bool invert);
-        Dimmable(std::function<void()> onInit, std::function<void(DimmableValue value)> onCommit);
+        Dimmable(std::function<void()> onInit, std::function<void(DimmableValue<double> value)> onCommit);
         void blink(unsigned long count);
         void blink(void);
         void setOff();

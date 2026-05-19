@@ -15,6 +15,7 @@ namespace IotNode
     {
       extern Dimmable indicator0;
       extern DimmableRGB indicator1;
+      extern Buzzer buzzer;
 
 #ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
       extern ESP32_WS2812 ws2812Bus0;
