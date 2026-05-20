@@ -87,7 +87,7 @@ namespace IotNode
             "input_maintenance",
             2048,
             NULL,
-            3,
+            tskIDLE_PRIORITY,
             NULL,
             CONFIG_ARDUINO_RUNNING_CORE);
 #endif
@@ -140,7 +140,7 @@ namespace IotNode
             "input_maintenance",
             2048,
             NULL,
-            3,
+            tskIDLE_PRIORITY,
             NULL,
             CONFIG_ARDUINO_RUNNING_CORE);
 #endif

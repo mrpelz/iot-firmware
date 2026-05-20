@@ -47,7 +47,7 @@ namespace IotNode
             "sds011_handling",
             2048,
             NULL,
-            1,
+            tskIDLE_PRIORITY,
             &taskHandle,
             CONFIG_ARDUINO_RUNNING_CORE);
       }

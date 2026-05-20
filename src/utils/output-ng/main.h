@@ -19,7 +19,21 @@
 #define OUTPUT_BLINK_PERIOD_OFF 500
 #define OUTPUT_ITERATE_INFINITE 0xffffffff
 #define OUTPUT_RAMP_THROTTLE 50
+#define OUTPUT_BUZZER_HOLD_TIME 125
+#define OUTPUT_BUZZER_PAUSE_TIME 375
 #define OUTPUT_BUZZER_DEFAULT_FREQUENCY 3750
+#define OUTPUT_BUZZER_C_FREQUENCY 4186
+#define OUTPUT_BUZZER_C_SHARP_FREQUENCY 4435
+#define OUTPUT_BUZZER_D_FREQUENCY 4699
+#define OUTPUT_BUZZER_E_FLAT_FREQUENCY 4978
+#define OUTPUT_BUZZER_E_FREQUENCY 5274
+#define OUTPUT_BUZZER_F_FREQUENCY 5588
+#define OUTPUT_BUZZER_F_SHARP_FREQUENCY 5920
+#define OUTPUT_BUZZER_G_FREQUENCY 6272
+#define OUTPUT_BUZZER_G_SHARP_FREQUENCY 6645
+#define OUTPUT_BUZZER_A_FREQUENCY 7040
+#define OUTPUT_BUZZER_B_FLAT_FREQUENCY 7459
+#define OUTPUT_BUZZER_B_FREQUENCY 7902
 #define OUTPUT_BUZZER_LEDC_RESOLUTION 8
 #define OUTPUT_BUZZER_LEDC_CHANNEL 7
 #define OUTPUT_DIMMABLE_FREQUENCY 5000
@@ -68,16 +82,17 @@ namespace IotNode
       private:
         std::function<void(T value)> _onCommit;
         std::function<void()> _onInit;
+        void _commit();
 
       protected:
         State<T> _state;
-        virtual void commit();
-        void reset();
+        void _reset();
 
       public:
         T value;
         T previousValue;
         Base(std::function<void()> onInit, std::function<void(T value)> onCommit, T initialValue);
+        bool getIsActive();
         void init();
         void set(T value);
         void setSequence(Request<T> request);
@@ -113,13 +128,20 @@ namespace IotNode
       class Buzzer : public Base<DimmableValue<unsigned long>>
       {
       private:
+        bool _invert;
+        bool _isAttached = false;
+        char _pin;
         Ramp _ramp;
+        void _write(unsigned long value);
 
       public:
-        Buzzer(char pin);
+        Buzzer(char pin, bool invert);
         void beep(unsigned long count, unsigned long frequency);
         void beep(unsigned long frequency);
         void beep(void);
+        void melody(std::vector<unsigned long> _melody, unsigned long count, unsigned long holdTime, unsigned long pauseTime);
+        void melody(std::vector<unsigned long> _melody, unsigned long count);
+        void melody(std::vector<unsigned long> _melody);
         void update();
       };
 
@@ -194,7 +216,7 @@ namespace IotNode
       class DimmableRGBWS2812 : public DimmableRGB
       {
       public:
-        DimmableRGBWS2812(char index, ESP32_WS2812 *bus);
+        DimmableRGBWS2812(char index, ESP32_WS2812 *bus, bool push);
       };
     }
 

@@ -76,7 +76,7 @@ namespace IotNode
             "link_maintenance",
             4096,
             NULL,
-            2,
+            tskIDLE_PRIORITY,
             NULL,
             CONFIG_ARDUINO_RUNNING_CORE);
 #endif

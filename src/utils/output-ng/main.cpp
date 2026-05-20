@@ -22,16 +22,22 @@ namespace IotNode
         value = initialValue;
         previousValue = initialValue;
 
-        reset();
+        _reset();
       }
 
       template <typename T>
-      void Base<T>::commit()
+      void Base<T>::_commit()
       {
         if (!_state.isInitialized)
           return;
 
         _onCommit(value);
+      }
+
+      template <typename T>
+      bool Base<T>::getIsActive()
+      {
+        return _state.iterations;
       }
 
       template <typename T>
@@ -44,17 +50,17 @@ namespace IotNode
       template <typename T>
       void Base<T>::set(T value_)
       {
-        reset();
+        _reset();
         previousValue = value;
         value = value_;
 
-        commit();
+        _commit();
       }
 
       template <typename T>
       void Base<T>::setSequence(Request<T> request)
       {
-        reset();
+        _reset();
         _state.iterations = request.iterations;
         _state.sequence = request.sequence;
       }
@@ -74,7 +80,7 @@ namespace IotNode
             !sequenceSize ||
             sequenceSize < _state.sequencePointer + 1)
         {
-          reset();
+          _reset();
           return;
         }
 
@@ -100,17 +106,17 @@ namespace IotNode
 
           if (!_state.iterations)
           {
-            reset();
+            _reset();
           }
 
           _state.sequencePointer = 0;
         }
 
-        commit();
+        _commit();
       }
 
       template <typename T>
-      void Base<T>::reset()
+      void Base<T>::_reset()
       {
         _state.iterations = 0;
         _state.nextSequenceStep = 0;
@@ -183,54 +189,58 @@ namespace IotNode
       }
 
       template class Base<DimmableValue<unsigned long>>;
-      Buzzer::Buzzer(char pin) : Base<DimmableValue<unsigned long>>([pin]() {},
-                                                                    [this, pin](DimmableValue<unsigned long> value)
-                                                                    {
-                                                                      if (value.rampTime)
-                                                                      {
-                                                                        _ramp.set(value.rampTime, [this, pin, value]()
-                                                                                  {
-                                                                                    auto effectiveValue = _ramp.getDelta(
-                                                                                        previousValue.value,
-                                                                                        value.value);
+      Buzzer::Buzzer(char pin, bool invert) : Base<DimmableValue<unsigned long>>([]() {},
+                                                                                 [this](DimmableValue<unsigned long> value)
+                                                                                 {
+                                                                                   if (value.rampTime)
+                                                                                   {
+                                                                                     _ramp.set(value.rampTime, [this, value]()
+                                                                                               { _write(_ramp.getDelta(
+                                                                                                     previousValue.value,
+                                                                                                     value.value)); });
 
-                                                                                    if (effectiveValue)
-                                                                                    {
-                                                                                      ledcAttachChannel(
-                                                                                        pin,
-                                                                                        OUTPUT_BUZZER_DEFAULT_FREQUENCY,
-                                                                                        OUTPUT_BUZZER_LEDC_RESOLUTION,
-                                                                                        OUTPUT_BUZZER_LEDC_CHANNEL
-                                                                                      );
-                                                                                      ledcWriteTone(pin,
-                                                                                                    effectiveValue);
+                                                                                     return;
+                                                                                   }
 
-                                                                                      return;
-                                                                                    }
-                                                                                    
-                                                                                    ledcDetach(pin); });
-
-                                                                        return;
-                                                                      }
-
-                                                                      if (value.value)
-                                                                      {
-                                                                        ledcAttachChannel(
-                                                                            pin,
-                                                                            OUTPUT_BUZZER_DEFAULT_FREQUENCY,
-                                                                            OUTPUT_BUZZER_LEDC_RESOLUTION,
-                                                                            OUTPUT_BUZZER_LEDC_CHANNEL);
-                                                                        ledcWriteTone(pin, value.value);
-
-                                                                        return;
-                                                                      }
-
-                                                                      ledcDetach(pin);
-                                                                    },
-                                                                    {.rampTime = 0,
-                                                                     .value = 0})
+                                                                                   _write(value.value);
+                                                                                 },
+                                                                                 {.rampTime = 0,
+                                                                                  .value = 0})
       {
+        _invert = invert;
+        _pin = pin;
         _ramp = Ramp(0);
+      }
+
+      void Buzzer::_write(unsigned long value)
+      {
+        if (value)
+        {
+          if (!_isAttached)
+          {
+            ledcAttachChannel(
+                _pin,
+                OUTPUT_BUZZER_DEFAULT_FREQUENCY,
+                OUTPUT_BUZZER_LEDC_RESOLUTION,
+                OUTPUT_BUZZER_LEDC_CHANNEL);
+            ledcOutputInvert(_pin, _invert);
+
+            _isAttached = true;
+          }
+
+          ledcWriteTone(_pin,
+                        value);
+
+          return;
+        }
+
+        if (_isAttached)
+        {
+          ledcDetach(_pin);
+          _isAttached = false;
+        }
+
+        pinMode(_pin, INPUT);
       }
 
       void Buzzer::beep()
@@ -245,7 +255,6 @@ namespace IotNode
 
       void Buzzer::beep(unsigned long count, unsigned long frequency)
       {
-        reset();
         setSequence({.iterations = count,
                      .sequence = {
                          {
@@ -253,43 +262,76 @@ namespace IotNode
                                  .rampTime = 0,
                                  .value = frequency,
                              },
-                             .holdTime = 125,
+                             .holdTime = OUTPUT_BUZZER_HOLD_TIME,
                          },
                          {
                              .value = {
                                  .rampTime = 0,
                                  .value = 0,
                              },
-                             .holdTime = 875,
-                         },
-                         {
-                             .value = {
-                                 .rampTime = 0,
-                                 .value = 300,
-                             },
-                             .holdTime = 875,
-                         },
-                         {
-                             .value = {
-                                 .rampTime = 3000,
-                                 .value = 10000,
-                             },
-                             .holdTime = 3125,
-                         },
-                         {
-                             .value = {
-                                 .rampTime = 3000,
-                                 .value = 300,
-                             },
-                             .holdTime = 3000,
-                         },
-                         {
-                             .value = {
-                                 .rampTime = 0,
-                                 .value = 0,
-                             },
-                             .holdTime = 875,
+                             .holdTime = OUTPUT_BUZZER_PAUSE_TIME,
                          }}});
+      }
+
+      void Buzzer::melody(
+          std::vector<unsigned long> _melody)
+      {
+        melody(_melody, 1);
+      }
+
+      void Buzzer::melody(
+          std::vector<unsigned long> _melody,
+          unsigned long count)
+      {
+        melody(_melody, count, OUTPUT_BUZZER_HOLD_TIME, OUTPUT_BUZZER_PAUSE_TIME);
+      }
+
+      void Buzzer::melody(
+          std::vector<unsigned long> _melody,
+          unsigned long count,
+          unsigned long holdTime,
+          unsigned long pauseTime)
+      {
+        std::vector<SequenceItem<DimmableValue<unsigned long>>> sequence(_melody.size());
+
+        for (auto &item : _melody)
+        {
+          if (holdTime)
+          {
+            sequence.push_back({
+                .value = {
+                    .rampTime = 0,
+                    .value = item,
+                },
+                .holdTime = holdTime,
+            });
+          }
+
+          if (pauseTime)
+          {
+            sequence.push_back({
+                .value = {
+                    .rampTime = 0,
+                    .value = 0,
+                },
+                .holdTime = pauseTime,
+            });
+          }
+        }
+
+        if (!pauseTime)
+        {
+          sequence.push_back({
+              .value = {
+                  .rampTime = 0,
+                  .value = 0,
+              },
+              .holdTime = 0,
+          });
+        }
+
+        setSequence({.iterations = count,
+                     .sequence = sequence});
       }
 
       void Buzzer::update()
@@ -333,7 +375,6 @@ namespace IotNode
 
       void Binary::blink(unsigned long count)
       {
-        reset();
         setSequence({.iterations = count,
                      .sequence = {{
                                       .value = true,
@@ -401,7 +442,6 @@ namespace IotNode
 
       void Dimmable::blink(unsigned long count)
       {
-        reset();
         setSequence({.iterations = count,
                      .sequence = {{
                                       .value = {
@@ -492,7 +532,6 @@ namespace IotNode
 
       void DimmableRGB::blink(unsigned long count)
       {
-        reset();
         setSequence({.iterations = count,
                      .sequence = {{
                                       .value = {
@@ -521,7 +560,6 @@ namespace IotNode
 
       void DimmableRGB::blinkR(unsigned long count)
       {
-        reset();
         setSequence({.iterations = count,
                      .sequence = {{
                                       .value = {
@@ -550,7 +588,6 @@ namespace IotNode
 
       void DimmableRGB::blinkG(unsigned long count)
       {
-        reset();
         setSequence({.iterations = count,
                      .sequence = {{
                                       .value = {
@@ -579,7 +616,6 @@ namespace IotNode
 
       void DimmableRGB::blinkB(unsigned long count)
       {
-        reset();
         setSequence({.iterations = count,
                      .sequence = {{
                                       .value = {
@@ -608,7 +644,6 @@ namespace IotNode
 
       void DimmableRGB::blinkRGB(unsigned long count)
       {
-        reset();
         setSequence({.iterations = count,
                      .sequence = {{
                                       .value = {
@@ -673,7 +708,6 @@ namespace IotNode
 
       void DimmableRGB::blinkRGBInclusive(unsigned long count)
       {
-        reset();
         setSequence({.iterations = count,
                      .sequence = {{
                                       .value = {
@@ -747,27 +781,32 @@ namespace IotNode
 
       DimmableRGBWS2812::DimmableRGBWS2812(
           char index,
-          ESP32_WS2812 *bus) : DimmableRGB([]() {},
-                                           [this, index, bus](DimmableRGBValue value)
-                                           {
-                                             if (value.rampTime)
-                                             {
-                                               _ramp.set(value.rampTime, [this, index, bus, value]()
-                                                         { bus->setLedColor(
-                                                               index,
-                                                               gamma(_ramp.getDelta(previousValue.r, value.r)) * 0xff,
-                                                               gamma(_ramp.getDelta(previousValue.g, value.g)) * 0xff,
-                                                               gamma(_ramp.getDelta(previousValue.b, value.b)) * 0xff); });
+          ESP32_WS2812 *bus,
+          bool push) : DimmableRGB([]() {},
+                                   [this, index, bus, push](DimmableRGBValue value)
+                                   {
+                                     if (value.rampTime)
+                                     {
+                                       _ramp.set(value.rampTime, [this, index, bus, push, value]()
+                                                 { bus->setLedColorData(
+                                                              index,
+                                                              gamma(_ramp.getDelta(previousValue.r, value.r)) * 0xff,
+                                                              gamma(_ramp.getDelta(previousValue.g, value.g)) * 0xff,
+                                                              gamma(_ramp.getDelta(previousValue.b, value.b)) * 0xff);
 
-                                               return;
-                                             }
+                                                              if (push) bus->show(); });
 
-                                             bus->setLedColor(
-                                                 index,
-                                                 gamma(value.r) * 0xff,
-                                                 gamma(value.g) * 0xff,
-                                                 gamma(value.b) * 0xff);
-                                           })
+                                       return;
+                                     }
+
+                                     bus->setLedColorData(index,
+                                                          gamma(value.r) * 0xff,
+                                                          gamma(value.g) * 0xff,
+                                                          gamma(value.b) * 0xff);
+
+                                     if (push)
+                                       bus->show();
+                                   })
       {
       }
     }

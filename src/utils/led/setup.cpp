@@ -60,7 +60,7 @@ namespace IotNode
             "led_maintenance",
             2048,
             NULL,
-            3,
+            tskIDLE_PRIORITY,
             NULL,
             CONFIG_ARDUINO_RUNNING_CORE);
 #endif

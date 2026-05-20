@@ -59,7 +59,7 @@ namespace IotNode
             "keepalive_maintenance",
             2048,
             NULL,
-            1,
+            tskIDLE_PRIORITY,
             NULL,
             CONFIG_ARDUINO_RUNNING_CORE);
 #endif
