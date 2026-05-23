@@ -17,7 +17,7 @@ namespace IotNode
       void initializer()
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("mhz19-service", "initializing sensor");
+        Utils::Log::debug("mhz19-service: initializing sensor");
 #endif
 
         IOT_NODE_MHZ19_SERIAL.begin(9600);
@@ -53,11 +53,11 @@ namespace IotNode
           auto transmittanceReading = sensor.getTransmittance();
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("mhz19-service.accuracy", String(accuracyReading));
-          Utils::Log::debug("mhz19-service.abc", String(abcReading));
-          Utils::Log::debug("mhz19-service.co2", String(co2Reading));
-          Utils::Log::debug("mhz19-service.temperature", String(temperatureReading));
-          Utils::Log::debug("mhz19-service.transmittance", String(transmittanceReading));
+          Utils::Log::debug(fmt::format("mhz19-service.accuracy: {}", accuracyReading));
+          Utils::Log::debug(fmt::format("mhz19-service.abc: {}", abcReading));
+          Utils::Log::debug(fmt::format("mhz19-service.co2: {}", co2Reading));
+          Utils::Log::debug(fmt::format("mhz19-service.temperature: {}", temperatureReading));
+          Utils::Log::debug(fmt::format("mhz19-service.transmittance: {}", transmittanceReading));
 #endif
 
           auto accuracy = reinterpret_cast<uint8_t *>(&accuracyReading);
@@ -94,7 +94,7 @@ namespace IotNode
               transmittance + sizeof(transmittanceReading));
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("mhz19-service", "sending response");
+          Utils::Log::debug("mhz19-service: sending response");
 #endif
 
           respondCallback(response);
@@ -105,7 +105,7 @@ namespace IotNode
       void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer)
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("mhz19-service", "got request");
+        Utils::Log::debug("mhz19-service: got request");
 #endif
 
         respondCallback = respond;

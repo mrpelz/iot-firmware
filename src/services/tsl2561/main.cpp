@@ -18,7 +18,7 @@ namespace IotNode
       void initializer(TwoWire *i2c)
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("tsl2561-service", "initializing sensor");
+        Utils::Log::debug("tsl2561-service: initializing sensor");
 #endif
 
         working = sensor.begin(i2c);
@@ -26,7 +26,7 @@ namespace IotNode
         if (!working)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("tsl2561-service", "sensor initialization failed");
+          Utils::Log::debug("tsl2561-service: sensor initialization failed");
 #endif
 
           return;
@@ -66,7 +66,7 @@ namespace IotNode
           Utils::I2C::unclaim();
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("tsl2561-service.reading", String(reading));
+          Utils::Log::debug(fmt::format("tsl2561-service.reading: {}", reading));
 #endif
 
           auto result = reinterpret_cast<uint8_t *>(&reading);
@@ -76,7 +76,7 @@ namespace IotNode
           response.insert(response.end(), result, result + sizeof(reading));
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("tsl2561-service", "sending response");
+          Utils::Log::debug("tsl2561-service: sending response");
 #endif
 
           respondCallback(response);
@@ -87,13 +87,13 @@ namespace IotNode
       void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer)
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("tsl2561-service", "got request");
+        Utils::Log::debug("tsl2561-service: got request");
 #endif
 
         if (!working)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("tsl2561-service", "sensor not working, sending null response");
+          Utils::Log::debug("tsl2561-service: sensor not working, sending null response");
 #endif
 
           respond({});

@@ -10,7 +10,7 @@ namespace IotNode
       void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer)
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("system-info-service", "got request");
+        Utils::Log::debug("system-info-service: got request");
 #endif
 
         Utils::UDP::Payload response;
@@ -47,7 +47,7 @@ namespace IotNode
 #endif
 
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("system-info-service", "sending response");
+        Utils::Log::debug("system-info-service: sending response");
 #endif
 
         respond(response);

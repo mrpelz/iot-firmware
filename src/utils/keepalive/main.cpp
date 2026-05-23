@@ -16,7 +16,7 @@ namespace IotNode
       void Class::start()
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("keepalive", "start");
+        Utils::Log::debug("keepalive: start");
 #endif
 
         state.running = true;
@@ -25,7 +25,7 @@ namespace IotNode
       void Class::stop()
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("keepalive", "stop");
+        Utils::Log::debug("keepalive: stop");
 #endif
 
         state.running = false;
@@ -50,7 +50,7 @@ namespace IotNode
           state.ticked = false;
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("keepalive", "tick");
+          Utils::Log::debug("keepalive: tick");
 #endif
 
           state.lastTick = now;
@@ -64,7 +64,7 @@ namespace IotNode
         if (timeSinceTick > state.timeout)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("keepalive", "trip");
+          Utils::Log::debug("keepalive: trip");
 #endif
 
           state.callback();

@@ -14,7 +14,7 @@ namespace IotNode
         auto handler = [udp, index](Utils::Button::Update update)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("button-event", "triggered");
+          Utils::Log::debug("button-event: triggered");
 #endif
 
           std::vector<uint8_t> payload = {
@@ -37,7 +37,7 @@ namespace IotNode
               update.pressedMap.end());
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("button-event", "sending event");
+          Utils::Log::debug("button-event: sending event");
 #endif
 
           udp->event(ids::button, index, payload);
@@ -52,7 +52,7 @@ namespace IotNode
         auto handler = [index](Utils::Button::Update update)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("button-espNow-event", "triggered");
+          Utils::Log::debug("button-espNow-event: triggered");
 #endif
 
           std::vector<uint8_t> payload = {
@@ -77,7 +77,7 @@ namespace IotNode
               update.pressedMap.end());
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("button-espNow-event", "sending event");
+          Utils::Log::debug("button-espNow-event: sending event");
 #endif
 
           Utils::EspNowNode::send(payload);

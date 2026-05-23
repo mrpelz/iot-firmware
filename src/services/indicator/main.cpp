@@ -17,13 +17,13 @@ namespace IotNode
                            Utils::UDP::Peer peer)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("indicator-service", "got request");
+          Utils::Log::debug("indicator-service: got request");
 #endif
 
           if (request->size() < 1)
           {
 #ifdef IOT_NODE_LOGGING
-            Utils::Log::debug("indicator-service", "missing parameters");
+            Utils::Log::debug("indicator-service: missing parameters");
 #endif
 
             return;
@@ -31,7 +31,7 @@ namespace IotNode
 
           auto cmd = request->at(0);
 
-          switch (cmd)
+          switch ((uint8_t)cmd)
           {
           case INDICATOR_CMD_ON:
             indicator->setOn(true);
@@ -44,7 +44,7 @@ namespace IotNode
             {
               auto count = request->at(1);
 
-              indicator->blink(count);
+              indicator->blink((uint8_t)count);
             }
             else
             {
@@ -53,7 +53,7 @@ namespace IotNode
           }
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("indicator-service", "sending response");
+          Utils::Log::debug("indicator-service: sending response");
 #endif
 
           respond({});
@@ -74,13 +74,13 @@ namespace IotNode
                            Utils::UDP::Peer peer)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("indicator-service", "got request");
+          Utils::Log::debug("indicator-service: got request");
 #endif
 
           if (request->size() < 1)
           {
 #ifdef IOT_NODE_LOGGING
-            Utils::Log::debug("indicator-service", "missing parameters");
+            Utils::Log::debug("indicator-service: missing parameters");
 #endif
 
             return;
@@ -88,7 +88,7 @@ namespace IotNode
 
           auto cmd = request->at(0);
 
-          switch (cmd)
+          switch ((uint8_t)cmd)
           {
           case INDICATOR_CMD_ON:
             indicator->setOn(true);
@@ -101,7 +101,7 @@ namespace IotNode
             {
               auto count = request->at(1);
 
-              indicator->blink(count);
+              indicator->blink((uint8_t)count);
             }
             else
             {
@@ -110,7 +110,7 @@ namespace IotNode
           }
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("indicator-service", "sending response");
+          Utils::Log::debug("indicator-service: sending response");
 #endif
 
           respond({});
@@ -132,13 +132,13 @@ namespace IotNode
                            Utils::UDP::Peer peer)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("indicator-service", "got request");
+          Utils::Log::debug("indicator-service: got request");
 #endif
 
           if (request->size() < 1)
           {
 #ifdef IOT_NODE_LOGGING
-            Utils::Log::debug("indicator-service", "missing parameters");
+            Utils::Log::debug("indicator-service: missing parameters");
 #endif
 
             return;
@@ -146,7 +146,7 @@ namespace IotNode
 
           auto cmd = request->at(0);
 
-          switch (cmd)
+          switch ((uint8_t)cmd)
           {
           case INDICATOR_CMD_ON:
             indicator->setOn(true);
@@ -159,7 +159,7 @@ namespace IotNode
             {
               auto count = request->at(1);
 
-              indicator->blink(count);
+              indicator->blink((uint8_t)count);
             }
             else
             {
@@ -168,7 +168,7 @@ namespace IotNode
           }
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("indicator-service", "sending response");
+          Utils::Log::debug("indicator-service: sending response");
 #endif
 
           respond({});

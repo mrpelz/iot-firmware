@@ -20,7 +20,7 @@ namespace IotNode
           return;
 
 #ifdef IOT_NODE_LOGGING
-        Log::debug("output", "commit");
+        Log::debug("output: commit");
 #endif
 
         digitalWrite(config.pin, (config.invert ? !state.on : state.on));
@@ -34,8 +34,8 @@ namespace IotNode
       void Regular::init()
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("output", "init");
-        Log::debug("output.pin", String(config.pin));
+        Log::debug("output: init");
+        Log::debug(fmt::format("output.pin: {}", config.pin));
 #endif
 
         pinMode(config.pin, OUTPUT);
@@ -48,7 +48,7 @@ namespace IotNode
       {
 #ifdef IOT_NODE_LOGGING
         Log::debug("output.set-on", on ? "on" : "off");
-        Log::debug("output.pin", String(config.pin));
+        Log::debug(fmt::format("output.pin: {}", config.pin));
 #endif
 
         state.on = on;
@@ -59,7 +59,7 @@ namespace IotNode
       {
 #ifdef IOT_NODE_LOGGING
         Log::debug("output.toggle", state.on ? "on2off" : "off2on");
-        Log::debug("output.pin", String(config.pin));
+        Log::debug(fmt::format("output.pin: {}", config.pin));
 #endif
 
         state.on = !state.on;
@@ -77,7 +77,7 @@ namespace IotNode
           return;
 
 #ifdef IOT_NODE_LOGGING
-        Log::debug("output", "commit");
+        Log::debug("output: commit");
 #endif
 
         auto unactionablePin = state.on ? config.offPin : config.onPin;
@@ -95,9 +95,9 @@ namespace IotNode
       void Pulse::init()
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("output", "init");
-        Log::debug("output.on-pin", String(config.onPin));
-        Log::debug("output.off-pin", String(config.offPin));
+        Log::debug("output: init");
+        Log::debug(fmt::format("output.on-pin: {}", config.onPin));
+        Log::debug(fmt::format("output.off-pin: {}", config.offPin));
 #endif
 
         pinMode(config.onPin, OUTPUT);
@@ -111,8 +111,8 @@ namespace IotNode
       {
 #ifdef IOT_NODE_LOGGING
         Log::debug("output.set-on", on ? "on" : "off");
-        Log::debug("output.on-pin", String(config.onPin));
-        Log::debug("output.off-pin", String(config.offPin));
+        Log::debug(fmt::format("output.on-pin: {}", config.onPin));
+        Log::debug(fmt::format("output.off-pin: {}", config.offPin));
 #endif
 
         state.on = on;
@@ -123,8 +123,8 @@ namespace IotNode
       {
 #ifdef IOT_NODE_LOGGING
         Log::debug("output.toggle", state.on ? "on2off" : "off2on");
-        Log::debug("output.on-pin", String(config.onPin));
-        Log::debug("output.off-pin", String(config.offPin));
+        Log::debug(fmt::format("output.on-pin: {}", config.onPin));
+        Log::debug(fmt::format("output.off-pin: {}", config.offPin));
 #endif
 
         state.on = !state.on;

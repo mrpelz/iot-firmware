@@ -20,10 +20,10 @@ namespace IotNode
           auto value = rf.getReceivedValue();
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("event.rf433.protocol", String(protocol));
-          Utils::Log::debug("event.rf433.delay", String(rf.getReceivedDelay()));
-          Utils::Log::debug("event.rf433.length", String(bitLength));
-          Utils::Log::debug("event.rf433.value", String(value));
+          Utils::Log::debug(fmt::format("event.rf433.protocol: {}", protocol));
+          Utils::Log::debug(fmt::format("event.rf433.delay: {}", rf.getReceivedDelay()));
+          Utils::Log::debug(fmt::format("event.rf433.length: {}", bitLength));
+          Utils::Log::debug(fmt::format("event.rf433.value: {}", value));
 #endif
 
           onDataReceived(&protocol, &bitLength, &value);

@@ -43,7 +43,7 @@ namespace IotNode
 
     namespace UDP
     {
-      typedef std::vector<uint8_t> Payload;
+      using Payload = std::vector<uint8_t>;
 
       typedef std::function<void(
           Payload response)>
@@ -76,7 +76,7 @@ namespace IotNode
         Peer eventPeer;
         Peer fallbackPeer;
         std::vector<Service *> services;
-        unsigned long requestTimes[256];
+        std::array<unsigned long, 256> requestTimes;
       };
 
       class Class

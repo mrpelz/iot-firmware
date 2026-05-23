@@ -5,6 +5,11 @@
 #include <Arduino.h>
 #include <functional>
 
+#include <pre.h>
+#include <post.h>
+
+#include <fmt/core.h>
+
 #ifdef IOT_NODE_ESP8266
 #include <ESP8266WiFi.h>
 #endif
@@ -23,7 +28,8 @@ namespace IotNode
 
       void setup();
 
-      void debug(String key, String value);
+      void debug(std::string key, std::string value);
+      void debug(std::string value);
 
       void info();
     }

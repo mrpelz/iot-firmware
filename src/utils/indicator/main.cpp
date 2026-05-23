@@ -32,8 +32,8 @@ namespace IotNode
       void ClassPin::blink()
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("indicator.blink", "infinite");
-        Log::debug("indicator.pin", String(config.pin));
+        Log::debug("indicator.blink: infinite");
+        Log::debug(fmt::format("indicator.pin: {}", config.pin));
 #endif
 
         state.on = false;
@@ -46,8 +46,8 @@ namespace IotNode
       void ClassPin::blink(uint8_t count)
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("indicator.blink", String(count));
-        Log::debug("indicator.pin", String(config.pin));
+        Log::debug(fmt::format("indicator.blink: {}", count));
+        Log::debug(fmt::format("indicator.pin: {}", config.pin));
 #endif
 
         state.on = false;
@@ -60,8 +60,8 @@ namespace IotNode
       void ClassPin::init()
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("indicator", "init");
-        Log::debug("indicator.pin", String(config.pin));
+        Log::debug("indicator: init");
+        Log::debug(fmt::format("indicator.pin: {}", config.pin));
 #endif
 
         pinMode(config.pin, OUTPUT);
@@ -80,7 +80,7 @@ namespace IotNode
       {
 #ifdef IOT_NODE_LOGGING
         Log::debug("indicator.set-on", on ? "on" : "off");
-        Log::debug("indicator.pin", String(config.pin));
+        Log::debug(fmt::format("indicator.pin: {}", config.pin));
 #endif
 
         state.on = on;
@@ -96,7 +96,7 @@ namespace IotNode
       {
 #ifdef IOT_NODE_LOGGING
         Log::debug("indicator.toggle", state.on ? "on2off" : "off2on");
-        Log::debug("indicator.pin", String(config.pin));
+        Log::debug(fmt::format("indicator.pin: {}", config.pin));
 #endif
 
         state.on = !state.on;
@@ -164,8 +164,8 @@ namespace IotNode
       void ClassExpander::blink()
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("indicator.blink", "infinite");
-        Log::debug("indicator.pin", String(config.pin));
+        Log::debug("indicator.blink: infinite");
+        Log::debug(fmt::format("indicator.pin: {}", config.pin));
 #endif
 
         state.on = false;
@@ -178,8 +178,8 @@ namespace IotNode
       void ClassExpander::blink(uint8_t count)
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("indicator.blink", String(count));
-        Log::debug("indicator.pin", String(config.pin));
+        Log::debug(fmt::format("indicator.blink: {}", count));
+        Log::debug(fmt::format("indicator.pin: {}", config.pin));
 #endif
 
         state.on = false;
@@ -192,8 +192,8 @@ namespace IotNode
       void ClassExpander::init()
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("indicator", "init");
-        Log::debug("indicator.pin", String(config.pin));
+        Log::debug("indicator: init");
+        Log::debug(fmt::format("indicator.pin: {}", config.pin));
 #endif
 
         state.wasInitialized = true;
@@ -210,8 +210,8 @@ namespace IotNode
       void ClassExpander::setOn(bool on)
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("indicator.set-on", on ? "on" : "off");
-        Log::debug("indicator.pin", String(config.pin));
+        Log::debug(fmt::format("indicator.set-on: {}", on ? "on" : "off"));
+        Log::debug(fmt::format("indicator.pin: {}", config.pin));
 #endif
 
         state.on = on;
@@ -226,8 +226,8 @@ namespace IotNode
       void ClassExpander::toggle()
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("indicator.toggle", state.on ? "on2off" : "off2on");
-        Log::debug("indicator.pin", String(config.pin));
+        Log::debug(fmt::format("indicator.toggle: {}", state.on ? "on2off" : "off2on"));
+        Log::debug(fmt::format("indicator.pin: {}", config.pin));
 #endif
 
         state.on = !state.on;
@@ -300,8 +300,8 @@ namespace IotNode
       void ClassWS2812::blink()
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("indicator.blink", "infinite");
-        Log::debug("indicator.pin", String(config.pin));
+        Log::debug("indicator.blink: infinite");
+        Log::debug(fmt::format("indicator.pin: {}", config.pin));
 #endif
 
         state.on = false;
@@ -314,8 +314,8 @@ namespace IotNode
       void ClassWS2812::blink(uint8_t count)
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("indicator.blink", String(count));
-        Log::debug("indicator.pin", String(config.pin));
+        Log::debug(fmt::format("indicator.blink: {}", count));
+        Log::debug(fmt::format("indicator.pin: {}", config.pin));
 #endif
 
         state.on = false;
@@ -328,8 +328,8 @@ namespace IotNode
       void ClassWS2812::init()
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("indicator", "init");
-        Log::debug("indicator.pin", String(config.pin));
+        Log::debug("indicator: init");
+        Log::debug(fmt::format("indicator.pin: {}", config.pin));
 #endif
 
         state.wasInitialized = true;
@@ -346,8 +346,8 @@ namespace IotNode
       void ClassWS2812::setOn(bool on)
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("indicator.set-on", on ? "on" : "off");
-        Log::debug("indicator.pin", String(config.pin));
+        Log::debug(fmt::format("indicator.set-on: {}", on ? "on" : "off"));
+        Log::debug(fmt::format("indicator.pin: {}", config.pin));
 #endif
 
         state.on = on;
@@ -362,8 +362,8 @@ namespace IotNode
       void ClassWS2812::toggle()
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("indicator.toggle", state.on ? "on2off" : "off2on");
-        Log::debug("indicator.pin", String(config.pin));
+        Log::debug(fmt::format("indicator.toggle: {}", state.on ? "on2off" : "off2on"));
+        Log::debug(fmt::format("indicator.pin: {}", config.pin));
 #endif
 
         state.on = !state.on;

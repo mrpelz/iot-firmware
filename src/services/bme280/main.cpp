@@ -18,14 +18,14 @@ namespace IotNode
       void initializer(TwoWire *i2c)
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("bme280-service", "initializing sensor");
+        Utils::Log::debug("bme280-service: initializing sensor");
 #endif
 
         working = sensor.begin(BME280_ADDRESS_ALTERNATE, i2c);
         if (!working)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("bme280-service", "sensor initialization failed");
+          Utils::Log::debug("bme280-service: sensor initialization failed");
 #endif
 
           return;
@@ -64,7 +64,7 @@ namespace IotNode
           if (!measurementSuccess)
           {
 #ifdef IOT_NODE_LOGGING
-            Utils::Log::debug("bme280-service", "measurement not successful, sending null response");
+            Utils::Log::debug("bme280-service: measurement not successful, sending null response");
 #endif
 
             Utils::I2C::unclaim();
@@ -81,9 +81,9 @@ namespace IotNode
           Utils::I2C::unclaim();
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("bme280-service.temperature", String(temperatureReading));
-          Utils::Log::debug("bme280-service.humidity", String(humidityReading));
-          Utils::Log::debug("bme280-service.pressure", String(pressureReading));
+          Utils::Log::debug(fmt::format("bme280-service.temperature: {}", temperatureReading));
+          Utils::Log::debug(fmt::format("bme280-service.humidity: {}", humidityReading));
+          Utils::Log::debug(fmt::format("bme280-service.pressure: {}", pressureReading));
 #endif
 
           auto temperatureResult = reinterpret_cast<uint8_t *>(&temperatureReading);
@@ -108,7 +108,7 @@ namespace IotNode
               pressureResult + sizeof(pressureReading));
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("bme280-service", "sending response");
+          Utils::Log::debug("bme280-service: sending response");
 #endif
 
           respondCallback(response);
@@ -119,13 +119,13 @@ namespace IotNode
       void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer)
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("bme280-service", "got request");
+        Utils::Log::debug("bme280-service: got request");
 #endif
 
         if (!working)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("bme280-service", "sensor not working, sending null response");
+          Utils::Log::debug("bme280-service: sensor not working, sending null response");
 #endif
 
           respond({});

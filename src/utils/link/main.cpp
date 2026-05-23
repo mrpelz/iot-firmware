@@ -7,7 +7,7 @@ namespace IotNode
 
     namespace Link
     {
-      String printMacAddress(uint8_t input[6])
+      std::string printMacAddress(uint8_t input[6])
       {
         char result[18];
 
@@ -25,7 +25,7 @@ namespace IotNode
         String output(result);
         output.toUpperCase();
 
-        return output;
+        return output.c_str();
       }
     }
 

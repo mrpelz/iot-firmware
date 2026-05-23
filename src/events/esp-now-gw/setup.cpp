@@ -26,7 +26,7 @@ namespace IotNode
         if (esp_now_init() != 0)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("error", "esp-now setup failed");
+          Utils::Log::debug("error: esp-now setup failed");
 #endif
 
           return;

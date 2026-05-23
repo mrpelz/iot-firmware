@@ -29,14 +29,14 @@ namespace IotNode
       void initializer(TwoWire *i2c)
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("sgp30-service", "initializing sensor");
+        Utils::Log::debug("sgp30-service: initializing sensor");
 #endif
 
         working = sensor.begin(i2c);
         if (!working)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("sgp30-service", "sensor initialization failed");
+          Utils::Log::debug("sgp30-service: sensor initialization failed");
 #endif
 
           return;
@@ -68,7 +68,7 @@ namespace IotNode
           if (!calibrationSuccess)
           {
 #ifdef IOT_NODE_LOGGING
-            Utils::Log::debug("sgp30-service", "calibration not successful, sending null response");
+            Utils::Log::debug("sgp30-service: calibration not successful, sending null response");
 #endif
 
             Utils::I2C::unclaim();
@@ -86,7 +86,7 @@ namespace IotNode
           if (!measurementRawSuccess || !measurementSuccess)
           {
 #ifdef IOT_NODE_LOGGING
-            Utils::Log::debug("sgp30-service", "measurement not successful, sending null response");
+            Utils::Log::debug("sgp30-service: measurement not successful, sending null response");
 #endif
 
             respondCallback({});
@@ -100,10 +100,10 @@ namespace IotNode
           auto eco2Reading = sensor.eCO2;
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("sgp30-service.h2", String(h2Reading));
-          Utils::Log::debug("sgp30-service.ethanol", String(ethanolReading));
-          Utils::Log::debug("sgp30-service.tvoc", String(tvocReading));
-          Utils::Log::debug("sgp30-service.eco2", String(eco2Reading));
+          Utils::Log::debug(fmt::format("sgp30-service.h2: {}", h2Reading));
+          Utils::Log::debug(fmt::format("sgp30-service.ethanol: {}", ethanolReading));
+          Utils::Log::debug(fmt::format("sgp30-service.tvoc: {}", tvocReading));
+          Utils::Log::debug(fmt::format("sgp30-service.eco2: {}", eco2Reading));
 #endif
 
           auto h2Result = reinterpret_cast<uint8_t *>(&h2Reading);
@@ -134,7 +134,7 @@ namespace IotNode
               eco2Result + sizeof(eco2Reading));
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("sgp30-service", "sending response");
+          Utils::Log::debug("sgp30-service: sending response");
 #endif
 
           respondCallback(response);
@@ -145,13 +145,13 @@ namespace IotNode
       void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer)
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("sgp30-service", "got request");
+        Utils::Log::debug("sgp30-service: got request");
 #endif
 
         if (!working)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("sgp30-service", "sensor not working, sending null response");
+          Utils::Log::debug("sgp30-service: sensor not working, sending null response");
 #endif
 
           respond({});
@@ -161,7 +161,7 @@ namespace IotNode
         if (request->size() < (sizeof(float) * 2))
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("sgp30-service", "request does not contain temperature and humidity");
+          Utils::Log::debug("sgp30-service: request does not contain temperature and humidity");
 #endif
 
           respond({});
@@ -171,8 +171,8 @@ namespace IotNode
         calibrationHumidity = ((float *)request->data())[1];
 
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("sgp30-service.calibration-temperature", String(calibrationTemperature));
-        Utils::Log::debug("sgp30-service.calibration-humidity", String(calibrationHumidity));
+        Utils::Log::debug(fmt::format("sgp30-service.calibration-temperature: {}", calibrationTemperature));
+        Utils::Log::debug(fmt::format("sgp30-service.calibration-humidity: {}", calibrationHumidity));
 #endif
 
         respondCallback = respond;

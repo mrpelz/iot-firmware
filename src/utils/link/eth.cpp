@@ -25,9 +25,9 @@ namespace IotNode
       {
 #ifdef IOT_NODE_LOGGING
 #ifdef IOT_NODE_IP_DHCP
-        Log::debug("config.network-config.dhcp", "1");
+        Log::debug("config.network-config.dhcp: 1");
 #else
-        Log::debug("config.network-config.dhcp", "0");
+        Log::debug("config.network-config.dhcp: 0");
         Log::debug("config.network-config.ip", state.interfaceConfig.ip.toString());
         Log::debug("config.network-config.gateway", state.interfaceConfig.gateway.toString());
         Log::debug("config.network-config.netmask", state.interfaceConfig.netmask.toString());
@@ -108,7 +108,7 @@ namespace IotNode
         state.isConnected = true;
 
 #ifdef IOT_NODE_LOGGING
-        Log::debug("event", "connect");
+        Log::debug("event: connect");
 #endif
 
         state.callbacks.connected();
@@ -117,7 +117,7 @@ namespace IotNode
       void Class::handleDhcpTimeout()
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("event", "network-config.dhcp-timeout");
+        Log::debug("event: network-config.dhcp-timeout");
 #endif
 
         state.callbacks.dhcpTimeout();
@@ -128,8 +128,8 @@ namespace IotNode
         state.isConnected = false;
 
 #ifdef IOT_NODE_LOGGING
-        Log::debug("event", "disconnect");
-        Log::debug("event.disconnect.reason", String(reason));
+        Log::debug("event: disconnect");
+        Log::debug(fmt::format("event.disconnect.reason: {}", reason));
 #endif
 
         state.callbacks.disconnected();
@@ -140,7 +140,7 @@ namespace IotNode
         state.isConnected = true;
 
 #ifdef IOT_NODE_LOGGING
-        Log::debug("event", "network-config");
+        Log::debug("event: network-config");
         Log::debug("event.network-config.ip", ip.toString());
         Log::debug("event.network-config.gateway", gateway.toString());
         Log::debug("event.network-config.netmask", netmask.toString());
@@ -202,7 +202,7 @@ namespace IotNode
             state.firstConnectionSucceeded = true;
 
 #ifdef IOT_NODE_LOGGING
-            Log::debug("info.first-connect", "succeeded");
+            Log::debug("info.first-connect: succeeded");
 #endif
 
             debug(true);
@@ -219,7 +219,7 @@ namespace IotNode
             state.maintenanceTime = now;
 
 #ifdef IOT_NODE_LOGGING
-            Log::debug("info.maintenance", String(timeSinceEthMaintenance));
+            Log::debug(fmt::format("info.maintenance: {}", timeSinceEthMaintenance));
 #endif
 
             debug(false);
@@ -238,7 +238,7 @@ namespace IotNode
           if (!state.isReconnecting)
           {
 #ifdef IOT_NODE_LOGGING
-            Log::debug("info.first-connect", "attempting");
+            Log::debug("info.first-connect: attempting");
 #endif
 
             state.isReconnecting = true;
@@ -256,7 +256,7 @@ namespace IotNode
           state.disconnectionTime = now;
 
 #ifdef IOT_NODE_LOGGING
-          Log::debug("info.timing.disconnection", String(now));
+          Log::debug(fmt::format("info.timing.disconnection: {}", now));
 #endif
 
           return;
@@ -270,7 +270,7 @@ namespace IotNode
           state.isReconnecting = true;
 
 #ifdef IOT_NODE_LOGGING
-          Log::debug("info.attempt-reconnect", String(timeSinceEthDisconnect));
+          Log::debug(fmt::format("info.attempt-reconnect: {}", timeSinceEthDisconnect));
 #endif
 
           ethConnect();
@@ -281,7 +281,7 @@ namespace IotNode
         if (timeSinceEthDisconnect > state.timings.restartAfter)
         {
 #ifdef IOT_NODE_LOGGING
-          Log::debug("info.attempt-restart", String(timeSinceEthDisconnect));
+          Log::debug(fmt::format("info.attempt-restart: {}", timeSinceEthDisconnect));
 #endif
 
           state.callbacks.beforeRestart();
@@ -298,7 +298,7 @@ namespace IotNode
       void Class::debug(bool deep)
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("info.eth.link-speed", String(ETH.linkSpeed()));
+        Log::debug(fmt::format("info.eth.link-speed: {}", ETH.linkSpeed()));
 
 #ifdef IOT_NODE_IP_DHCP
         IPAddress ip = ETH.localIP();

@@ -1,4 +1,6 @@
 #include "./ota.h"
+#include <pre.h>
+#include <post.h>
 
 namespace IotNode
 {
@@ -16,25 +18,27 @@ namespace IotNode
       {
         ArduinoOTA.setHostname(IOT_NODE_NAME);
         ArduinoOTA.setPassword(IOT_NODE_OTA_PASSWORD);
+        ArduinoOTA.setMdnsEnabled(true);
+        ArduinoOTA.setTimeout(30000);
 
         ArduinoOTA.onStart([]()
                            {
 #ifdef IOT_NODE_LOGGING
-                             Log::debug("ota", "start");
+                             Log::debug("ota: start");
 #endif
                            });
 
         ArduinoOTA.onEnd([]()
                          {
 #ifdef IOT_NODE_LOGGING
-                           Log::debug("ota", "end");
+                           Log::debug("ota: end");
 #endif
                          });
 
         ArduinoOTA.onProgress([](unsigned int progress, unsigned int total)
                               {
 #ifdef IOT_NODE_LOGGING
-                                Log::debug("ota.progress", String(progress / (total / 100)));
+                                Log::debug(fmt::format("ota.progress: {}%", (progress * 100) / total));
 #endif
                               });
 
@@ -42,15 +46,15 @@ namespace IotNode
                            {
 #ifdef IOT_NODE_LOGGING
                              if (error == OTA_AUTH_ERROR)
-                               Log::debug("ota.error", "auth");
+                               Log::debug("ota.error: auth");
                              else if (error == OTA_BEGIN_ERROR)
-                               Log::debug("ota.error", "begin");
+                               Log::debug("ota.error: begin");
                              else if (error == OTA_CONNECT_ERROR)
-                               Log::debug("ota.error", "connect");
+                               Log::debug("ota.error: connect");
                              else if (error == OTA_RECEIVE_ERROR)
-                               Log::debug("ota.error", "receive");
+                               Log::debug("ota.error: receive");
                              else if (error == OTA_END_ERROR)
-                               Log::debug("ota.error", "end");
+                               Log::debug("ota.error: end");
 #endif
                            });
       }

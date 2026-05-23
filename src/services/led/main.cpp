@@ -17,20 +17,20 @@ namespace IotNode
                            Utils::UDP::Peer peer)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("led-service", "got request");
-          Utils::Log::debug("led-service.index", String(index));
+          Utils::Log::debug("led-service: got request");
+          Utils::Log::debug(fmt::format("led-service.index: {}", index));
 #endif
 
           auto duty = request->size() >= 1 ? request->at(0) : (uint8_t)0;
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("led-service.duty", String(duty));
+          Utils::Log::debug(fmt::format("led-service.duty: {}", duty));
 #endif
 
           led->set(duty);
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("led-service", "sending response");
+          Utils::Log::debug("led-service: sending response");
 #endif
 
           respond({});

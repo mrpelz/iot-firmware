@@ -17,20 +17,20 @@ namespace IotNode
                            Utils::UDP::Peer peer)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("output-service", "got request");
-          Utils::Log::debug("output-service.index", String(index));
+          Utils::Log::debug("output-service: got request");
+          Utils::Log::debug(fmt::format("output-service.index: {}", index));
 #endif
 
           bool on = request->size() >= 1 && request->at(0) != 0;
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("output-service.on", String(on));
+          Utils::Log::debug(fmt::format("output-service.on: {}", on));
 #endif
 
           output->setOn(on);
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("output-service", "sending response");
+          Utils::Log::debug("output-service: sending response");
 #endif
 
           respond({});
@@ -50,20 +50,20 @@ namespace IotNode
                            Utils::UDP::Peer peer)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("output-service", "got request");
-          Utils::Log::debug("output-service.index", String(index));
+          Utils::Log::debug("output-service: got request");
+          Utils::Log::debug(fmt::format("output-service.index: {}", index));
 #endif
 
           bool on = request->size() >= 1 && request->at(0) != 0;
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("output-service.on", String(on));
+          Utils::Log::debug(fmt::format("output-service.on: {}", on));
 #endif
 
           output->setOn(on);
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("output-service", "sending response");
+          Utils::Log::debug("output-service: sending response");
 #endif
 
           respond({});

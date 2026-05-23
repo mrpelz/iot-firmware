@@ -21,14 +21,14 @@ namespace IotNode
       void initializer(TwoWire *i2c)
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("ccs811-service", "initializing sensor");
+        Utils::Log::debug("ccs811-service: initializing sensor");
 #endif
 
         working = sensor.begin(CCS811_ADDRESS, i2c);
         if (!working)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("ccs811-service", "sensor initialization failed");
+          Utils::Log::debug("ccs811-service: sensor initialization failed");
 #endif
 
           return;
@@ -61,7 +61,7 @@ namespace IotNode
           if (sensor.available() && !sensor.readData())
           {
 #ifdef IOT_NODE_LOGGING
-            Utils::Log::debug("ccs811-service", "measurement not successful, sending null response");
+            Utils::Log::debug("ccs811-service: measurement not successful, sending null response");
 #endif
 
             Utils::I2C::unclaim();
@@ -78,9 +78,9 @@ namespace IotNode
           Utils::I2C::unclaim();
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("ccs811-service.temperature", String(temperatureReading));
-          Utils::Log::debug("ccs811-service.tvoc", String(tvocReading));
-          Utils::Log::debug("ccs811-service.eco2", String(eco2Reading));
+          Utils::Log::debug(fmt::format("ccs811-service.temperature: {}", temperatureReading));
+          Utils::Log::debug(fmt::format("ccs811-service.tvoc: {}", tvocReading));
+          Utils::Log::debug(fmt::format("ccs811-service.eco2: {}", eco2Reading));
 #endif
 
           auto temperatureResult = reinterpret_cast<uint8_t *>(&temperatureReading);
@@ -105,7 +105,7 @@ namespace IotNode
               eco2Result + sizeof(eco2Reading));
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("ccs811-service", "sending response");
+          Utils::Log::debug("ccs811-service: sending response");
 #endif
 
           respondCallback(response);
@@ -116,13 +116,13 @@ namespace IotNode
       void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer)
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("ccs811-service", "got request");
+        Utils::Log::debug("ccs811-service: got request");
 #endif
 
         if (!working)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("ccs811-service", "sensor not working, sending null response");
+          Utils::Log::debug("ccs811-service: sensor not working, sending null response");
 #endif
 
           respond({});
@@ -132,7 +132,7 @@ namespace IotNode
         if (request->size() < (sizeof(float) * 2))
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("ccs811-service", "request does not contain temperature and humidity");
+          Utils::Log::debug("ccs811-service: request does not contain temperature and humidity");
 #endif
 
           respond({});
@@ -142,8 +142,8 @@ namespace IotNode
         calibrationHumidity = ((float *)request->data())[1];
 
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("ccs811-service.calibration-temperature", String(calibrationTemperature));
-        Utils::Log::debug("ccs811-service.calibration-humidity", String(calibrationHumidity));
+        Utils::Log::debug(fmt::format("ccs811-service.calibration-temperature: {}", calibrationTemperature));
+        Utils::Log::debug(fmt::format("ccs811-service.calibration-humidity: {}", calibrationHumidity));
 #endif
 
         respondCallback = respond;

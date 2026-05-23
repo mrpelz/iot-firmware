@@ -1,7 +1,7 @@
 {
   "build": {
     "arduino": {
-      "partitions": "max_app_4MB.csv",
+      "partitions": "ota_nofs_4MB.csv",
       "memory_type": "qio_qspi"
     },
     "core": "esp32",

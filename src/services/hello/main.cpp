@@ -9,7 +9,7 @@ namespace IotNode
     {
       auto delimiter = String(",");
 
-      void addLineToRespone(Utils::UDP::Payload *response, String line)
+      void addLineToRespone(Utils::UDP::Payload *response, const std::string line)
       {
         response->insert(response->end(), line.begin(), line.end());
       }
@@ -22,7 +22,7 @@ namespace IotNode
       void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer)
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("hello-service", "got request");
+        Utils::Log::debug("hello-service: got request");
 #endif
 
         Utils::UDP::Payload response;
@@ -59,7 +59,7 @@ namespace IotNode
         addLineToRespone(&response, String(ESP.getChipId(), HEX));
 #endif
 #ifdef IOT_NODE_ESP32
-        addLineToRespone(&response, String(ESP.getEfuseMac(), HEX));
+        addLineToRespone(&response, fmt::format("{:X}", ESP.getEfuseMac()));
 #endif
         addDelimiter(&response);
 
@@ -73,7 +73,7 @@ namespace IotNode
 #endif
         addDelimiter(&response);
 
-        addLineToRespone(&response, WiFi.macAddress());
+        addLineToRespone(&response, WiFi.macAddress().c_str());
         addDelimiter(&response);
 
 #ifdef IOT_NODE_LINK_WIFI
@@ -82,34 +82,34 @@ namespace IotNode
         addDelimiter(&response);
 
 #ifdef IOT_NODE_LINK_WIFI
-        addLineToRespone(&response, String(WiFi.channel()));
+        addLineToRespone(&response, std::to_string(WiFi.channel()));
 #endif
         addDelimiter(&response);
 
 #ifdef IOT_NODE_LINK_WIFI
-        addLineToRespone(&response, String(WiFi.RSSI()));
+        addLineToRespone(&response, std::to_string(WiFi.RSSI()));
 #endif
         addDelimiter(&response);
 
 #if defined(IOT_NODE_LINK_WIFI) && defined(IOT_NODE_ESP8266)
-        addLineToRespone(&response, String(WiFi.getPhyMode()));
+        addLineToRespone(&response, WiFi.getPhyMode());
 #endif
         addDelimiter(&response);
 
 #ifdef IOT_NODE_LINK_WIFI
-        addLineToRespone(&response, WiFi.SSID());
+        addLineToRespone(&response, WiFi.SSID().c_str());
 #endif
         addDelimiter(&response);
 
 #ifdef IOT_NODE_ESP32
-        addLineToRespone(&response, String(temperatureRead()));
+        addLineToRespone(&response, std::to_string(temperatureRead()));
 #endif
         addDelimiter(&response);
 
         addLineToRespone(&response, "BYE");
 
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("hello-service", "sending response");
+        Utils::Log::debug("hello-service: sending response");
 #endif
 
         respond(response);

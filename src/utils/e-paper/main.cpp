@@ -64,7 +64,7 @@ namespace IotNode
         if (!touchInit)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("error", "touch init failed");
+          Utils::Log::debug("error: touch init failed");
 #endif
         }
 
@@ -79,7 +79,7 @@ namespace IotNode
         if (!framebuffer)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("error", "epd framebuffer allocation failed");
+          Utils::Log::debug("error: epd framebuffer allocation failed");
 #endif
 
           return false;
@@ -102,8 +102,8 @@ namespace IotNode
         auto chunkLength = isFirstPacket ? data->data_len - WS_HEADER_SIZE : data->data_len;
 
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("websocket-event.isFirstPacket", String(isFirstPacket));
-        Utils::Log::debug("websocket-event.isLastPacket", String(isLastPacket));
+        Utils::Log::debug(fmt::format("websocket-event.isFirstPacket: {}", isFirstPacket));
+        Utils::Log::debug(fmt::format("websocket-event.isLastPacket: {}", isLastPacket));
 #endif
 
         if (isFirstPacket)
@@ -114,10 +114,10 @@ namespace IotNode
           auto height = ((uint32_t *)data->data_ptr)[3];
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("websocket-event.x", String(x));
-          Utils::Log::debug("websocket-event.y", String(y));
-          Utils::Log::debug("websocket-event.width", String(width));
-          Utils::Log::debug("websocket-event.height", String(height));
+          Utils::Log::debug(fmt::format("websocket-event.x: {}", x));
+          Utils::Log::debug(fmt::format("websocket-event.y: {}", y));
+          Utils::Log::debug(fmt::format("websocket-event.width: {}", width));
+          Utils::Log::debug(fmt::format("websocket-event.height: {}", height));
 #endif
 
           updateArea.x = x;
@@ -161,7 +161,7 @@ namespace IotNode
         {
         case WEBSOCKET_EVENT_CONNECTED:
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("websocket-event", "connected");
+          Utils::Log::debug("websocket-event: connected");
 #endif
 
           isConnected = true;
@@ -169,7 +169,7 @@ namespace IotNode
           return;
         case WEBSOCKET_EVENT_DISCONNECTED:
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("websocket-event", "disconnected");
+          Utils::Log::debug("websocket-event: disconnected");
 #endif
 
           if (isConnected)
@@ -185,10 +185,10 @@ namespace IotNode
             return;
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("websocket-event", "data");
-          Utils::Log::debug("websocket-event.payload.length", String(data->payload_len));
-          Utils::Log::debug("websocket-event.payload.offset", String(data->payload_offset));
-          Utils::Log::debug("websocket-event.data.length", String(data->data_len));
+          Utils::Log::debug("websocket-event: data");
+          Utils::Log::debug(fmt::format("websocket-event.payload.length: {}", data->payload_len));
+          Utils::Log::debug(fmt::format("websocket-event.payload.offset: {}", data->payload_offset));
+          Utils::Log::debug(fmt::format("websocket-event.data.length: {}", data->data_len));
 #endif
 
           websocketDataHandler(data);
@@ -196,7 +196,7 @@ namespace IotNode
           return;
         case WEBSOCKET_EVENT_ERROR:
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("websocket-event", "error");
+          Utils::Log::debug("websocket-event: error");
 #endif
 
           if (isConnected)
@@ -301,10 +301,10 @@ namespace IotNode
           return;
 
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("touch.down", String(touchState.down));
-        Utils::Log::debug("touch.moved", String(touchState.moved));
-        Utils::Log::debug("touch.x", String(touchState.x));
-        Utils::Log::debug("touch.y", String(touchState.y));
+        Utils::Log::debug(fmt::format("touch.down: {}", touchState.down));
+        Utils::Log::debug(fmt::format("touch.moved: {}", touchState.moved));
+        Utils::Log::debug(fmt::format("touch.x: {}", touchState.x));
+        Utils::Log::debug(fmt::format("touch.y: {}", touchState.y));
 #endif
 
         if (!isConnected)
@@ -333,7 +333,7 @@ namespace IotNode
         if (!rxBuffer)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("error", "rxBuffer allocation failed");
+          Utils::Log::debug("error: rxBuffer allocation failed");
 #endif
 
           return false;

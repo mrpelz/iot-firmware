@@ -22,12 +22,12 @@ namespace IotNode
         }
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("info.buttons.change-callback", "udp event not usable");
+          Utils::Log::debug("info.buttons.change-callback: udp event not usable");
 #endif
 
         if (update.downChanged && !update.down) {
 #ifdef IOT_NODE_LOGGING
-            Utils::Log::debug("info.buttons.change-callback", "triggering override");
+            Utils::Log::debug("info.buttons.change-callback: triggering override");
 #endif
 
 #ifdef IOT_NODE_POWER_CYCLE_PROTECTION

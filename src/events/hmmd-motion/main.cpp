@@ -18,7 +18,7 @@ namespace IotNode
       void initializer()
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("hmmd-motion-event", "initializing sensor");
+        Utils::Log::debug("hmmd-motion-event: initializing sensor");
 #endif
 
         vTaskDelay(2000 / portTICK_PERIOD_MS);
@@ -34,7 +34,7 @@ namespace IotNode
           }
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("hmmd-motion-event.init", "retrying connection");
+          Utils::Log::debug("hmmd-motion-event.init: retrying connection");
           vTaskDelay(1000 / portTICK_PERIOD_MS);
 #endif
         }
@@ -56,9 +56,9 @@ namespace IotNode
           }
 
           auto config = sensor->radarConfiguration;
-          Utils::Log::debug("hmmd-motion-event.config.gates-min", String(config.detectionGatesMin));
-          Utils::Log::debug("hmmd-motion-event.config.gates-max", String(config.detectionGatesMax));
-          Utils::Log::debug("hmmd-motion-event.config.disappearance-delay", String(config.targetDisappearanceDelay));
+          Utils::Log::debug(fmt::format("hmmd-motion-event.config.gates-min: {}", config.detectionGatesMin));
+          Utils::Log::debug(fmt::format("hmmd-motion-event.config.gates-max: {}", config.detectionGatesMax));
+          Utils::Log::debug(fmt::format("hmmd-motion-event.config.disappearance-delay: {}", config.targetDisappearanceDelay));
         }
 #endif
       }
@@ -90,7 +90,7 @@ namespace IotNode
             event(false);
 
 #ifdef IOT_NODE_LOGGING
-            Utils::Log::debug("hmmd-motion-event", "target-lost");
+            Utils::Log::debug("hmmd-motion-event: target-lost");
 #endif
           }
           else if (!isDetected && newIsDetected)
@@ -98,8 +98,8 @@ namespace IotNode
             event(true, newDistance);
 
 #ifdef IOT_NODE_LOGGING
-            Utils::Log::debug("hmmd-motion-event", "target-found");
-            Utils::Log::debug("hmmd-motion-event.distance", String(newDistance));
+            Utils::Log::debug("hmmd-motion-event: target-found");
+            Utils::Log::debug(fmt::format("hmmd-motion-event.distance: {}", newDistance));
 #endif
           }
 
@@ -110,7 +110,7 @@ namespace IotNode
             event(true, newDistance);
 
 #ifdef IOT_NODE_LOGGING
-            Utils::Log::debug("hmmd-motion-event.distance", String(newDistance));
+            Utils::Log::debug(fmt::format("hmmd-motion-event.distance: {}", newDistance));
 #endif
           }
 
@@ -125,7 +125,7 @@ namespace IotNode
 
           event(false);
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("hmmd-motion-event.sensor-error", "not-sending-data");
+          Utils::Log::debug("hmmd-motion-event.sensor-error: not-sending-data");
 #endif
         }
       }

@@ -3,6 +3,8 @@
 #include <Arduino.h>
 #include <functional>
 
+#include <pre.h>
+
 #ifdef IOT_NODE_ESP8266
 #include <ESP8266WiFi.h>
 #endif
@@ -30,7 +32,7 @@ namespace IotNode
       typedef uint8_t DisconnectReason_t;
 #endif
 
-      String printMacAddress(uint8_t input[6]);
+      std::string printMacAddress(uint8_t input[6]);
 
 #ifdef IOT_NODE_IP_STATIC
       struct InterfaceConfig

@@ -27,17 +27,15 @@ namespace IotNode
         info();
       }
 
-      void debug(String key, String value)
+      void debug(std::string key, std::string value)
       {
-        unsigned long now = millis();
-
-        Serial.print("[");
-        Serial.print(now);
-        Serial.print("]:\"");
-        Serial.print(key);
-        Serial.print("\":\"");
-        Serial.print(value);
-        Serial.print("\"\n");
+        auto line = fmt::format("[{}]:\"{}\":\"{}\"\n", millis(), key, value);
+        Serial.write(line.c_str());
+      }
+      void debug(std::string value)
+      {
+        auto line = fmt::format("[{}]:\"{}\"\n", millis(), value);
+        Serial.write(line.c_str());
       }
 
       void info()
@@ -62,11 +60,11 @@ namespace IotNode
         debug("info.build.pio.framework", IOT_NODE_PIO_FRAMEWORK);
 
 #ifdef IOT_NODE_ESP8266
-        debug("info.system.chip-id", String(ESP.getChipId(), HEX));
-        debug("info.system.flash-id", String(ESP.getFlashChipId(), HEX));
+        log_e("info.system.chip-id", String(ESP.getChipId(), HEX).c_str());
+        log_e("info.system.flash-id", String(ESP.getFlashChipId(), HEX).c_str());
 #endif
 
-        debug("info.system.mac-address", WiFi.macAddress());
+        debug("info.system.mac-address", WiFi.macAddress().c_str());
       }
     }
 

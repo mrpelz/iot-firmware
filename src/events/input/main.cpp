@@ -82,8 +82,8 @@ namespace IotNode
           return;
 
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("event", "input");
-        Utils::Log::debug("input.down", String(state.down));
+        Utils::Log::debug("event: input");
+        Utils::Log::debug(fmt::format("input.down: {}", state.down));
 #endif
 
         state.changeCallback(state.down);

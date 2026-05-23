@@ -2,6 +2,8 @@
 
 #include <Arduino.h>
 
+#include <fmt/core.h>
+
 #include "../../utils/link/main.h"
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"
@@ -21,7 +23,7 @@ namespace IotNode
 
     namespace Hello
     {
-      void addLineToRespone(Utils::UDP::Payload response, String line);
+      void addLineToRespone(Utils::UDP::Payload response, const std::string line);
 
       void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
     }

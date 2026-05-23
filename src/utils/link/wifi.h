@@ -31,8 +31,8 @@ namespace IotNode
 
       struct Credentials
       {
-        String ssid;
-        String password;
+        std::string ssid;
+        std::string password;
 
 #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
         uint8_t bssid[6];

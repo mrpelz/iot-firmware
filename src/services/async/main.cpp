@@ -37,7 +37,7 @@ namespace IotNode
           vTaskDelay(ASYNC_RESPONSE_DELAY / portTICK_PERIOD_MS);
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("async-service", "sending delayed response");
+          Utils::Log::debug("async-service: sending delayed response");
 #endif
 
           respondCallback({0x0a, 0x0b, 0x0c});
@@ -48,7 +48,7 @@ namespace IotNode
       void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer)
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("async-service", "got request");
+        Utils::Log::debug("async-service: got request");
 #endif
 
         respondCallback = respond;

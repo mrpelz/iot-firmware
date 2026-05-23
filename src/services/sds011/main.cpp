@@ -29,7 +29,7 @@ namespace IotNode
       void initializer()
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("sds011-service", "initializing sensor");
+        Utils::Log::debug("sds011-service: initializing sensor");
 #endif
 
         sensor.begin();
@@ -75,7 +75,7 @@ namespace IotNode
           if (!reading.isOk())
           {
 #ifdef IOT_NODE_LOGGING
-            Utils::Log::debug("sds011-service", "measurement not successful, sending null response");
+            Utils::Log::debug("sds011-service: measurement not successful, sending null response");
 #endif
 
             respondCallback({});
@@ -84,8 +84,8 @@ namespace IotNode
           }
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("sds011-service.pm025", String(reading.pm25));
-          Utils::Log::debug("sds011-service.pm10", String(reading.pm10));
+          Utils::Log::debug(fmt::format("sds011-service.pm025: {}", reading.pm25));
+          Utils::Log::debug(fmt::format("sds011-service.pm10: {}", reading.pm10));
 #endif
 
           auto pm025 = reinterpret_cast<uint8_t *>(&reading.pm25);
@@ -104,7 +104,7 @@ namespace IotNode
               pm10 + sizeof(reading.pm10));
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("sds011-service", "sending response");
+          Utils::Log::debug("sds011-service: sending response");
 #endif
 
           respondCallback(response);
@@ -115,7 +115,7 @@ namespace IotNode
       void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer)
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("sds011-service", "got request");
+        Utils::Log::debug("sds011-service: got request");
 #endif
 
         respondCallback = respond;

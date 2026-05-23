@@ -17,7 +17,7 @@ namespace IotNode
 
       void Class::addService(Service *service)
       {
-        state.services.insert(state.services.end(), service);
+        state.services.insert(std::end(state.services), service);
       }
 
       void Class::begin()
@@ -26,8 +26,8 @@ namespace IotNode
           return;
 
 #ifdef IOT_NODE_LOGGING
-        Log::debug("event", "udp.listening");
-        Log::debug("udp.listening.port", String(state.port));
+        Log::debug("event: udp.listening");
+        Log::debug(fmt::format("udp.listening.port: {}", state.port));
 #endif
 
         state.isListening = true;
@@ -40,8 +40,8 @@ namespace IotNode
           return;
 
 #ifdef IOT_NODE_LOGGING
-        Log::debug("event", "udp.listening");
-        Log::debug("udp.listening", "close");
+        Log::debug("event: udp.listening");
+        Log::debug("udp.listening: close");
 #endif
 
         removeEventPeer();
@@ -55,26 +55,24 @@ namespace IotNode
         if (!state.eventPeer.port)
           return;
 
-        Payload outgoing = {
-            Services::ids::_reserved_event,
-            eventId,
-            eventIndex};
+        Payload outgoing;
 
-        uint8_t *eventStart = event.data();
-        uint8_t *eventEnd = eventStart + event.size();
-        outgoing.insert(outgoing.end(), eventStart, eventEnd);
+        outgoing.insert(std::end(outgoing), Services::ids::_reserved_event);
+        outgoing.insert(std::end(outgoing), eventId);
+        outgoing.insert(std::end(outgoing), eventIndex);
+        outgoing.insert(std::end(outgoing), std::begin(event), std::end(event));
 
 #ifdef IOT_NODE_LOGGING
-        Log::debug("udp.event.length", String(outgoing.size()));
-        Log::debug("udp.event.remote-ip", state.eventPeer.ip.toString());
-        Log::debug("udp.event.remote-port", String(state.eventPeer.port));
-        Log::debug("udp.event.event-id", String(eventId, HEX));
-        Log::debug("udp.event.event-index", String(eventIndex, HEX));
-        Log::debug("udp.event.message-length", String(event.size()));
+        Log::debug(fmt::format("udp.event.length: {}", outgoing.size()));
+        Log::debug(fmt::format("udp.event.remote-ip: {}", state.eventPeer.ip.toString().c_str()));
+        Log::debug(fmt::format("udp.event.remote-port: {}", state.eventPeer.port));
+        Log::debug(fmt::format("udp.event.event-id: {:1X}", (uint8_t)eventId));
+        Log::debug(fmt::format("udp.event.event-index: {:1X}", (uint8_t)eventIndex));
+        Log::debug(fmt::format("udp.event.message-length: {}", event.size()));
 #endif
 
         state.udp.writeTo(
-            outgoing.data(),
+            (uint8_t *)outgoing.data(),
             outgoing.size(),
             state.eventPeer.ip,
             state.eventPeer.port);
@@ -83,7 +81,7 @@ namespace IotNode
       void Class::handleRequest(AsyncUDPPacket *packet)
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("event", "udp.request");
+        Log::debug("event: udp.request");
 #endif
 
         size_t length = packet->length();
@@ -100,8 +98,8 @@ namespace IotNode
             packet->remotePort()};
 
 #ifdef IOT_NODE_LOGGING
-        Log::debug("udp.request.incoming-ip", peer.ip.toString());
-        Log::debug("udp.request.incoming-port", String(peer.port));
+        Log::debug(fmt::format("udp.request.incoming-ip: {}", peer.ip.toString().c_str()));
+        Log::debug(fmt::format("udp.request.incoming-port: {}", peer.port));
 #endif
 
         auto validPeer = peer.port && (peer.ip[0] + peer.ip[1] + peer.ip[2] + peer.ip[3]);
@@ -112,7 +110,7 @@ namespace IotNode
         else if (!state.fallbackPeer.port)
         {
 #ifdef IOT_NODE_LOGGING
-          Log::debug("event", "udp.request.no-usable-peer");
+          Log::debug("event: udp.request.no-usable-peer");
 #endif
 
           return;
@@ -122,57 +120,56 @@ namespace IotNode
           peer = state.fallbackPeer;
 
 #ifdef IOT_NODE_LOGGING
-          Log::debug("event", "udp.request.use-fallback-peer");
+          Log::debug("event: udp.request.use-fallback-peer");
 #endif
         }
 
         auto payload = packet->data();
 
-        auto messageId = ((uint8_t *)payload)[0];
-        auto messageVersion = ((uint8_t *)payload)[1];
-        auto serviceId = ((uint8_t *)payload)[2];
-        auto serviceIndex = ((uint8_t *)payload)[3];
+        auto messageId = payload[0];
+        auto messageVersion = payload[1];
+        auto serviceId = payload[2];
+        auto serviceIndex = payload[3];
 
         uint8_t *messageStart = payload + MESSAGE_ID_LENGTH + MESSAGE_VERSION_LENGTH + SERVICE_ID_LENGTH + SERVICE_INDEX_LENGTH;
         uint8_t *messageEnd = payload + length;
 
-        Payload message;
-        message.insert(message.end(), messageStart, messageEnd);
+        Payload message(messageStart, messageEnd);
 
         packet->flush();
 
 #ifdef IOT_NODE_LOGGING
-        Log::debug("udp.request.length", String(length));
-        Log::debug("udp.request.remote-ip", peer.ip.toString());
-        Log::debug("udp.request.remote-port", String(peer.port));
-        Log::debug("udp.request.message-id", String(messageId, HEX));
-        Log::debug("udp.request.message-version", String(messageVersion, HEX));
-        Log::debug("udp.request.service-id", String(serviceId, HEX));
-        Log::debug("udp.request.service-index", String(serviceIndex, HEX));
-        Log::debug("udp.request.message-length", String(message.size()));
+        Log::debug(fmt::format("udp.request.length: {}", length));
+        Log::debug(fmt::format("udp.request.remote-ip: {}", peer.ip.toString().c_str()));
+        Log::debug(fmt::format("udp.request.remote-port: {}", peer.port));
+        Log::debug(fmt::format("udp.request.message-id: {:1X}", (uint8_t)messageId));
+        Log::debug(fmt::format("udp.request.message-version: {:1X}", messageVersion));
+        Log::debug(fmt::format("udp.request.service-id: {:1X}", (uint8_t)serviceId));
+        Log::debug(fmt::format("udp.request.service-index: {:1X}", (uint8_t)serviceIndex));
+        Log::debug(fmt::format("udp.request.message-length: {}", message.size()));
 #endif
 
         if (messageVersion != MESSAGE_VERSION)
         {
 #ifdef IOT_NODE_LOGGING
-          Log::debug("event", "udp.request.no-matching-version");
+          Log::debug("event: udp.request.no-matching-version");
 #endif
 
           return;
         }
 
         auto now = millis();
-        auto timeSinceLastRequest = now - state.requestTimes[messageId];
+        auto timeSinceLastRequest = now - state.requestTimes.at((uint8_t)messageId);
         if (timeSinceLastRequest < REPEAT_WINDOW)
         {
 #ifdef IOT_NODE_LOGGING
-          Log::debug("event", "udp.request.ignoring-repeated-message");
+          Log::debug("event: udp.request.ignoring-repeated-message");
 #endif
 
           return;
         }
 
-        state.requestTimes[messageId] = now;
+        state.requestTimes[uint8_t(messageId)] = now;
 
         bool match = false;
         std::for_each(
@@ -193,26 +190,24 @@ namespace IotNode
                   &message,
                   [this, messageId, serviceId, peer](Payload response)
                   {
-                    Payload outgoing = {
-                        messageId};
+                    Payload outgoing;
 
-                    uint8_t *responseStart = response.data();
-                    uint8_t *responseEnd = responseStart + response.size();
-                    outgoing.insert(outgoing.end(), responseStart, responseEnd);
+                    outgoing.insert(std::end(outgoing), messageId);
+                    outgoing.insert(std::end(outgoing), std::begin(response), std::end(response));
 
 #ifdef IOT_NODE_LOGGING
-                    Log::debug("udp.response.length", String(outgoing.size()));
-                    Log::debug("udp.response.remote-ip", peer.ip.toString());
-                    Log::debug("udp.response.remote-port", String(peer.port));
-                    Log::debug("udp.response.message-id", String(messageId, HEX));
-                    Log::debug("udp.response.service-id", String(serviceId, HEX));
-                    Log::debug("udp.response.message-length", String(response.size()));
+                    Log::debug(fmt::format("udp.response.length: {}", outgoing.size()));
+                    Log::debug(fmt::format("udp.response.remote-ip: {}", peer.ip.toString().c_str()));
+                    Log::debug(fmt::format("udp.response.remote-port: {}", peer.port));
+                    Log::debug(fmt::format("udp.response.message-id: {:1X}", messageId));
+                    Log::debug(fmt::format("udp.response.service-id: {:1X}", serviceId));
+                    Log::debug(fmt::format("udp.response.message-length: {}", response.size()));
 #endif
 
                     for (size_t i = 0; i < REPEAT_COUNT; i++)
                     {
                       state.udp.writeTo(
-                          outgoing.data(),
+                          (uint8_t *)outgoing.data(),
                           outgoing.size(),
                           peer.ip,
                           peer.port);
@@ -224,7 +219,7 @@ namespace IotNode
         if (!match)
         {
 #ifdef IOT_NODE_LOGGING
-          Log::debug("event", "udp.request.no-matching-service");
+          Log::debug("event: udp.request.no-matching-service");
 #endif
         }
       }

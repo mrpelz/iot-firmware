@@ -47,22 +47,22 @@ namespace IotNode
       void Class::configDebug()
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("config.wifi.phy-mode", String(state.phyMode));
-        Log::debug("config.wifi.output-power", String(state.outputPower));
-        Log::debug("config.wifi.ssid", state.credentials.ssid);
+        Log::debug(fmt::format("config.wifi.phy-mode: {}", String(state.phyMode).c_str()));
+        Log::debug(fmt::format("config.wifi.output-power: {}", String(state.outputPower).c_str()));
+        Log::debug(fmt::format("config.wifi.ssid: {}", state.credentials.ssid));
 
 #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
-        Log::debug("config.wifi.bssid", printMacAddress(state.credentials.bssid));
-        Log::debug("config.wifi.channel", String(state.credentials.channel));
+        Log::debug(fmt::format("config.wifi.bssid: {}", printMacAddress(state.credentials.bssid)));
+        Log::debug(fmt::format("config.wifi.channel: {}", state.credentials.channel));
 #endif
 
 #ifdef IOT_NODE_IP_DHCP
-        Log::debug("config.wifi.network-config.dhcp", "1");
+        Log::debug("config.wifi.network-config.dhcp: 1");
 #elif defined(IOT_NODE_IP_STATIC)
-        Log::debug("config.wifi.network-config.dhcp", "0");
-        Log::debug("config.wifi.network-config.ip", state.interfaceConfig.ip.toString());
-        Log::debug("config.wifi.network-config.gateway", state.interfaceConfig.gateway.toString());
-        Log::debug("config.wifi.network-config.netmask", state.interfaceConfig.netmask.toString());
+        Log::debug("config.wifi.network-config.dhcp: 0");
+        Log::debug(fmt::format("config.wifi.network-config.ip: {}", state.interfaceConfig.ip.toString().c_str()));
+        Log::debug(fmt::format("config.wifi.network-config.gateway: {}", state.interfaceConfig.gateway.toString().c_str()));
+        Log::debug(fmt::format("config.wifi.network-config.netmask: {}", state.interfaceConfig.netmask.toString().c_str()));
 #endif
 #endif
       }
@@ -82,10 +82,10 @@ namespace IotNode
         state.isConnected = true;
 
 #ifdef IOT_NODE_LOGGING
-        Log::debug("event", "wifi.connect");
-        Log::debug("event.wifi.connect.ssid", ssid);
-        Log::debug("event.wifi.connect.bssid", printMacAddress(bssid));
-        Log::debug("event.wifi.connect.channel", String(channel));
+        Log::debug("event: wifi.connect");
+        Log::debug(fmt::format("event.wifi.connect.ssid: {}", ssid.c_str()));
+        Log::debug(fmt::format("event.wifi.connect.bssid: {}", printMacAddress(bssid)));
+        Log::debug(fmt::format("event.wifi.connect.channel: {}", channel));
 #endif
 
         state.callbacks.connected();
@@ -94,7 +94,7 @@ namespace IotNode
       void Class::handleDhcpTimeout()
       {
 #ifdef IOT_NODE_LOGGING
-        Log::debug("event", "wifi.network-config.dhcp-timeout");
+        Log::debug("event: wifi.network-config.dhcp-timeout");
 #endif
 
         state.callbacks.dhcpTimeout();
@@ -105,10 +105,10 @@ namespace IotNode
         state.isConnected = false;
 
 #ifdef IOT_NODE_LOGGING
-        Log::debug("event", "wifi.disconnect");
-        Log::debug("event.wifi.disconnect.ssid", ssid);
-        Log::debug("event.wifi.disconnect.bssid", printMacAddress(bssid));
-        Log::debug("event.wifi.disconnect.reason", String(reason));
+        Log::debug("event: wifi.disconnect");
+        Log::debug(fmt::format("event.wifi.disconnect.ssid: {}", ssid.c_str()));
+        Log::debug(fmt::format("event.wifi.disconnect.bssid: {}", printMacAddress(bssid)));
+        Log::debug(fmt::format("event.wifi.disconnect.reason: {}", reason));
 #endif
 
         state.callbacks.disconnected();
@@ -119,10 +119,10 @@ namespace IotNode
         state.isConnected = true;
 
 #ifdef IOT_NODE_LOGGING
-        Log::debug("event", "wifi.network-config");
-        Log::debug("event.wifi.network-config.ip", ip.toString());
-        Log::debug("event.wifi.network-config.gateway", gateway.toString());
-        Log::debug("event.wifi.network-config.netmask", netmask.toString());
+        Log::debug("event: wifi.network-config");
+        Log::debug(fmt::format("event.wifi.network-config.ip: {}", ip.toString().c_str()));
+        Log::debug(fmt::format("event.wifi.network-config.gateway: {}", gateway.toString().c_str()));
+        Log::debug(fmt::format("event.wifi.network-config.netmask: {}", netmask.toString().c_str()));
 #endif
 
         state.callbacks.gotIP(ip);
@@ -181,7 +181,7 @@ namespace IotNode
             state.firstConnectionSucceeded = true;
 
 #ifdef IOT_NODE_LOGGING
-            Log::debug("info.wifi.first-connect", "succeeded");
+            Log::debug("info.wifi.first-connect: succeeded");
 #endif
 
             debug(true);
@@ -198,7 +198,7 @@ namespace IotNode
             state.maintenanceTime = now;
 
 #ifdef IOT_NODE_LOGGING
-            Log::debug("info.wifi.maintenance", String(timeSinceWifiMaintenance));
+            Log::debug(fmt::format("info.wifi.maintenance: {}", timeSinceWifiMaintenance));
 #endif
 
             debug(false);
@@ -217,7 +217,7 @@ namespace IotNode
           if (!state.isReconnecting)
           {
 #ifdef IOT_NODE_LOGGING
-            Log::debug("info.wifi.first-connect", "attempting");
+            Log::debug("info.wifi.first-connect: attempting");
 #endif
 
             state.isReconnecting = true;
@@ -235,7 +235,7 @@ namespace IotNode
           state.disconnectionTime = now;
 
 #ifdef IOT_NODE_LOGGING
-          Log::debug("info.timing.disconnection", String(now));
+          Log::debug(fmt::format("info.timing.disconnection: {}", now));
 #endif
 
           return;
@@ -249,7 +249,7 @@ namespace IotNode
           state.isReconnecting = true;
 
 #ifdef IOT_NODE_LOGGING
-          Log::debug("info.wifi.attempt-reconnect", String(timeSinceWifiDisconnect));
+          Log::debug(fmt::format("info.wifi.attempt-reconnect: {}", timeSinceWifiDisconnect));
 #endif
 
           wifiConnect();
@@ -260,7 +260,7 @@ namespace IotNode
         if (timeSinceWifiDisconnect > state.timings.restartAfter)
         {
 #ifdef IOT_NODE_LOGGING
-          Log::debug("info.wifi.attempt-restart", String(timeSinceWifiDisconnect));
+          Log::debug(fmt::format("info.wifi.attempt-restart: {}", timeSinceWifiDisconnect));
 #endif
 
           state.callbacks.beforeRestart();
@@ -394,32 +394,32 @@ namespace IotNode
         if (deep)
         {
 #ifdef IOT_NODE_ESP8266
-          Log::debug("info.wifi.phy-mode", String(WiFi.getPhyMode()));
+          Log::debug(fmt::format("info.wifi.phy-mode: {}", WiFi.getPhyMode()));
 #endif
 
-          Log::debug("info.wifi.ssid", WiFi.SSID());
+          Log::debug(fmt::format("info.wifi.ssid: {}", WiFi.SSID().c_str()));
 
 #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
-          Log::debug("info.wifi.bssid", printMacAddress(WiFi.BSSID()));
-          Log::debug("info.wifi.channel", String(WiFi.channel()));
+          Log::debug(fmt::format("info.wifi.bssid: {}", printMacAddress(WiFi.BSSID())));
+          Log::debug(fmt::format("info.wifi.channel: {}", WiFi.channel()));
 #endif
         }
 
 #ifndef IOT_NODE_ADVANCED_WIFI_CONFIG
-        Log::debug("info.wifi.bssid", printMacAddress(WiFi.BSSID()));
-        Log::debug("info.wifi.channel", String(WiFi.channel()));
+        Log::debug(fmt::format("info.wifi.bssid: {}", printMacAddress(WiFi.BSSID())));
+        Log::debug(fmt::format("info.wifi.channel: {}", WiFi.channel()));
 #endif
 
-        Log::debug("info.wifi.rssi", String(WiFi.RSSI()));
+        Log::debug(fmt::format("info.wifi.rssi", WiFi.RSSI()));
 
 #ifdef IOT_NODE_IP_DHCP
         IPAddress ip = WiFi.localIP();
         IPAddress gateway = WiFi.gatewayIP();
         IPAddress netmask = WiFi.subnetMask();
 
-        Log::debug("info.wifi.network-config.ip", ip.toString());
-        Log::debug("info.wifi.network-config.gateway", gateway.toString());
-        Log::debug("info.wifi.network-config.netmask", netmask.toString());
+        Log::debug(fmt::format("info.wifi.network-config.ip: {}", ip.toString().c_str()));
+        Log::debug(fmt::format("info.wifi.network-config.gateway: {}", gateway.toString().c_str()));
+        Log::debug(fmt::format("info.wifi.network-config.netmask: {}", netmask.toString().c_str()));
 #endif
 #endif
       }

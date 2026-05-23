@@ -17,7 +17,7 @@ namespace IotNode
       void onDataReceived(const uint8_t *mac, const uint8_t *incomingData, int length)
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("event", "esp-now-message");
+        Utils::Log::debug("event: esp-now-message");
         Utils::Log::debug("esp-now-message.mac", Utils::Link::printMacAddress(WiFi.BSSID()));
 #endif
 

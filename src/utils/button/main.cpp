@@ -146,12 +146,12 @@ namespace IotNode
             });
 
 #ifdef IOT_NODE_LOGGING
-        Log::debug("event", "button");
-        Log::debug("button.down", String(state.down));
-        Log::debug("button.down.changed", String(downChanged));
-        Log::debug("button.down.change-period", String(timeSinceLastChange));
-        Log::debug("button.repeat", String(state.repeat));
-        Log::debug("button.longpress", String(state.longpress));
+        Log::debug("event: button");
+        Log::debug(fmt::format("button.down: {}", state.down));
+        Log::debug(fmt::format("button.down.changed: {}", downChanged));
+        Log::debug(fmt::format("button.down.change-period: {}", timeSinceLastChange));
+        Log::debug(fmt::format("button.repeat: {}", state.repeat));
+        Log::debug(fmt::format("button.longpress: {}", state.longpress));
 #endif
 
         state.changeCallback({state.down,

@@ -18,7 +18,7 @@ namespace IotNode
       void setup()
       {
 #ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("sx1509-service", "initializing io");
+        Utils::Log::debug("sx1509-service: initializing io");
 #endif
 
         working = io.begin(SX1509_ADDRESS, I2C::bus);
@@ -26,7 +26,7 @@ namespace IotNode
         if (!working)
         {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("sx1509-service", "io initialization failed");
+          Utils::Log::debug("sx1509-service: io initialization failed");
 #endif
 
           return;
