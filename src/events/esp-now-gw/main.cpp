@@ -9,7 +9,7 @@ namespace IotNode
 
     namespace EspNowGw
     {
-      void event(std::vector<uint8_t> payload)
+      void event(::std::vector<uint8_t> payload)
       {
         Utils::UDP::instance.event(ids::espNowGw, 0, payload);
       }
@@ -21,7 +21,7 @@ namespace IotNode
         Utils::Log::debug("esp-now-message.mac", Utils::Link::printMacAddress(WiFi.BSSID()));
 #endif
 
-        std::vector<uint8_t> payload = {};
+        ::std::vector<uint8_t> payload = {};
 
         payload.insert(
             payload.end(),

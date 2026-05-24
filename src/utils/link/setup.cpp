@@ -31,7 +31,7 @@ namespace IotNode
 
         link.onGotIP([](IPAddress ip)
                      {
-                       UDP::instance.begin();
+                       IotNode::Utils::UDP::instance.begin();
 
 #ifdef IOT_NODE_ESP32
                        MDNS.begin(IOT_NODE_NAME);
@@ -55,7 +55,7 @@ namespace IotNode
 
         link.onDisconnected([]()
                             {
-                              UDP::instance.close();
+                              IotNode::Utils::UDP::instance.close();
 
 #ifdef IOT_NODE_ESP32
                               ArduinoOTA.end();

@@ -18,8 +18,11 @@ namespace IotNode
       {
         ArduinoOTA.setHostname(IOT_NODE_NAME);
         ArduinoOTA.setPassword(IOT_NODE_OTA_PASSWORD);
+
+#ifdef IOT_NODE_ESP32
         ArduinoOTA.setMdnsEnabled(true);
         ArduinoOTA.setTimeout(30000);
+#endif
 
         ArduinoOTA.onStart([]()
                            {

@@ -27,12 +27,12 @@ namespace IotNode
         info();
       }
 
-      void debug(std::string key, std::string value)
+      void debug(::std::string key, ::std::string value)
       {
         auto line = fmt::format("[{}]:\"{}\":\"{}\"\n", millis(), key, value);
         Serial.write(line.c_str());
       }
-      void debug(std::string value)
+      void debug(::std::string value)
       {
         auto line = fmt::format("[{}]:\"{}\"\n", millis(), value);
         Serial.write(line.c_str());

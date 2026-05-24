@@ -25,10 +25,10 @@ namespace IotNode
         unsigned long prevDuration;
         uint8_t repeat;
         uint8_t longpress;
-        std::vector<bool> pressedMap;
+        ::std::vector<bool> pressedMap;
       };
 
-      typedef std::function<void(Update update)> ChangeCallback;
+      typedef ::std::function<void(Update update)> ChangeCallback;
 
       struct Config
       {

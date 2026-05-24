@@ -26,7 +26,7 @@ namespace IotNode
 
     namespace Hello
     {
-      void addLineToRespone(Utils::UDP::Payload response, const std::string line);
+      void addLineToRespone(Utils::UDP::Payload response, const ::std::string line);
 
       void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
     }

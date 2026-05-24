@@ -24,12 +24,12 @@ namespace IotNode
 
     namespace Log
     {
-      typedef std::function<void(String key, String value)> LogCallback;
+      typedef ::std::function<void(String key, String value)> LogCallback;
 
       void setup();
 
-      void debug(std::string key, std::string value);
-      void debug(std::string value);
+      void debug(::std::string key, ::std::string value);
+      void debug(::std::string value);
 
       void info();
     }

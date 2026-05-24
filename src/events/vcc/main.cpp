@@ -14,7 +14,7 @@ namespace IotNode
       {
         auto handler = [](uint16_t vcc)
         {
-          std::vector<uint8_t> response = {
+          ::std::vector<uint8_t> response = {
               ids::vcc,
               0};
 

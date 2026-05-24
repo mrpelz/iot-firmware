@@ -35,7 +35,7 @@ namespace IotNode
       typedef uint8_t DisconnectReason_t;
 #endif
 
-      std::string printMacAddress(uint8_t input[6]);
+      ::std::string printMacAddress(uint8_t input[6]);
 
 #ifdef IOT_NODE_IP_STATIC
       struct InterfaceConfig
@@ -63,13 +63,13 @@ namespace IotNode
 
       struct Callbacks
       {
-        std::function<void()> beforeRestart = []() {};
-        std::function<void()> reconnect = []() {};
+        ::std::function<void()> beforeRestart = []() {};
+        ::std::function<void()> reconnect = []() {};
 
-        std::function<void()> connected = []() {};
-        std::function<void()> dhcpTimeout = []() {};
-        std::function<void()> disconnected = []() {};
-        std::function<void(IPAddress ip)> gotIP = [](auto ip) {};
+        ::std::function<void()> connected = []() {};
+        ::std::function<void()> dhcpTimeout = []() {};
+        ::std::function<void()> disconnected = []() {};
+        ::std::function<void(IPAddress ip)> gotIP = [](auto ip) {};
       };
     }
 

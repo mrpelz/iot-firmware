@@ -15,7 +15,7 @@ namespace IotNode
 
     namespace Keepalive
     {
-      typedef std::function<void()> KeepaliveCallback;
+      typedef ::std::function<void()> KeepaliveCallback;
 
       struct State
       {

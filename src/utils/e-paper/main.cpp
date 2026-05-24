@@ -214,7 +214,7 @@ namespace IotNode
         {
           auto _type = reinterpret_cast<uint8_t *>(&type);
 
-          std::vector<char> payload;
+          ::std::vector<char> payload;
 
           payload.insert(
               payload.end(),
@@ -237,7 +237,7 @@ namespace IotNode
         auto _x = reinterpret_cast<uint8_t *>(&x);
         auto _y = reinterpret_cast<uint8_t *>(&y);
 
-        std::vector<char> payload;
+        ::std::vector<char> payload;
 
         payload.insert(
             payload.end(),

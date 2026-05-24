@@ -46,9 +46,9 @@ namespace IotNode
 
     namespace UDP
     {
-      using Payload = std::vector<uint8_t>;
+      using Payload = ::std::vector<uint8_t>;
 
-      typedef std::function<void(
+      typedef ::std::function<void(
           Payload response)>
           RespondCallback;
 
@@ -58,7 +58,7 @@ namespace IotNode
         uint16_t port;
       };
 
-      typedef std::function<void(
+      typedef ::std::function<void(
           Payload *request,
           RespondCallback respond,
           Peer peer)>
@@ -78,8 +78,8 @@ namespace IotNode
         uint16_t port;
         Peer eventPeer;
         Peer fallbackPeer;
-        std::vector<Service *> services;
-        std::array<unsigned long, 256> requestTimes;
+        ::std::vector<Service *> services;
+        ::std::array<unsigned long, 256> requestTimes;
       };
 
       class Class

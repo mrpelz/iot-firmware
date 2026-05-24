@@ -31,8 +31,8 @@ namespace IotNode
 
       struct Credentials
       {
-        std::string ssid;
-        std::string password;
+        ::std::string ssid;
+        ::std::string password;
 
 #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
         uint8_t bssid[6];
@@ -91,12 +91,12 @@ namespace IotNode
         void connect();
         void disconnect();
         bool isConnected();
-        void onBeforeRestart(std::function<void()> callback);
-        void onConnected(std::function<void()> callback);
-        void onDhcpTimeout(std::function<void()> callback);
-        void onDisconnected(std::function<void()> callback);
-        void onGotIP(std::function<void(IPAddress ip)> callback);
-        void onReconnect(std::function<void()> callback);
+        void onBeforeRestart(::std::function<void()> callback);
+        void onConnected(::std::function<void()> callback);
+        void onDhcpTimeout(::std::function<void()> callback);
+        void onDisconnected(::std::function<void()> callback);
+        void onGotIP(::std::function<void(IPAddress ip)> callback);
+        void onReconnect(::std::function<void()> callback);
         void update();
         void debug(bool deep);
       };

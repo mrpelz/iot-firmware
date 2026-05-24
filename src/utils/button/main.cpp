@@ -9,7 +9,7 @@ namespace IotNode
 
     namespace Button
     {
-      std::vector<Class *> buttons;
+      ::std::vector<Class *> buttons;
 
       Class::Class(Config _config)
       {
@@ -136,10 +136,10 @@ namespace IotNode
         if (!(downChanged || longpressChanged))
           return;
 
-        std::vector<bool> pressedMap;
-        std::for_each(
-            std::begin(buttons),
-            std::end(buttons),
+        ::std::vector<bool> pressedMap;
+        ::std::for_each(
+            ::std::begin(buttons),
+            ::std::end(buttons),
             [&pressedMap](Class *button)
             {
               pressedMap.insert(pressedMap.end(), button->isDown());

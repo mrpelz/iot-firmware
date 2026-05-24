@@ -44,7 +44,7 @@ namespace IotNode
       };
 #pragma pack(pop)
 
-      typedef std::vector<SequenceItem> Sequence;
+      typedef ::std::vector<SequenceItem> Sequence;
 
       struct State
       {

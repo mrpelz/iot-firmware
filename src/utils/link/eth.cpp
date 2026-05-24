@@ -154,32 +154,32 @@ namespace IotNode
         return state.isConnected;
       }
 
-      void Class::onBeforeRestart(std::function<void()> callback)
+      void Class::onBeforeRestart(::std::function<void()> callback)
       {
         state.callbacks.beforeRestart = callback;
       }
 
-      void Class::onConnected(std::function<void()> callback)
+      void Class::onConnected(::std::function<void()> callback)
       {
         state.callbacks.connected = callback;
       }
 
-      void Class::onDhcpTimeout(std::function<void()> callback)
+      void Class::onDhcpTimeout(::std::function<void()> callback)
       {
         state.callbacks.dhcpTimeout = callback;
       }
 
-      void Class::onDisconnected(std::function<void()> callback)
+      void Class::onDisconnected(::std::function<void()> callback)
       {
         state.callbacks.disconnected = callback;
       }
 
-      void Class::onGotIP(std::function<void(IPAddress ip)> callback)
+      void Class::onGotIP(::std::function<void(IPAddress ip)> callback)
       {
         state.callbacks.gotIP = callback;
       }
 
-      void Class::onReconnect(std::function<void()> callback)
+      void Class::onReconnect(::std::function<void()> callback)
       {
         state.callbacks.reconnect = callback;
       }

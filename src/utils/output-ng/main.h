@@ -66,7 +66,7 @@ namespace IotNode
       struct Request
       {
         unsigned long iterations;
-        std::vector<SequenceItem<T>> sequence;
+        ::std::vector<SequenceItem<T>> sequence;
       };
 
       template <typename T>
@@ -75,7 +75,7 @@ namespace IotNode
         unsigned long iterations = 0;
         bool isInitialized = false;
         unsigned long nextSequenceStep = 0;
-        std::vector<SequenceItem<T>> sequence = {};
+        ::std::vector<SequenceItem<T>> sequence = {};
         size_t sequencePointer = 0;
       };
 
@@ -83,8 +83,8 @@ namespace IotNode
       class Base
       {
       private:
-        std::function<void(T value)> _onCommit;
-        std::function<void()> _onInit;
+        ::std::function<void(T value)> _onCommit;
+        ::std::function<void()> _onInit;
         void _commit();
 
       protected:
@@ -94,7 +94,7 @@ namespace IotNode
       public:
         T value;
         T previousValue;
-        Base(std::function<void()> onInit, std::function<void(T value)> onCommit, T initialValue);
+        Base(::std::function<void()> onInit, ::std::function<void(T value)> onCommit, T initialValue);
         bool getIsActive();
         void init();
         void set(T value);
@@ -109,7 +109,7 @@ namespace IotNode
         unsigned long _duration = 0;
         unsigned long _lastUpdate = 0;
         unsigned long _startTime = 0;
-        std::function<void()> _onUpdate = NULL;
+        ::std::function<void()> _onUpdate = NULL;
 
       public:
         double progress = 0;
@@ -117,7 +117,7 @@ namespace IotNode
         double getDelta(double startValue, double endValue);
         unsigned long getDelta(unsigned long startValue, unsigned long endValue);
         void reset();
-        void set(unsigned long duration, std::function<void()> onUpdate);
+        void set(unsigned long duration, ::std::function<void()> onUpdate);
         void update();
       };
 
@@ -142,9 +142,9 @@ namespace IotNode
         void beep(unsigned long count, unsigned long frequency);
         void beep(unsigned long frequency);
         void beep(void);
-        void melody(std::vector<unsigned long> _melody, unsigned long count, unsigned long holdTime, unsigned long pauseTime);
-        void melody(std::vector<unsigned long> _melody, unsigned long count);
-        void melody(std::vector<unsigned long> _melody);
+        void melody(::std::vector<unsigned long> _melody, unsigned long count, unsigned long holdTime, unsigned long pauseTime);
+        void melody(::std::vector<unsigned long> _melody, unsigned long count);
+        void melody(::std::vector<unsigned long> _melody);
         void update();
       };
 
@@ -152,7 +152,7 @@ namespace IotNode
       {
       public:
         Binary(uint8_t pin, bool invert);
-        Binary(std::function<void()> onInit, std::function<void(bool value)> onCommit);
+        Binary(::std::function<void()> onInit, ::std::function<void(bool value)> onCommit);
         void blink(unsigned long count);
         void blink(void);
         void setOff();
@@ -172,7 +172,7 @@ namespace IotNode
 
       public:
         Dimmable(uint8_t pin, bool invert);
-        Dimmable(std::function<void()> onInit, std::function<void(DimmableValue<double> value)> onCommit);
+        Dimmable(::std::function<void()> onInit, ::std::function<void(DimmableValue<double> value)> onCommit);
         void blink(unsigned long count);
         void blink(void);
         void setOff();
@@ -195,7 +195,7 @@ namespace IotNode
 
       public:
         DimmableRGB(uint8_t pinR, uint8_t pinG, uint8_t pinB, bool invert);
-        DimmableRGB(std::function<void()> onInit, std::function<void(DimmableRGBValue value)> onCommit);
+        DimmableRGB(::std::function<void()> onInit, ::std::function<void(DimmableRGBValue value)> onCommit);
         void blink(unsigned long count);
         void blink(void);
         void blinkR(unsigned long count);
@@ -216,11 +216,13 @@ namespace IotNode
         void update();
       };
 
+#ifdef IOT_NODE_WS2812
       class DimmableRGBWS2812 : public DimmableRGB
       {
       public:
         DimmableRGBWS2812(uint8_t index, ESP32_WS2812 *bus, bool push);
       };
+#endif
     }
 
   } // section namespace

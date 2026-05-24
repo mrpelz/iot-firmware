@@ -9,7 +9,7 @@ namespace IotNode
     {
       auto delimiter = String(",");
 
-      void addLineToRespone(Utils::UDP::Payload *response, const std::string line)
+      void addLineToRespone(Utils::UDP::Payload *response, const ::std::string line)
       {
         response->insert(response->end(), line.begin(), line.end());
       }

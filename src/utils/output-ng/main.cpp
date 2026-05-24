@@ -15,7 +15,7 @@ namespace IotNode
       }
 
       template <typename T>
-      Base<T>::Base(std::function<void()> onInit, std::function<void(T value)> onCommit, T initialValue)
+      Base<T>::Base(::std::function<void()> onInit, ::std::function<void(T value)> onCommit, T initialValue)
       {
         _onInit = onInit;
         _onCommit = onCommit;
@@ -150,7 +150,7 @@ namespace IotNode
         progress = 0;
       }
 
-      void Ramp::set(unsigned long duration, std::function<void()> onUpdate)
+      void Ramp::set(unsigned long duration, ::std::function<void()> onUpdate)
       {
         _duration = duration;
         _onUpdate = onUpdate;
@@ -218,25 +218,30 @@ namespace IotNode
         {
           if (!_isAttached)
           {
+#ifdef IOT_NODE_ESP32
             ledcAttachChannel(
                 _pin,
                 OUTPUT_BUZZER_DEFAULT_FREQUENCY,
                 OUTPUT_BUZZER_LEDC_RESOLUTION,
                 OUTPUT_BUZZER_LEDC_CHANNEL);
             ledcOutputInvert(_pin, _invert);
+#endif
 
             _isAttached = true;
           }
-
+#ifdef IOT_NODE_ESP32
           ledcWriteTone(_pin,
                         value);
+#endif
 
           return;
         }
 
         if (_isAttached)
         {
+#ifdef IOT_NODE_ESP32
           ledcDetach(_pin);
+#endif
           _isAttached = false;
         }
 
@@ -274,25 +279,25 @@ namespace IotNode
       }
 
       void Buzzer::melody(
-          std::vector<unsigned long> _melody)
+          ::std::vector<unsigned long> _melody)
       {
         melody(_melody, 1);
       }
 
       void Buzzer::melody(
-          std::vector<unsigned long> _melody,
+          ::std::vector<unsigned long> _melody,
           unsigned long count)
       {
         melody(_melody, count, OUTPUT_BUZZER_HOLD_TIME, OUTPUT_BUZZER_PAUSE_TIME);
       }
 
       void Buzzer::melody(
-          std::vector<unsigned long> _melody,
+          ::std::vector<unsigned long> _melody,
           unsigned long count,
           unsigned long holdTime,
           unsigned long pauseTime)
       {
-        std::vector<SequenceItem<DimmableValue<unsigned long>>> sequence(_melody.size());
+        ::std::vector<SequenceItem<DimmableValue<unsigned long>>> sequence(_melody.size());
 
         for (auto &item : _melody)
         {
@@ -351,10 +356,10 @@ namespace IotNode
       {
       }
       Binary::Binary(
-          std::function<void()> onInit,
-          std::function<void(bool value)> onCommit) : Base<bool>(onInit,
-                                                                 onCommit,
-                                                                 false)
+          ::std::function<void()> onInit,
+          ::std::function<void(bool value)> onCommit) : Base<bool>(onInit,
+                                                                   onCommit,
+                                                                   false)
       {
       }
 
@@ -406,20 +411,27 @@ namespace IotNode
       Dimmable::Dimmable(uint8_t pin, bool invert) : Base<DimmableValue<double>>(
                                                          [pin, invert]()
                                                          {
+#ifdef IOT_NODE_ESP32
                                                            ledcAttach(pin, OUTPUT_DIMMABLE_FREQUENCY, OUTPUT_DIMMABLE_RESOLUTION);
                                                            ledcOutputInvert(pin, invert);
+#endif
                                                          },
                                                          [this, pin](DimmableValue<double> value)
                                                          {
                                                            if (value.rampTime)
                                                            {
                                                              _ramp.set(value.rampTime, [this, pin, value]()
-                                                                       { ledcWrite(pin, gamma(_ramp.getDelta(previousValue.value, value.value)) * outputDimmableFull); });
+                                                                       {
+#ifdef IOT_NODE_ESP32
+                                                                         ledcWrite(pin, gamma(_ramp.getDelta(previousValue.value, value.value)) * outputDimmableFull);
+#endif
+                                                                       });
 
                                                              return;
                                                            }
-
+#ifdef IOT_NODE_ESP32
                                                            ledcWrite(pin, gamma(value.value) * outputDimmableFull);
+#endif
                                                          },
                                                          {.rampTime = 0,
                                                           .value = 0})
@@ -427,10 +439,10 @@ namespace IotNode
         _ramp = Ramp();
       }
       Dimmable::Dimmable(
-          std::function<void()> onInit,
-          std::function<void(DimmableValue<double> value)> onCommit) : Base<DimmableValue<double>>(onInit, onCommit,
-                                                                                                   {.rampTime = 0,
-                                                                                                    .value = 0})
+          ::std::function<void()> onInit,
+          ::std::function<void(DimmableValue<double> value)> onCommit) : Base<DimmableValue<double>>(onInit, onCommit,
+                                                                                                     {.rampTime = 0,
+                                                                                                      .value = 0})
       {
         _ramp = Ramp();
       }
@@ -481,6 +493,7 @@ namespace IotNode
       DimmableRGB::DimmableRGB(uint8_t pinR, uint8_t pinG, uint8_t pinB, bool invert) : Base<DimmableRGBValue>(
                                                                                             [pinR, pinG, pinB, invert]()
                                                                                             {
+#ifdef IOT_NODE_ESP32
                                                                                               ledcAttach(pinR, OUTPUT_DIMMABLE_FREQUENCY, OUTPUT_DIMMABLE_RESOLUTION);
                                                                                               ledcOutputInvert(pinR, invert);
 
@@ -489,6 +502,7 @@ namespace IotNode
 
                                                                                               ledcAttach(pinB, OUTPUT_DIMMABLE_FREQUENCY, OUTPUT_DIMMABLE_RESOLUTION);
                                                                                               ledcOutputInvert(pinB, invert);
+#endif
                                                                                             },
                                                                                             [this, pinR, pinG, pinB](DimmableRGBValue value)
                                                                                             {
@@ -496,16 +510,20 @@ namespace IotNode
                                                                                               {
                                                                                                 _ramp.set(value.rampTime, [this, pinR, pinG, pinB, value]()
                                                                                                           {
-                                                                      ledcWrite(pinR, gamma(_ramp.getDelta(previousValue.r, value.r)) * outputDimmableFull);
-                                                                      ledcWrite(pinG, gamma(_ramp.getDelta(previousValue.g, value.g)) * outputDimmableFull);
-                                                                      ledcWrite(pinB, gamma(_ramp.getDelta(previousValue.b, value.b)) * outputDimmableFull); });
+#ifdef IOT_NODE_ESP32
+                                                                                                            ledcWrite(pinR, gamma(_ramp.getDelta(previousValue.r, value.r)) * outputDimmableFull);
+                                                                                                            ledcWrite(pinG, gamma(_ramp.getDelta(previousValue.g, value.g)) * outputDimmableFull);
+                                                                                                            ledcWrite(pinB, gamma(_ramp.getDelta(previousValue.b, value.b)) * outputDimmableFull);
+#endif
+                                                                                                          });
 
                                                                                                 return;
                                                                                               }
-
+#ifdef IOT_NODE_ESP32
                                                                                               ledcWrite(pinR, gamma(value.r) * outputDimmableFull);
                                                                                               ledcWrite(pinG, gamma(value.g) * outputDimmableFull);
                                                                                               ledcWrite(pinB, gamma(value.b) * outputDimmableFull);
+#endif
                                                                                             },
                                                                                             {.rampTime = 0,
                                                                                              .r = 0,
@@ -515,12 +533,12 @@ namespace IotNode
         _ramp = Ramp();
       }
       DimmableRGB::DimmableRGB(
-          std::function<void()> onInit,
-          std::function<void(DimmableRGBValue value)> onCommit) : Base<DimmableRGBValue>(onInit, onCommit,
-                                                                                         {.rampTime = 0,
-                                                                                          .r = 0,
-                                                                                          .g = 0,
-                                                                                          .b = 0})
+          ::std::function<void()> onInit,
+          ::std::function<void(DimmableRGBValue value)> onCommit) : Base<DimmableRGBValue>(onInit, onCommit,
+                                                                                           {.rampTime = 0,
+                                                                                            .r = 0,
+                                                                                            .g = 0,
+                                                                                            .b = 0})
       {
         _ramp = Ramp();
       }
@@ -779,6 +797,7 @@ namespace IotNode
         Base::update();
       }
 
+#ifdef IOT_NODE_WS2812
       DimmableRGBWS2812::DimmableRGBWS2812(
           uint8_t index,
           ESP32_WS2812 *bus,
@@ -809,6 +828,7 @@ namespace IotNode
                                    })
       {
       }
+#endif
     }
 
   } // section namespace

@@ -65,15 +65,15 @@ namespace IotNode
 
       void event(bool isTargetDetected, int16_t distance = 0)
       {
-        std::vector<uint8_t> payload = {
+        ::std::vector<uint8_t> payload = {
             (uint8_t)(isTargetDetected ? 0x01 : 0x00),
         };
 
-        auto distance_ = std::bit_cast<std::array<uint8_t, sizeof distance>>(distance);
+        auto distance_ = ::std::bit_cast<::std::array<uint8_t, sizeof distance>>(distance);
         payload.insert(
             payload.end(),
-            std::begin(distance_),
-            std::end(distance_));
+            ::std::begin(distance_),
+            ::std::end(distance_));
 
         Utils::UDP::instance.event(ids::hmmdMotion, 0, payload);
       }

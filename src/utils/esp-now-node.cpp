@@ -84,7 +84,7 @@ namespace IotNode
         keepalive.start();
       }
 
-      void send(std::vector<uint8_t> payload)
+      void send(::std::vector<uint8_t> payload)
       {
         if (workingMode == WORKING_MODE::WAKE || !espNowInitialized)
           return;

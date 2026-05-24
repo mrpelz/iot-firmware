@@ -17,7 +17,7 @@ namespace IotNode
           Utils::Log::debug("button-event: triggered");
 #endif
 
-          std::vector<uint8_t> payload = {
+          ::std::vector<uint8_t> payload = {
               (uint8_t)(update.down ? 0x01 : 0x00),
               (uint8_t)(update.downChanged ? 0x01 : 0x00),
               update.repeat,
@@ -55,7 +55,7 @@ namespace IotNode
           Utils::Log::debug("button-espNow-event: triggered");
 #endif
 
-          std::vector<uint8_t> payload = {
+          ::std::vector<uint8_t> payload = {
               ids::button,
               index,
               (uint8_t)(update.down ? 0x01 : 0x00),

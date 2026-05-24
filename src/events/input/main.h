@@ -20,7 +20,7 @@ namespace IotNode
 
     namespace Input
     {
-      typedef std::function<void(bool down)> ChangeCallback;
+      typedef ::std::function<void(bool down)> ChangeCallback;
 
       struct State
       {

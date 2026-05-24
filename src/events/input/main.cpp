@@ -107,7 +107,7 @@ namespace IotNode
       {
         auto handler = [index](bool down)
         {
-          std::vector<uint8_t> response = {
+          ::std::vector<uint8_t> response = {
               ids::input,
               index,
               (uint8_t)(down ? 0x01 : 0x00)};

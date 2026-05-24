@@ -42,7 +42,7 @@ namespace IotNode
 
       void setup();
 
-      void send(std::vector<uint8_t> payload);
+      void send(::std::vector<uint8_t> payload);
 
       void update();
     }
