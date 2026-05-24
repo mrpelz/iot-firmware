@@ -41,7 +41,7 @@ namespace IotNode
         xTaskCreatePinnedToCore(
             task,
             "e-paper_maintenance",
-            2048,
+            FREERTOS_STACK_SIZE,
             NULL,
             tskIDLE_PRIORITY,
             NULL,

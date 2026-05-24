@@ -112,7 +112,7 @@ namespace IotNode
         xTaskCreatePinnedToCore(
             task,
             "indicator_maintenance",
-            2048,
+            FREERTOS_STACK_SIZE,
             NULL,
             tskIDLE_PRIORITY,
             NULL,

@@ -36,7 +36,7 @@ namespace IotNode
         xTaskCreatePinnedToCore(
             responseTask,
             "veml6070_handling",
-            2048,
+            FREERTOS_STACK_SIZE,
             NULL,
             tskIDLE_PRIORITY,
             &taskHandle,

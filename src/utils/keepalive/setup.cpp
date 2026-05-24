@@ -15,7 +15,7 @@ namespace IotNode
           });
 
       Class eventPeer(
-          10000,
+          10000, // 10 seconds
           []()
           {
             Utils::UDP::instance.removeEventPeer();
@@ -57,7 +57,7 @@ namespace IotNode
         xTaskCreatePinnedToCore(
             task,
             "keepalive_maintenance",
-            2048,
+            FREERTOS_STACK_SIZE,
             NULL,
             tskIDLE_PRIORITY,
             NULL,

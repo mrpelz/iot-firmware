@@ -58,7 +58,7 @@ namespace IotNode
         xTaskCreatePinnedToCore(
             task,
             "led_maintenance",
-            2048,
+            FREERTOS_STACK_SIZE,
             NULL,
             tskIDLE_PRIORITY,
             NULL,

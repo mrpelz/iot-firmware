@@ -9,8 +9,8 @@ namespace IotNode
     {
       Class::Class(unsigned long timeout, KeepaliveCallback callback)
       {
-        state.timeout = timeout;
-        state.callback = callback;
+        _state.timeout = timeout;
+        _state.callback = callback;
       }
 
       void Class::start()
@@ -19,7 +19,7 @@ namespace IotNode
         Utils::Log::debug("keepalive: start");
 #endif
 
-        state.running = true;
+        _state.running = true;
       }
 
       void Class::stop()
@@ -28,46 +28,46 @@ namespace IotNode
         Utils::Log::debug("keepalive: stop");
 #endif
 
-        state.running = false;
+        _state.running = false;
       }
 
       void Class::tick()
       {
-        if (!state.running)
+        if (!_state.running)
         {
           start();
         }
 
-        state.ticked = true;
+        _state.ticked = true;
       }
 
       void Class::update()
       {
         unsigned long now = millis();
 
-        if (state.ticked)
+        if (_state.ticked)
         {
-          state.ticked = false;
+          _state.ticked = false;
 
 #ifdef IOT_NODE_LOGGING
           Utils::Log::debug("keepalive: tick");
 #endif
 
-          state.lastTick = now;
+          _state.lastTick = now;
         }
 
-        if (!state.running)
+        if (!_state.running)
           return;
 
-        unsigned long timeSinceTick = now - state.lastTick;
+        unsigned long timeSinceTick = now - _state.lastTick;
 
-        if (timeSinceTick > state.timeout)
+        if (timeSinceTick > _state.timeout)
         {
 #ifdef IOT_NODE_LOGGING
           Utils::Log::debug("keepalive: trip");
 #endif
 
-          state.callback();
+          _state.callback();
 
           stop();
         }

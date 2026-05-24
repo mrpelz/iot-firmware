@@ -1,6 +1,9 @@
 #pragma once
 
 #include <Arduino.h>
+
+#include <pre.h>
+#include <post.h>
 #include <functional>
 
 #include "../../utils/log.h"
@@ -26,7 +29,7 @@ namespace IotNode
       class Class
       {
       private:
-        State state;
+        State _state;
 
       public:
         Class(unsigned long timeout, KeepaliveCallback callback);

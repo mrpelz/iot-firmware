@@ -51,7 +51,7 @@ namespace IotNode
         xTaskCreatePinnedToCore(
             task,
             "rf433_maintenance",
-            2048,
+            FREERTOS_STACK_SIZE,
             NULL,
             tskIDLE_PRIORITY,
             NULL,

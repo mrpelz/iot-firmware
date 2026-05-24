@@ -3,6 +3,9 @@
 #ifdef IOT_NODE_MCP9808
 
 #include <Arduino.h>
+
+#include <pre.h>
+#include <post.h>
 #include <Wire.h>
 
 #include "Adafruit_MCP9808.h"

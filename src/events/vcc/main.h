@@ -3,6 +3,9 @@
 #ifdef IOT_NODE_VCC
 
 #include <Arduino.h>
+
+#include <pre.h>
+#include <post.h>
 #include <functional>
 
 #include "../../utils/esp-now-node.h"

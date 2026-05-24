@@ -1,6 +1,9 @@
 #pragma once
 
 #include <Arduino.h>
+
+#include <pre.h>
+#include <post.h>
 #include <functional>
 
 #include <pre.h>

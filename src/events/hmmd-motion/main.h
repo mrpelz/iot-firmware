@@ -3,6 +3,9 @@
 #ifdef IOT_NODE_HMMD_MOTION
 
 #include <Arduino.h>
+
+#include <pre.h>
+#include <post.h>
 #include <vector>
 
 #include "../../utils/log.h"

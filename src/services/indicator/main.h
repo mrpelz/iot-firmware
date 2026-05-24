@@ -4,6 +4,9 @@
 
 #include <Arduino.h>
 
+#include <pre.h>
+#include <post.h>
+
 #include "../../utils/indicator/setup.h"
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"

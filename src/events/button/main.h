@@ -4,6 +4,9 @@
 
 #include <Arduino.h>
 
+#include <pre.h>
+#include <post.h>
+
 #include "../../utils/button/main.h"
 #include "../../utils/esp-now-node.h"
 #include "../../utils/log.h"

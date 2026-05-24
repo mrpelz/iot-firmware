@@ -85,7 +85,7 @@ namespace IotNode
         xTaskCreatePinnedToCore(
             task,
             "input_maintenance",
-            2048,
+            FREERTOS_STACK_SIZE,
             NULL,
             tskIDLE_PRIORITY,
             NULL,
@@ -138,7 +138,7 @@ namespace IotNode
         xTaskCreatePinnedToCore(
             task,
             "input_maintenance",
-            2048,
+            FREERTOS_STACK_SIZE,
             NULL,
             tskIDLE_PRIORITY,
             NULL,

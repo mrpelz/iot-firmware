@@ -8,7 +8,7 @@
 #include <pre.h>
 #include <post.h>
 
-#include <fmt/core.h>
+#include <FmtLib.h>
 
 #ifdef IOT_NODE_ESP8266
 #include <ESP8266WiFi.h>

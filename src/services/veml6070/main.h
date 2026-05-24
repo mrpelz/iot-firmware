@@ -3,6 +3,9 @@
 #ifdef IOT_NODE_VEML6070
 
 #include <Arduino.h>
+
+#include <pre.h>
+#include <post.h>
 #include <Wire.h>
 
 #include "../../utils/i2c.h"

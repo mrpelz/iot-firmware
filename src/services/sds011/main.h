@@ -4,6 +4,9 @@
 
 #include <Arduino.h>
 
+#include <pre.h>
+#include <post.h>
+
 #include "SdsDustSensor.h"
 
 #include "../../utils/log.h"

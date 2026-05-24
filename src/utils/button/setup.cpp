@@ -67,7 +67,7 @@ namespace IotNode
         xTaskCreatePinnedToCore(
             task,
             "button_maintenance",
-            2048,
+            FREERTOS_STACK_SIZE,
             NULL,
             tskIDLE_PRIORITY,
             NULL,

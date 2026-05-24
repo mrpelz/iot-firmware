@@ -3,6 +3,9 @@
 #ifdef IOT_NODE_SGP30
 
 #include <Arduino.h>
+
+#include <pre.h>
+#include <post.h>
 #include <Wire.h>
 
 #include <Adafruit_SGP30.h>

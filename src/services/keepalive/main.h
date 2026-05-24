@@ -2,6 +2,9 @@
 
 #include <Arduino.h>
 
+#include <pre.h>
+#include <post.h>
+
 #include "../../utils/keepalive/setup.h"
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"

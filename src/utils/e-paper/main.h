@@ -3,6 +3,9 @@
 #ifdef IOT_NODE_E_PAPER
 
 #include <Arduino.h>
+
+#include <pre.h>
+#include <post.h>
 #include <functional>
 
 #include "epd_driver.h"

@@ -3,6 +3,9 @@
 #ifdef IOT_NODE_OUTPUT
 
 #include <Arduino.h>
+
+#include <pre.h>
+#include <post.h>
 #include "../log.h"
 
 namespace IotNode

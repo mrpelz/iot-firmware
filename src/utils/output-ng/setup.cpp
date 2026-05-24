@@ -763,7 +763,7 @@ namespace IotNode
         xTaskCreatePinnedToCore(
             task,
             "output_ng_maintenance",
-            2048,
+            FREERTOS_STACK_SIZE,
             NULL,
             tskIDLE_PRIORITY,
             NULL,

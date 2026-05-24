@@ -3,6 +3,9 @@
 #ifdef IOT_NODE_CCS811
 
 #include <Arduino.h>
+
+#include <pre.h>
+#include <post.h>
 #include <Wire.h>
 
 #include <Adafruit_CCS811.h>

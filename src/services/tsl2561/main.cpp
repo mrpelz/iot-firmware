@@ -38,7 +38,7 @@ namespace IotNode
         xTaskCreatePinnedToCore(
             responseTask,
             "tsl2561_handling",
-            2048,
+            FREERTOS_STACK_SIZE,
             NULL,
             tskIDLE_PRIORITY,
             &taskHandle,

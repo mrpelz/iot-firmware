@@ -3,6 +3,9 @@
 #ifdef IOT_NODE_BME280
 
 #include <Arduino.h>
+
+#include <pre.h>
+#include <post.h>
 #include <Wire.h>
 
 #include <Adafruit_BME280.h>

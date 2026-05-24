@@ -410,7 +410,7 @@ namespace IotNode
         Log::debug(fmt::format("info.wifi.channel: {}", WiFi.channel()));
 #endif
 
-        Log::debug(fmt::format("info.wifi.rssi", WiFi.RSSI()));
+        Log::debug(fmt::format("info.wifi.rssi: {}", WiFi.RSSI()));
 
 #ifdef IOT_NODE_IP_DHCP
         IPAddress ip = WiFi.localIP();

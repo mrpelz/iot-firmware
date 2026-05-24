@@ -3,6 +3,9 @@
 #ifdef IOT_NODE_RF_433
 
 #include <Arduino.h>
+
+#include <pre.h>
+#include <post.h>
 #include <vector>
 
 #include <RCSwitch.h>

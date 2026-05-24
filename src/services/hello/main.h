@@ -2,7 +2,10 @@
 
 #include <Arduino.h>
 
-#include <fmt/core.h>
+#include <pre.h>
+#include <post.h>
+
+#include <FmtLib.h>
 
 #include "../../utils/link/main.h"
 #include "../../utils/log.h"
