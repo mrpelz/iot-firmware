@@ -2,28 +2,20 @@
 
 #include "./setup.h"
 
-namespace IotNode
+namespace IotNode::Services::Tsl2561
 {
-  namespace Services
+  Utils::UDP::Service service = {
+      .serviceId = ids::tsl2561,
+      .serviceIndex = 0,
+      .handler = handler,
+  };
+
+  void setup()
   {
+    initializer(&Utils::I2C::bus);
 
-    namespace Tsl2561
-    {
-      Utils::UDP::Service service = {
-          .serviceId = ids::tsl2561,
-          .serviceIndex = 0,
-          .handler = handler,
-      };
-
-      void setup()
-      {
-        initializer(&Utils::I2C::bus);
-
-        Utils::UDP::instance.addService(&service);
-      }
-    }
-
-  } // section namespace
-} // project namespace
+    Utils::UDP::instance.addService(&service);
+  }
+}
 
 #endif

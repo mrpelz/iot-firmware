@@ -15,22 +15,14 @@
 #define TSL2561_CHOSEN_ADDRESS TSL2561_ADDR_FLOAT
 #endif
 
-namespace IotNode
+namespace IotNode::Services::Tsl2561
 {
-  namespace Services
+  class Sensor : public Adafruit_TSL2561_Unified
   {
-
-    namespace Tsl2561
-    {
-      class Sensor : public Adafruit_TSL2561_Unified
-      {
-      public:
-        Sensor();
-        float calculateLux(uint16_t broadband, uint16_t ir);
-      };
-    }
-
-  } // section namespace
-} // project namespace
+  public:
+    Sensor();
+    float calculateLux(uint16_t broadband, uint16_t ir);
+  };
+}
 
 #endif

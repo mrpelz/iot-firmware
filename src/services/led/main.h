@@ -7,17 +7,9 @@
 #include "../../utils/udp/main.h"
 #include "../service-ids.h"
 
-namespace IotNode
+namespace IotNode::Services::Led
 {
-  namespace Services
-  {
-
-    namespace Led
-    {
-      Utils::UDP::Service makeService(FadeLed *led, uint8_t index);
-    }
-
-  } // section namespace
-} // project namespace
+  Utils::UDP::Service makeService(FadeLed *led, uint8_t index);
+}
 
 #endif

@@ -9,17 +9,9 @@
 #include "../../utils/udp/setup.h"
 #include "./main.h"
 
-namespace IotNode
+namespace IotNode::Services::Mcp9808
 {
-  namespace Services
-  {
-
-    namespace Mcp9808
-    {
-      void setup();
-    }
-
-  } // section namespace
-} // project namespace
+  void setup();
+}
 
 #endif

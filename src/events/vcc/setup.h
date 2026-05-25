@@ -8,21 +8,13 @@
 #include "../../utils/vcc.h"
 #include "./main.h"
 
-namespace IotNode
+namespace IotNode::Events::VCC
 {
-  namespace Events
-  {
-
-    namespace VCC
-    {
-      void update();
+  void update();
 
 #ifdef IOT_NODE_ESP_NOW_NODE
-      void setupEspNow();
+  void setupEspNow();
 #endif
-    }
-
-  } // section namespace
-} // project namespace
+}
 
 #endif

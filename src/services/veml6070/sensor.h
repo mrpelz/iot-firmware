@@ -11,21 +11,13 @@
 #include <Adafruit_VEML6070.h>
 #undef private
 
-namespace IotNode
+namespace IotNode::Services::Veml6070
 {
-  namespace Services
+  class Sensor : public Adafruit_VEML6070
   {
-
-    namespace Veml6070
-    {
-      class Sensor : public Adafruit_VEML6070
-      {
-      public:
-        bool begin(TwoWire *i2c);
-      };
-    }
-
-  } // section namespace
-} // project namespace
+  public:
+    bool begin(TwoWire *i2c);
+  };
+}
 
 #endif

@@ -19,17 +19,9 @@
 #include <ETH.h>
 #endif
 
-namespace IotNode
+namespace IotNode::Services::Hello
 {
-  namespace Services
-  {
+  void addLineToRespone(Utils::UDP::Payload response, const ::std::string line);
 
-    namespace Hello
-    {
-      void addLineToRespone(Utils::UDP::Payload response, const ::std::string line);
-
-      void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
-    }
-
-  } // section namespace
-} // project namespace
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
+}

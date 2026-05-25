@@ -14,21 +14,13 @@
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"
 
-namespace IotNode
+namespace IotNode::Services::Mcp9808
 {
-  namespace Services
-  {
+  void initializer(TwoWire *i2c);
 
-    namespace Mcp9808
-    {
-      void initializer(TwoWire *i2c);
+  void responseTask(void *parameter);
 
-      void responseTask(void *parameter);
-
-      void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
-    }
-
-  } // section namespace
-} // project namespace
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
+}
 
 #endif

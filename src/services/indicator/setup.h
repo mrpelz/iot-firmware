@@ -7,17 +7,9 @@
 #include "../../utils/udp/setup.h"
 #include "./main.h"
 
-namespace IotNode
+namespace IotNode::Services::Indicator
 {
-  namespace Services
-  {
-
-    namespace Indicator
-    {
-      void setup();
-    }
-
-  } // section namespace
-} // project namespace
+  void setup();
+}
 
 #endif

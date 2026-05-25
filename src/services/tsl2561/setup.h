@@ -9,17 +9,9 @@
 #include "../../utils/udp/setup.h"
 #include "./main.h"
 
-namespace IotNode
+namespace IotNode::Services::Tsl2561
 {
-  namespace Services
-  {
-
-    namespace Tsl2561
-    {
-      void setup();
-    }
-
-  } // section namespace
-} // project namespace
+  void setup();
+}
 
 #endif

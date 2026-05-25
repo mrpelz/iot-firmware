@@ -11,17 +11,9 @@
 #include "../../utils/log.h"
 #include "./main.h"
 
-namespace IotNode
+namespace IotNode::Events::EspNowGw
 {
-  namespace Events
-  {
-
-    namespace EspNowGw
-    {
-      void setup();
-    }
-
-  } // section namespace
-} // project namespace
+  void setup();
+}
 
 #endif

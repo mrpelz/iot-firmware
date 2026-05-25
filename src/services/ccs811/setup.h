@@ -9,17 +9,9 @@
 #include "../../utils/udp/setup.h"
 #include "./main.h"
 
-namespace IotNode
+namespace IotNode::Services::Ccs811
 {
-  namespace Services
-  {
-
-    namespace Ccs811
-    {
-      void setup();
-    }
-
-  } // section namespace
-} // project namespace
+  void setup();
+}
 
 #endif

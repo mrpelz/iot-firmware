@@ -13,21 +13,13 @@
 #include "../../utils/udp/main.h"
 #include "./sensor.h"
 
-namespace IotNode
+namespace IotNode::Services::Veml6070
 {
-  namespace Services
-  {
+  void initializer(TwoWire *i2c);
 
-    namespace Veml6070
-    {
-      void initializer(TwoWire *i2c);
+  void responseTask(void *parameter);
 
-      void responseTask(void *parameter);
-
-      void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
-    }
-
-  } // section namespace
-} // project namespace
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
+}
 
 #endif

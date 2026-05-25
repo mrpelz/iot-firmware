@@ -10,29 +10,21 @@
 #define I2C_LOCK_DELAY 10
 #define I2C_START_DELAY 10000
 
-namespace IotNode
+namespace IotNode::Utils::I2C
 {
-  namespace Utils
-  {
-
-    namespace I2C
-    {
-      extern TwoWire bus;
+  extern TwoWire bus;
 
 #ifdef IOT_NODE_I2C_SCAN
-      void scan();
+  void scan();
 #endif
 
-      void setup();
+  void setup();
 
 #ifdef IOT_NODE_ESP32
-      void claim();
+  void claim();
 
-      void unclaim();
+  void unclaim();
 #endif
-    }
-
-  } // section namespace
-} // project namespace
+}
 
 #endif

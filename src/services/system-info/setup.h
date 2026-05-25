@@ -6,15 +6,7 @@
 #include "../../utils/udp/setup.h"
 #include "./main.h"
 
-namespace IotNode
+namespace IotNode::Services::SystemInfo
 {
-  namespace Services
-  {
-
-    namespace SystemInfo
-    {
-      void setup();
-    }
-
-  } // section namespace
-} // project namespace
+  void setup();
+}

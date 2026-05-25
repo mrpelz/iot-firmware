@@ -12,23 +12,15 @@
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"
 
-namespace IotNode
+namespace IotNode::Services::Sds011
 {
-  namespace Services
-  {
+  void sleepSensor();
 
-    namespace Sds011
-    {
-      void sleepSensor();
+  void initializer();
 
-      void initializer();
+  void responseTask(void *parameter);
 
-      void responseTask(void *parameter);
-
-      void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
-    }
-
-  } // section namespace
-} // project namespace
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
+}
 
 #endif

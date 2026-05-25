@@ -2,125 +2,117 @@
 
 #ifdef IOT_NODE_INPUT
 
-namespace IotNode
+namespace IotNode::Events::Input
 {
-  namespace Events
+  Class::Class(uint8_t _pin, bool _pullup, unsigned long _debounceTime, unsigned long _noiseGateTime)
   {
+    pin = _pin;
+    pullup = _pullup;
+    debounceTime = _debounceTime;
+    noiseGateTime = _noiseGateTime;
+  }
 
-    namespace Input
+  void Class::setChangeCallback(ChangeCallback callback)
+  {
+    state.changeCallback = callback;
+  }
+
+  void Class::start()
+  {
+    state.running = true;
+
+    pinMode(
+        pin,
+        pullup ? INPUT_PULLUP : INPUT);
+  }
+
+  void Class::update()
+  {
+    update(false);
+  }
+  void Class::update(bool force)
+  {
+    if (!state.running)
+      return;
+
+    auto now = millis();
+
+    auto down = digitalRead(pin);
+
+    if (!force && noiseGateTime)
     {
-      Class::Class(uint8_t _pin, bool _pullup, unsigned long _debounceTime, unsigned long _noiseGateTime)
+      if (!state.noiseGateTime && down)
       {
-        pin = _pin;
-        pullup = _pullup;
-        debounceTime = _debounceTime;
-        noiseGateTime = _noiseGateTime;
+        state.noiseGateTime = now;
+        return;
       }
 
-      void Class::setChangeCallback(ChangeCallback callback)
+      auto timeSinceNoiseGateBegin = now - state.noiseGateTime;
+      if (timeSinceNoiseGateBegin < noiseGateTime && down)
       {
-        state.changeCallback = callback;
+        return;
       }
 
-      void Class::start()
+      if (state.noiseGateTime && !down)
       {
-        state.running = true;
-
-        pinMode(
-            pin,
-            pullup ? INPUT_PULLUP : INPUT);
+        state.noiseGateTime = 0;
+        return;
       }
 
-      void Class::update()
-      {
-        update(false);
-      }
-      void Class::update(bool force)
-      {
-        if (!state.running)
-          return;
-
-        auto now = millis();
-
-        auto down = digitalRead(pin);
-
-        if (!force && noiseGateTime)
-        {
-          if (!state.noiseGateTime && down)
-          {
-            state.noiseGateTime = now;
-            return;
-          }
-
-          auto timeSinceNoiseGateBegin = now - state.noiseGateTime;
-          if (timeSinceNoiseGateBegin < noiseGateTime && down)
-          {
-            return;
-          }
-
-          if (state.noiseGateTime && !down)
-          {
-            state.noiseGateTime = 0;
-            return;
-          }
-
-          state.noiseGateTime = 0;
-        }
-
-        auto timeSinceLastChange = now - state.changeTime;
-        if (!force && timeSinceLastChange < debounceTime)
-          return;
-
-        bool downChanged = down != state.down;
-
-        if (downChanged)
-        {
-          state.down = down;
-        }
-
-        if (!downChanged)
-          return;
-
-#ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("event: input");
-        Utils::Log::debug(fmt::format("input.down: {}", state.down));
-#endif
-
-        state.changeCallback(state.down);
-      }
-
-      ChangeCallback makeEvent(Utils::UDP::Class *udp, uint8_t index)
-      {
-        auto handler = [udp, index](bool down)
-        {
-          udp->event(
-              ids::input,
-              index,
-              {(uint8_t)(down ? 0x01 : 0x00)});
-        };
-
-        return handler;
-      }
-
-#ifdef IOT_NODE_ESP_NOW_NODE
-      ChangeCallback makeEspNowEvent(uint8_t index)
-      {
-        auto handler = [index](bool down)
-        {
-          ::std::vector<uint8_t> response = {
-              ids::input,
-              index,
-              (uint8_t)(down ? 0x01 : 0x00)};
-
-          Utils::EspNowNode::send(response);
-        };
-
-        return handler;
-      }
-#endif
+      state.noiseGateTime = 0;
     }
 
-  } // section namespace
-} // project namespace
+    auto timeSinceLastChange = now - state.changeTime;
+    if (!force && timeSinceLastChange < debounceTime)
+      return;
+
+    bool downChanged = down != state.down;
+
+    if (downChanged)
+    {
+      state.down = down;
+    }
+
+    if (!downChanged)
+      return;
+
+#ifdef IOT_NODE_LOGGING
+    Utils::Log::debug("event: input");
+    Utils::Log::debug(fmt::format("input.down: {}", state.down));
+#endif
+
+    state.changeCallback(state.down);
+  }
+
+  ChangeCallback makeEvent(Utils::UDP::Class *udp, uint8_t index)
+  {
+    auto handler = [udp, index](bool down)
+    {
+      udp->event(
+          ids::input,
+          index,
+          {(uint8_t)(down ? 0x01 : 0x00)});
+    };
+
+    return handler;
+  }
+
+#ifdef IOT_NODE_ESP_NOW_NODE
+  ChangeCallback makeEspNowEvent(uint8_t index)
+  {
+    auto handler = [index](bool down)
+    {
+      ::std::vector<uint8_t> response = {
+          ids::input,
+          index,
+          (uint8_t)(down ? 0x01 : 0x00)};
+
+      Utils::EspNowNode::send(response);
+    };
+
+    return handler;
+  }
+#endif
+}
 
 #endif

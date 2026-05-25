@@ -6,16 +6,8 @@
 
 #include "./log.h"
 
-namespace IotNode
+namespace IotNode::Utils::OTA
 {
-  namespace Utils
-  {
-
-    namespace OTA
-    {
-      void update();
-      void setup();
-    }
-
-  } // section namespace
-} // project namespace
+  void update();
+  void setup();
+}

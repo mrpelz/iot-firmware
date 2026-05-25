@@ -9,21 +9,13 @@
 
 #include "./main.h"
 
-namespace IotNode
+namespace IotNode::Utils::EPaper
 {
-  namespace Utils
-  {
-
-    namespace EPaper
-    {
 #ifdef IOT_NODE_ESP32
-      void task(void *parameter);
+  void task(void *parameter);
 #endif
 
-      void setup();
-    }
-
-  } // section namespace
-} // project namespace
+  void setup();
+}
 
 #endif

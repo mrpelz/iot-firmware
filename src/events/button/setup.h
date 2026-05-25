@@ -11,21 +11,13 @@
 #include "../../utils/udp/setup.h"
 #include "./main.h"
 
-namespace IotNode
+namespace IotNode::Events::Button
 {
-  namespace Events
-  {
-
-    namespace Button
-    {
-      void setup();
+  void setup();
 
 #ifdef IOT_NODE_ESP_NOW_NODE
-      void setupEspNow();
+  void setupEspNow();
 #endif
-    }
-
-  } // section namespace
-} // project namespace
+}
 
 #endif

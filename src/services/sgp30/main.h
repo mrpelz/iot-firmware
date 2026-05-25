@@ -14,23 +14,15 @@
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"
 
-namespace IotNode
+namespace IotNode::Services::Sgp30
 {
-  namespace Services
-  {
+  uint32_t getAbsoluteHumidity(float temperature, float humidity);
 
-    namespace Sgp30
-    {
-      uint32_t getAbsoluteHumidity(float temperature, float humidity);
+  void initializer(TwoWire *i2c);
 
-      void initializer(TwoWire *i2c);
+  void responseTask(void *parameter);
 
-      void responseTask(void *parameter);
-
-      void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
-    }
-
-  } // section namespace
-} // project namespace
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
+}
 
 #endif

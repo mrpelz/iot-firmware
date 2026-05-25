@@ -39,67 +39,59 @@
 #define REPEAT_COUNT 2
 #define REPEAT_WINDOW 200
 
-namespace IotNode
+namespace IotNode::Utils::UDP
 {
-  namespace Utils
+  using Payload = ::std::vector<uint8_t>;
+
+  typedef ::std::function<void(
+      Payload response)>
+      RespondCallback;
+
+  struct Peer
   {
+    IPAddress ip;
+    uint16_t port;
+  };
 
-    namespace UDP
-    {
-      using Payload = ::std::vector<uint8_t>;
+  typedef ::std::function<void(
+      Payload *request,
+      RespondCallback respond,
+      Peer peer)>
+      RequestHandler;
 
-      typedef ::std::function<void(
-          Payload response)>
-          RespondCallback;
+  struct Service
+  {
+    uint8_t serviceId;
+    uint8_t serviceIndex;
+    RequestHandler handler;
+  };
 
-      struct Peer
-      {
-        IPAddress ip;
-        uint16_t port;
-      };
+  struct State
+  {
+    bool isListening = false;
+    AsyncUDP udp;
+    uint16_t port;
+    Peer eventPeer;
+    Peer fallbackPeer;
+    ::std::vector<Service *> services;
+    ::std::array<unsigned long, 256> requestTimes;
+  };
 
-      typedef ::std::function<void(
-          Payload *request,
-          RespondCallback respond,
-          Peer peer)>
-          RequestHandler;
+  class Class
+  {
+  private:
+    State state;
+    void handleRequest(AsyncUDPPacket *packet);
 
-      struct Service
-      {
-        uint8_t serviceId;
-        uint8_t serviceIndex;
-        RequestHandler handler;
-      };
-
-      struct State
-      {
-        bool isListening = false;
-        AsyncUDP udp;
-        uint16_t port;
-        Peer eventPeer;
-        Peer fallbackPeer;
-        ::std::vector<Service *> services;
-        ::std::array<unsigned long, 256> requestTimes;
-      };
-
-      class Class
-      {
-      private:
-        State state;
-        void handleRequest(AsyncUDPPacket *packet);
-
-      public:
-        Class(uint16_t port);
-        void addService(Service *service);
-        void begin();
-        void close();
-        void event(uint8_t eventId, uint8_t eventIndex, Payload event);
-        bool hasEventPeer();
-        bool isListening();
-        void removeEventPeer();
-        void setEventPeer(Peer peer);
-      };
-    }
-
-  } // section namespace
-} // project namespace
+  public:
+    Class(uint16_t port);
+    void addService(Service *service);
+    void begin();
+    void close();
+    void event(uint8_t eventId, uint8_t eventIndex, Payload event);
+    bool hasEventPeer();
+    bool isListening();
+    void removeEventPeer();
+    void setEventPeer(Peer peer);
+  };
+}

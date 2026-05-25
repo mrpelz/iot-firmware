@@ -2,28 +2,20 @@
 
 #include "./sensor.h"
 
-namespace IotNode
+namespace IotNode::Services::Veml6070
 {
-  namespace Services
+  bool Sensor::begin(TwoWire *i2c)
   {
+    i2c->beginTransmission(VEML6070_ADDR_L);
 
-    namespace Veml6070
+    if (i2c->endTransmission() == 0)
     {
-      bool Sensor::begin(TwoWire *i2c)
-      {
-        i2c->beginTransmission(VEML6070_ADDR_L);
-
-        if (i2c->endTransmission() == 0)
-        {
-          Adafruit_VEML6070::begin(VEML6070_4_T, i2c);
-          return true;
-        }
-
-        return false;
-      }
+      Adafruit_VEML6070::begin(VEML6070_4_T, i2c);
+      return true;
     }
 
-  } // section namespace
-} // project namespace
+    return false;
+  }
+}
 
 #endif

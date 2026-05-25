@@ -32,35 +32,27 @@
 #define WS_HEADER_SIZE 16
 #define WS_RX_BUFFER_SIZE E_PAPER_FRAMEBUFFER_SIZE + WS_HEADER_SIZE
 
-namespace IotNode
+namespace IotNode::Utils::EPaper
 {
-  namespace Utils
-  {
+  void epdClear();
 
-    namespace EPaper
-    {
-      void epdClear();
+  bool touchSetup();
 
-      bool touchSetup();
+  bool epdSetup();
 
-      bool epdSetup();
+  void websocketDataHandler(esp_websocket_event_data_t *data);
 
-      void websocketDataHandler(esp_websocket_event_data_t *data);
+  void websocketEventHandler(
+      void *handler_args,
+      esp_event_base_t base,
+      int32_t event_id,
+      void *event_data);
 
-      void websocketEventHandler(
-          void *handler_args,
-          esp_event_base_t base,
-          int32_t event_id,
-          void *event_data);
+  void websocketSend(uint32_t type);
 
-      void websocketSend(uint32_t type);
+  void websocketTouch();
 
-      void websocketTouch();
-
-      bool websocketStart();
-    }
-
-  } // section namespace
-} // project namespace
+  bool websocketStart();
+}
 
 #endif

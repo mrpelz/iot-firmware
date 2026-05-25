@@ -6,19 +6,11 @@
 
 #define VCC_OVERSAMPLE 10
 
-namespace IotNode
+namespace IotNode::Utils::VCC
 {
-  namespace Utils
-  {
+  void update();
 
-    namespace VCC
-    {
-      void update();
-
-      uint16_t get();
-    }
-
-  } // section namespace
-} // project namespace
+  uint16_t get();
+}
 
 #endif

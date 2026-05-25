@@ -2,25 +2,17 @@
 
 #ifdef IOT_NODE_HMMD_MOTION
 
-namespace IotNode
+namespace IotNode::Events::HmmdMotion
 {
-  namespace Events
+  void update()
   {
+    checkForTargets();
+  }
 
-    namespace HmmdMotion
-    {
-      void update()
-      {
-        checkForTargets();
-      }
-
-      void setup()
-      {
-        initializer();
-      }
-    }
-
-  } // section namespace
-} // project namespace
+  void setup()
+  {
+    initializer();
+  }
+}
 
 #endif

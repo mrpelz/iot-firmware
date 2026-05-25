@@ -6,15 +6,7 @@
 #include "../../utils/udp/setup.h"
 #include "./main.h"
 
-namespace IotNode
+namespace IotNode::Services::Keepalive
 {
-  namespace Services
-  {
-
-    namespace Keepalive
-    {
-      void setup();
-    }
-
-  } // section namespace
-} // project namespace
+  void setup();
+}

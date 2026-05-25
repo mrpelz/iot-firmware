@@ -11,15 +11,7 @@
 #include "../../utils/udp/setup.h"
 #include "./setup.h"
 
-namespace IotNode
+namespace IotNode::Services::Keepalive
 {
-  namespace Services
-  {
-
-    namespace Keepalive
-    {
-      Utils::UDP::RequestHandler makeHandler();
-    }
-
-  } // section namespace
-} // project namespace
+  Utils::UDP::RequestHandler makeHandler();
+}

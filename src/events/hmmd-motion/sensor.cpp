@@ -2,39 +2,31 @@
 
 #include "./sensor.h"
 
-namespace IotNode
+namespace IotNode::Events::HmmdMotion
 {
-  namespace Events
+  bool Sensor::begin(Stream &dataStream)
   {
+    // UARTs
+    _uartRadar = &dataStream;
 
-    namespace HmmdMotion
+    if (!_uartRadar)
     {
-      bool Sensor::begin(Stream &dataStream)
-      {
-        // UARTs
-        _uartRadar = &dataStream;
-
-        if (!_uartRadar)
-        {
-          return false;
-        }
-
-#if !defined(S3KM1110_SKIP_READ_CONFIG_ON_BEGIN)
-        if (_enableReportMode())
-        {
-          readAllRadarConfigs();
-          return true;
-        }
-#else
-        return _enableReportMode();
-#endif // S3KM1110_SKIP_READ_CONFIG_ON_BEGIN
-
-        return false;
-      }
-
+      return false;
     }
 
-  } // section namespace
-} // project namespace
+#if !defined(S3KM1110_SKIP_READ_CONFIG_ON_BEGIN)
+    if (_enableReportMode())
+    {
+      readAllRadarConfigs();
+      return true;
+    }
+#else
+    return _enableReportMode();
+#endif // S3KM1110_SKIP_READ_CONFIG_ON_BEGIN
+
+    return false;
+  }
+
+}
 
 #endif

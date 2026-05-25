@@ -16,15 +16,7 @@
 #include <ETH.h>
 #endif
 
-namespace IotNode
+namespace IotNode::Services::SystemInfo
 {
-  namespace Services
-  {
-
-    namespace SystemInfo
-    {
-      void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
-    }
-
-  } // section namespace
-} // project namespace
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
+}

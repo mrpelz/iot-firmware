@@ -2,100 +2,92 @@
 
 #ifdef IOT_NODE_I2C
 
-namespace IotNode
+namespace IotNode::Utils::I2C
 {
-  namespace Utils
-  {
-
-    namespace I2C
-    {
 #ifdef IOT_NODE_ESP8266
-      TwoWire bus = TwoWire();
+  TwoWire bus = TwoWire();
 #endif
 #ifdef IOT_NODE_ESP32
-      TwoWire bus = TwoWire(0);
+  TwoWire bus = TwoWire(0);
 #endif
 
-      volatile bool lock = false;
+  volatile bool lock = false;
 
 #ifdef IOT_NODE_I2C_SCAN
-      void scan()
-      {
-        vTaskDelay(I2C_START_DELAY / portTICK_PERIOD_MS);
+  void scan()
+  {
+    vTaskDelay(I2C_START_DELAY / portTICK_PERIOD_MS);
 
-        uint8_t deviceCount = 0;
-        uint8_t errorCount = 0;
-
-#ifdef IOT_NODE_LOGGING
-        Log::debug("i2c.scan: start");
-#endif
-
-        for (uint8_t address = 1; address < 127; address++)
-        {
-          bus.beginTransmission(address);
-          auto error = bus.endTransmission();
-
-          if (error == 0)
-          {
-            deviceCount++;
+    uint8_t deviceCount = 0;
+    uint8_t errorCount = 0;
 
 #ifdef IOT_NODE_LOGGING
-            Log::debug(fmt::format("i2c.scan.found.address: {}", address, HEX));
+    Log::debug("i2c.scan: start");
 #endif
-          }
-          else if (error == 4)
-          {
-            errorCount++;
+
+    for (uint8_t address = 1; address < 127; address++)
+    {
+      bus.beginTransmission(address);
+      auto error = bus.endTransmission();
+
+      if (error == 0)
+      {
+        deviceCount++;
 
 #ifdef IOT_NODE_LOGGING
-            Log::debug(fmt::format("i2c.scan.unknown-error.address: {}", address, HEX));
+        Log::debug(fmt::format("i2c.scan.found.address: {}", address, HEX));
 #endif
-          }
-        }
+      }
+      else if (error == 4)
+      {
+        errorCount++;
 
 #ifdef IOT_NODE_LOGGING
-        Log::debug(fmt::format("i2c.scan.found.count: {}", deviceCount));
-        Log::debug(fmt::format("i2c.scan.unknown-error.count: {}", errorCount));
-        Log::debug("i2c.scan: done");
+        Log::debug(fmt::format("i2c.scan.unknown-error.address: {}", address, HEX));
 #endif
       }
-#endif
-
-      void setup()
-      {
-#ifdef IOT_NODE_ESP32
-        bus.begin(32, 33);
-#else
-        bus.begin();
-#endif
-      }
-
-#ifdef IOT_NODE_ESP32
-      void claim()
-      {
-        if (!lock)
-        {
-          lock = true;
-
-          return;
-        }
-
-        while (lock)
-        {
-          vTaskDelay(I2C_LOCK_DELAY / portTICK_PERIOD_MS);
-        }
-
-        lock = true;
-      }
-
-      void unclaim()
-      {
-        lock = false;
-      }
-#endif
     }
 
-  } // section namespace
-} // project namespace
+#ifdef IOT_NODE_LOGGING
+    Log::debug(fmt::format("i2c.scan.found.count: {}", deviceCount));
+    Log::debug(fmt::format("i2c.scan.unknown-error.count: {}", errorCount));
+    Log::debug("i2c.scan: done");
+#endif
+  }
+#endif
+
+  void setup()
+  {
+#ifdef IOT_NODE_ESP32
+    bus.begin(32, 33);
+#else
+    bus.begin();
+#endif
+  }
+
+#ifdef IOT_NODE_ESP32
+  void claim()
+  {
+    if (!lock)
+    {
+      lock = true;
+
+      return;
+    }
+
+    while (lock)
+    {
+      vTaskDelay(I2C_LOCK_DELAY / portTICK_PERIOD_MS);
+    }
+
+    lock = true;
+  }
+
+  void unclaim()
+  {
+    lock = false;
+  }
+#endif
+}
 
 #endif

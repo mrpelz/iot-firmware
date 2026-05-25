@@ -6,31 +6,23 @@
 
 #include <FadeLed.h>
 
-namespace IotNode
+namespace IotNode::Utils::Led
 {
-  namespace Utils
-  {
-
-    namespace Led
-    {
 #ifdef IOT_NODE_BOARD_H801
-      extern FadeLed led0;
-      extern FadeLed led1;
-      extern FadeLed led2;
-      extern FadeLed led3;
-      extern FadeLed led4;
+  extern FadeLed led0;
+  extern FadeLed led1;
+  extern FadeLed led2;
+  extern FadeLed led3;
+  extern FadeLed led4;
 #endif
 
-      void update();
+  void update();
 
 #ifdef IOT_NODE_ESP32
-      void task(void *parameter);
+  void task(void *parameter);
 #endif
 
-      void setup();
-    }
-
-  } // section namespace
-} // project namespace
+  void setup();
+}
 
 #endif

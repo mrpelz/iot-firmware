@@ -126,7 +126,3 @@
 #ifdef IOT_NODE_VCC
 #include "./utils/vcc.h"
 #endif
-
-namespace IotNode
-{
-} // project namespace

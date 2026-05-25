@@ -14,19 +14,11 @@
 #include "../../utils/udp/setup.h"
 #include "../event-ids.h"
 
-namespace IotNode
+namespace IotNode::Events::Rf433
 {
-  namespace Events
-  {
+  void event(::std::vector<uint8_t> payload);
 
-    namespace Rf433
-    {
-      void event(::std::vector<uint8_t> payload);
-
-      void onDataReceived(unsigned int *protocol, unsigned int *bitLength, unsigned long *value);
-    }
-
-  } // section namespace
-} // project namespace
+  void onDataReceived(unsigned int *protocol, unsigned int *bitLength, unsigned long *value);
+}
 
 #endif

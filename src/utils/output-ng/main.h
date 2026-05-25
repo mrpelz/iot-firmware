@@ -46,186 +46,178 @@
 
 constexpr unsigned long outputDimmableFull = (1 << OUTPUT_DIMMABLE_RESOLUTION) - 1;
 
-namespace IotNode
+namespace IotNode::Utils::OutputNg
 {
-  namespace Utils
+  double gamma(double input, double gamma);
+
+  template <typename T>
+  struct SequenceItem
   {
+    T value;
+    unsigned long holdTime;
+  };
 
-    namespace OutputNg
-    {
-      double gamma(double input, double gamma);
+  template <typename T>
+  struct Request
+  {
+    unsigned long iterations;
+    ::std::vector<SequenceItem<T>> sequence;
+  };
 
-      template <typename T>
-      struct SequenceItem
-      {
-        T value;
-        unsigned long holdTime;
-      };
+  template <typename T>
+  struct State
+  {
+    unsigned long iterations = 0;
+    bool isInitialized = false;
+    unsigned long nextSequenceStep = 0;
+    ::std::vector<SequenceItem<T>> sequence = {};
+    size_t sequencePointer = 0;
+  };
 
-      template <typename T>
-      struct Request
-      {
-        unsigned long iterations;
-        ::std::vector<SequenceItem<T>> sequence;
-      };
+  template <typename T>
+  class Base
+  {
+  private:
+    ::std::function<void(T value)> _onCommit;
+    ::std::function<void()> _onInit;
+    void _commit();
 
-      template <typename T>
-      struct State
-      {
-        unsigned long iterations = 0;
-        bool isInitialized = false;
-        unsigned long nextSequenceStep = 0;
-        ::std::vector<SequenceItem<T>> sequence = {};
-        size_t sequencePointer = 0;
-      };
+  protected:
+    State<T> _state;
+    void _reset();
 
-      template <typename T>
-      class Base
-      {
-      private:
-        ::std::function<void(T value)> _onCommit;
-        ::std::function<void()> _onInit;
-        void _commit();
+  public:
+    T value;
+    T previousValue;
+    Base(::std::function<void()> onInit, ::std::function<void(T value)> onCommit, T initialValue);
+    bool getIsActive();
+    void init();
+    void set(T value);
+    void setSequence(Request<T> request);
+    void update();
+  };
 
-      protected:
-        State<T> _state;
-        void _reset();
+  class Ramp
+  {
+  private:
+    unsigned long _throttle;
+    unsigned long _duration = 0;
+    unsigned long _lastUpdate = 0;
+    unsigned long _startTime = 0;
+    ::std::function<void()> _onUpdate = NULL;
 
-      public:
-        T value;
-        T previousValue;
-        Base(::std::function<void()> onInit, ::std::function<void(T value)> onCommit, T initialValue);
-        bool getIsActive();
-        void init();
-        void set(T value);
-        void setSequence(Request<T> request);
-        void update();
-      };
+  public:
+    double progress = 0;
+    Ramp(unsigned long throttle);
+    double getDelta(double startValue, double endValue);
+    unsigned long getDelta(unsigned long startValue, unsigned long endValue);
+    void reset();
+    void set(unsigned long duration, ::std::function<void()> onUpdate);
+    void update();
+  };
 
-      class Ramp
-      {
-      private:
-        unsigned long _throttle;
-        unsigned long _duration = 0;
-        unsigned long _lastUpdate = 0;
-        unsigned long _startTime = 0;
-        ::std::function<void()> _onUpdate = NULL;
+  template <typename T>
+  struct DimmableValue
+  {
+    unsigned long rampTime;
+    T value;
+  };
 
-      public:
-        double progress = 0;
-        Ramp(unsigned long throttle);
-        double getDelta(double startValue, double endValue);
-        unsigned long getDelta(unsigned long startValue, unsigned long endValue);
-        void reset();
-        void set(unsigned long duration, ::std::function<void()> onUpdate);
-        void update();
-      };
+  class Buzzer : public Base<DimmableValue<unsigned long>>
+  {
+  private:
+    bool _invert;
+    bool _isAttached = false;
+    uint8_t _pin;
+    Ramp _ramp;
+    void _write(unsigned long value);
 
-      template <typename T>
-      struct DimmableValue
-      {
-        unsigned long rampTime;
-        T value;
-      };
+  public:
+    Buzzer(uint8_t pin, bool invert);
+    void beep(unsigned long count, unsigned long frequency);
+    void beep(unsigned long frequency);
+    void beep(void);
+    void melody(::std::vector<unsigned long> _melody, unsigned long count, unsigned long holdTime, unsigned long pauseTime);
+    void melody(::std::vector<unsigned long> _melody, unsigned long count);
+    void melody(::std::vector<unsigned long> _melody);
+    void update();
+  };
 
-      class Buzzer : public Base<DimmableValue<unsigned long>>
-      {
-      private:
-        bool _invert;
-        bool _isAttached = false;
-        uint8_t _pin;
-        Ramp _ramp;
-        void _write(unsigned long value);
+  class Binary : public Base<bool>
+  {
+  public:
+    Binary(uint8_t pin, bool invert);
+    Binary(::std::function<void()> onInit, ::std::function<void(bool value)> onCommit);
+    void blink(unsigned long count);
+    void blink(void);
+    void setOff();
+    void setOn();
+  };
 
-      public:
-        Buzzer(uint8_t pin, bool invert);
-        void beep(unsigned long count, unsigned long frequency);
-        void beep(unsigned long frequency);
-        void beep(void);
-        void melody(::std::vector<unsigned long> _melody, unsigned long count, unsigned long holdTime, unsigned long pauseTime);
-        void melody(::std::vector<unsigned long> _melody, unsigned long count);
-        void melody(::std::vector<unsigned long> _melody);
-        void update();
-      };
+  class BinaryPulse : public Binary
+  {
+  public:
+    BinaryPulse(uint8_t pinOn, uint8_t pinOff, bool invert, uint8_t pulseTime);
+  };
 
-      class Binary : public Base<bool>
-      {
-      public:
-        Binary(uint8_t pin, bool invert);
-        Binary(::std::function<void()> onInit, ::std::function<void(bool value)> onCommit);
-        void blink(unsigned long count);
-        void blink(void);
-        void setOff();
-        void setOn();
-      };
+  class Dimmable : public Base<DimmableValue<double>>
+  {
+  protected:
+    Ramp _ramp;
 
-      class BinaryPulse : public Binary
-      {
-      public:
-        BinaryPulse(uint8_t pinOn, uint8_t pinOff, bool invert, uint8_t pulseTime);
-      };
+  public:
+    Dimmable(uint8_t pin, bool invert);
+    Dimmable(::std::function<void()> onInit, ::std::function<void(DimmableValue<double> value)> onCommit);
+    void blink(unsigned long count);
+    void blink(void);
+    void setOff();
+    void setOn();
+    void update();
+  };
 
-      class Dimmable : public Base<DimmableValue<double>>
-      {
-      protected:
-        Ramp _ramp;
+  struct DimmableRGBValue
+  {
+    unsigned long rampTime;
+    double r;
+    double g;
+    double b;
+  };
 
-      public:
-        Dimmable(uint8_t pin, bool invert);
-        Dimmable(::std::function<void()> onInit, ::std::function<void(DimmableValue<double> value)> onCommit);
-        void blink(unsigned long count);
-        void blink(void);
-        void setOff();
-        void setOn();
-        void update();
-      };
+  class DimmableRGB : public Base<DimmableRGBValue>
+  {
+  protected:
+    Ramp _ramp;
 
-      struct DimmableRGBValue
-      {
-        unsigned long rampTime;
-        double r;
-        double g;
-        double b;
-      };
-
-      class DimmableRGB : public Base<DimmableRGBValue>
-      {
-      protected:
-        Ramp _ramp;
-
-      public:
-        DimmableRGB(uint8_t pinR, uint8_t pinG, uint8_t pinB, bool invert);
-        DimmableRGB(::std::function<void()> onInit, ::std::function<void(DimmableRGBValue value)> onCommit);
-        void blink(unsigned long count);
-        void blink(void);
-        void blinkR(unsigned long count);
-        void blinkR(void);
-        void blinkG(unsigned long count);
-        void blinkG(void);
-        void blinkB(unsigned long count);
-        void blinkB(void);
-        void blinkRGB(unsigned long count);
-        void blinkRGB(void);
-        void blinkRGBInclusive(unsigned long count);
-        void blinkRGBInclusive(void);
-        void setOff();
-        void setOn();
-        void setR();
-        void setG();
-        void setB();
-        void update();
-      };
+  public:
+    DimmableRGB(uint8_t pinR, uint8_t pinG, uint8_t pinB, bool invert);
+    DimmableRGB(::std::function<void()> onInit, ::std::function<void(DimmableRGBValue value)> onCommit);
+    void blink(unsigned long count);
+    void blink(void);
+    void blinkR(unsigned long count);
+    void blinkR(void);
+    void blinkG(unsigned long count);
+    void blinkG(void);
+    void blinkB(unsigned long count);
+    void blinkB(void);
+    void blinkRGB(unsigned long count);
+    void blinkRGB(void);
+    void blinkRGBInclusive(unsigned long count);
+    void blinkRGBInclusive(void);
+    void setOff();
+    void setOn();
+    void setR();
+    void setG();
+    void setB();
+    void update();
+  };
 
 #ifdef IOT_NODE_WS2812
-      class DimmableRGBWS2812 : public DimmableRGB
-      {
-      public:
-        DimmableRGBWS2812(uint8_t index, ESP32_WS2812 *bus, bool push);
-      };
+  class DimmableRGBWS2812 : public DimmableRGB
+  {
+  public:
+    DimmableRGBWS2812(uint8_t index, ESP32_WS2812 *bus, bool push);
+  };
 #endif
-    }
-
-  } // section namespace
-} // project namespace
+}
 
 #endif

@@ -13,21 +13,13 @@
 #include "../event-ids.h"
 #include "./sensor.h"
 
-namespace IotNode
+namespace IotNode::Events::HmmdMotion
 {
-  namespace Events
-  {
+  void initializer();
 
-    namespace HmmdMotion
-    {
-      void initializer();
+  void event(bool isTargetDetected, int16_t distance);
 
-      void event(bool isTargetDetected, int16_t distance);
-
-      void checkForTargets();
-    }
-
-  } // section namespace
-} // project namespace
+  void checkForTargets();
+}
 
 #endif

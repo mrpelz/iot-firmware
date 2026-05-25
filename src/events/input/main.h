@@ -13,49 +13,41 @@
 #include "../../utils/udp/main.h"
 #include "../event-ids.h"
 
-namespace IotNode
+namespace IotNode::Events::Input
 {
-  namespace Events
+  typedef ::std::function<void(bool down)> ChangeCallback;
+
+  struct State
   {
+    bool running = false;
+    bool down = false;
+    unsigned long changeTime = 0;
+    unsigned long noiseGateTime;
+    ChangeCallback changeCallback = [](bool down) {};
+  };
 
-    namespace Input
-    {
-      typedef ::std::function<void(bool down)> ChangeCallback;
+  class Class
+  {
+  private:
+    uint8_t pin;
+    bool pullup;
+    unsigned long debounceTime;
+    unsigned long noiseGateTime;
+    State state;
 
-      struct State
-      {
-        bool running = false;
-        bool down = false;
-        unsigned long changeTime = 0;
-        unsigned long noiseGateTime;
-        ChangeCallback changeCallback = [](bool down) {};
-      };
+  public:
+    Class(uint8_t _pin, bool _pullup, unsigned long _debounceTime, unsigned long _noiseGateTime);
+    void setChangeCallback(ChangeCallback callback);
+    void start();
+    void update();
+    void update(bool force);
+  };
 
-      class Class
-      {
-      private:
-        uint8_t pin;
-        bool pullup;
-        unsigned long debounceTime;
-        unsigned long noiseGateTime;
-        State state;
-
-      public:
-        Class(uint8_t _pin, bool _pullup, unsigned long _debounceTime, unsigned long _noiseGateTime);
-        void setChangeCallback(ChangeCallback callback);
-        void start();
-        void update();
-        void update(bool force);
-      };
-
-      ChangeCallback makeEvent(Utils::UDP::Class *udp, uint8_t index);
+  ChangeCallback makeEvent(Utils::UDP::Class *udp, uint8_t index);
 
 #ifdef IOT_NODE_ESP_NOW_NODE
-      ChangeCallback makeEspNowEvent(uint8_t index);
+  ChangeCallback makeEspNowEvent(uint8_t index);
 #endif
-    }
-
-  } // section namespace
-} // project namespace
+}
 
 #endif

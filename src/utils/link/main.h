@@ -20,59 +20,51 @@
 
 #define LINK_DELAY 1000
 
-namespace IotNode
+namespace IotNode::Utils::Link
 {
-  namespace Utils
-  {
-
-    namespace Link
-    {
 #ifdef IOT_NODE_ESP8266
-      typedef WiFiEventHandler EventHandler_t;
-      typedef WiFiDisconnectReason DisconnectReason_t;
+  typedef WiFiEventHandler EventHandler_t;
+  typedef WiFiDisconnectReason DisconnectReason_t;
 #endif
 #ifdef IOT_NODE_ESP32
-      typedef wifi_event_id_t EventHandler_t;
-      typedef uint8_t DisconnectReason_t;
+  typedef wifi_event_id_t EventHandler_t;
+  typedef uint8_t DisconnectReason_t;
 #endif
 
-      ::std::string printMacAddress(uint8_t input[6]);
+  ::std::string printMacAddress(uint8_t input[6]);
 
 #ifdef IOT_NODE_IP_STATIC
-      struct InterfaceConfig
-      {
-        IPAddress ip;
-        IPAddress gateway;
-        IPAddress netmask;
-      };
+  struct InterfaceConfig
+  {
+    IPAddress ip;
+    IPAddress gateway;
+    IPAddress netmask;
+  };
 #endif
 
-      struct Timings
-      {
-        unsigned long runDebugEvery;
-        unsigned long tryReconnectAfter;
-        unsigned long restartAfter;
-      };
+  struct Timings
+  {
+    unsigned long runDebugEvery;
+    unsigned long tryReconnectAfter;
+    unsigned long restartAfter;
+  };
 
-      struct EventListeners
-      {
-        EventHandler_t onConnected;
-        EventHandler_t onDisconnected;
-        EventHandler_t onGotIP;
-        EventHandler_t onDHCPTimeout;
-      };
+  struct EventListeners
+  {
+    EventHandler_t onConnected;
+    EventHandler_t onDisconnected;
+    EventHandler_t onGotIP;
+    EventHandler_t onDHCPTimeout;
+  };
 
-      struct Callbacks
-      {
-        ::std::function<void()> beforeRestart = []() {};
-        ::std::function<void()> reconnect = []() {};
+  struct Callbacks
+  {
+    ::std::function<void()> beforeRestart = []() {};
+    ::std::function<void()> reconnect = []() {};
 
-        ::std::function<void()> connected = []() {};
-        ::std::function<void()> dhcpTimeout = []() {};
-        ::std::function<void()> disconnected = []() {};
-        ::std::function<void(IPAddress ip)> gotIP = [](auto ip) {};
-      };
-    }
-
-  } // section namespace
-} // project namespace
+    ::std::function<void()> connected = []() {};
+    ::std::function<void()> dhcpTimeout = []() {};
+    ::std::function<void()> disconnected = []() {};
+    ::std::function<void(IPAddress ip)> gotIP = [](auto ip) {};
+  };
+}

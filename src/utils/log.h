@@ -17,24 +17,16 @@
 #include <WiFi.h>
 #endif
 
-namespace IotNode
+namespace IotNode::Utils::Log
 {
-  namespace Utils
-  {
+  typedef ::std::function<void(String key, String value)> LogCallback;
 
-    namespace Log
-    {
-      typedef ::std::function<void(String key, String value)> LogCallback;
+  void setup();
 
-      void setup();
+  void debug(::std::string key, ::std::string value);
+  void debug(::std::string value);
 
-      void debug(::std::string key, ::std::string value);
-      void debug(::std::string value);
-
-      void info();
-    }
-
-  } // section namespace
-} // project namespace
+  void info();
+}
 
 #endif

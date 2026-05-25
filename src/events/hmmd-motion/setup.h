@@ -7,18 +7,10 @@
 #include "../../utils/log.h"
 #include "./main.h"
 
-namespace IotNode
+namespace IotNode::Events::HmmdMotion
 {
-  namespace Events
-  {
-
-    namespace HmmdMotion
-    {
-      void update();
-      void setup();
-    }
-
-  } // section namespace
-} // project namespace
+  void update();
+  void setup();
+}
 
 #endif

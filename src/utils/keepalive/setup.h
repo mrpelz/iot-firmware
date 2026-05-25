@@ -6,28 +6,20 @@
 #include "../udp/setup.h"
 #include "./main.h"
 
-namespace IotNode
+namespace IotNode::Utils::Keepalive
 {
-  namespace Utils
-  {
-
-    namespace Keepalive
-    {
-      extern Class keepalive;
-      extern Class eventPeer;
+  extern Class keepalive;
+  extern Class eventPeer;
 
 #ifdef IOT_NODE_POWER_CYCLE_PROTECTION
-      extern Class powerCycleProtection;
+  extern Class powerCycleProtection;
 #endif
 
-      void update();
+  void update();
 
 #ifdef IOT_NODE_ESP32
-      void task(void *parameter);
+  void task(void *parameter);
 #endif
 
-      void setup();
-    }
-
-  } // section namespace
-} // project namespace
+  void setup();
+}

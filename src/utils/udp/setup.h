@@ -4,17 +4,9 @@
 
 #include "./main.h"
 
-namespace IotNode
+namespace IotNode::Utils::UDP
 {
-  namespace Utils
-  {
+  extern Class instance;
 
-    namespace UDP
-    {
-      extern Class instance;
-
-      void setup();
-    }
-
-  } // section namespace
-} // project namespace
+  void setup();
+}

@@ -12,21 +12,13 @@
 
 #define ASYNC_RESPONSE_DELAY 30000
 
-namespace IotNode
+namespace IotNode::Services::Async
 {
-  namespace Services
-  {
+  void initializer();
 
-    namespace Async
-    {
-      void initializer();
+  void responseTask(void *parameter);
 
-      void responseTask(void *parameter);
-
-      void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
-    }
-
-  } // section namespace
-} // project namespace
+  void handler(Utils::UDP::Payload *request, Utils::UDP::RespondCallback respond, Utils::UDP::Peer peer);
+}
 
 #endif

@@ -2,48 +2,40 @@
 
 #ifdef IOT_NODE_LED
 
-namespace IotNode
+namespace IotNode::Services::Led
 {
-  namespace Services
+  Utils::UDP::Service makeService(FadeLed *led, uint8_t index)
   {
-
-    namespace Led
+    auto handler = [led, index](
+                       Utils::UDP::Payload *request,
+                       Utils::UDP::RespondCallback respond,
+                       Utils::UDP::Peer peer)
     {
-      Utils::UDP::Service makeService(FadeLed *led, uint8_t index)
-      {
-        auto handler = [led, index](
-                           Utils::UDP::Payload *request,
-                           Utils::UDP::RespondCallback respond,
-                           Utils::UDP::Peer peer)
-        {
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("led-service: got request");
-          Utils::Log::debug(fmt::format("led-service.index: {}", index));
+      Utils::Log::debug("led-service: got request");
+      Utils::Log::debug(fmt::format("led-service.index: {}", index));
 #endif
 
-          auto duty = request->size() >= 1 ? request->at(0) : (uint8_t)0;
+      auto duty = request->size() >= 1 ? request->at(0) : (uint8_t)0;
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug(fmt::format("led-service.duty: {}", duty));
+      Utils::Log::debug(fmt::format("led-service.duty: {}", duty));
 #endif
 
-          led->set(duty);
+      led->set(duty);
 
 #ifdef IOT_NODE_LOGGING
-          Utils::Log::debug("led-service: sending response");
+      Utils::Log::debug("led-service: sending response");
 #endif
 
-          respond({});
-        };
+      respond({});
+    };
 
-        return {
-            ids::led,
-            index,
-            handler};
-      }
-    }
-
-  } // section namespace
-} // project namespace
+    return {
+        ids::led,
+        index,
+        handler};
+  }
+}
 
 #endif

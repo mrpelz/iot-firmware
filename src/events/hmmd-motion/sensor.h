@@ -8,21 +8,13 @@
 #include <s3km1110.h>
 #undef private
 
-namespace IotNode
+namespace IotNode::Events::HmmdMotion
 {
-  namespace Events
+  class Sensor : public s3km1110
   {
-
-    namespace HmmdMotion
-    {
-      class Sensor : public s3km1110
-      {
-      public:
-        bool begin(Stream &dataStream);
-      };
-    }
-
-  } // section namespace
-} // project namespace
+  public:
+    bool begin(Stream &dataStream);
+  };
+}
 
 #endif
