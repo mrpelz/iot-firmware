@@ -56,7 +56,7 @@ namespace IotNode
         addDelimiter(&response);
 
 #ifdef IOT_NODE_ESP8266
-        addLineToRespone(&response, String(ESP.getChipId(), HEX));
+        addLineToRespone(&response, fmt::format("{:X}", ESP.getChipId()));
 #endif
 #ifdef IOT_NODE_ESP32
         addLineToRespone(&response, fmt::format("{:X}", ESP.getEfuseMac()));
@@ -64,7 +64,7 @@ namespace IotNode
         addDelimiter(&response);
 
 #ifdef IOT_NODE_ESP8266
-        addLineToRespone(&response, String(ESP.getFlashChipId(), HEX));
+        addLineToRespone(&response, fmt::format("{:X}", ESP.getFlashChipId()));
 #endif
         addDelimiter(&response);
 
@@ -82,17 +82,17 @@ namespace IotNode
         addDelimiter(&response);
 
 #ifdef IOT_NODE_LINK_WIFI
-        addLineToRespone(&response, std::to_string(WiFi.channel()));
+        addLineToRespone(&response, ::std::to_string(WiFi.channel()));
 #endif
         addDelimiter(&response);
 
 #ifdef IOT_NODE_LINK_WIFI
-        addLineToRespone(&response, std::to_string(WiFi.RSSI()));
+        addLineToRespone(&response, ::std::to_string(WiFi.RSSI()));
 #endif
         addDelimiter(&response);
 
 #if defined(IOT_NODE_LINK_WIFI) && defined(IOT_NODE_ESP8266)
-        addLineToRespone(&response, WiFi.getPhyMode());
+        addLineToRespone(&response, ::std::to_string(WiFi.getPhyMode()));
 #endif
         addDelimiter(&response);
 

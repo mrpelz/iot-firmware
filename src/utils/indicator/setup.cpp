@@ -96,7 +96,7 @@ namespace IotNode
         indicator0.init();
 #endif
 
-#if defined(IOT_NODE_BOARD_ROOM_SENSOR)
+#ifdef IOT_NODE_BOARD_ROOM_SENSOR
         indicator1.init();
         indicator2.init();
 
@@ -111,7 +111,7 @@ namespace IotNode
 #ifdef IOT_NODE_ESP32
         xTaskCreatePinnedToCore(
             task,
-            "indicator_maintenance",
+            "output_ng_maintenance",
             FREERTOS_STACK_SIZE,
             NULL,
             tskIDLE_PRIORITY,

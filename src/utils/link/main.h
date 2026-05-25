@@ -5,6 +5,7 @@
 #include <pre.h>
 #include <post.h>
 #include <functional>
+#include <FmtLib.h>
 
 #include <pre.h>
 

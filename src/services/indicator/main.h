@@ -27,10 +27,6 @@ namespace IotNode
 #ifdef IOT_NODE_SX1509
       Utils::UDP::Service makeService(Utils::Indicator::ClassExpander *output, uint8_t index);
 #endif
-
-#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
-      Utils::UDP::Service makeService(Utils::Indicator::ClassWS2812 *output, uint8_t index);
-#endif
     }
 
   } // section namespace
