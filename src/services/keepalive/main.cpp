@@ -13,7 +13,7 @@ namespace IotNode::Services::Keepalive
       Utils::Log::debug("keepalive-service: got request");
 #endif
 
-      auto restart = request->size() >= 1 && (uint8_t)(request->at(0)) != 0;
+      auto restart = request->size() >= 1 && (request->at(0)) != 0;
       if (restart)
       {
 #ifdef IOT_NODE_LOGGING

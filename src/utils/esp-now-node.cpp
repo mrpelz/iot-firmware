@@ -8,7 +8,7 @@ namespace IotNode::Utils::EspNowNode
 
   WORKING_MODE workingMode = WORKING_MODE::WAKE;
 
-  uint8_t gw_mac[] = IOT_NODE_ESP_NOW_GW_MAC;
+  unsigned char gw_mac[] = IOT_NODE_ESP_NOW_GW_MAC;
 
   auto keepalive = Keepalive::Class(
       5000,
@@ -41,7 +41,7 @@ namespace IotNode::Utils::EspNowNode
     }
   }
 
-  void onDataSent(uint8_t *mac_addr, uint8_t status)
+  void onDataSent(unsigned char *mac_addr, unsigned char status)
   {
     keepalive.tick();
   }
@@ -79,7 +79,7 @@ namespace IotNode::Utils::EspNowNode
     keepalive.start();
   }
 
-  void send(::std::vector<uint8_t> payload)
+  void send(::std::vector<unsigned char> payload)
   {
     if (workingMode == WORKING_MODE::WAKE || !espNowInitialized)
       return;

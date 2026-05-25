@@ -18,14 +18,14 @@ namespace IotNode::Utils::I2C
   {
     vTaskDelay(I2C_START_DELAY / portTICK_PERIOD_MS);
 
-    uint8_t deviceCount = 0;
-    uint8_t errorCount = 0;
+    unsigned char deviceCount = 0;
+    unsigned char errorCount = 0;
 
 #ifdef IOT_NODE_LOGGING
     Log::debug("i2c.scan: start");
 #endif
 
-    for (uint8_t address = 1; address < 127; address++)
+    for (unsigned char address = 1; address < 127; address++)
     {
       bus.beginTransmission(address);
       auto error = bus.endTransmission();

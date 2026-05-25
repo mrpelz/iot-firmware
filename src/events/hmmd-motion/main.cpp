@@ -6,8 +6,8 @@ namespace IotNode::Events::HmmdMotion
 {
   auto sensor = new Sensor();
 
-  uint32_t lastReading = 0;
-  uint16_t lastDistance = 0;
+  unsigned long lastReading = 0;
+  unsigned short lastDistance = 0;
   auto isDetected = false;
 
   void initializer()
@@ -58,13 +58,13 @@ namespace IotNode::Events::HmmdMotion
 #endif
   }
 
-  void event(bool isTargetDetected, int16_t distance = 0)
+  void event(bool isTargetDetected, short distance = 0)
   {
-    ::std::vector<uint8_t> payload = {
-        (uint8_t)(isTargetDetected ? 0x01 : 0x00),
+    ::std::vector<unsigned char> payload = {
+        (isTargetDetected ? 0x01 : 0x00),
     };
 
-    auto distance_ = ::std::bit_cast<::std::array<uint8_t, sizeof distance>>(distance);
+    auto distance_ = ::std::bit_cast<::std::array<unsigned char, sizeof distance>>(distance);
     payload.insert(
         payload.end(),
         ::std::begin(distance_),
@@ -112,7 +112,7 @@ namespace IotNode::Events::HmmdMotion
       lastDistance = newDistance;
     }
 
-    static uint32_t nextWarning = 0;
+    static unsigned long nextWarning = 0;
     if (!sensor->isActive() && millis() > nextWarning)
     {
       // throttle warnings to at most once every 5 seconds

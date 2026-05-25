@@ -15,9 +15,9 @@
 
 namespace IotNode::Events::EspNowGw
 {
-  void event(::std::vector<uint8_t> payload);
+  void event(::std::vector<unsigned char> payload);
 
-  void onDataReceived(const uint8_t *mac, const uint8_t *incomingData, int length);
+  void onDataReceived(const unsigned char *mac, const unsigned char *incomingData, int length);
 }
 
 #endif

@@ -38,7 +38,7 @@ namespace IotNode::Utils::Indicator
     state.blinkInfinite = true;
   }
 
-  void ClassPin::blink(uint8_t count)
+  void ClassPin::blink(unsigned char count)
   {
 #ifdef IOT_NODE_LOGGING
     Log::debug(fmt::format("indicator.blink: {}", count));
@@ -170,7 +170,7 @@ namespace IotNode::Utils::Indicator
     state.blinkInfinite = true;
   }
 
-  void ClassExpander::blink(uint8_t count)
+  void ClassExpander::blink(unsigned char count)
   {
 #ifdef IOT_NODE_LOGGING
     Log::debug(fmt::format("indicator.blink: {}", count));

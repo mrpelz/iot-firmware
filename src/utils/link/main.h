@@ -28,10 +28,10 @@ namespace IotNode::Utils::Link
 #endif
 #ifdef IOT_NODE_ESP32
   typedef wifi_event_id_t EventHandler_t;
-  typedef uint8_t DisconnectReason_t;
+  typedef unsigned char DisconnectReason_t;
 #endif
 
-  ::std::string printMacAddress(uint8_t input[6]);
+  ::std::string printMacAddress(unsigned char input[6]);
 
 #ifdef IOT_NODE_IP_STATIC
   struct InterfaceConfig

@@ -18,8 +18,8 @@ namespace IotNode::Utils::Button
     bool down;
     bool downChanged;
     unsigned long prevDuration;
-    uint8_t repeat;
-    uint8_t longpress;
+    unsigned char repeat;
+    unsigned char longpress;
     ::std::vector<bool> pressedMap;
   };
 
@@ -27,7 +27,7 @@ namespace IotNode::Utils::Button
 
   struct Config
   {
-    uint8_t pin;
+    unsigned char pin;
     bool invert;
     bool pullupEnable;
     unsigned long debounceTime;
@@ -41,8 +41,8 @@ namespace IotNode::Utils::Button
     bool running = false;
     bool down;
     unsigned long changeTime;
-    uint8_t repeat;
-    uint8_t longpress;
+    unsigned char repeat;
+    unsigned char longpress;
     unsigned long longpressTime;
     unsigned long noiseGateTime;
     ChangeCallback changeCallback = [](Update update) {};

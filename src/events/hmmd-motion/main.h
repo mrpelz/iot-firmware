@@ -17,7 +17,7 @@ namespace IotNode::Events::HmmdMotion
 {
   void initializer();
 
-  void event(bool isTargetDetected, int16_t distance);
+  void event(bool isTargetDetected, short distance);
 
   void checkForTargets();
 }

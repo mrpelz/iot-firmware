@@ -41,7 +41,7 @@
 
 namespace IotNode::Utils::UDP
 {
-  using Payload = ::std::vector<uint8_t>;
+  using Payload = ::std::vector<unsigned char>;
 
   typedef ::std::function<void(
       Payload response)>
@@ -50,7 +50,7 @@ namespace IotNode::Utils::UDP
   struct Peer
   {
     IPAddress ip;
-    uint16_t port;
+    unsigned short port;
   };
 
   typedef ::std::function<void(
@@ -61,8 +61,8 @@ namespace IotNode::Utils::UDP
 
   struct Service
   {
-    uint8_t serviceId;
-    uint8_t serviceIndex;
+    unsigned char serviceId;
+    unsigned char serviceIndex;
     RequestHandler handler;
   };
 
@@ -70,7 +70,7 @@ namespace IotNode::Utils::UDP
   {
     bool isListening = false;
     AsyncUDP udp;
-    uint16_t port;
+    unsigned short port;
     Peer eventPeer;
     Peer fallbackPeer;
     ::std::vector<Service *> services;
@@ -84,11 +84,11 @@ namespace IotNode::Utils::UDP
     void handleRequest(AsyncUDPPacket *packet);
 
   public:
-    Class(uint16_t port);
+    Class(unsigned short port);
     void addService(Service *service);
     void begin();
     void close();
-    void event(uint8_t eventId, uint8_t eventIndex, Payload event);
+    void event(unsigned char eventId, unsigned char eventIndex, Payload event);
     bool hasEventPeer();
     bool isListening();
     void removeEventPeer();

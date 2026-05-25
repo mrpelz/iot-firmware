@@ -5,12 +5,12 @@
 namespace IotNode::Utils::EPaper
 {
   auto touch = TouchClass();
-  uint8_t *framebuffer = NULL;
+  unsigned char *framebuffer = NULL;
 
   static esp_websocket_client_config_t websocketConfig;
   esp_websocket_client_handle_t websocketClient = NULL;
 
-  uint8_t *rxBuffer = NULL;
+  unsigned char *rxBuffer = NULL;
   Rect_t updateArea = {
       .x = 0,
       .y = 0,
@@ -18,15 +18,15 @@ namespace IotNode::Utils::EPaper
       .height = 0};
 
   auto isConnected = false;
-  uint8_t update = 0;
+  unsigned char update = 0;
 
   struct TouchState
   {
     bool interrupted = false;
     bool down = false;
     bool moved = false;
-    uint16_t x = 0;
-    uint16_t y = 0;
+    unsigned short x = 0;
+    unsigned short y = 0;
   } touchState;
 
   void epdClear()
@@ -70,7 +70,7 @@ namespace IotNode::Utils::EPaper
   {
     epd_init();
 
-    framebuffer = (uint8_t *)ps_calloc(sizeof(uint8_t), E_PAPER_FRAMEBUFFER_SIZE);
+    framebuffer = (unsigned char *)ps_calloc(sizeof(unsigned char), E_PAPER_FRAMEBUFFER_SIZE);
     if (!framebuffer)
     {
 #ifdef IOT_NODE_LOGGING
@@ -103,10 +103,10 @@ namespace IotNode::Utils::EPaper
 
     if (isFirstPacket)
     {
-      auto x = ((uint32_t *)data->data_ptr)[0];
-      auto y = ((uint32_t *)data->data_ptr)[1];
-      auto width = ((uint32_t *)data->data_ptr)[2];
-      auto height = ((uint32_t *)data->data_ptr)[3];
+      auto x = ((unsigned long *)data->data_ptr)[0];
+      auto y = ((unsigned long *)data->data_ptr)[1];
+      auto width = ((unsigned long *)data->data_ptr)[2];
+      auto height = ((unsigned long *)data->data_ptr)[3];
 
 #ifdef IOT_NODE_LOGGING
       Utils::Log::debug(fmt::format("websocket-event.x: {}", x));
@@ -147,7 +147,7 @@ namespace IotNode::Utils::EPaper
   void websocketEventHandler(
       void *handler_args,
       esp_event_base_t base,
-      int32_t event_id,
+      long event_id,
       void *event_data)
   {
     esp_websocket_event_data_t *data = (esp_websocket_event_data_t *)event_data;
@@ -203,11 +203,11 @@ namespace IotNode::Utils::EPaper
     }
   }
 
-  void websocketSend(uint32_t type)
+  void websocketSend(unsigned long type)
   {
     if (type >= 3)
     {
-      auto _type = reinterpret_cast<uint8_t *>(&type);
+      auto _type = reinterpret_cast<unsigned char *>(&type);
 
       ::std::vector<char> payload;
 
@@ -225,12 +225,12 @@ namespace IotNode::Utils::EPaper
       return;
     }
 
-    uint32_t x = touchState.x;
-    uint32_t y = touchState.y;
+    unsigned long x = touchState.x;
+    unsigned long y = touchState.y;
 
-    auto _type = reinterpret_cast<uint8_t *>(&type);
-    auto _x = reinterpret_cast<uint8_t *>(&x);
-    auto _y = reinterpret_cast<uint8_t *>(&y);
+    auto _type = reinterpret_cast<unsigned char *>(&type);
+    auto _x = reinterpret_cast<unsigned char *>(&x);
+    auto _y = reinterpret_cast<unsigned char *>(&y);
 
     ::std::vector<char> payload;
 
@@ -267,8 +267,8 @@ namespace IotNode::Utils::EPaper
 
     if (touch.scanPoint())
     {
-      uint16_t x;
-      uint16_t y;
+      unsigned short x;
+      unsigned short y;
 
       touch.getPoint(x, y, 0);
       y = EPD_HEIGHT - y;
@@ -305,7 +305,7 @@ namespace IotNode::Utils::EPaper
     if (!isConnected)
       return;
 
-    uint32_t type;
+    unsigned long type;
     if (!touchState.down)
       type = 0;
     else if (touchState.moved)
@@ -324,7 +324,7 @@ namespace IotNode::Utils::EPaper
   {
     epdClear();
 
-    rxBuffer = (uint8_t *)ps_calloc(sizeof(uint8_t), WS_RX_BUFFER_SIZE);
+    rxBuffer = (unsigned char *)ps_calloc(sizeof(unsigned char), WS_RX_BUFFER_SIZE);
     if (!rxBuffer)
     {
 #ifdef IOT_NODE_LOGGING

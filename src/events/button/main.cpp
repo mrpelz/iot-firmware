@@ -4,7 +4,7 @@
 
 namespace IotNode::Events::Button
 {
-  Utils::Button::ChangeCallback makeEvent(Utils::UDP::Class *udp, uint8_t index)
+  Utils::Button::ChangeCallback makeEvent(Utils::UDP::Class *udp, unsigned char index)
   {
     auto handler = [udp, index](Utils::Button::Update update)
     {
@@ -12,14 +12,14 @@ namespace IotNode::Events::Button
       Utils::Log::debug("button-event: triggered");
 #endif
 
-      ::std::vector<uint8_t> payload = {
-          (uint8_t)(update.down ? 0x01 : 0x00),
-          (uint8_t)(update.downChanged ? 0x01 : 0x00),
+      ::std::vector<unsigned char> payload = {
+          (update.down ? 0x01 : 0x00),
+          (update.downChanged ? 0x01 : 0x00),
           update.repeat,
           update.longpress,
       };
 
-      auto prevDuration = reinterpret_cast<uint8_t *>(&(update.prevDuration));
+      auto prevDuration = reinterpret_cast<unsigned char *>(&(update.prevDuration));
 
       payload.insert(
           payload.end(),
@@ -42,7 +42,7 @@ namespace IotNode::Events::Button
   }
 
 #ifdef IOT_NODE_ESP_NOW_NODE
-  Utils::Button::ChangeCallback makeEspNowEvent(uint8_t index)
+  Utils::Button::ChangeCallback makeEspNowEvent(unsigned char index)
   {
     auto handler = [index](Utils::Button::Update update)
     {
@@ -50,16 +50,16 @@ namespace IotNode::Events::Button
       Utils::Log::debug("button-espNow-event: triggered");
 #endif
 
-      ::std::vector<uint8_t> payload = {
+      ::std::vector<unsigned char> payload = {
           ids::button,
           index,
-          (uint8_t)(update.down ? 0x01 : 0x00),
-          (uint8_t)(update.downChanged ? 0x01 : 0x00),
+          (update.down ? 0x01 : 0x00),
+          (update.downChanged ? 0x01 : 0x00),
           update.repeat,
           update.longpress,
       };
 
-      auto prevDuration = reinterpret_cast<uint8_t *>(&(update.prevDuration));
+      auto prevDuration = reinterpret_cast<unsigned char *>(&(update.prevDuration));
 
       payload.insert(
           payload.end(),

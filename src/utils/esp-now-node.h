@@ -33,11 +33,11 @@ namespace IotNode::Utils::EspNowNode
 
   void sleep();
 
-  void onDataSent(uint8_t *mac_addr, uint8_t status);
+  void onDataSent(unsigned char *mac_addr, unsigned char status);
 
   void setup();
 
-  void send(::std::vector<uint8_t> payload);
+  void send(::std::vector<unsigned char> payload);
 
   void update();
 }

@@ -15,10 +15,10 @@
 
 namespace IotNode::Events::Button
 {
-  Utils::Button::ChangeCallback makeEvent(Utils::UDP::Class *udp, uint8_t index);
+  Utils::Button::ChangeCallback makeEvent(Utils::UDP::Class *udp, unsigned char index);
 
 #ifdef IOT_NODE_ESP_NOW_NODE
-  Utils::Button::ChangeCallback makeEspNowEvent(uint8_t index);
+  Utils::Button::ChangeCallback makeEspNowEvent(unsigned char index);
 #endif
 }
 

@@ -4,7 +4,7 @@
 
 namespace IotNode::Events::Input
 {
-  Class::Class(uint8_t _pin, bool _pullup, unsigned long _debounceTime, unsigned long _noiseGateTime)
+  Class::Class(unsigned char _pin, bool _pullup, unsigned long _debounceTime, unsigned long _noiseGateTime)
   {
     pin = _pin;
     pullup = _pullup;
@@ -84,28 +84,28 @@ namespace IotNode::Events::Input
     state.changeCallback(state.down);
   }
 
-  ChangeCallback makeEvent(Utils::UDP::Class *udp, uint8_t index)
+  ChangeCallback makeEvent(Utils::UDP::Class *udp, unsigned char index)
   {
     auto handler = [udp, index](bool down)
     {
       udp->event(
           ids::input,
           index,
-          {(uint8_t)(down ? 0x01 : 0x00)});
+          {(down ? 0x01 : 0x00)});
     };
 
     return handler;
   }
 
 #ifdef IOT_NODE_ESP_NOW_NODE
-  ChangeCallback makeEspNowEvent(uint8_t index)
+  ChangeCallback makeEspNowEvent(unsigned char index)
   {
     auto handler = [index](bool down)
     {
-      ::std::vector<uint8_t> response = {
+      ::std::vector<unsigned char> response = {
           ids::input,
           index,
-          (uint8_t)(down ? 0x01 : 0x00)};
+          (down ? 0x01 : 0x00)};
 
       Utils::EspNowNode::send(response);
     };

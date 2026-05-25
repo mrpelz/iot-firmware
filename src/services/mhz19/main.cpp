@@ -55,11 +55,11 @@ namespace IotNode::Services::Mhz19
       Utils::Log::debug(fmt::format("mhz19-service.transmittance: {}", transmittanceReading));
 #endif
 
-      auto accuracy = reinterpret_cast<uint8_t *>(&accuracyReading);
-      auto abc = reinterpret_cast<uint8_t *>(&abcReading);
-      auto co2 = reinterpret_cast<uint8_t *>(&co2Reading);
-      auto temperature = reinterpret_cast<uint8_t *>(&temperatureReading);
-      auto transmittance = reinterpret_cast<uint8_t *>(&transmittanceReading);
+      auto accuracy = reinterpret_cast<unsigned char *>(&accuracyReading);
+      auto abc = reinterpret_cast<unsigned char *>(&abcReading);
+      auto co2 = reinterpret_cast<unsigned char *>(&co2Reading);
+      auto temperature = reinterpret_cast<unsigned char *>(&temperatureReading);
+      auto transmittance = reinterpret_cast<unsigned char *>(&transmittanceReading);
 
       Utils::UDP::Payload response;
 

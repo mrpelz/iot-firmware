@@ -44,7 +44,7 @@ namespace IotNode::Utils::Link
     void ethConnect();
     void handleConnected();
     void handleDhcpTimeout();
-    void handleDisconnected(uint8_t reason);
+    void handleDisconnected(unsigned char reason);
     void handleGotIP(IPAddress ip, IPAddress gateway, IPAddress netmask);
 
   public:

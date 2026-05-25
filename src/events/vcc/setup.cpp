@@ -4,7 +4,7 @@
 
 namespace IotNode::Events::VCC
 {
-  ChangeCallback cb = [](uint16_t vcc) {};
+  ChangeCallback cb = [](unsigned short vcc) {};
 
   auto keepalive = Utils::Keepalive::Class(
       1000,

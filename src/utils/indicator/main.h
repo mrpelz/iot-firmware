@@ -21,7 +21,7 @@ namespace IotNode::Utils::Indicator
 {
   struct Config
   {
-    uint8_t pin;
+    unsigned char pin;
     bool invert;
     unsigned long blinkPeriodOn;
     unsigned long blinkPeriodOff;
@@ -30,7 +30,7 @@ namespace IotNode::Utils::Indicator
 #pragma pack(push, 1)
   struct SequenceItem
   {
-    uint8_t value;
+    unsigned char value;
     unsigned long time;
     unsigned long rampTime;
   };
@@ -43,7 +43,7 @@ namespace IotNode::Utils::Indicator
     bool on = false;
     bool wasInitialized = false;
     unsigned long blinkChange = 0;
-    uint8_t blinkCount = 0;
+    unsigned char blinkCount = 0;
     bool blinkInfinite = false;
   };
 
@@ -57,7 +57,7 @@ namespace IotNode::Utils::Indicator
   public:
     ClassPin(Config _config);
     bool isOn();
-    void blink(uint8_t count);
+    void blink(unsigned char count);
     void blink(void);
     void init();
     void setBlinkFrequency(unsigned long blinkPeriodOn, unsigned long blinkPeriodOff);
@@ -76,7 +76,7 @@ namespace IotNode::Utils::Indicator
   public:
     ClassExpander(Config _config);
     bool isOn();
-    void blink(uint8_t count);
+    void blink(unsigned char count);
     void blink(void);
     void init();
     void setBlinkFrequency(unsigned long blinkPeriodOn, unsigned long blinkPeriodOff);

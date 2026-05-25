@@ -10,7 +10,7 @@ namespace IotNode::Utils::VCC
 {
   void update();
 
-  uint16_t get();
+  unsigned short get();
 }
 
 #endif

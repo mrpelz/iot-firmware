@@ -81,9 +81,9 @@ namespace IotNode::Services::Bme280
       Utils::Log::debug(fmt::format("bme280-service.pressure: {}", pressureReading));
 #endif
 
-      auto temperatureResult = reinterpret_cast<uint8_t *>(&temperatureReading);
-      auto humidityResult = reinterpret_cast<uint8_t *>(&humidityReading);
-      auto pressureResult = reinterpret_cast<uint8_t *>(&pressureReading);
+      auto temperatureResult = reinterpret_cast<unsigned char *>(&temperatureReading);
+      auto humidityResult = reinterpret_cast<unsigned char *>(&humidityReading);
+      auto pressureResult = reinterpret_cast<unsigned char *>(&pressureReading);
 
       Utils::UDP::Payload response;
 

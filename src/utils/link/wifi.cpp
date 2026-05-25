@@ -72,7 +72,7 @@ namespace IotNode::Utils::Link
     state.shouldBeConnected = false;
   }
 
-  void Class::handleConnected(String ssid, uint8_t *bssid, uint8_t channel)
+  void Class::handleConnected(String ssid, unsigned char *bssid, unsigned char channel)
   {
     state.isConnected = true;
 
@@ -95,7 +95,7 @@ namespace IotNode::Utils::Link
     state.callbacks.dhcpTimeout();
   }
 
-  void Class::handleDisconnected(String ssid, uint8_t *bssid, DisconnectReason_t reason)
+  void Class::handleDisconnected(String ssid, unsigned char *bssid, DisconnectReason_t reason)
   {
     state.isConnected = false;
 
@@ -103,7 +103,7 @@ namespace IotNode::Utils::Link
     Log::debug("event: wifi.disconnect");
     Log::debug(fmt::format("event.wifi.disconnect.ssid: {}", ssid.c_str()));
     Log::debug(fmt::format("event.wifi.disconnect.bssid: {}", printMacAddress(bssid)));
-    Log::debug(fmt::format("event.wifi.disconnect.reason: {}", reason));
+    Log::debug(fmt::format("event.wifi.disconnect.reason: {}", ::std::to_string(reason)));
 #endif
 
     state.callbacks.disconnected();
@@ -389,7 +389,7 @@ namespace IotNode::Utils::Link
     if (deep)
     {
 #ifdef IOT_NODE_ESP8266
-      Log::debug(fmt::format("info.wifi.phy-mode: {}", WiFi.getPhyMode()));
+      Log::debug(fmt::format("info.wifi.phy-mode: {}", ::std::to_string(WiFi.getPhyMode())));
 #endif
 
       Log::debug(fmt::format("info.wifi.ssid: {}", WiFi.SSID().c_str()));

@@ -6,14 +6,14 @@ namespace IotNode::Services::Tsl2561
 {
   Sensor::Sensor() : Adafruit_TSL2561_Unified(TSL2561_CHOSEN_ADDRESS, 12345) {}
 
-  float Sensor::calculateLux(uint16_t broadband, uint16_t ir)
+  float Sensor::calculateLux(unsigned short broadband, unsigned short ir)
   {
     unsigned long chScale;
     unsigned long channel1;
     unsigned long channel0;
 
     /* Make sure the sensor isn't saturated! */
-    uint16_t clipThreshold;
+    unsigned short clipThreshold;
     switch (_tsl2561IntegrationTime)
     {
     case TSL2561_INTEGRATIONTIME_13MS:

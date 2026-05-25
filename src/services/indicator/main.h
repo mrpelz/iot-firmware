@@ -17,10 +17,10 @@
 
 namespace IotNode::Services::Indicator
 {
-  Utils::UDP::Service makeService(Utils::Indicator::ClassPin *output, uint8_t index);
+  Utils::UDP::Service makeService(Utils::Indicator::ClassPin *output, unsigned char index);
 
 #ifdef IOT_NODE_SX1509
-  Utils::UDP::Service makeService(Utils::Indicator::ClassExpander *output, uint8_t index);
+  Utils::UDP::Service makeService(Utils::Indicator::ClassExpander *output, unsigned char index);
 #endif
 }
 

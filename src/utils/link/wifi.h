@@ -30,8 +30,8 @@ namespace IotNode::Utils::Link
     ::std::string password;
 
 #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG
-    uint8_t bssid[6];
-    uint8_t channel;
+    unsigned char bssid[6];
+    unsigned char channel;
 #endif
   };
 
@@ -75,9 +75,9 @@ namespace IotNode::Utils::Link
   private:
     State state;
     void wifiConnect();
-    void handleConnected(String ssid, uint8_t *bssid, uint8_t channel);
+    void handleConnected(String ssid, unsigned char *bssid, unsigned char channel);
     void handleDhcpTimeout();
-    void handleDisconnected(String ssid, uint8_t *bssid, DisconnectReason_t reason);
+    void handleDisconnected(String ssid, unsigned char *bssid, DisconnectReason_t reason);
     void handleGotIP(IPAddress ip, IPAddress gateway, IPAddress netmask);
 
   public:

@@ -45,10 +45,10 @@ namespace IotNode::Utils::EPaper
   void websocketEventHandler(
       void *handler_args,
       esp_event_base_t base,
-      int32_t event_id,
+      long event_id,
       void *event_data);
 
-  void websocketSend(uint32_t type);
+  void websocketSend(unsigned long type);
 
   void websocketTouch();
 

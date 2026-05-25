@@ -4,22 +4,22 @@
 
 namespace IotNode::Utils::OutputNg
 {
+#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
   Dimmable indicator0(1, true);
   DimmableRGB indicator1(2, 3, 4, false);
   Buzzer buzzer(5, true);
 
-#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
   ESP32_WS2812 ws2812Bus0 = ESP32_WS2812(1, 21, 0, TYPE_RGB);
   DimmableRGBWS2812 indicatorRGB(0, &ws2812Bus0, false);
 #endif
 
   void update()
   {
+#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
     indicator0.update();
     indicator1.update();
     buzzer.update();
 
-#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
     indicatorRGB.update();
     ws2812Bus0.show();
 #endif
@@ -38,6 +38,7 @@ namespace IotNode::Utils::OutputNg
 
   void setup()
   {
+#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
     indicator0.init();
     indicator0.blink();
 
@@ -748,7 +749,6 @@ namespace IotNode::Utils::OutputNg
     //                         },
     //                     }});
 
-#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
     ws2812Bus0.begin();
     indicatorRGB.init();
     indicatorRGB.blinkRGBInclusive();

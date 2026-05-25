@@ -8,14 +8,14 @@ namespace IotNode::Utils::VCC
 {
   bool read = false;
 
-  uint16_t vcc = 0;
+  unsigned short vcc = 0;
 
   void update()
   {
     if (read)
       return;
 
-    uint16_t measurement = ESP.getVcc();
+    unsigned short measurement = ESP.getVcc();
 
     if (!vcc)
     {
@@ -26,7 +26,7 @@ namespace IotNode::Utils::VCC
     vcc = (vcc + measurement) / 2;
   }
 
-  uint16_t get()
+  unsigned short get()
   {
     read = true;
     return vcc;

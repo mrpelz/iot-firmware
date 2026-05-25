@@ -9,7 +9,7 @@
 
 namespace IotNode::Services::Led
 {
-  Utils::UDP::Service makeService(FadeLed *led, uint8_t index);
+  Utils::UDP::Service makeService(FadeLed *led, unsigned char index);
 }
 
 #endif

@@ -4,7 +4,7 @@
 
 namespace IotNode::Services::Output
 {
-  Utils::UDP::Service makeService(Utils::Output::Regular *output, uint8_t index)
+  Utils::UDP::Service makeService(Utils::Output::Regular *output, unsigned char index)
   {
     auto handler = [output, index](
                        Utils::UDP::Payload *request,
@@ -37,7 +37,7 @@ namespace IotNode::Services::Output
         handler};
   }
 
-  Utils::UDP::Service makeService(Utils::Output::Pulse *output, uint8_t index)
+  Utils::UDP::Service makeService(Utils::Output::Pulse *output, unsigned char index)
   {
     auto handler = [output, index](
                        Utils::UDP::Payload *request,

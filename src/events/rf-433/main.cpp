@@ -4,17 +4,17 @@
 
 namespace IotNode::Events::Rf433
 {
-  void event(::std::vector<uint8_t> payload)
+  void event(::std::vector<unsigned char> payload)
   {
     Utils::UDP::instance.event(ids::rf433, 0, payload);
   }
 
   void onDataReceived(unsigned int *protocol, unsigned int *bitLength, unsigned long *value)
   {
-    ::std::vector<uint8_t> payload = {};
+    ::std::vector<unsigned char> payload = {};
 
-    auto _protocol = reinterpret_cast<uint8_t *>(protocol);
-    auto _value = reinterpret_cast<uint8_t *>(value);
+    auto _protocol = reinterpret_cast<unsigned char *>(protocol);
+    auto _value = reinterpret_cast<unsigned char *>(value);
 
     payload.insert(
         payload.end(),

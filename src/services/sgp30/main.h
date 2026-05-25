@@ -16,7 +16,7 @@
 
 namespace IotNode::Services::Sgp30
 {
-  uint32_t getAbsoluteHumidity(float temperature, float humidity);
+  unsigned long getAbsoluteHumidity(float temperature, float humidity);
 
   void initializer(TwoWire *i2c);
 

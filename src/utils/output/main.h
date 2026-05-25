@@ -12,14 +12,14 @@ namespace IotNode::Utils::Output
 {
   struct RegularConfig
   {
-    uint8_t pin;
+    unsigned char pin;
     bool invert;
   };
 
   struct PulseConfig
   {
-    uint8_t onPin;
-    uint8_t offPin;
+    unsigned char onPin;
+    unsigned char offPin;
     bool invert;
   };
 

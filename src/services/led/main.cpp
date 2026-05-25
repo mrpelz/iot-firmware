@@ -4,7 +4,7 @@
 
 namespace IotNode::Services::Led
 {
-  Utils::UDP::Service makeService(FadeLed *led, uint8_t index)
+  Utils::UDP::Service makeService(FadeLed *led, unsigned char index)
   {
     auto handler = [led, index](
                        Utils::UDP::Payload *request,
@@ -16,7 +16,7 @@ namespace IotNode::Services::Led
       Utils::Log::debug(fmt::format("led-service.index: {}", index));
 #endif
 
-      auto duty = request->size() >= 1 ? request->at(0) : (uint8_t)0;
+      auto duty = request->size() >= 1 ? request->at(0) : 0;
 
 #ifdef IOT_NODE_LOGGING
       Utils::Log::debug(fmt::format("led-service.duty: {}", duty));

@@ -7,13 +7,13 @@ namespace IotNode::Events::VCC
 #ifdef IOT_NODE_ESP_NOW_NODE
   ChangeCallback makeEspNowEvent()
   {
-    auto handler = [](uint16_t vcc)
+    auto handler = [](unsigned short vcc)
     {
-      ::std::vector<uint8_t> response = {
+      ::std::vector<unsigned char> response = {
           ids::vcc,
           0};
 
-      auto value = reinterpret_cast<uint8_t *>(&(vcc));
+      auto value = reinterpret_cast<unsigned char *>(&(vcc));
 
       response.insert(
           response.end(),

@@ -118,7 +118,7 @@ namespace IotNode::Utils::Link
     state.callbacks.dhcpTimeout();
   }
 
-  void Class::handleDisconnected(uint8_t reason)
+  void Class::handleDisconnected(unsigned char reason)
   {
     state.isConnected = false;
 

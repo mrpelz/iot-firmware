@@ -4,7 +4,7 @@
 
 namespace IotNode::Services::Indicator
 {
-  Utils::UDP::Service makeService(Utils::Indicator::ClassPin *indicator, uint8_t index)
+  Utils::UDP::Service makeService(Utils::Indicator::ClassPin *indicator, unsigned char index)
   {
     auto handler = [indicator, index](
                        Utils::UDP::Payload *request,
@@ -26,7 +26,7 @@ namespace IotNode::Services::Indicator
 
       auto cmd = request->at(0);
 
-      switch ((uint8_t)cmd)
+      switch (cmd)
       {
       case INDICATOR_CMD_ON:
         indicator->setOn(true);
@@ -39,7 +39,7 @@ namespace IotNode::Services::Indicator
         {
           auto count = request->at(1);
 
-          indicator->blink((uint8_t)count);
+          indicator->blink(count);
         }
         else
         {
@@ -61,7 +61,7 @@ namespace IotNode::Services::Indicator
   }
 
 #ifdef IOT_NODE_SX1509
-  Utils::UDP::Service makeService(Utils::Indicator::ClassExpander *indicator, uint8_t index)
+  Utils::UDP::Service makeService(Utils::Indicator::ClassExpander *indicator, unsigned char index)
   {
     auto handler = [indicator, index](
                        Utils::UDP::Payload *request,
@@ -83,7 +83,7 @@ namespace IotNode::Services::Indicator
 
       auto cmd = request->at(0);
 
-      switch ((uint8_t)cmd)
+      switch (cmd)
       {
       case INDICATOR_CMD_ON:
         indicator->setOn(true);
@@ -96,7 +96,7 @@ namespace IotNode::Services::Indicator
         {
           auto count = request->at(1);
 
-          indicator->blink((uint8_t)count);
+          indicator->blink(count);
         }
         else
         {

@@ -78,9 +78,9 @@ namespace IotNode::Services::Ccs811
       Utils::Log::debug(fmt::format("ccs811-service.eco2: {}", eco2Reading));
 #endif
 
-      auto temperatureResult = reinterpret_cast<uint8_t *>(&temperatureReading);
-      auto tvocResult = reinterpret_cast<uint8_t *>(&tvocReading);
-      auto eco2Result = reinterpret_cast<uint8_t *>(&eco2Reading);
+      auto temperatureResult = reinterpret_cast<unsigned char *>(&temperatureReading);
+      auto tvocResult = reinterpret_cast<unsigned char *>(&tvocReading);
+      auto eco2Result = reinterpret_cast<unsigned char *>(&eco2Reading);
 
       Utils::UDP::Payload response;
 

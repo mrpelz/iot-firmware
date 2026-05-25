@@ -83,8 +83,8 @@ namespace IotNode::Services::Sds011
       Utils::Log::debug(fmt::format("sds011-service.pm10: {}", reading.pm10));
 #endif
 
-      auto pm025 = reinterpret_cast<uint8_t *>(&reading.pm25);
-      auto pm10 = reinterpret_cast<uint8_t *>(&reading.pm10);
+      auto pm025 = reinterpret_cast<unsigned char *>(&reading.pm25);
+      auto pm10 = reinterpret_cast<unsigned char *>(&reading.pm10);
 
       Utils::UDP::Payload response;
 

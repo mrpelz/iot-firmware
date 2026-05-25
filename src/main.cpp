@@ -83,6 +83,9 @@ void setup()
 
 #ifdef IOT_NODE_INDICATORS
   ::IotNode::Services::Indicator::setup();
+#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
+  ::IotNode::Services::OutputNg::setup();
+#endif
 #endif
 
 #ifdef IOT_NODE_LED

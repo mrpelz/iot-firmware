@@ -4,19 +4,19 @@
 
 namespace IotNode::Events::EspNowGw
 {
-  void event(::std::vector<uint8_t> payload)
+  void event(::std::vector<unsigned char> payload)
   {
     Utils::UDP::instance.event(ids::espNowGw, 0, payload);
   }
 
-  void onDataReceived(const uint8_t *mac, const uint8_t *incomingData, int length)
+  void onDataReceived(const unsigned char *mac, const unsigned char *incomingData, int length)
   {
 #ifdef IOT_NODE_LOGGING
     Utils::Log::debug("event: esp-now-message");
     Utils::Log::debug("esp-now-message.mac", Utils::Link::printMacAddress(WiFi.BSSID()));
 #endif
 
-    ::std::vector<uint8_t> payload = {};
+    ::std::vector<unsigned char> payload = {};
 
     payload.insert(
         payload.end(),

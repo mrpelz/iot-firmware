@@ -21,7 +21,7 @@ namespace IotNode::Services::Tsl2561
   {
   public:
     Sensor();
-    float calculateLux(uint16_t broadband, uint16_t ir);
+    float calculateLux(unsigned short broadband, unsigned short ir);
   };
 }
 

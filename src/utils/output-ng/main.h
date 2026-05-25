@@ -21,7 +21,7 @@
 #define OUTPUT_BLINK_PERIOD_ON 500
 #define OUTPUT_BLINK_PERIOD_OFF 500
 #define OUTPUT_ITERATE_INFINITE 0xffffffff
-#define OUTPUT_RAMP_THROTTLE 50
+#define OUTPUT_RAMP_THROTTLE 0
 #define OUTPUT_BUZZER_HOLD_TIME 125
 #define OUTPUT_BUZZER_PAUSE_TIME 375
 #define OUTPUT_BUZZER_DEFAULT_FREQUENCY 3750
@@ -128,12 +128,12 @@ namespace IotNode::Utils::OutputNg
   private:
     bool _invert;
     bool _isAttached = false;
-    uint8_t _pin;
+    unsigned char _pin;
     Ramp _ramp;
     void _write(unsigned long value);
 
   public:
-    Buzzer(uint8_t pin, bool invert);
+    Buzzer(unsigned char pin, bool invert);
     void beep(unsigned long count, unsigned long frequency);
     void beep(unsigned long frequency);
     void beep(void);
@@ -146,7 +146,7 @@ namespace IotNode::Utils::OutputNg
   class Binary : public Base<bool>
   {
   public:
-    Binary(uint8_t pin, bool invert);
+    Binary(unsigned char pin, bool invert);
     Binary(::std::function<void()> onInit, ::std::function<void(bool value)> onCommit);
     void blink(unsigned long count);
     void blink(void);
@@ -157,7 +157,7 @@ namespace IotNode::Utils::OutputNg
   class BinaryPulse : public Binary
   {
   public:
-    BinaryPulse(uint8_t pinOn, uint8_t pinOff, bool invert, uint8_t pulseTime);
+    BinaryPulse(unsigned char pinOn, unsigned char pinOff, bool invert, unsigned char pulseTime);
   };
 
   class Dimmable : public Base<DimmableValue<double>>
@@ -166,7 +166,7 @@ namespace IotNode::Utils::OutputNg
     Ramp _ramp;
 
   public:
-    Dimmable(uint8_t pin, bool invert);
+    Dimmable(unsigned char pin, bool invert);
     Dimmable(::std::function<void()> onInit, ::std::function<void(DimmableValue<double> value)> onCommit);
     void blink(unsigned long count);
     void blink(void);
@@ -189,7 +189,7 @@ namespace IotNode::Utils::OutputNg
     Ramp _ramp;
 
   public:
-    DimmableRGB(uint8_t pinR, uint8_t pinG, uint8_t pinB, bool invert);
+    DimmableRGB(unsigned char pinR, unsigned char pinG, unsigned char pinB, bool invert);
     DimmableRGB(::std::function<void()> onInit, ::std::function<void(DimmableRGBValue value)> onCommit);
     void blink(unsigned long count);
     void blink(void);
@@ -215,7 +215,7 @@ namespace IotNode::Utils::OutputNg
   class DimmableRGBWS2812 : public DimmableRGB
   {
   public:
-    DimmableRGBWS2812(uint8_t index, ESP32_WS2812 *bus, bool push);
+    DimmableRGBWS2812(unsigned char index, ESP32_WS2812 *bus, bool push);
   };
 #endif
 }

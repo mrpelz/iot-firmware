@@ -14,7 +14,7 @@
 
 namespace IotNode::Events::VCC
 {
-  typedef ::std::function<void(uint16_t vcc)> ChangeCallback;
+  typedef ::std::function<void(unsigned short vcc)> ChangeCallback;
 
 #ifdef IOT_NODE_ESP_NOW_NODE
   ChangeCallback makeEspNowEvent();

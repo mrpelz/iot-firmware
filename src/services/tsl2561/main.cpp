@@ -50,8 +50,8 @@ namespace IotNode::Services::Tsl2561
         continue;
       }
 
-      uint16_t broadband;
-      uint16_t infrared;
+      unsigned short broadband;
+      unsigned short infrared;
 
       Utils::I2C::claim();
 
@@ -64,7 +64,7 @@ namespace IotNode::Services::Tsl2561
       Utils::Log::debug(fmt::format("tsl2561-service.reading: {}", reading));
 #endif
 
-      auto result = reinterpret_cast<uint8_t *>(&reading);
+      auto result = reinterpret_cast<unsigned char *>(&reading);
 
       Utils::UDP::Payload response;
 

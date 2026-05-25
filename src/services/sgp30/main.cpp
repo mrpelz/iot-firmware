@@ -13,11 +13,11 @@ namespace IotNode::Services::Sgp30
   bool working = false;
   auto sensor = Adafruit_SGP30();
 
-  uint32_t getAbsoluteHumidity(float temperature, float humidity)
+  unsigned long getAbsoluteHumidity(float temperature, float humidity)
   {
     // approximation formula from Sensirion SGP30 Driver Integration chapter 3.15
     const float absoluteHumidity = 216.7f * ((humidity / 100.0f) * 6.112f * exp((17.62f * temperature) / (243.12f + temperature)) / (273.15f + temperature)); // [g/m^3]
-    const uint32_t absoluteHumidityScaled = static_cast<uint32_t>(1000.0f * absoluteHumidity);                                                                // [mg/m^3]
+    const unsigned long absoluteHumidityScaled = static_cast<unsigned long>(1000.0f * absoluteHumidity);                                                      // [mg/m^3]
     return absoluteHumidityScaled;
   }
 
@@ -101,10 +101,10 @@ namespace IotNode::Services::Sgp30
       Utils::Log::debug(fmt::format("sgp30-service.eco2: {}", eco2Reading));
 #endif
 
-      auto h2Result = reinterpret_cast<uint8_t *>(&h2Reading);
-      auto ethanolResult = reinterpret_cast<uint8_t *>(&ethanolReading);
-      auto tvocResult = reinterpret_cast<uint8_t *>(&tvocReading);
-      auto eco2Result = reinterpret_cast<uint8_t *>(&eco2Reading);
+      auto h2Result = reinterpret_cast<unsigned char *>(&h2Reading);
+      auto ethanolResult = reinterpret_cast<unsigned char *>(&ethanolReading);
+      auto tvocResult = reinterpret_cast<unsigned char *>(&tvocReading);
+      auto eco2Result = reinterpret_cast<unsigned char *>(&eco2Reading);
 
       Utils::UDP::Payload response;
 

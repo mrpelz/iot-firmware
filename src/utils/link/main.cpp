@@ -2,7 +2,7 @@
 
 namespace IotNode::Utils::Link
 {
-  ::std::string printMacAddress(uint8_t input[6])
+  ::std::string printMacAddress(unsigned char input[6])
   {
     char result[18];
 

@@ -63,7 +63,7 @@ namespace IotNode::Services::Veml6070
       Utils::Log::debug(fmt::format("veml6070-service.reading: {}", reading));
 #endif
 
-      auto result = reinterpret_cast<uint8_t *>(&reading);
+      auto result = reinterpret_cast<unsigned char *>(&reading);
 
       Utils::UDP::Payload response;
 

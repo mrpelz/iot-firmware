@@ -16,7 +16,7 @@
 
 namespace IotNode::Events::Rf433
 {
-  void event(::std::vector<uint8_t> payload);
+  void event(::std::vector<unsigned char> payload);
 
   void onDataReceived(unsigned int *protocol, unsigned int *bitLength, unsigned long *value);
 }

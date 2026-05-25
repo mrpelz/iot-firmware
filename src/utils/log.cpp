@@ -55,8 +55,8 @@ namespace IotNode::Utils::Log
     debug("info.build.pio.framework", IOT_NODE_PIO_FRAMEWORK);
 
 #ifdef IOT_NODE_ESP8266
-    log_e("info.system.chip-id", String(ESP.getChipId(), HEX).c_str());
-    log_e("info.system.flash-id", String(ESP.getFlashChipId(), HEX).c_str());
+    debug("info.system.chip-id", ::std::to_string(ESP.getChipId()));
+    debug("info.system.flash-id", ::std::to_string(ESP.getFlashChipId()));
 #endif
 
     debug("info.system.mac-address", WiFi.macAddress().c_str());

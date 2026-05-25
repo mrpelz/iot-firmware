@@ -18,13 +18,13 @@ namespace IotNode::Services::SystemInfo
     response.insert(response.end(), &flashId, &flashId + sizeof(flashId));
 #endif
 
-    auto macAddress = new uint8_t[6];
+    auto macAddress = new unsigned char[6];
     WiFi.macAddress(macAddress);
     response.insert(response.end(), macAddress, macAddress + 6);
     delete macAddress;
 
 #ifdef IOT_NODE_LINK_ETH
-    auto ethMacAddress = new uint8_t[6];
+    auto ethMacAddress = new unsigned char[6];
     esp_netif_get_mac(esp_netif_get_handle_from_ifkey("ETH_DEF"), ethMacAddress);
     response.insert(response.end(), ethMacAddress, ethMacAddress + 6);
     delete ethMacAddress;
