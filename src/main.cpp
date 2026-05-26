@@ -53,7 +53,7 @@ void setup()
 #ifdef IOT_NODE_INDICATORS
   ::IotNode::Utils::Indicator::setup();
   ::IotNode::Utils::OutputNg::setup();
-#ifndef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
+#if !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO) && !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
   ::IotNode::Utils::Indicator::indicator0.setOn(true);
 #endif
 #endif
@@ -83,7 +83,7 @@ void setup()
 
 #ifdef IOT_NODE_INDICATORS
   ::IotNode::Services::Indicator::setup();
-#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
+#if defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO) || defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
   ::IotNode::Services::OutputNg::setup();
 #endif
 #endif
@@ -163,7 +163,7 @@ void setup()
   if (::IotNode::Utils::Link::link.isConnected())
     return;
 
-#ifndef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
+#if !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO) && !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
   ::IotNode::Utils::Indicator::indicator0.blink();
 #endif
 #endif

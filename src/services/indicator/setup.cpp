@@ -4,7 +4,7 @@
 
 namespace IotNode::Services::Indicator
 {
-#ifndef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
+#if !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO) && !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
   auto service0 = makeService(&Utils::Indicator::indicator0, 0);
 
 #ifdef IOT_NODE_BOARD_ROOM_SENSOR
@@ -15,7 +15,7 @@ namespace IotNode::Services::Indicator
 
   void setup()
   {
-#ifndef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
+#if !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO) && !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
     Utils::UDP::instance.addService(&service0);
 
 #ifdef IOT_NODE_BOARD_ROOM_SENSOR

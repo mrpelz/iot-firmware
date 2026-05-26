@@ -8,15 +8,17 @@
 
 namespace IotNode::Utils::OutputNg
 {
+#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
   extern Dimmable indicator0;
   extern DimmableRGB indicator1;
   extern Buzzer buzzer;
+#endif
 
-#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
+#if defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO) || defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
   extern ESP32_WS2812 ws2812Bus0;
 #endif
 
-#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
+#if defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO) || defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
   extern DimmableRGBWS2812 indicatorRGB;
 #endif
 

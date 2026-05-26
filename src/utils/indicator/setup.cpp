@@ -4,7 +4,7 @@
 
 namespace IotNode::Utils::Indicator
 {
-#ifndef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
+#if !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO) && !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
 #ifdef IOT_NODE_BOARD_ROOM_SENSOR
   ClassExpander indicator0({
     ROOM_SENSOR_INDICATOR_LED_R,
@@ -60,7 +60,7 @@ namespace IotNode::Utils::Indicator
 
   void update()
   {
-#ifndef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
+#if !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO) && !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
     indicator0.update();
 #endif
 
@@ -87,7 +87,7 @@ namespace IotNode::Utils::Indicator
 
   void setup()
   {
-#ifndef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO
+#if !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO) && !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
     indicator0.init();
 #endif
 

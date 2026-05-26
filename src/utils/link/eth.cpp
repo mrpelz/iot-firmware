@@ -4,6 +4,10 @@
 
 namespace IotNode::Utils::Link
 {
+#ifdef IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH
+  SPIClass ethSPI(HSPI);
+#endif
+
   Class::Class(Config config)
   {
 #ifdef IOT_NODE_IP_STATIC
@@ -83,6 +87,9 @@ namespace IotNode::Utils::Link
     ETH.begin(ETH_PHY_LAN8720, ETH_PHY_ADDR_AUTO, 16, 23, 18, ETH_CLOCK_GPIO0_IN);
 #elif defined(IOT_NODE_OLIMEX_ETH)
     ETH.begin(ETH_PHY_LAN8720, ETH_PHY_ADDR_AUTO, 12, 23, 18, ETH_CLOCK_GPIO17_OUT);
+#elif defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
+    ethSPI.begin(13, 12, 11, 14);
+    ETH.begin(ETH_PHY_W5500, 0, 14, 10, 9, ethSPI);
 #else
     ETH.begin();
 #endif
@@ -135,10 +142,10 @@ namespace IotNode::Utils::Link
     state.isConnected = true;
 
 #ifdef IOT_NODE_LOGGING
-    Log::debug("event: network-config");
-    Log::debug("event.network-config.ip", ip.toString());
-    Log::debug("event.network-config.gateway", gateway.toString());
-    Log::debug("event.network-config.netmask", netmask.toString());
+    Log::debug("event: eth.network-config");
+    Log::debug(fmt::format("event.eth.network-config.ip: {}", ip.toString().c_str()));
+    Log::debug(fmt::format("event.eth.network-config.gateway: {}", gateway.toString().c_str()));
+    Log::debug(fmt::format("event.eth.network-config.netmask: {}", netmask.toString().c_str()));
 #endif
 
     state.callbacks.gotIP(ip);
@@ -300,9 +307,9 @@ namespace IotNode::Utils::Link
     IPAddress gateway = ETH.gatewayIP();
     IPAddress netmask = ETH.subnetMask();
 
-    Log::debug("info.network-config.ip", ip.toString());
-    Log::debug("info.network-config.gateway", gateway.toString());
-    Log::debug("info.network-config.netmask", netmask.toString());
+    Log::debug(fmt::format("info.eth.network-config.ip: {}", ip.toString().c_str()));
+    Log::debug(fmt::format("info.eth.network-config.gateway: {}", gateway.toString().c_str()));
+    Log::debug(fmt::format("info.eth.network-config.netmask: {}", netmask.toString().c_str()));
 #endif
 #endif
   }

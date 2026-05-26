@@ -12,7 +12,7 @@ namespace IotNode::Utils::Indicator
   extern ClassExpander indicator0;
   extern ClassExpander indicator1;
   extern ClassExpander indicator2;
-#elif !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO)
+#elif !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO) && !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
   extern ClassPin indicator0;
 #endif
 

@@ -64,7 +64,7 @@ namespace IotNode::Services::Hello
     addDelimiter(&response);
 
 #ifdef IOT_NODE_LINK_ETH
-    addLineToRespone(&response, ETH.macAddress());
+    addLineToRespone(&response, ETH.macAddress().c_str());
 #endif
     addDelimiter(&response);
 
