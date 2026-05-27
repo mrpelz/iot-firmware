@@ -90,6 +90,8 @@ namespace IotNode::Utils::Link
 #elif defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
     ethSPI.begin(13, 12, 11, 14);
     ETH.begin(ETH_PHY_W5500, 0, 14, 10, 9, ethSPI);
+#elif defined(IOT_NODE_BOARD_LILYGO_T_ETH_POE)
+    ETH.begin(ETH_PHY_LAN8720, ETH_PHY_ADDR_AUTO, 23, 18, -1, ETH_CLOCK_GPIO17_OUT);
 #else
     ETH.begin();
 #endif
