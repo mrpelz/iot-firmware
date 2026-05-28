@@ -97,7 +97,7 @@ namespace IotNode::Services::Hello
     addDelimiter(&response);
 
 #ifdef IOT_NODE_ESP32
-    addLineToRespone(&response, std::to_string(temperatureRead()));
+    addLineToRespone(&response, ::std::to_string(temperatureRead()));
 #endif
     addDelimiter(&response);
 
