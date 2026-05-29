@@ -4,6 +4,10 @@
 
 namespace IotNode::Utils::EQ3
 {
+#ifdef IOT_NODE_EQ3_ENTRY_DOOR
+  Lib::EQ3::Class entryDoorLock(EQ3_ENTRY_DOOR_ADDRESS, EQ3_ENTRY_DOOR_USER_KEY, EQ3_ENTRY_DOOR_USER_ID);
+#endif
+
   void update()
   {
   }
@@ -21,6 +25,9 @@ namespace IotNode::Utils::EQ3
 
   void setup()
   {
+    BLEDevice::init("");
+    entryDoorLock.connect();
+
 #ifdef IOT_NODE_ESP32
     xTaskCreatePinnedToCore(
         task,

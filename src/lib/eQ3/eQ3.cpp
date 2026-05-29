@@ -28,13 +28,13 @@ namespace IotNode::Lib::EQ3
     bleClient->setClientCallbacks((BLEClientCallbacks *)this);
   }
 
-  void Class::_onConnect(BLEClient *pClient)
+  void Class::onConnect(BLEClient *pClient)
   {
     Serial.println("# Connecting...");
     state.connectionState = CONNECTING;
   }
 
-  void Class::_onDisconnect(BLEClient *pClient)
+  void Class::onDisconnect(BLEClient *pClient)
   {
     Serial.println("# Disconnected!");
     state.connectionState = DISCONNECTED;
@@ -91,7 +91,7 @@ namespace IotNode::Lib::EQ3
     return true;
   }
 
-  void Class::_onResult(BLEAdvertisedDevice advertisedDevice)
+  void Class::onResult(BLEAdvertisedDevice advertisedDevice)
   {
     if (advertisedDevice.getAddress().toString().c_str() == _address.c_str())
     { // TODO: Make name and address variable

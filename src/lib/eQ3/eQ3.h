@@ -23,7 +23,7 @@
 
 namespace IotNode::Lib::EQ3
 {
-  class Class : public BLEAdvertisedDeviceCallbacks, public BLEClientCallbacks /*, public BLERemoteCharacteristicCallbacks*/
+  class Class : public BLEAdvertisedDeviceCallbacks, public BLEClientCallbacks
   {
   private:
     ::std::string _address;
@@ -43,10 +43,10 @@ namespace IotNode::Lib::EQ3
 
     void _connectHandler();
     void _exchangeNonces();
-    void _onConnect(BLEClient *pClient);
-    void _onDisconnect(BLEClient *pClient);
+    void onConnect(BLEClient *pClient);
+    void onDisconnect(BLEClient *pClient);
     void _onNotify(BLERemoteCharacteristic *pBLERemoteCharacteristic, uint8_t *pData, size_t length, bool isNotify);
-    void _onResult(BLEAdvertisedDevice advertisedDevice);
+    void onResult(BLEAdvertisedDevice advertisedDevice);
     void _sendCommand(CommandType command);
     bool _sendMessage(eQ3Message::Message *msg);
     void _sendNextFragment();
