@@ -11,8 +11,11 @@
 #include "./services/system-info/setup.h"
 #include "./utils/keepalive/setup.h"
 #include "./utils/link/setup.h"
-#include "./utils/ota.h"
 #include "./utils/udp/setup.h"
+
+#ifndef IOT_NODE_NO_OTA
+#include "./utils/ota.h"
+#endif
 
 #ifdef IOT_NODE_SX1509
 #include "./utils/sx1509/setup.h"
@@ -97,6 +100,10 @@
 
 #ifdef IOT_NODE_E_PAPER
 #include "./utils/e-paper/setup.h"
+#endif
+
+#ifdef IOT_NODE_EQ3
+#include "./utils/eq3/setup.h"
 #endif
 
 #ifdef IOT_NODE_ESP_NOW_NODE

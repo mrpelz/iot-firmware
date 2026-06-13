@@ -16,8 +16,10 @@ namespace IotNode::Utils::Link
 
     state.timings = config.timings;
 
-    WiFi.mode(WIFI_OFF);
-    btStop();
+    if (WiFi.getMode() != WIFI_OFF)
+    {
+      WiFi.mode(WIFI_OFF);
+    }
   }
 
   void Class::configDebug()

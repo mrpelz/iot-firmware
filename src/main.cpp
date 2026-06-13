@@ -124,6 +124,10 @@ void setup()
   ::IotNode::Services::Ccs811::setup();
 #endif
 
+#ifdef IOT_NODE_EQ3
+  ::IotNode::Utils::EQ3::setup();
+#endif
+
 #ifdef IOT_NODE_MCP9808
   ::IotNode::Services::Mcp9808::setup();
 #endif
@@ -153,7 +157,9 @@ void setup()
   ::IotNode::Services::EPaper::setup();
 #endif
 
+#ifndef IOT_NODE_NO_OTA
   ::IotNode::Utils::OTA::setup();
+#endif
 
 #ifdef IOT_NODE_I2C_SCAN
   ::IotNode::Utils::I2C::scan();
@@ -218,7 +224,9 @@ void loop()
   ::IotNode::Events::HmmdMotion::update();
 #endif
 
+#ifndef IOT_NODE_NO_OTA
   ::IotNode::Utils::OTA::update();
+#endif
 
 #ifdef IOT_NODE_ESP32
   vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);

@@ -22,6 +22,7 @@ namespace IotNode::Utils::Link
 
   void setup()
   {
+
     link.configDebug();
 
     link.onGotIP([](IPAddress ip)
