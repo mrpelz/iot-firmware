@@ -7,8 +7,6 @@ namespace IotNode::Events::EspNowGw
   void setup()
   {
     WiFi.persistent(false);
-
-    WiFi.setAutoConnect(false);
     WiFi.setAutoReconnect(false);
 
     WiFi.mode(WIFI_STA);

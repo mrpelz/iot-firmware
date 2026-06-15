@@ -43,11 +43,11 @@ namespace IotNode::Events::HmmdMotion
     {
       if (sensor->readFirmwareVersion())
       {
-        Utils::Log::debug("hmmd-motion-event.firmware-version", sensor->firmwareVersion);
+        Utils::Log::debug("hmmd-motion-event.firmware-version", sensor->firmwareVersion.c_str());
       }
       if (sensor->readSerialNumber())
       {
-        Utils::Log::debug("hmmd-motion-event.serial-number", sensor->serialNumber);
+        Utils::Log::debug("hmmd-motion-event.serial-number", sensor->serialNumber.c_str());
       }
 
       auto config = sensor->radarConfiguration;
@@ -61,7 +61,7 @@ namespace IotNode::Events::HmmdMotion
   void event(bool isTargetDetected, short distance = 0)
   {
     ::std::vector<unsigned char> payload = {
-        (isTargetDetected ? 0x01 : 0x00),
+        (unsigned char)(isTargetDetected ? 0x01 : 0x00),
     };
 
     auto distance_ = ::std::bit_cast<::std::array<unsigned char, sizeof distance>>(distance);

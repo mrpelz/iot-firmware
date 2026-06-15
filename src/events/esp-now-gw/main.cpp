@@ -9,7 +9,7 @@ namespace IotNode::Events::EspNowGw
     Utils::UDP::instance.event(ids::espNowGw, 0, payload);
   }
 
-  void onDataReceived(const unsigned char *mac, const unsigned char *incomingData, int length)
+  void onDataReceived(const esp_now_recv_info_t *esp_now_info, const unsigned char *incomingData, int length)
   {
 #ifdef IOT_NODE_LOGGING
     Utils::Log::debug("event: esp-now-message");
@@ -20,8 +20,8 @@ namespace IotNode::Events::EspNowGw
 
     payload.insert(
         payload.end(),
-        mac,
-        mac + 6);
+        esp_now_info->src_addr,
+        esp_now_info->src_addr + 6);
 
     payload.insert(
         payload.end(),
