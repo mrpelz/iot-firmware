@@ -11,7 +11,7 @@ namespace IotNode::Utils::OTA
 
   void setup()
   {
-    ArduinoOTA.setHostname(IOT_NODE_NAME);
+    ArduinoOTA.setHostname(IOT_NODE_PIO_ENV);
     ArduinoOTA.setPassword(IOT_NODE_OTA_PASSWORD);
 
 #ifdef IOT_NODE_ESP32

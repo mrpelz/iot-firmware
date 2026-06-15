@@ -25,7 +25,7 @@ namespace IotNode::Services::Hello
     addLineToRespone(&response, "HELLO");
     addDelimiter(&response);
 
-    addLineToRespone(&response, IOT_NODE_NAME);
+    addLineToRespone(&response, IOT_NODE_PIO_ENV);
     addDelimiter(&response);
 
 #ifdef IOT_NODE_BOARD_NAME

@@ -69,5 +69,8 @@
     "variant": "cpp"
   },
   "editor.detectIndentation": false,
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "[ini]": {
+    "editor.insertSpaces": false
+  }
 }

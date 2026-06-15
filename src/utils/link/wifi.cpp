@@ -356,11 +356,11 @@ namespace IotNode::Utils::Link
 #endif
 
 #ifdef IOT_NODE_ESP32
-    WiFi.setHostname(IOT_NODE_NAME);
+    WiFi.setHostname(IOT_NODE_PIO_ENV);
 #endif
 
 #ifdef IOT_NODE_ESP8266
-    wifi_station_set_hostname(IOT_NODE_NAME);
+    wifi_station_set_hostname(IOT_NODE_PIO_ENV);
 #endif
 
 #ifdef IOT_NODE_ADVANCED_WIFI_CONFIG

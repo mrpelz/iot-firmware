@@ -30,14 +30,14 @@ namespace IotNode::Utils::Link
                    IotNode::Utils::UDP::instance.begin();
 
 #ifdef IOT_NODE_ESP32
-                   MDNS.begin(IOT_NODE_NAME);
+                   MDNS.begin(IOT_NODE_PIO_ENV);
 
                    ArduinoOTA.setMdnsEnabled(true);
                    ArduinoOTA.begin();
 #endif
 
 #ifdef IOT_NODE_ESP8266
-                   MDNS.begin(IOT_NODE_NAME, ip);
+                   MDNS.begin(IOT_NODE_PIO_ENV, ip);
 
                    ArduinoOTA.begin(true);
 #endif

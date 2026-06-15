@@ -31,8 +31,8 @@ namespace IotNode::Services::Sds011
     vTaskDelay(IOT_NODE_LOG_DELAY / portTICK_PERIOD_MS);
 
 #ifdef IOT_NODE_LOGGING
-    Utils::Log::debug("sds011-service.sensor-firmware-version", sensor.queryFirmwareVersion().toString());
-    Utils::Log::debug("sds011-service.sensor-reporting-mode", sensor.setQueryReportingMode().toString());
+    Utils::Log::debug("sds011-service.sensor-firmware-version", sensor.queryFirmwareVersion().toString().c_str());
+    Utils::Log::debug("sds011-service.sensor-reporting-mode", sensor.setQueryReportingMode().toString().c_str());
 #endif
 
     sleepSensor();
@@ -64,7 +64,7 @@ namespace IotNode::Services::Sds011
       sleepSensor();
 
 #ifdef IOT_NODE_LOGGING
-      Utils::Log::debug("sds011-service.status", reading.statusToString());
+      Utils::Log::debug("sds011-service.status", reading.statusToString().c_str());
 #endif
 
       if (!reading.isOk())

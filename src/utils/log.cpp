@@ -39,8 +39,6 @@ namespace IotNode::Utils::Log
 
     Serial.println();
 
-    debug("info.name", IOT_NODE_NAME);
-
 #ifdef IOT_NODE_BOARD_NAME
     debug("info.board-name", IOT_NODE_BOARD_NAME);
 #endif

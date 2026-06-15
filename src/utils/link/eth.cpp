@@ -106,7 +106,7 @@ namespace IotNode::Utils::Link
         state.interfaceConfig.gateway);
 #endif
 
-    ETH.setHostname(IOT_NODE_NAME);
+    ETH.setHostname(IOT_NODE_PIO_ENV);
   }
 
   void Class::handleConnected()
