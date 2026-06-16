@@ -6,7 +6,22 @@
 
 #include "../udp/setup.h"
 #include "./main.h"
-#include "./utils/indicator/setup.h"
+
+#ifdef IOT_NODE_INDICATORS
+#if defined(ENV_SCOPED_SETUP) && defined(IOT_NODE_BOARD_TEST_DEVICE)
+#include "../../setup/Test_Device/indicator.h"
+#elif defined(ENV_SCOPED_SETUP) && defined(IOT_NODE_BOARD_ROOM_SENSOR)
+#include "../../setup/Test_mrpelzBedroom_roomSensor/indicator.h"
+#elif defined(ENV_SCOPED_SETUP) && defined(IOT_NODE_BOARD_OBI_JACK)
+#include "../../setup/Obi_Jack/indicator.h"
+#elif defined(ENV_SCOPED_SETUP) && defined(IOT_NODE_BOARD_H801)
+#include "../../setup/H801/indicator.h"
+#elif defined(ENV_SCOPED_SETUP) && (defined(IOT_NODE_BOARD_SONOFF_BASIC_R2V1) || defined(IOT_NODE_BOARD_SONOFF_BASIC_R2V13))
+#include "../../setup/Sonoff_Basic_R2/indicator.h"
+#elif defined(ENV_SCOPED_SETUP) && defined(IOT_NODE_BOARD_SHELLYPLUS1)
+#include "../../setup/Shelly_Plus_1/indicator.h"
+#endif
+#endif
 
 #ifdef IOT_NODE_ESP8266
 #include <ESP8266mDNS.h>

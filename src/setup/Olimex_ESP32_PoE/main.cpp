@@ -1,0 +1,37 @@
+#ifdef IOT_NODE_ENV_OLIMEX_ESP32_POE
+
+#include "./main.h"
+
+namespace IotNode::Setup
+{
+  void setup()
+  {
+    ::IotNode::Utils::Keepalive::setup();
+
+#ifdef IOT_NODE_LOGGING
+    ::IotNode::Utils::Log::setup();
+#endif
+
+    vTaskDelay(IOT_NODE_LOG_DELAY / portTICK_PERIOD_MS);
+
+    ::IotNode::Utils::UDP::setup();
+    ::IotNode::Utils::Link::setup();
+
+    ::IotNode::Services::Hello::setup();
+    ::IotNode::Services::Keepalive::setup();
+    ::IotNode::Services::SystemInfo::setup();
+
+    ::IotNode::Events::Rf433::setup();
+
+    ::IotNode::Utils::OTA::setup();
+  }
+
+  void loop()
+  {
+    ::IotNode::Utils::OTA::update();
+
+    vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
+  }
+}
+
+#endif

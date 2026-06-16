@@ -7,7 +7,7 @@
 #include <pre.h>
 #include <post.h>
 
-#include "../../utils/output-ng/setup.h"
+#include "../../utils/output-ng/main.h"
 #include "../../utils/log.h"
 #include "../../utils/udp/main.h"
 

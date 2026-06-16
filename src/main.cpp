@@ -2,24 +2,13 @@
 
 void setup()
 {
+#ifndef ENV_SCOPED_SETUP
 #ifdef IOT_NODE_ESP_NOW_NODE
   ::IotNode::Utils::EspNowNode::getWorkingMode();
 
   if (::IotNode::Utils::EspNowNode::workingMode == ::IotNode::Utils::EspNowNode::WORKING_MODE::SLEEP)
   {
-#ifdef IOT_NODE_BUTTONS
-    ::IotNode::Utils::Button::setup();
-#endif
-
     ::IotNode::Utils::EspNowNode::setup();
-
-#ifdef IOT_NODE_BUTTONS
-    ::IotNode::Events::Button::setupEspNow();
-#endif
-
-#ifdef IOT_NODE_INPUT
-    ::IotNode::Events::Input::setupEspNow();
-#endif
 
 #ifdef IOT_NODE_VCC
     ::IotNode::Events::VCC::setupEspNow();
@@ -50,26 +39,6 @@ void setup()
   ::IotNode::Utils::Sx1509::setup();
 #endif
 
-#ifdef IOT_NODE_INDICATORS
-  ::IotNode::Utils::Indicator::setup();
-  ::IotNode::Utils::OutputNg::setup();
-#if !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO) && !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
-  ::IotNode::Utils::Indicator::indicator0.setOn(true);
-#endif
-#endif
-
-#ifdef IOT_NODE_LED
-  ::IotNode::Utils::Led::setup();
-#endif
-
-#ifdef IOT_NODE_OUTPUT
-  ::IotNode::Utils::Output::setup();
-#endif
-
-#ifdef IOT_NODE_BUTTONS
-  ::IotNode::Utils::Button::setup();
-#endif
-
   ::IotNode::Utils::UDP::setup();
   ::IotNode::Utils::Link::setup();
 
@@ -81,31 +50,8 @@ void setup()
   ::IotNode::Services::Keepalive::setup();
   ::IotNode::Services::SystemInfo::setup();
 
-#ifdef IOT_NODE_INDICATORS
-  ::IotNode::Services::Indicator::setup();
-#if defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO) || defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
-  ::IotNode::Services::OutputNg::setup();
-#endif
-#endif
-
-#ifdef IOT_NODE_LED
-  ::IotNode::Services::Led::setup();
-#endif
-
-#ifdef IOT_NODE_OUTPUT
-  ::IotNode::Services::Output::setup();
-#endif
-
-#ifdef IOT_NODE_BUTTONS
-  ::IotNode::Events::Button::setup();
-#endif
-
 #ifdef IOT_NODE_ESP_NOW_GW
   ::IotNode::Events::EspNowGw::setup();
-#endif
-
-#ifdef IOT_NODE_INPUT
-  ::IotNode::Events::Input::setup();
 #endif
 
 #ifdef IOT_NODE_HMMD_MOTION
@@ -164,39 +110,17 @@ void setup()
 #ifdef IOT_NODE_I2C_SCAN
   ::IotNode::Utils::I2C::scan();
 #endif
-
-#ifdef IOT_NODE_INDICATORS
-  if (::IotNode::Utils::Link::link.isConnected())
-    return;
-
-#if !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO) && !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
-  ::IotNode::Utils::Indicator::indicator0.blink();
 #endif
+
+#ifdef ENV_SCOPED_SETUP
+  ::IotNode::Setup::setup();
 #endif
 }
 
 void loop()
 {
+#ifndef ENV_SCOPED_SETUP
 #ifdef IOT_NODE_ESP8266
-  delay(IOT_NODE_MUTLITASKING_DELAY);
-
-#ifdef IOT_NODE_INDICATORS
-  ::IotNode::Utils::Indicator::update();
-  ::IotNode::Utils::OutputNg::update();
-#endif
-
-#ifdef IOT_NODE_LED
-  ::IotNode::Utils::Led::update();
-#endif
-
-#ifdef IOT_NODE_BUTTONS
-  ::IotNode::Utils::Button::update();
-#endif
-
-#ifdef IOT_NODE_INPUT
-  ::IotNode::Events::Input::update();
-#endif
-
 #ifdef IOT_NODE_VCC
   ::IotNode::Utils::VCC::update();
   ::IotNode::Events::VCC::update();
@@ -227,8 +151,16 @@ void loop()
 #ifndef IOT_NODE_NO_OTA
   ::IotNode::Utils::OTA::update();
 #endif
+#ifdef IOT_NODE_ESP8266
+  delay(IOT_NODE_MUTLITASKING_DELAY);
+#endif
 
 #ifdef IOT_NODE_ESP32
   vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
+#endif
+#endif
+
+#ifdef ENV_SCOPED_SETUP
+  ::IotNode::Setup::loop();
 #endif
 }

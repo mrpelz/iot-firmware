@@ -44,7 +44,7 @@ namespace IotNode::Utils::Link
 
 #if !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO) && !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
 #ifdef IOT_NODE_INDICATORS
-                   Indicator::indicator0.setOn(false);
+                   Setup::Indicator::indicator0.setOn(false);
 #endif
 #endif
                  });
@@ -59,7 +59,11 @@ namespace IotNode::Utils::Link
 
 #if !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO) && !defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
 #ifdef IOT_NODE_INDICATORS
+#if defined(ENV_SCOPED_SETUP) && (defined(IOT_NODE_BOARD_TEST_DEVICE) || defined(IOT_NODE_BOARD_ROOM_SENSOR) || defined(IOT_NODE_BOARD_OBI_JACK) || defined(IOT_NODE_BOARD_H801) || defined(IOT_NODE_BOARD_SONOFF_BASIC_R2V1) || defined(IOT_NODE_BOARD_SONOFF_BASIC_R2V13) || defined(IOT_NODE_BOARD_SHELLYPLUS1))
+                          Setup::Indicator::indicator0.blink();
+#else
                           Indicator::indicator0.blink();
+#endif
 #endif
 #endif
                         });

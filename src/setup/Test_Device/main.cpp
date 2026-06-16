@@ -1,0 +1,52 @@
+#ifdef IOT_NODE_BOARD_TEST_DEVICE
+
+#include "./main.h"
+
+namespace IotNode::Setup
+{
+
+  void setup()
+  {
+    ::IotNode::Utils::Keepalive::setup();
+
+#ifdef IOT_NODE_LOGGING
+    ::IotNode::Utils::Log::setup();
+#endif
+
+    vTaskDelay(IOT_NODE_LOG_DELAY / portTICK_PERIOD_MS);
+
+    ::IotNode::Utils::I2C::setup();
+    ::IotNode::Utils::UDP::setup();
+    ::IotNode::Utils::Link::setup();
+
+    ::IotNode::Services::Hello::setup();
+    ::IotNode::Services::Keepalive::setup();
+    ::IotNode::Services::SystemInfo::setup();
+
+    Indicator::setup();
+    Input::setup();
+
+    ::IotNode::Services::Bme280::setup();
+    ::IotNode::Services::Mcp9808::setup();
+    ::IotNode::Services::Mhz19::setup();
+    ::IotNode::Services::Sds011::setup();
+    ::IotNode::Services::Tsl2561::setup();
+    ::IotNode::Services::Veml6070::setup();
+
+    ::IotNode::Utils::OTA::setup();
+
+    if (::IotNode::Utils::Link::link.isConnected())
+      return;
+
+    Indicator::indicator0.blink();
+  }
+
+  void loop()
+  {
+    ::IotNode::Utils::OTA::update();
+
+    vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
+  }
+}
+
+#endif

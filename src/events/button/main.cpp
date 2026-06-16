@@ -13,8 +13,8 @@ namespace IotNode::Events::Button
 #endif
 
       ::std::vector<unsigned char> payload = {
-          (update.down ? 0x01 : 0x00),
-          (update.downChanged ? 0x01 : 0x00),
+          (unsigned char)(update.down ? 0x01 : 0x00),
+          (unsigned char)(update.downChanged ? 0x01 : 0x00),
           update.repeat,
           update.longpress,
       };

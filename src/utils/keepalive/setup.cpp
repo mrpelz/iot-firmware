@@ -21,7 +21,11 @@ namespace IotNode::Utils::Keepalive
       30000,
       []()
       {
+#ifdef ENV_SCOPED_SETUP
+        Setup::Output::output0.setOn(true);
+#else
         Output::output0.setOn(true);
+#endif
       });
 #endif
 
