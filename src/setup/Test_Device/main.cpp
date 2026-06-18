@@ -13,7 +13,7 @@ namespace IotNode::Setup
     ::IotNode::Utils::Log::setup();
 #endif
 
-    vTaskDelay(IOT_NODE_LOG_DELAY / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(100));
 
     ::IotNode::Utils::I2C::setup();
     ::IotNode::Utils::UDP::setup();
@@ -45,7 +45,7 @@ namespace IotNode::Setup
   {
     ::IotNode::Utils::OTA::update();
 
-    vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(100));
   }
 }
 

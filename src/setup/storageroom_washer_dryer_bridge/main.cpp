@@ -1,4 +1,4 @@
-#ifdef IOT_NODE_ENV_SHELLY_PLUS_1
+#ifdef IOT_NODE_ENV_STORAGEROOM_WASHER_DRYER_BRIDGE
 
 #include "./main.h"
 
@@ -21,21 +21,15 @@ namespace IotNode::Setup
     ::IotNode::Services::Keepalive::setup();
     ::IotNode::Services::SystemInfo::setup();
 
-    Output::setup();
-    Indicator::setup();
-    Button::setup();
+    TCPBridge::setup();
 
     ::IotNode::Utils::OTA::setup();
-
-    if (::IotNode::Utils::Link::link.isConnected())
-      return;
-
-    Indicator::indicator0.blink();
   }
 
   void loop()
   {
     ::IotNode::Utils::OTA::update();
+
     vTaskDelay(pdMS_TO_TICKS(100));
   }
 }

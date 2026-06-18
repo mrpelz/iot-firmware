@@ -21,7 +21,7 @@ namespace IotNode::Setup::Indicator
     for (;;)
     {
       update();
-      vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
+      vTaskDelay(pdMS_TO_TICKS(100));
     }
   }
 

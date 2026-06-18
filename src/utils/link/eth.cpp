@@ -83,10 +83,10 @@ namespace IotNode::Utils::Link
     // because reasons
     WiFi.disconnect();
 
-    vTaskDelay(LINK_DELAY / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(100));
 
 #ifdef IOT_NODE_WT32_ETH01
-    ETH.begin(ETH_PHY_LAN8720, ETH_PHY_ADDR_AUTO, 16, 23, 18, ETH_CLOCK_GPIO0_IN);
+    ETH.begin(ETH_PHY_LAN8720, ETH_PHY_ADDR_AUTO, 23, 18, 16, ETH_CLOCK_GPIO0_IN);
 #elif defined(IOT_NODE_OLIMEX_ETH)
     ETH.begin(ETH_PHY_LAN8720, ETH_PHY_ADDR_AUTO, 12, 23, 18, ETH_CLOCK_GPIO17_OUT);
 #elif defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH)
@@ -111,8 +111,6 @@ namespace IotNode::Utils::Link
 
   void Class::handleConnected()
   {
-    state.isConnected = true;
-
 #ifdef IOT_NODE_LOGGING
     Log::debug("event: connect");
 #endif

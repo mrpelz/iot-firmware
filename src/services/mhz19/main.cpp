@@ -16,7 +16,7 @@ namespace IotNode::Services::Mhz19
 #endif
 
     IOT_NODE_MHZ19_SERIAL.begin(9600);
-    vTaskDelay(IOT_NODE_LOG_DELAY / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(100));
 
     sensor.begin(IOT_NODE_MHZ19_SERIAL);
     sensor.autoCalibration();

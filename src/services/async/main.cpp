@@ -29,7 +29,7 @@ namespace IotNode::Services::Async
         continue;
       }
 
-      vTaskDelay(ASYNC_RESPONSE_DELAY / portTICK_PERIOD_MS);
+      vTaskDelay(pdMS_TO_TICKS(100));
 
 #ifdef IOT_NODE_LOGGING
       Utils::Log::debug("async-service: sending delayed response");

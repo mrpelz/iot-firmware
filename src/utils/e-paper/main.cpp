@@ -141,7 +141,7 @@ namespace IotNode::Utils::EPaper
       memset(rxBuffer, 0xff, WS_RX_BUFFER_SIZE);
     }
 
-    vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(100));
   }
 
   void websocketEventHandler(

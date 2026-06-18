@@ -28,7 +28,7 @@ void setup()
   delay(IOT_NODE_LOG_DELAY);
 #endif
 #ifdef IOT_NODE_ESP32
-  vTaskDelay(IOT_NODE_LOG_DELAY / portTICK_PERIOD_MS);
+  vTaskDelay(pdMS_TO_TICKS(100));
 #endif
 
 #ifdef IOT_NODE_I2C
@@ -156,7 +156,7 @@ void loop()
 #endif
 
 #ifdef IOT_NODE_ESP32
-  vTaskDelay(IOT_NODE_MUTLITASKING_DELAY / portTICK_PERIOD_MS);
+  vTaskDelay(pdMS_TO_TICKS(100));
 #endif
 #endif
 

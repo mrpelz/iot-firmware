@@ -14,7 +14,7 @@ namespace IotNode::Services::Sds011
     for (size_t i = 0; i < 10; i++)
     {
       auto result = sensor.sleep();
-      vTaskDelay(IOT_NODE_LOG_DELAY / portTICK_PERIOD_MS);
+      vTaskDelay(pdMS_TO_TICKS(100));
 
       if (!result.isWorking())
         break;
@@ -28,7 +28,7 @@ namespace IotNode::Services::Sds011
 #endif
 
     sensor.begin();
-    vTaskDelay(IOT_NODE_LOG_DELAY / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(100));
 
 #ifdef IOT_NODE_LOGGING
     Utils::Log::debug("sds011-service.sensor-firmware-version", sensor.queryFirmwareVersion().toString().c_str());
@@ -58,7 +58,7 @@ namespace IotNode::Services::Sds011
       }
 
       sensor.wakeup();
-      vTaskDelay(30000 / portTICK_PERIOD_MS);
+      vTaskDelay(pdMS_TO_TICKS(100));
 
       auto reading = sensor.queryPm();
       sleepSensor();

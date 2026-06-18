@@ -16,7 +16,7 @@ namespace IotNode::Events::HmmdMotion
     Utils::Log::debug("hmmd-motion-event: initializing sensor");
 #endif
 
-    vTaskDelay(2000 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(100));
     IOT_NODE_HMMD_MOTION_SERIAL.begin(115200, SERIAL_8N1, 6, 5);
 
     bool isRadarEnabled = false;
@@ -30,7 +30,7 @@ namespace IotNode::Events::HmmdMotion
 
 #ifdef IOT_NODE_LOGGING
       Utils::Log::debug("hmmd-motion-event.init: retrying connection");
-      vTaskDelay(1000 / portTICK_PERIOD_MS);
+      vTaskDelay(pdMS_TO_TICKS(100));
 #endif
     }
 

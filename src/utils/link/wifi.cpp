@@ -74,8 +74,6 @@ namespace IotNode::Utils::Link
 
   void Class::handleConnected(String ssid, unsigned char *bssid, unsigned char channel)
   {
-    state.isConnected = true;
-
 #ifdef IOT_NODE_LOGGING
     Log::debug("event: wifi.connect");
     Log::debug(fmt::format("event.wifi.connect.ssid: {}", ssid.c_str()));
@@ -344,7 +342,7 @@ namespace IotNode::Utils::Link
     delay(LINK_DELAY);
 #endif
 #ifdef IOT_NODE_ESP32
-    vTaskDelay(LINK_DELAY / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(100));
 #endif
 
 #ifdef IOT_NODE_IP_STATIC
@@ -377,7 +375,7 @@ namespace IotNode::Utils::Link
     delay(LINK_DELAY);
 #endif
 #ifdef IOT_NODE_ESP32
-    vTaskDelay(LINK_DELAY / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(100));
 #endif
 
     WiFi.mode(WIFI_STA);

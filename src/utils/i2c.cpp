@@ -16,7 +16,7 @@ namespace IotNode::Utils::I2C
 #ifdef IOT_NODE_I2C_SCAN
   void scan()
   {
-    vTaskDelay(I2C_START_DELAY / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(100));
 
     unsigned char deviceCount = 0;
     unsigned char errorCount = 0;
@@ -77,7 +77,7 @@ namespace IotNode::Utils::I2C
 
     while (lock)
     {
-      vTaskDelay(I2C_LOCK_DELAY / portTICK_PERIOD_MS);
+      vTaskDelay(pdMS_TO_TICKS(100));
     }
 
     lock = true;
