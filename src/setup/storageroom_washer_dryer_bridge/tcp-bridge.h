@@ -19,8 +19,9 @@
 
 #include "../../utils/link/setup.h"
 
-#define SERIAL_RX_BUFFER_SIZE 2500
-#define SERIAL_TX_BUFFER_SIZE 2500
+#define SERIAL_RX_LENGTH_BEFORE_ISR 6
+#define SERIAL_RX_MS_BEFORE_ISR 10
+
 #define SERIAL_TO_CLIENTS_BUFFER_SIZE 25000
 #define CLIENTS_TO_SERIAL_BUFFER_SIZE 25000
 
@@ -49,9 +50,15 @@ namespace IotNode::Setup::TCPBridge
     ServerState server;
   };
 
+  void clearSerialRx(Config *config);
+
   void onSerialData(Config *config);
 
   void onClient(void *arg, AsyncClient *instance);
+
+  void bufferToClients(Config *config);
+
+  void bufferToSerial(Config *config);
 
   void maintenanceTask(void *parameter);
 
