@@ -20,8 +20,7 @@
 #include "../../services/keepalive/setup.h"
 #include "../../services/system-info/setup.h"
 
-#include "./indicator.h"
-#include "./led.h"
+#include "./output-ng.h"
 
 #include "../../utils/ota.h"
 

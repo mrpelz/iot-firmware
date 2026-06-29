@@ -6,17 +6,17 @@ namespace IotNode::Setup::OutputNg
 {
 
   ::IotNode::Utils::OutputNg::Dimmable indicator0(1, true);
-  auto service0 = ::IotNode::Services::OutputNg::makeService(&indicator0, 0);
+  auto service0 = ::IotNode::Services::OutputNg::makeService(&indicator0, &::IotNode::Utils::UDP::instance, 0);
 
   ::IotNode::Utils::OutputNg::DimmableRGB indicator1(2, 3, 4, false);
-  auto service1 = ::IotNode::Services::OutputNg::makeService(&indicator1, 0);
+  auto service1 = ::IotNode::Services::OutputNg::makeService(&indicator1, &::IotNode::Utils::UDP::instance, 0);
 
   ::IotNode::Utils::OutputNg::Buzzer buzzer(5, true);
-  auto service3 = ::IotNode::Services::OutputNg::makeService(&buzzer, 0);
+  auto service3 = ::IotNode::Services::OutputNg::makeService(&buzzer, &::IotNode::Utils::UDP::instance, 0);
 
   ESP32_WS2812 ws2812Bus0 = ESP32_WS2812(1, 21, 0, TYPE_RGB);
   ::IotNode::Utils::OutputNg::DimmableRGBWS2812 indicatorRGB(0, &ws2812Bus0, false);
-  auto service2 = ::IotNode::Services::OutputNg::makeService(&indicatorRGB, 1);
+  auto service2 = ::IotNode::Services::OutputNg::makeService(&indicatorRGB, &::IotNode::Utils::UDP::instance, 1);
 
   void update()
   {

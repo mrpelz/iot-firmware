@@ -72,5 +72,6 @@
   "editor.tabSize": 2,
   "[ini]": {
     "editor.insertSpaces": false
-  }
+  },
+  "workbench.quickOpen.preserveInput": true
 }

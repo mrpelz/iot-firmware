@@ -7,7 +7,7 @@ namespace IotNode::Setup::OutputNg
   ESP32_WS2812 ws2812Bus0 = ESP32_WS2812(1, 21, 0, TYPE_GRB);
   ::IotNode::Utils::OutputNg::DimmableRGBWS2812 indicatorRGB(0, &ws2812Bus0, false);
 
-  auto service0 = ::IotNode::Services::OutputNg::makeService(&indicatorRGB, 1);
+  auto service0 = ::IotNode::Services::OutputNg::makeService(&indicatorRGB, &::IotNode::Utils::UDP::instance, 1);
 
   void update()
   {

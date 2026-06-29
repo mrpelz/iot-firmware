@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined(IOT_NODE_INDICATORS) && (defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO) || defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH))
+#ifdef IOT_NODE_OUTPUT_NG
 
 #include <Arduino.h>
 
@@ -18,10 +18,10 @@
 
 namespace IotNode::Services::OutputNg
 {
-  Utils::UDP::Service makeService(Utils::OutputNg::Buzzer *instance, unsigned char index);
-  Utils::UDP::Service makeService(Utils::OutputNg::Binary *instance, unsigned char index);
-  Utils::UDP::Service makeService(Utils::OutputNg::Dimmable *instance, unsigned char index);
-  Utils::UDP::Service makeService(Utils::OutputNg::DimmableRGB *instance, unsigned char index);
+  Utils::UDP::Service makeService(Utils::OutputNg::Buzzer *instance, Utils::UDP::Class *udp, unsigned char index);
+  Utils::UDP::Service makeService(Utils::OutputNg::Binary *instance, Utils::UDP::Class *udp, unsigned char index);
+  Utils::UDP::Service makeService(Utils::OutputNg::Dimmable *instance, Utils::UDP::Class *udp, unsigned char index);
+  Utils::UDP::Service makeService(Utils::OutputNg::DimmableRGB *instance, Utils::UDP::Class *udp, unsigned char index);
 }
 
 #endif

@@ -14,8 +14,7 @@ namespace IotNode::Setup
 
     delay(IOT_NODE_LOG_DELAY);
 
-    Indicator::setup();
-    Led::setup();
+    OutputNg::setup();
 
     ::IotNode::Utils::UDP::setup();
     ::IotNode::Utils::Link::setup();
@@ -28,14 +27,11 @@ namespace IotNode::Setup
 
     if (::IotNode::Utils::Link::link.isConnected())
       return;
-
-    Indicator::indicator0.blink();
   }
 
   void loop()
   {
-    Indicator::update();
-    Led::update();
+    OutputNg::update();
 
     ::IotNode::Utils::Keepalive::update();
     ::IotNode::Utils::Link::update();

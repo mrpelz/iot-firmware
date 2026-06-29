@@ -1,12 +1,12 @@
 #include "./main.h"
 
-#if defined(IOT_NODE_INDICATORS) && (defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ZERO) || defined(IOT_NODE_BOARD_WAVESHARE_ESP32_S3_ETH))
+#ifdef IOT_NODE_OUTPUT_NG
 
 namespace IotNode::Services::OutputNg
 {
-  Utils::UDP::Service makeService(Utils::OutputNg::Buzzer *instance, unsigned char index)
+  Utils::UDP::Service makeService(Utils::OutputNg::Buzzer *instance, Utils::UDP::Class *udp, unsigned char index)
   {
-    auto handler = [instance, index](
+    auto handler = [instance, index, udp](
                        Utils::UDP::Payload *request,
                        Utils::UDP::RespondCallback respond,
                        Utils::UDP::Peer peer)
@@ -52,7 +52,24 @@ namespace IotNode::Services::OutputNg
           object.sequence.size() ? object.sequence.at(0).value.value : 0));
 #endif
 
-      instance->setSequence(object);
+      instance->setSequence(
+          object,
+          [index, udp](unsigned long remainingIterations)
+          {
+            ::std::vector<unsigned char> payload = {
+                (unsigned char)true, // still iterating
+            };
+
+            auto remainingIterations_ = reinterpret_cast<unsigned char *>(&remainingIterations);
+            payload.insert(
+                payload.end(),
+                remainingIterations_,
+                remainingIterations_ + sizeof(remainingIterations));
+
+            udp->event(Events::ids::outputNgBuzzerProgress, index, payload); }, [index, udp]()
+          { udp->event(Events::ids::outputNgBuzzerProgress, index, {
+                                                                       (unsigned char)false, // ended (reset)
+                                                                   }); });
 
 #ifdef IOT_NODE_LOGGING
       Utils::Log::debug("indicator-service: sending response");
@@ -67,9 +84,9 @@ namespace IotNode::Services::OutputNg
         handler};
   }
 
-  Utils::UDP::Service makeService(Utils::OutputNg::Binary *instance, unsigned char index)
+  Utils::UDP::Service makeService(Utils::OutputNg::Binary *instance, Utils::UDP::Class *udp, unsigned char index)
   {
-    auto handler = [instance, index](
+    auto handler = [instance, index, udp](
                        Utils::UDP::Payload *request,
                        Utils::UDP::RespondCallback respond,
                        Utils::UDP::Peer peer)
@@ -112,7 +129,24 @@ namespace IotNode::Services::OutputNg
           object.sequence.size() && object.sequence.at(0).value ? "true" : "false"));
 #endif
 
-      instance->setSequence(object);
+      instance->setSequence(
+          object,
+          [index, udp](unsigned long remainingIterations)
+          {
+            ::std::vector<unsigned char> payload = {
+                (unsigned char)true, // still iterating
+            };
+
+            auto remainingIterations_ = reinterpret_cast<unsigned char *>(&remainingIterations);
+            payload.insert(
+                payload.end(),
+                remainingIterations_,
+                remainingIterations_ + sizeof(remainingIterations));
+
+            udp->event(Events::ids::outputNgBinaryProgress, index, payload); }, [index, udp]()
+          { udp->event(Events::ids::outputNgBinaryProgress, index, {
+                                                                       (unsigned char)false, // ended (reset)
+                                                                   }); });
 
 #ifdef IOT_NODE_LOGGING
       Utils::Log::debug("indicator-service: sending response");
@@ -127,9 +161,9 @@ namespace IotNode::Services::OutputNg
         handler};
   }
 
-  Utils::UDP::Service makeService(Utils::OutputNg::Dimmable *instance, unsigned char index)
+  Utils::UDP::Service makeService(Utils::OutputNg::Dimmable *instance, Utils::UDP::Class *udp, unsigned char index)
   {
-    auto handler = [instance, index](
+    auto handler = [instance, index, udp](
                        Utils::UDP::Payload *request,
                        Utils::UDP::RespondCallback respond,
                        Utils::UDP::Peer peer)
@@ -175,7 +209,24 @@ item0.value.value:{:.2f}",
           object.sequence.size() ? object.sequence.at(0).value.value : 0));
 #endif
 
-      instance->setSequence(object);
+      instance->setSequence(
+          object,
+          [index, udp](unsigned long remainingIterations)
+          {
+            ::std::vector<unsigned char> payload = {
+                (unsigned char)true, // still iterating
+            };
+
+            auto remainingIterations_ = reinterpret_cast<unsigned char *>(&remainingIterations);
+            payload.insert(
+                payload.end(),
+                remainingIterations_,
+                remainingIterations_ + sizeof(remainingIterations));
+
+            udp->event(Events::ids::outputNgDimmableProgress, index, payload); }, [index, udp]()
+          { udp->event(Events::ids::outputNgDimmableProgress, index, {
+                                                                         (unsigned char)false, // ended (reset)
+                                                                     }); });
 
 #ifdef IOT_NODE_LOGGING
       Utils::Log::debug("indicator-service: sending response");
@@ -190,9 +241,9 @@ item0.value.value:{:.2f}",
         handler};
   }
 
-  Utils::UDP::Service makeService(Utils::OutputNg::DimmableRGB *instance, unsigned char index)
+  Utils::UDP::Service makeService(Utils::OutputNg::DimmableRGB *instance, Utils::UDP::Class *udp, unsigned char index)
   {
-    auto handler = [instance, index](
+    auto handler = [instance, index, udp](
                        Utils::UDP::Payload *request,
                        Utils::UDP::RespondCallback respond,
                        Utils::UDP::Peer peer)
@@ -254,7 +305,24 @@ item1.value.b:{:.2f}",
           object.sequence.size() > 1 ? object.sequence.at(1).value.b : 0));
 #endif
 
-      instance->setSequence(object);
+      instance->setSequence(
+          object,
+          [index, udp](unsigned long remainingIterations)
+          {
+            ::std::vector<unsigned char> payload = {
+                (unsigned char)true, // still iterating
+            };
+
+            auto remainingIterations_ = reinterpret_cast<unsigned char *>(&remainingIterations);
+            payload.insert(
+                payload.end(),
+                remainingIterations_,
+                remainingIterations_ + sizeof(remainingIterations));
+
+            udp->event(Events::ids::outputNgDimmableRGBProgress, index, payload); }, [index, udp]()
+          { udp->event(Events::ids::outputNgDimmableRGBProgress, index, {
+                                                                            (unsigned char)false, // ended (reset)
+                                                                        }); });
 
 #ifdef IOT_NODE_LOGGING
       Utils::Log::debug("indicator-service: sending response");
