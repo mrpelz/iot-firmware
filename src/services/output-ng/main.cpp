@@ -28,15 +28,6 @@ namespace IotNode::Services::OutputNg
         object.sequence.push_back(item);
       }
 
-      if (false)
-      {
-#ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("indicator-service: error");
-
-        return;
-#endif
-      }
-
 #ifdef IOT_NODE_LOGGING
       Utils::Log::debug(fmt::format(
           "output-ng-service: dezerialized:\n\
@@ -72,7 +63,7 @@ namespace IotNode::Services::OutputNg
                                                                    }); });
 
 #ifdef IOT_NODE_LOGGING
-      Utils::Log::debug("indicator-service: sending response");
+      Utils::Log::debug("output-ng-service: sending response");
 #endif
 
       respond({});
@@ -105,15 +96,6 @@ namespace IotNode::Services::OutputNg
         memcpy(&item.value, itemBegin + sizeof(item.holdTime), sizeof(item.value));
 
         object.sequence.push_back(item);
-      }
-
-      if (false)
-      {
-#ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("indicator-service: error");
-
-        return;
-#endif
       }
 
 #ifdef IOT_NODE_LOGGING
@@ -149,7 +131,7 @@ namespace IotNode::Services::OutputNg
                                                                    }); });
 
 #ifdef IOT_NODE_LOGGING
-      Utils::Log::debug("indicator-service: sending response");
+      Utils::Log::debug("output-ng-service: sending response");
 #endif
 
       respond({});
@@ -183,15 +165,6 @@ namespace IotNode::Services::OutputNg
         memcpy(&item.value.value, itemBegin + sizeof(item.holdTime) + sizeof(item.value.rampTime), sizeof(item.value.value));
 
         object.sequence.push_back(item);
-      }
-
-      if (false)
-      {
-#ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("indicator-service: error");
-
-        return;
-#endif
       }
 
 #ifdef IOT_NODE_LOGGING
@@ -229,7 +202,7 @@ item0.value.value:{:.2f}",
                                                                      }); });
 
 #ifdef IOT_NODE_LOGGING
-      Utils::Log::debug("indicator-service: sending response");
+      Utils::Log::debug("output-ng-service: sending response");
 #endif
 
       respond({});
@@ -265,15 +238,6 @@ item0.value.value:{:.2f}",
         memcpy(&item.value.b, itemBegin + sizeof(item.holdTime) + sizeof(item.value.rampTime) + sizeof(item.value.r) + sizeof(item.value.g), sizeof(item.value.b));
 
         object.sequence.push_back(item);
-      }
-
-      if (false)
-      {
-#ifdef IOT_NODE_LOGGING
-        Utils::Log::debug("indicator-service: error");
-
-        return;
-#endif
       }
 
 #ifdef IOT_NODE_LOGGING
@@ -325,7 +289,7 @@ item1.value.b:{:.2f}",
                                                                         }); });
 
 #ifdef IOT_NODE_LOGGING
-      Utils::Log::debug("indicator-service: sending response");
+      Utils::Log::debug("output-ng-service: sending response");
 #endif
 
       respond({});

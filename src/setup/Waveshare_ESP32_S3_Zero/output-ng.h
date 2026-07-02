@@ -10,11 +10,11 @@
 
 namespace IotNode::Setup::OutputNg
 {
-  extern ::IotNode::Utils::OutputNg::Dimmable indicator0;
-  extern ::IotNode::Utils::OutputNg::DimmableRGB indicator1;
-  extern ::IotNode::Utils::OutputNg::Buzzer buzzer;
   extern ESP32_WS2812 ws2812Bus0;
-  extern ::IotNode::Utils::OutputNg::DimmableRGBWS2812 indicatorRGB;
+  extern ::IotNode::Utils::OutputNg::DimmableRGBWS2812 indicatorRGB0;
+  extern ::IotNode::Utils::OutputNg::Dimmable led0;
+  extern ::IotNode::Utils::OutputNg::DimmableRGB ledRGB1;
+  extern ::IotNode::Utils::OutputNg::Buzzer buzzer0;
 
   void update();
   void task(void *parameter);

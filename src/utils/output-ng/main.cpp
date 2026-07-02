@@ -45,10 +45,11 @@ namespace IotNode::Utils::OutputNg
   template <typename T>
   void Base<T>::init()
   {
-    if (_onInit == NULL)
-      return;
+    if (_onInit != NULL)
+    {
+      _onInit();
+    }
 
-    _onInit();
     _state.isInitialized = true;
   }
 
