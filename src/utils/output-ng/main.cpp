@@ -125,11 +125,6 @@ namespace IotNode::Utils::OutputNg
         _onIterate(_state.iterations);
       }
 
-      if (!_state.iterations)
-      {
-        _reset();
-      }
-
       _state.sequencePointer = 0;
     }
 
@@ -176,6 +171,7 @@ namespace IotNode::Utils::OutputNg
     _lastUpdate = 0;
     _onUpdate = NULL;
     _startTime = 0;
+    isRunning = false;
     progress = 0;
   }
 
@@ -184,6 +180,7 @@ namespace IotNode::Utils::OutputNg
     _duration = duration;
     _onUpdate = onUpdate;
     _startTime = millis();
+    isRunning = true;
   }
 
   void Ramp::update()
@@ -380,6 +377,9 @@ namespace IotNode::Utils::OutputNg
   void Buzzer::update()
   {
     _ramp.update();
+    if (_ramp.isRunning)
+      return;
+
     Base::update();
   }
 
@@ -532,6 +532,9 @@ namespace IotNode::Utils::OutputNg
   void Dimmable::update()
   {
     _ramp.update();
+    if (_ramp.isRunning)
+      return;
+
     Base::update();
   }
 
@@ -863,6 +866,9 @@ namespace IotNode::Utils::OutputNg
   void DimmableRGB::update()
   {
     _ramp.update();
+    if (_ramp.isRunning)
+      return;
+
     Base::update();
   }
 

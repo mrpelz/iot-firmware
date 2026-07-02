@@ -119,6 +119,7 @@ namespace IotNode::Utils::OutputNg
     ::std::function<void()> _onUpdate = NULL;
 
   public:
+    bool isRunning = false;
     double progress = 0;
     Ramp(unsigned long throttle);
     double getDelta(double startValue, double endValue);
