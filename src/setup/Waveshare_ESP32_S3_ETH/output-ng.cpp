@@ -20,7 +20,7 @@ namespace IotNode::Setup::OutputNg
     for (;;)
     {
       update();
-      vTaskDelay(pdMS_TO_TICKS(25));
+      vTaskDelay(pdMS_TO_TICKS(IOT_NODE_MUTLITASKING_DELAY));
     }
   }
 
