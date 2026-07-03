@@ -24,9 +24,6 @@ namespace IotNode::Setup
     ::IotNode::Services::SystemInfo::setup();
 
     ::IotNode::Utils::OTA::setup();
-
-    if (::IotNode::Utils::Link::link.isConnected())
-      return;
   }
 
   void loop()

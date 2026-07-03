@@ -36,7 +36,7 @@
 
 #define EVENT_MAX_LENGTH UDP_MAX_LENGTH - MESSAGE_ID_LENGTH - EVENT_ID_LENGTH + EVENT_INDEX_LENGTH
 
-#define REPEAT_COUNT 2
+#define REPEAT_COUNT 3
 #define REPEAT_WINDOW 200
 
 namespace IotNode::Utils::UDP
@@ -88,7 +88,7 @@ namespace IotNode::Utils::UDP
     void addService(Service *service);
     void begin();
     void close();
-    void event(unsigned char eventId, unsigned char eventIndex, Payload event);
+    void event(unsigned char eventId, unsigned char eventIndex, Payload event, size_t repeat = 1);
     bool hasEventPeer();
     bool isListening();
     void removeEventPeer();

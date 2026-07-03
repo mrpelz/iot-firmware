@@ -45,7 +45,7 @@ namespace IotNode::Utils::UDP
     state.udp.close();
   }
 
-  void Class::event(unsigned char eventId, unsigned char eventIndex, Payload event)
+  void Class::event(unsigned char eventId, unsigned char eventIndex, Payload event, size_t repeat)
   {
     if (!state.eventPeer.port)
       return;
@@ -66,11 +66,14 @@ namespace IotNode::Utils::UDP
     Log::debug(fmt::format("udp.event.message-length: {}", event.size()));
 #endif
 
-    state.udp.writeTo(
-        (unsigned char *)outgoing.data(),
-        outgoing.size(),
-        state.eventPeer.ip,
-        state.eventPeer.port);
+    for (size_t i = 0; i < repeat; i++)
+    {
+      state.udp.writeTo(
+          (unsigned char *)outgoing.data(),
+          outgoing.size(),
+          state.eventPeer.ip,
+          state.eventPeer.port);
+    }
   }
 
   void Class::handleRequest(AsyncUDPPacket *packet)

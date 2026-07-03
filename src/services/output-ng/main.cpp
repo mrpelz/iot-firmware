@@ -57,10 +57,11 @@ namespace IotNode::Services::OutputNg
                 remainingIterations_,
                 remainingIterations_ + sizeof(remainingIterations));
 
-            udp->event(Events::ids::outputNgBuzzerProgress, index, payload); }, [index, udp]()
+            udp->event(Events::ids::outputNgBuzzerProgress, index, payload, REPEAT_COUNT); }, [index, udp]()
           { udp->event(Events::ids::outputNgBuzzerProgress, index, {
                                                                        (unsigned char)false, // ended (reset)
-                                                                   }); });
+                                                                   },
+                       REPEAT_COUNT); });
 
 #ifdef IOT_NODE_LOGGING
       Utils::Log::debug("output-ng-service: sending response");
@@ -125,10 +126,11 @@ namespace IotNode::Services::OutputNg
                 remainingIterations_,
                 remainingIterations_ + sizeof(remainingIterations));
 
-            udp->event(Events::ids::outputNgBinaryProgress, index, payload); }, [index, udp]()
+            udp->event(Events::ids::outputNgBinaryProgress, index, payload, REPEAT_COUNT); }, [index, udp]()
           { udp->event(Events::ids::outputNgBinaryProgress, index, {
                                                                        (unsigned char)false, // ended (reset)
-                                                                   }); });
+                                                                   },
+                       REPEAT_COUNT); });
 
 #ifdef IOT_NODE_LOGGING
       Utils::Log::debug("output-ng-service: sending response");
@@ -196,10 +198,11 @@ item0.value.value:{:.2f}",
                 remainingIterations_,
                 remainingIterations_ + sizeof(remainingIterations));
 
-            udp->event(Events::ids::outputNgDimmableProgress, index, payload); }, [index, udp]()
+            udp->event(Events::ids::outputNgDimmableProgress, index, payload, REPEAT_COUNT); }, [index, udp]()
           { udp->event(Events::ids::outputNgDimmableProgress, index, {
                                                                          (unsigned char)false, // ended (reset)
-                                                                     }); });
+                                                                     },
+                       REPEAT_COUNT); });
 
 #ifdef IOT_NODE_LOGGING
       Utils::Log::debug("output-ng-service: sending response");
@@ -283,10 +286,11 @@ item1.value.b:{:.2f}",
                 remainingIterations_,
                 remainingIterations_ + sizeof(remainingIterations));
 
-            udp->event(Events::ids::outputNgDimmableRGBProgress, index, payload); }, [index, udp]()
+            udp->event(Events::ids::outputNgDimmableRGBProgress, index, payload, REPEAT_COUNT); }, [index, udp]()
           { udp->event(Events::ids::outputNgDimmableRGBProgress, index, {
                                                                             (unsigned char)false, // ended (reset)
-                                                                        }); });
+                                                                        },
+                       REPEAT_COUNT); });
 
 #ifdef IOT_NODE_LOGGING
       Utils::Log::debug("output-ng-service: sending response");
