@@ -15,16 +15,19 @@ namespace IotNode::Setup
 
     vTaskDelay(pdMS_TO_TICKS(IOT_NODE_MUTLITASKING_DELAY));
 
-    ::IotNode::Utils::UDP::setup();
     ::IotNode::Utils::Link::setup();
+    ::IotNode::Utils::OTA::setup();
+
+    if (::IotNode::Utils::SafeMode::isSafeMode())
+      return;
+
+    ::IotNode::Utils::UDP::setup();
 
     ::IotNode::Services::Hello::setup();
     ::IotNode::Services::Keepalive::setup();
     ::IotNode::Services::SystemInfo::setup();
 
     OutputNg::setup();
-
-    ::IotNode::Utils::OTA::setup();
   }
 
   void loop()

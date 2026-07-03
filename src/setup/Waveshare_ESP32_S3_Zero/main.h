@@ -14,6 +14,7 @@
 #include "../../utils/log.h"
 #endif
 
+#include "../../utils/safe-mode.h"
 #include "../../utils/udp/setup.h"
 #include "../../utils/link/setup.h"
 
