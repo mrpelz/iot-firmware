@@ -56,6 +56,10 @@ namespace IotNode::Utils::OutputNg
 {
   double gamma(double input, double gamma);
 
+#ifdef IOT_NODE_ESP8266
+  void avoidSoftwarePWMForFullDutyCycle(unsigned char pin, int dutyCycle);
+#endif
+
   template <typename T>
   struct SequenceItem
   {

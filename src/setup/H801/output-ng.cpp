@@ -4,56 +4,56 @@
 
 namespace IotNode::Setup::OutputNg
 {
-  ::IotNode::Utils::OutputNg::Dimmable indicator0(5, true);
-  auto serviceIndicator0 = ::IotNode::Services::OutputNg::makeService(&indicator0, &::IotNode::Utils::UDP::instance, 0);
+  ::IotNode::Utils::OutputNg::Dimmable indicatorR(5, true);
+  auto serviceIndicatorR = ::IotNode::Services::OutputNg::makeService(&indicatorR, &::IotNode::Utils::UDP::instance, 0);
 
-  ::IotNode::Utils::OutputNg::Dimmable indicator1(1, true);
-  auto serviceIndicator1 = ::IotNode::Services::OutputNg::makeService(&indicator1, &::IotNode::Utils::UDP::instance, 1);
+  ::IotNode::Utils::OutputNg::Dimmable indicatorG(1, true);
+  auto serviceIndicatorG = ::IotNode::Services::OutputNg::makeService(&indicatorG, &::IotNode::Utils::UDP::instance, 1);
 
-  ::IotNode::Utils::OutputNg::Dimmable led0(15, true);
-  auto serviceLed0 = ::IotNode::Services::OutputNg::makeService(&led0, &::IotNode::Utils::UDP::instance, 2);
+  ::IotNode::Utils::OutputNg::Dimmable ledR(15, false);
+  auto serviceLedR = ::IotNode::Services::OutputNg::makeService(&ledR, &::IotNode::Utils::UDP::instance, 2);
 
-  ::IotNode::Utils::OutputNg::Dimmable led1(13, true);
-  auto serviceLed1 = ::IotNode::Services::OutputNg::makeService(&led1, &::IotNode::Utils::UDP::instance, 3);
+  ::IotNode::Utils::OutputNg::Dimmable ledG(12, false);
+  auto serviceLedG = ::IotNode::Services::OutputNg::makeService(&ledG, &::IotNode::Utils::UDP::instance, 4);
 
-  ::IotNode::Utils::OutputNg::Dimmable led2(12, true);
-  auto serviceLed2 = ::IotNode::Services::OutputNg::makeService(&led2, &::IotNode::Utils::UDP::instance, 4);
+  ::IotNode::Utils::OutputNg::Dimmable ledB(13, false);
+  auto serviceLedB = ::IotNode::Services::OutputNg::makeService(&ledB, &::IotNode::Utils::UDP::instance, 3);
 
-  ::IotNode::Utils::OutputNg::Dimmable led3(14, true);
-  auto serviceLed3 = ::IotNode::Services::OutputNg::makeService(&led3, &::IotNode::Utils::UDP::instance, 5);
+  ::IotNode::Utils::OutputNg::Dimmable ledW1(14, false);
+  auto serviceLedW1 = ::IotNode::Services::OutputNg::makeService(&ledW1, &::IotNode::Utils::UDP::instance, 5);
 
-  ::IotNode::Utils::OutputNg::Dimmable led4(4, true);
-  auto serviceLed4 = ::IotNode::Services::OutputNg::makeService(&led4, &::IotNode::Utils::UDP::instance, 6);
+  ::IotNode::Utils::OutputNg::Dimmable ledW2(4, false);
+  auto serviceLedW2 = ::IotNode::Services::OutputNg::makeService(&ledW2, &::IotNode::Utils::UDP::instance, 6);
 
   void update()
   {
-    indicator0.update();
-    indicator1.update();
+    indicatorR.update();
+    indicatorG.update();
 
-    led0.update();
-    led1.update();
-    led2.update();
-    led3.update();
-    led4.update();
+    ledR.update();
+    ledG.update();
+    ledB.update();
+    ledW1.update();
+    ledW2.update();
   }
 
   void setup()
   {
-    indicator0.init();
-    ::IotNode::Utils::UDP::instance.addService(&serviceIndicator0);
-    indicator1.init();
-    ::IotNode::Utils::UDP::instance.addService(&serviceIndicator1);
+    indicatorR.init();
+    ::IotNode::Utils::UDP::instance.addService(&serviceIndicatorR);
+    indicatorG.init();
+    ::IotNode::Utils::UDP::instance.addService(&serviceIndicatorG);
 
-    led0.init();
-    ::IotNode::Utils::UDP::instance.addService(&serviceLed0);
-    led1.init();
-    ::IotNode::Utils::UDP::instance.addService(&serviceLed1);
-    led2.init();
-    ::IotNode::Utils::UDP::instance.addService(&serviceLed2);
-    led3.init();
-    ::IotNode::Utils::UDP::instance.addService(&serviceLed3);
-    led4.init();
-    ::IotNode::Utils::UDP::instance.addService(&serviceLed4);
+    ledR.init();
+    ::IotNode::Utils::UDP::instance.addService(&serviceLedR);
+    ledG.init();
+    ::IotNode::Utils::UDP::instance.addService(&serviceLedG);
+    ledB.init();
+    ::IotNode::Utils::UDP::instance.addService(&serviceLedB);
+    ledW1.init();
+    ::IotNode::Utils::UDP::instance.addService(&serviceLedW1);
+    ledW2.init();
+    ::IotNode::Utils::UDP::instance.addService(&serviceLedW2);
   }
 }
 

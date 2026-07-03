@@ -10,14 +10,14 @@
 
 namespace IotNode::Setup::OutputNg
 {
-  extern ::IotNode::Utils::OutputNg::Dimmable indicator0;
-  extern ::IotNode::Utils::OutputNg::Dimmable indicator1;
+  extern ::IotNode::Utils::OutputNg::Dimmable indicatorR;
+  extern ::IotNode::Utils::OutputNg::Dimmable indicatorG;
 
-  extern ::IotNode::Utils::OutputNg::Dimmable led0;
-  extern ::IotNode::Utils::OutputNg::Dimmable led1;
-  extern ::IotNode::Utils::OutputNg::Dimmable led2;
-  extern ::IotNode::Utils::OutputNg::Dimmable led3;
-  extern ::IotNode::Utils::OutputNg::Dimmable led4;
+  extern ::IotNode::Utils::OutputNg::Dimmable ledR;
+  extern ::IotNode::Utils::OutputNg::Dimmable ledB;
+  extern ::IotNode::Utils::OutputNg::Dimmable ledG;
+  extern ::IotNode::Utils::OutputNg::Dimmable ledW1;
+  extern ::IotNode::Utils::OutputNg::Dimmable ledW2;
 
   void update();
   void setup();

@@ -9,6 +9,24 @@ namespace IotNode::Utils::OutputNg
     return pow(input, gamma);
   }
 
+#ifdef IOT_NODE_ESP8266
+  void avoidSoftwarePWMForFullDutyCycle(unsigned char pin, int dutyCycle)
+  {
+    if (dutyCycle == 0)
+    {
+      digitalWrite(pin, LOW);
+    }
+    else if (dutyCycle == outputDimmableFull)
+    {
+      digitalWrite(pin, HIGH);
+    }
+    else
+    {
+      analogWrite(pin, dutyCycle);
+    }
+  }
+#endif
+
   template <typename T>
   Base<T>::Base(
       T initialValue,
@@ -252,7 +270,7 @@ namespace IotNode::Utils::OutputNg
 #endif
 #ifdef IOT_NODE_ESP8266
         constexpr int pwm = outputDimmableFull / 2;
-        analogWrite(_pin, pwm);
+        avoidSoftwarePWMForFullDutyCycle(_pin, pwm);
 #endif
 
         _isAttached = true;
@@ -274,7 +292,7 @@ namespace IotNode::Utils::OutputNg
       ledcDetach(_pin);
 #endif
 #ifdef IOT_NODE_ESP8266
-      analogWrite(_pin, 0);
+      avoidSoftwarePWMForFullDutyCycle(_pin, 0);
 #endif
 
       _isAttached = false;
@@ -456,7 +474,7 @@ namespace IotNode::Utils::OutputNg
 #endif
 #ifdef IOT_NODE_ESP8266
                                                                  int pwm = gamma(_ramp.getDelta(previousValue.value, value.value)) * outputDimmableFull;
-                                                                 analogWrite(pin, invert ? outputDimmableFull - pwm : pwm);
+                                                                 avoidSoftwarePWMForFullDutyCycle(pin, invert ? outputDimmableFull - pwm : pwm);
 #endif
                                                                });
 
@@ -467,7 +485,7 @@ namespace IotNode::Utils::OutputNg
 #endif
 #ifdef IOT_NODE_ESP8266
                                                    int pwm = gamma(value.value) * outputDimmableFull;
-                                                   analogWrite(pin, invert ? outputDimmableFull - pwm : pwm);
+                                                   avoidSoftwarePWMForFullDutyCycle(pin, invert ? outputDimmableFull - pwm : pwm);
 #endif
                                                  },
                                                  [pin, invert]()
@@ -556,13 +574,13 @@ namespace IotNode::Utils::OutputNg
 #endif
 #ifdef IOT_NODE_ESP8266
                                                             int pwmR = gamma(_ramp.getDelta(previousValue.r, value.r)) * outputDimmableFull;
-                                                            analogWrite(pinR, invert ? outputDimmableFull - pwmR : pwmR);
+                                                            avoidSoftwarePWMForFullDutyCycle(pinR, invert ? outputDimmableFull - pwmR : pwmR);
 
                                                             int pwmG = gamma(_ramp.getDelta(previousValue.g, value.g)) * outputDimmableFull;
-                                                            analogWrite(pinG, invert ? outputDimmableFull - pwmG : pwmG);
+                                                            avoidSoftwarePWMForFullDutyCycle(pinG, invert ? outputDimmableFull - pwmG : pwmG);
 
                                                             int pwmB = gamma(_ramp.getDelta(previousValue.b, value.b)) * outputDimmableFull;
-                                                            analogWrite(pinB, invert ? outputDimmableFull - pwmB : pwmB);
+                                                            avoidSoftwarePWMForFullDutyCycle(pinB, invert ? outputDimmableFull - pwmB : pwmB);
 #endif
                                                           });
 
@@ -575,13 +593,13 @@ namespace IotNode::Utils::OutputNg
 #endif
 #ifdef IOT_NODE_ESP8266
                                               int pwmR = gamma(value.r) * outputDimmableFull;
-                                              analogWrite(pinR, invert ? outputDimmableFull - pwmR : pwmR);
+                                              avoidSoftwarePWMForFullDutyCycle(pinR, invert ? outputDimmableFull - pwmR : pwmR);
 
                                               int pwmG = gamma(value.g) * outputDimmableFull;
-                                              analogWrite(pinG, invert ? outputDimmableFull - pwmG : pwmG);
+                                              avoidSoftwarePWMForFullDutyCycle(pinG, invert ? outputDimmableFull - pwmG : pwmG);
 
                                               int pwmB = gamma(value.b) * outputDimmableFull;
-                                              analogWrite(pinB, invert ? outputDimmableFull - pwmB : pwmB);
+                                              avoidSoftwarePWMForFullDutyCycle(pinB, invert ? outputDimmableFull - pwmB : pwmB);
 #endif
                                             },
                                             [pinR, pinG, pinB, invert]()

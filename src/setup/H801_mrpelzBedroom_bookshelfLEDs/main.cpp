@@ -14,8 +14,6 @@ namespace IotNode::Setup
 
     delay(IOT_NODE_LOG_DELAY);
 
-    OutputNg::setup();
-
     ::IotNode::Utils::UDP::setup();
     ::IotNode::Utils::Link::setup();
 
@@ -24,6 +22,8 @@ namespace IotNode::Setup
     ::IotNode::Services::SystemInfo::setup();
 
     ::IotNode::Utils::OTA::setup();
+
+    OutputNg::setup();
   }
 
   void loop()
