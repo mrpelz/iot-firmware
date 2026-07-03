@@ -395,7 +395,7 @@ namespace IotNode::Utils::OutputNg
   void Buzzer::update()
   {
     _ramp.update();
-    if (_ramp.isRunning)
+    if (_ramp.isRunning && _state.nextSequenceStep)
       return;
 
     Base::update();
@@ -550,7 +550,7 @@ namespace IotNode::Utils::OutputNg
   void Dimmable::update()
   {
     _ramp.update();
-    if (_ramp.isRunning)
+    if (_ramp.isRunning && _state.nextSequenceStep)
       return;
 
     Base::update();
@@ -884,7 +884,7 @@ namespace IotNode::Utils::OutputNg
   void DimmableRGB::update()
   {
     _ramp.update();
-    if (_ramp.isRunning)
+    if (_ramp.isRunning && _state.nextSequenceStep)
       return;
 
     Base::update();
