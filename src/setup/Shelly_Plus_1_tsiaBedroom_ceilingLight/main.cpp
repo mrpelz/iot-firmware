@@ -1,0 +1,43 @@
+#ifdef IOT_NODE_ENV_SHELLY_PLUS_1_TSIABEDROOM_CEILINGLIGHT
+
+#include "./main.h"
+
+namespace IotNode::Setup
+{
+  void setup()
+  {
+    ::IotNode::Utils::Keepalive::setup();
+
+#ifdef IOT_NODE_LOGGING
+    ::IotNode::Utils::Log::setup();
+#endif
+
+    vTaskDelay(pdMS_TO_TICKS(IOT_NODE_MUTLITASKING_DELAY));
+
+    ::IotNode::Utils::UDP::setup();
+    ::IotNode::Utils::Link::setup();
+
+    ::IotNode::Services::Hello::setup();
+    ::IotNode::Services::Keepalive::setup();
+    ::IotNode::Services::SystemInfo::setup();
+
+    Output::setup();
+    Indicator::setup();
+    Button::setup();
+
+    ::IotNode::Utils::OTA::setup();
+
+    if (::IotNode::Utils::Link::link.isConnected())
+      return;
+
+    Indicator::indicator0.blink();
+  }
+
+  void loop()
+  {
+    ::IotNode::Utils::OTA::update();
+    vTaskDelay(pdMS_TO_TICKS(IOT_NODE_MUTLITASKING_DELAY));
+  }
+}
+
+#endif
