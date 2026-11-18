@@ -10,8 +10,7 @@ namespace IotNode::Setup::TCPBridge
               .port = &Serial1,
               .onSerialInit = [](HardwareSerial *serial)
               {
-                serial->begin(9600, SERIAL_8N1, 32, 33);
-                serial->setTxInvert(true);
+                serial->begin(9600, SERIAL_8N1, 32, 33, true);
               }},
           .server = {
               .port = 1337,
@@ -20,8 +19,7 @@ namespace IotNode::Setup::TCPBridge
       {
           .serial = {.port = &Serial2, .onSerialInit = [](HardwareSerial *serial)
                                        {
-                                         serial->begin(9600, SERIAL_8N1, 5, 17);
-                                         serial->setTxInvert(true);
+                                         serial->begin(9600, SERIAL_8N1, 5, 17, true);
                                        }},
           .server = {
               .port = 1338,
@@ -214,10 +212,16 @@ namespace IotNode::Setup::TCPBridge
   {
     auto config = reinterpret_cast<Config *>(parameter);
 
-    config->serial.port->onReceive([&config]()
+    config->serial.port->onReceive([config]()
                                    { onSerialData(config); });
-    config->serial.port->onReceiveError([&config](hardwareSerial_error_t _error)
-                                        { clearSerialRx(config); });
+    config->serial.port->onReceiveError([config](hardwareSerial_error_t _error)
+                                        {
+                                          /*
+                                            don’t clear receive buffer, because machine bus breaks regularly,
+                                            which is treated as a receive error, clearing to-be-received bytes
+                                          */
+                                          // clearSerialRx(config);
+                                        });
 
     vTaskDelay(pdMS_TO_TICKS(1000));
     config->serial.onSerialInit(config->serial.port);
@@ -250,6 +254,8 @@ namespace IotNode::Setup::TCPBridge
 
         bufferToSerial(config);
         yield();
+
+        vTaskDelay(1);
       }
 
 #ifdef IOT_NODE_LOGGING
@@ -269,7 +275,7 @@ namespace IotNode::Setup::TCPBridge
 
     for (auto &config : configs)
     {
-      config.serial.port->setRxTimeout(SERIAL_RX_MS_BEFORE_ISR);
+      config.serial.port->setRxTimeout(SERIAL_RX_SYMBOLS_BEFORE_ISR);
       config.serial.port->setRxFIFOFull(SERIAL_RX_LENGTH_BEFORE_ISR);
       config.serial.clientsToSerialBuffer = xRingbufferCreate(CLIENTS_TO_SERIAL_BUFFER_SIZE, RINGBUF_TYPE_BYTEBUF);
 
@@ -281,7 +287,7 @@ namespace IotNode::Setup::TCPBridge
           "tcp_bridge_maintenance",
           FREERTOS_STACK_SIZE,
           &config,
-          tskIDLE_PRIORITY,
+          tskIDLE_PRIORITY + 2,
           NULL,
           CONFIG_ARDUINO_RUNNING_CORE);
     }
